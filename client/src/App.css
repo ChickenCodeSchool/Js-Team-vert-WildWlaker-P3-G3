@@ -1,3 +1,13 @@
+:root {
+  --color-background: ;
+  --color-light: ;
+  --color-dark: ;
+  --color-link: ;
+  --color-side-bar: ;
+
+  --gradient-orange: ;
+}
+
 * {
   margin: 0;
   padding: 0;
