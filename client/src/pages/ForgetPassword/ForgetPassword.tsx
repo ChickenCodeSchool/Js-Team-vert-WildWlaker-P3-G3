@@ -2,6 +2,7 @@ import "./ForgetPassword.css";
 import { useState } from "react";
 import { Link } from "react-router";
 import connexionImg from "../../assets/images/Connexion-img.png";
+import logo from "../../assets/images/logo-wedoo.png";
 
 function ForgetPassword() {
   const [identifier, setIdentifier] = useState("");
@@ -14,7 +15,14 @@ function ForgetPassword() {
 
   return (
     <>
-      <h1 className="title-forgetPassword">Wedoo</h1>
+      <div className="navbar-forgetpassword">
+        <Link to="/" className="nav-forgetpassword">
+          <img src={logo} alt="logo-wedoo" />
+          <h1>
+            WE<i>D</i>OO
+          </h1>
+        </Link>
+      </div>
       <div className="forgetPassword-section">
         <div className="forgetPassword-img-text">
           <img

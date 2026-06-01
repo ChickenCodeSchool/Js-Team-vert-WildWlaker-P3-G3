@@ -6,6 +6,30 @@
   box-shadow: 0px 15px 50px rgba(0, 0, 0, 0.207);
 }
 
+.navbar-connexion {
+  width: 100%;
+  margin-top: 20px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  img {
+    width: 35px;
+    height: 35px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+  .nav-connexion {
+    text-decoration: none;
+    font-size: 22px;
+    color: black;
+    display: flex;
+    align-items: center;
+  }
+}
+
 .connection-img {
   width: 30vw;
   border-radius: 20px 0 0 20px;
@@ -24,7 +48,7 @@
   position: absolute;
   bottom: 0;
   color: white;
-  margin: 60px;
+  margin: 6vh;
   font-size: 20px;
 }
 
@@ -34,7 +58,7 @@
 }
 
 .connection-img-text p {
-  font-size: 8px;
+  font-size: 10px;
 }
 
 .connection-content {
@@ -87,6 +111,11 @@
   background-color: rgba(226, 154, 154, 0.189);
   border-color: rgba(194, 118, 118, 0.282);
 }
+.email-connexion,
+.password-connexion {
+  font-size: 12px;
+  font-weight: 700;
+}
 
 .img-password-eye {
   width: 20px;
@@ -123,7 +152,7 @@
 
 .password-forget {
   font-size: 12px;
-  margin-left: 5vw;
+  margin-left: 7vw;
   color: brown;
   font-weight: 600;
   text-decoration: none;
@@ -181,7 +210,7 @@
   }
 
   .connection-img-text p {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .Welcome-title {
@@ -209,6 +238,6 @@
   }
 
   .password-forget {
-    margin-left: 15vh;
+    margin-left: 18vh;
   }
 }

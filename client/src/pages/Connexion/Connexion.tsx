@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import connexionImg from "../../assets/images/Connexion-img.png";
 import eye from "../../assets/images/eye.png";
 import hide from "../../assets/images/hide.png";
+import logo from "../../assets/images/logo-wedoo.png";
 
 function Connexion() {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +25,14 @@ function Connexion() {
 
   return (
     <>
-      <h1 className="title-connection">Wedoo</h1>
+      <div className="navbar-connexion">
+        <Link to="/" className="nav-connexion">
+          <img src={logo} alt="logo-wedoo" />
+          <h1>
+            WE<i>D</i>OO
+          </h1>
+        </Link>
+      </div>
       <div className="connection-section">
         <div className="connection-img-text">
           <img
@@ -47,7 +55,7 @@ function Connexion() {
             </p>
           </div>
           <div className="email-input-label">
-            <label htmlFor="email" className="email-text">
+            <label htmlFor="email" className="email-connexion">
               Pseudo ou Email
             </label>
             <br />
@@ -67,7 +75,7 @@ function Connexion() {
           </div>
 
           <div className="password-input-label">
-            <label htmlFor="password" className="password-text">
+            <label htmlFor="password" className="password-connexion">
               Mot de passe
             </label>
             <Link to="/forgetpassword" className="password-forget">

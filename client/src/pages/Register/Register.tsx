@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import connexionImg from "../../assets/images/Connexion-img.png";
 import eye from "../../assets/images/eye.png";
 import hide from "../../assets/images/hide.png";
+import logo from "../../assets/images/logo-wedoo.png";
 
 function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +41,14 @@ function Register() {
 
   return (
     <>
-      <h1 className="title-register">Wedoo</h1>
+      <div className="navbar-register">
+        <Link to="/" className="nav-register">
+          <img src={logo} alt="logo-wedoo" />
+          <h1>
+            WE<i>D</i>OO
+          </h1>
+        </Link>
+      </div>
       <div className="register-section">
         <div className="register-img-text">
           <img src={connexionImg} alt="register-img" className="register-img" />

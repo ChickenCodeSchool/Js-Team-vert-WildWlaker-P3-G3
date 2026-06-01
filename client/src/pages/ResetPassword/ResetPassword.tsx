@@ -1,8 +1,10 @@
 import "./ResetPassword.css";
 import { useState } from "react";
+import { Link } from "react-router";
 import connexionImg from "../../assets/images/Connexion-img.png";
 import eye from "../../assets/images/eye.png";
 import hide from "../../assets/images/hide.png";
+import logo from "../../assets/images/logo-wedoo.png";
 
 function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +28,14 @@ function ResetPassword() {
 
   return (
     <>
-      <h1 className="title-resetpassword">Wedoo</h1>
+      <div className="navbar-resetpassword">
+        <Link to="/" className="nav-resetpassword">
+          <img src={logo} alt="logo-wedoo" />
+          <h1>
+            WE<i>D</i>OO
+          </h1>
+        </Link>
+      </div>
       <div className="resetpassword-section">
         <div className="resetpassword-img-text">
           <img
