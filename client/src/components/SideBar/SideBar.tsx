@@ -8,12 +8,13 @@ import {
   Trash2,
   TriangleAlert,
 } from "lucide-react";
-import { useState } from "react";
+
 import Logo from "../../assets/images/logo-wedoo.png";
-
-function SideBar() {
-  const [active, setActive] = useState("");
-
+interface SideBarProps {
+  active: string;
+  setActive: (value: string) => void;
+}
+function SideBar({ active, setActive }: SideBarProps) {
   return (
     <>
       <nav className="sidebar">
