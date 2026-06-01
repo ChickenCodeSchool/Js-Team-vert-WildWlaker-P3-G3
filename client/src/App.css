@@ -3,9 +3,13 @@
 :root {
   --color-background: ;
   --color-light: #ff7e5f;
-  --color-dark: ;
+  --color-dark: #a53b22;
   --color-link: ;
   --color-side-bar: ;
 
   --gradient-orange: linear-gradient(to right, #ff7e5f, #a53b22);
+}
+
+* {
+  font-family: "Be Vietnam Pro", sans-serif;
 }

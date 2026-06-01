@@ -1,5 +1,4 @@
 import "./App.css";
-import "./pages/Budget/Budget";
 
 function App() {
   return (
