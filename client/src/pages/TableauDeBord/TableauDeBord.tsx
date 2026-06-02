@@ -1,6 +1,7 @@
 import { useState } from "react";
+import Dashboard from "../../components/Dashboard/Dashboard.tsx";
 import SideBar from "../../components/SideBar/SideBar";
-
+import "./TableauDeBord.css";
 // import Dashboard from "../components/Dashboard";
 // import Messagerie from "../components/Messagerie";
 // import Reservation from "../components/Reservation";
@@ -14,7 +15,7 @@ function TableauDeBord() {
     <>
       <div className="dashboard-page">
         <SideBar active={active} setActive={setActive} />
-
+        <Dashboard />
         {/* <main className="content">
           {active === "tableau" && <Dashboard />}
           {active === "messagerie" && <Messagerie />}
