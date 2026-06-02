@@ -1,27 +1,60 @@
 @import "../App.css";
 
-* {
-  margin: 0;
-  padding: 0;
+:root {
+  --green-color: #059669;
+  --green-background: rgba(5, 150, 105, 0.2);
+
+  --red-color: #a61b1b;
+  --red-background: rgba(166, 27, 27, 0.2);
+
+  --beige-color: rgb(198, 137, 79);
 }
 
 .budget {
-  width: 75vw;
-  height: 90vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10vh;
+  /* -- Mobile -- */
+  @media screen and (max-width: 429px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* -- Desktop -- */
+  @media screen and (min-width: 429px) {
+    width: 75vw;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin-left: 5vw;
+  }
 
   header {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    /* -- Mobile -- */
+    @media screen and (max-width: 429px) {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
 
-    h1 {
-      color: var(--color-dark);
-      font-size: 3vw;
+      h1 {
+        color: var(--color-dark);
+        font-size: 6vw;
+      }
+    }
+
+    /* -- Desktop -- */
+    @media screen and (min-width: 429px) {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      h1 {
+        color: var(--color-dark);
+        font-size: 3vw;
+      }
     }
 
     button {
@@ -42,57 +75,248 @@
       margin-right: 5vw;
 
       box-shadow: 0 4px 8px rgba(108, 39, 13, 0.776);
+
+      /* -- Mobile -- */
+      @media screen and (max-width: 429px) {
+        display: none;
+      }
     }
   }
 
   .monEquilibres {
-    width: 90%;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-template-rows: 100%;
-    grid-gap: 3vw;
+    /* -- Mobile -- */
+    @media screen and (max-width: 429px) {
+      display: flex;
+      justify-content: center;
+      font-size: 1rem;
+      width: 100%;
+    }
+
+    /* -- Desktop -- */
+    @media screen and (min-width: 429px) {
+      width: 90%;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 100%;
+      grid-gap: 3vw;
+      font-size: 1.5rem;
+    }
 
     .monEquilibresBox {
       background: linear-gradient(135deg, #ff7b5a, #b94424);
       border-radius: 22px;
       padding: 24px 32px;
       color: white;
-      font-size: 1.5rem;
 
-      box-shadow: 0 14px 24px rgba(118, 23, 1, 0.718), 0 4px 8px
-        rgba(108, 39, 13, 0.776);
+      /* -- Mobile -- */
+      @media screen and (max-width: 429px) {
+        width: 80%;
 
-      h2 {
-        font-size: 5vw;
+        h2 {
+          font-size: 2rem;
+          margin-top: 5px;
+          margin-bottom: 15px;
+        }
+      }
+
+      /* -- Desktop -- */
+      @media screen and (min-width: 429px) {
+        height: 70%;
+        box-shadow: 0 14px 24px rgba(118, 23, 1, 0.718), 0 4px 8px
+          rgba(108, 39, 13, 0.776);
+
+        h2 {
+          font-size: 5vw;
+          margin: 5px;
+        }
+      }
+
+      small {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        gap: 5px;
       }
     }
 
     .total {
-      display: flex;
-      flex-direction: column;
-      gap: 4vh;
+      /* -- Mobile -- */
+      @media screen and (max-width: 429px) {
+        display: none;
+      }
+
+      /* -- Desktop -- */
+      @media screen and (min-width: 429px) {
+        display: flex;
+        flex-direction: column;
+        gap: 4vh;
+        margin-left: 3vw;
+        font-size: 1.2rem;
+
+        h3 {
+          font-size: 2rem;
+          margin: 5px;
+        }
+
+        div {
+          border-radius: 10px;
+          padding: 10px;
+        }
+
+        .positif {
+          background-color: var(--green-background);
+
+          .lucid {
+            background: var(--green-background);
+            border-radius: 50%;
+            padding: 3px;
+          }
+        }
+
+        .negatif {
+          background: var(--red-background);
+
+          .lucid {
+            background: var(--red-background);
+            border-radius: 50%;
+            padding: 3px;
+          }
+        }
+      }
     }
   }
 
   .positif {
-    color: #059669;
-
-    .lucid {
-      background: #dff5ee;
-    }
+    color: var(--green-color);
   }
 
   .negatif {
-    color: #e11d48;
-
-    .lucid {
-      background: #fdecef;
-    }
+    color: var(--red-color);
   }
 
   .depensesEquilibres {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-direction: row;
+
+    /* -- Mobile -- */
+    @media screen and (max-width: 429px) {
+      align-self: center;
+    }
+
+    /* -- Desktop -- */
+    @media screen and (min-width: 429px) {
+      align-self: start;
+      margin-left: 4vw;
+      width: 80%;
+    }
+
+    /* -- Mobile -- */
+    @media screen and (max-width: 429px) {
+      .depenses {
+        .mobileDepenses {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          margin-top: 5vh;
+          margin-bottom: 10px;
+
+          h5 {
+            font-size: 1.5rem;
+            margin: 0;
+          }
+
+          button {
+            border-style: none;
+            background: none;
+            color: rgb(225, 178, 27);
+          }
+        }
+      }
+
+      /* -- Desktop -- */
+      @media screen and (min-width: 429px) {
+        .depenses {
+          margin-top: 10vw;
+          .mobileDepenses {
+            button {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    .equilibres {
+      /* -- Mobile -- */
+      @media screen and (max-width: 429px) {
+        display: none;
+      }
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      @media screen and (min-width: 429px) {
+        h5 {
+          font-size: 2rem;
+          margin-top: 10vh;
+          margin-bottom: 10px;
+        }
+      }
+
+      section {
+        display: flex;
+        flex-direction: column;
+
+        article {
+          background: white;
+          padding: 20px;
+          border: 2px var(--beige-color) solid;
+          border-bottom-color: white;
+          font-weight: bold;
+
+          display: flex;
+          justify-content: space-between;
+          gap: 10vw;
+        }
+
+        :first-child {
+          border-top-left-radius: 15px;
+          border-top-right-radius: 15px;
+        }
+
+        :last-child {
+          border-bottom-left-radius: 15px;
+          border-bottom-right-radius: 15px;
+          border-bottom-color: var(--beige-color);
+        }
+      }
+    }
+  }
+
+  .plusButton {
+    /* -- Mobile -- */
+    @media screen and (max-width: 429px) {
+      color: black;
+      background: var(--color-light);
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+
+      display: flex;
+      align-self: flex-end;
+
+      position: fixed;
+      bottom: 10vh;
+    }
+
+    /* -- Desktop -- */
+    @media screen and (min-width: 429px) {
+      display: none;
+    }
   }
 }

@@ -1,6 +1,7 @@
-.dashboard-page {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 5vw;
+@media screen and (min-width: 429px) {
+  .dashboard-page {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
 }
