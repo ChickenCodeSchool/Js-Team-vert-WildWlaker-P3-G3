@@ -8,13 +8,12 @@
 :root {
   /* User */
   --bg-neutral: #ffffff; /*cards*/
-  --bg-color: #dec0b9; /*add 30% opacity*/
-  --bg-card-brown: #a53b22;
+  --bg-color: #fcddd79a;
 
-  --sideBar-color: #dec0b9; /*add 23% opacity*/
+  --sideBar-color: #feb47b5b;
   --hover-color: #a53b22; /*hover & icons*/
   --input-color: #8b716b;
-  --button-color: linear-gradient(to right, #ff7e5f, #a53b22);
+  --button-color: linear-gradient(to right, #ff7e5f, #a53b22); /*fonctionne uniquement avec background ou background-image*/
 
   --font-black: #1f1b18;
   --font-neutral: #ffffff;

@@ -13,6 +13,7 @@ import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
 import Register from "./pages/Register/Register";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import TableauDeBord from "./pages/TableauDeBord/TableauDeBord";
+// import TodoList from "./components/ToDoList/TodoList";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
     path: "/resetpassword",
     element: <ResetPassword />,
   },
+  // {
+  //   path: "/todoList",
+  //   element: <TodoList />,
+  // },
   // Try adding a new route! For example, "/about" with an About component
 ]);
 
