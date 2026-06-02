@@ -10,6 +10,7 @@ import App from "./App";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
+import HomeEvents from "./pages/HomeEvents/HomeEvents";
 
 // import About from "./pages/About";
 // import Contact from "./pages/Contact";
@@ -21,8 +22,15 @@ import App from "./App";
 const router = createBrowserRouter([
   {
     path: "/", // The root path
-    element: <App />, // Renders the App component for the home page
+    element: <App />,
   },
+  {
+    path: "/HomeEvents/",
+    element: <HomeEvents />,
+  },
+
+  // Renders the App component for the home page
+
   // Try adding a new route! For example, "/about" with an About component
 ]);
 
