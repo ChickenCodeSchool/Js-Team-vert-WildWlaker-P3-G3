@@ -1,0 +1,160 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Carter+One&family=Inter:ital,opsz,wght@0,14..32,800;1,14..32,800&family=Lexend:wght@100..900&family=Limelight&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Display:ital,wght@0,100..900;1,100..900&family=Oi&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playfair:ital,opsz,wght@1,5..1200,300..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Space+Grotesk:wght@300..700&family=Ultra&display=swap");
+@media screen and (min-width: 429px) {
+  .sidebar {
+    font-family: "Be Vietnam Pro", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    height: 90vh;
+    display: flex;
+    align-items: flex-start;
+    width: 14vw;
+    padding: 20px 0 0 0;
+    margin-top: 5vh;
+    flex-direction: column;
+    position: relative;
+    background-color: #feb47b5b;
+    border-radius: 40px;
+    .logo-sidebar-container {
+      margin: 0 0 0 20px;
+      display: flex;
+      align-items: center;
+      .logo-sidebar-image {
+        width: 30px;
+        height: 30px;
+      }
+      .logo-sidebar-h2 {
+        color: #ff7e5f;
+      }
+    }
+    .sidebar-menu {
+      list-style: none;
+      padding: 0;
+      width: 100%;
+      li {
+        display: flex;
+        align-items: center;
+        height: 50px;
+        gap: 8px;
+        width: 100%;
+        .layout,
+        .message,
+        .book,
+        .dollar,
+        .image {
+          margin: 0 0 0 20px;
+        }
+        button {
+          border-style: none;
+          background: none;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+      }
+      li.active {
+        background-color: #fa985f6b;
+        width: 90%;
+        border-radius: 0 20px 20px 0;
+        border-left: 4px solid #b44a0c8f;
+      }
+    }
+    .sidebar-end-menu {
+      list-style: none;
+      padding: 0;
+      position: absolute;
+      bottom: 0;
+      .sidebar-signal {
+        margin: 0 0 0 20px;
+        display: flex;
+        align-items: center;
+        height: 50px;
+        button {
+          border-style: none;
+          background: none;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+      }
+      .sidebar-delete-event {
+        margin: 0 0 0 20px;
+        display: flex;
+        align-items: center;
+        height: 50px;
+        button {
+          border-style: none;
+          background: none;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 428px) {
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 70px;
+    margin-top: 0;
+    padding: 0;
+    z-index: 1000;
+    background-color: #c5c5c54b;
+    gap: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    .logo-sidebar-container {
+      display: none;
+    }
+
+    .sidebar-menu,
+    .sidebar-end-menu {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      list-style: none;
+      position: static;
+      margin: 0;
+      padding: 0;
+      gap: 15px;
+
+      li {
+        width: auto;
+        height: auto;
+        justify-content: center;
+
+        button {
+          background: none;
+          padding: 10px;
+          border: none;
+        }
+
+        span {
+          display: none;
+        }
+      }
+    }
+
+    li.active {
+      background-color: #fa985fcb;
+      border-radius: 30%;
+      border-left: none;
+      width: auto;
+      padding: 10px;
+    }
+
+    .layout,
+    .message,
+    .book,
+    .dollar,
+    .image {
+      margin: 0;
+    }
+  }
+}
