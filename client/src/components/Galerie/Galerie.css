@@ -12,40 +12,65 @@
     h1 {
       color: #b2553d;
       font-size: 2rem;
+      font-weight: 700;
     }
 
     .galerie-button {
-      border: none;
-      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
 
       padding: 0.75rem 1.25rem;
+
+      border: none;
+      border-radius: 999px;
 
       background-color: #ff8a65;
       color: white;
 
       cursor: pointer;
+
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #ff7a4f;
+      }
     }
   }
 
   .galerie-grid {
     display: grid;
 
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 
     gap: 1rem;
 
-    .photo {
-      border-radius: 12px;
+    list-style: none;
 
-      min-height: 200px;
+    padding: 0;
+    margin: 0;
+  }
 
-      background-color: #d9d9d9;
-    }
+  .galerie-item {
+    overflow: hidden;
 
-    .grande {
-      grid-column: span 3;
+    border-radius: 12px;
+  }
 
-      min-height: 300px;
+  .photo {
+    width: 100%;
+    height: 220px;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 12px;
+
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.03);
     }
   }
 }
