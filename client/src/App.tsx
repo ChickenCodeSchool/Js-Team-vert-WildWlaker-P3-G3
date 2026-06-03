@@ -1,11 +1,12 @@
-import { Outlet } from "react-router";
+// import { Outlet } from "react-router";
+import TableauDeBord from "./pages/TableauDeBord/TableauDeBord";
 import "./App.css";
 // import Presentation from "./pages/Presentation/Presentation";
 
 function App() {
   return (
     <>
-      <Outlet />
+      <TableauDeBord />
     </>
   );
 }
