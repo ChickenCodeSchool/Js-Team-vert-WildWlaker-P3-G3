@@ -1,0 +1,54 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.CardEvents-Global {
+  width: 16rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px black;
+  background: var(--bg-neutral);
+  overflow: hidden;
+  margin-bottom: 3rem;
+  .CardEvents-Image {
+    width: 100%;
+    height: 12rem;
+    object-fit: cover;
+    display: block;
+  }
+  .CardEvents-ImageDate {
+    position: relative;
+    .CardEvents-Date {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 2.5rem;
+      height: 3rem;
+      background: var(--bg-color);
+      border-radius: 0.5rem;
+      border: 1px solid black;
+      .CardEvents-Date-Day {
+        color: var(--font-darkBrown);
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+      .CardEvents-Date-Month {
+        color: var(--font-gray);
+        font-size: 0.75rem;
+      }
+    }
+  }
+  .CardEvents-Container {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1rem;
+    gap: 0.5rem;
+  }
+  .CardEvents-Location {
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+}
