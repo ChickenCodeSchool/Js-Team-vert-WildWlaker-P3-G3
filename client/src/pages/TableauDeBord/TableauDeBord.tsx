@@ -1,5 +1,7 @@
+import "./TableauDeBord.css";
 import { useState } from "react";
 import Dashboard from "../../components/Dashboard/Dashboard.tsx";
+import Galerie from "../../components/Galerie/Galerie";
 import SideBar from "../../components/SideBar/SideBar";
 import "./TableauDeBord.css";
 // import Dashboard from "../components/Dashboard";
@@ -15,14 +17,13 @@ function TableauDeBord() {
     <>
       <div className="dashboard-page">
         <SideBar active={active} setActive={setActive} />
-        <Dashboard />
-        {/* <main className="content">
+        <main className="content">
           {active === "tableau" && <Dashboard />}
-          {active === "messagerie" && <Messagerie />}
+          {/* {active === "messagerie" && <Messagerie />}
           {active === "reservation" && <Reservation />}
-          {active === "budget" && <Budget />}
+          {active === "budget" && <Budget />} */}
           {active === "galerie" && <Galerie />}
-        </main> */}
+        </main>
       </div>
     </>
   );
