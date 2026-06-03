@@ -62,7 +62,7 @@ function TodoList() {
 
   return (
     <div className="todolist-global">
-      <h2 className="todolist-title">Todo List</h2>
+      <h2 className="todolist-title">To-do list</h2>
       <div className="todolist-text">
         <input
           type="text"

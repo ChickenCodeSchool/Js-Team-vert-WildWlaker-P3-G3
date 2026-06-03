@@ -1,5 +1,31 @@
-/* * {
-  margin: 0;
-  padding: 0;
-  font-family: "Be Vietnam Pro", sans-serif;
-} */
+:root {
+  /* User */
+  --bg-neutral: #ffffff; /*cards*/
+  --bg-color: #fcddd79a;
+
+  --sideBar-color: #feb47b5b;
+  --hover-color: #a53b22; /*hover & icons*/
+  --input-color: #8b716b;
+  --button-color: linear-gradient(to right, #ff7e5f, #a53b22); /*fonctionne uniquement avec background ou background-image*/
+
+  --font-black: #1f1b18;
+  --font-neutral: #ffffff;
+  --font-darkBrown: #5d2e00;
+  --font-brown: #a53b22; /*Wedoo title*/
+  --font-red: #e11d48;
+  --font-green: #059669;
+
+  /* status user*/
+  --bg-confirm-state: #cde5ff;
+  --font-comfirm-state: #001d32;
+
+  --bg-waiting-state: #ffdcc4;
+  --font-waiting-state: #2f1400;
+
+  /* status admin*/
+  --bg-valid-state: #b2f59e;
+  --font-valid-state: #0c5b20;
+
+  --bg-pending-state: #ba1a1a;
+  --font-pending-state: #93000a;
+}
