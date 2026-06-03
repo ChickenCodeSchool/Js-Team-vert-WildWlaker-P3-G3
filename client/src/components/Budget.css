@@ -234,16 +234,13 @@
           }
         }
       }
+    }
 
-      /* -- Desktop -- */
-      @media screen and (min-width: 429px) {
-        .depenses {
-          margin-top: 10vw;
-          .mobileDepenses {
-            button {
-              display: none;
-            }
-          }
+    /* -- Desktop -- */
+    @media screen and (min-width: 429px) {
+      .depenses {
+        button {
+          display: none;
         }
       }
     }
@@ -260,6 +257,7 @@
       flex-direction: column;
       gap: 10px;
 
+      /* -- Desktop -- */
       @media screen and (min-width: 429px) {
         h5 {
           font-size: 2rem;
@@ -281,7 +279,19 @@
 
           display: flex;
           justify-content: space-between;
-          gap: 10vw;
+
+          /* -- Mobile -- */
+          @media screen and (max-width: 429px) {
+            gap: 10vw;
+          }
+          /* -- Laptop -- */
+          @media screen and (max-width: 1249px) and (min-width: 429px) {
+            gap: 2vw;
+          }
+          /* -- Desktop -- */
+          @media screen and (min-width: 1249px) {
+            gap: 10vw;
+          }
         }
 
         :first-child {
