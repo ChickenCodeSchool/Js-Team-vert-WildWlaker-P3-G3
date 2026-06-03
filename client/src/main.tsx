@@ -7,6 +7,13 @@ import { RouterProvider, createBrowserRouter } from "react-router";
 
 // Import the main app component
 import App from "./App";
+import Connexion from "./pages/Connexion/Connexion";
+import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
+// import Presentation from "./pages/Presentation/Presentation";
+import Register from "./pages/Register/Register";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import TableauDeBord from "./pages/TableauDeBord/TableauDeBord";
+// import TodoList from "./components/ToDoList/TodoList";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
@@ -24,13 +31,37 @@ const router = createBrowserRouter([
     path: "/", // The root path
     element: <App />,
   },
+
+  // Renders the App component for the home page
+
   {
     path: "/HomeEvents/",
     element: <HomeEvents />,
   },
-
-  // Renders the App component for the home page
-
+  {
+    path: "/tableaudebord",
+    element: <TableauDeBord />,
+  },
+  {
+    path: "/connexion",
+    element: <Connexion />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/forgetpassword",
+    element: <ForgetPassword />,
+  },
+  {
+    path: "/resetpassword",
+    element: <ResetPassword />,
+  },
+  // {
+  //   path: "/todoList",
+  //   element: <TodoList />,
+  // },
   // Try adding a new route! For example, "/about" with an About component
 ]);
 

@@ -1,0 +1,113 @@
+/* reste a importer les bonnes fonts et les var colors correct sinon on est bueno */
+
+.todolist-global {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color);
+  font-family: "Be Vietnam Pro", sans-serif;
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 17.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  gap: 1rem;
+
+  .todolist-text {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .task-text {
+    border: 0.5px solid var(--hover-color);
+    border-radius: 8px;
+    width: 12rem;
+    outline: none;
+  }
+
+  .task-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--button-color);
+    color: var(--font-neutral);
+    border: none;
+    border-radius: 50%;
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--hover-color);
+    }
+  }
+
+  .task-item-ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    .task-item-li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.5rem 0;
+    }
+  }
+
+  .task-checkbox {
+    appearance: none;
+    flex-shrink: 0;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 2px solid var(--hover-color);
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:checked {
+      background: var(--hover-color);
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 8l4 4 6-6' stroke='white' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-size: contain;
+    }
+  }
+
+  .task-name {
+    flex: 1;
+    min-width: 0;
+    /* word-break: break-word; */
+    min-height: 1em;
+  }
+
+  .task-done {
+    text-decoration: line-through;
+    font-style: italic;
+  }
+
+  .task-edit {
+    flex: 1;
+    min-width: 0;
+    width: 0;
+    /* text-wrap: wrap; */
+    outline: none;
+  }
+
+  .task-trash,
+  .task-edit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--button-color);
+    color: var(--font-neutral);
+    border: none;
+    border-radius: 4px;
+    padding: 0.25rem;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--hover-color);
+    }
+  }
+
+  button:focus {
+    outline: none;
+  }
+}
