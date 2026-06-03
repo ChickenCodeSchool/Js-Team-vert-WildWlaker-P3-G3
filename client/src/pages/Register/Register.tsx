@@ -1,6 +1,6 @@
 import "./Register.css";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import connexionImg from "../../assets/images/Connexion-img.png";
 import eye from "../../assets/images/eye.png";
 import hide from "../../assets/images/hide.png";
@@ -39,6 +39,40 @@ function Register() {
     passwordsMatch &&
     acceptedTerms;
 
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:3310/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message);
+        return;
+      }
+
+      console.log("USER CREATED:", data);
+
+      navigate("/connexion");
+    } catch (error) {
+      console.error("ERROR:", error);
+      alert("Erreur serveur");
+    }
+  };
+
   return (
     <>
       <div className="navbar-register">
@@ -59,7 +93,7 @@ function Register() {
             </p>
           </div>
         </div>
-        <form className="register-content">
+        <form className="register-content" onSubmit={handleSubmit}>
           <div className="wel-para-title-register">
             <h2 className="Welcome-title-register">Bienvenue</h2>
             <p className="Welcome-para-register">Inscrivez-vous à WEDOO.</p>

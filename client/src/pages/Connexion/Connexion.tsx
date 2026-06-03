@@ -23,6 +23,32 @@ function Connexion() {
     /[@$!%*?&]/.test(password);
   const formValid = identifierValid && passwordRules;
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("http://localhost:3310/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          identifier,
+          password,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Login failed");
+      }
+
+      const data = await res.json();
+      console.log("USER CONNECTED:", data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <>
       <div className="navbar-connexion">
@@ -47,7 +73,7 @@ function Connexion() {
             </p>
           </div>
         </div>
-        <form className="connection-content">
+        <form className="connection-content" onSubmit={handleSubmit}>
           <div className="wel-para-title">
             <h2 className="Welcome-title">Bienvenue</h2>
             <p className="Welcome-para">
