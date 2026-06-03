@@ -1,0 +1,19 @@
+.HomeEvents-Global {
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  padding: 10%;
+
+  .HomeEvents-Title {
+    color: var(--font-darkBrown);
+  }
+  .HomeEvents-FilterAdd {
+    display: flex;
+    justify-content: space-between;
+    padding-block: 2rem;
+  }
+  .HomeEvents-CardGlobal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+}

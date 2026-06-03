@@ -10,7 +10,7 @@ import "./ModalAddEvent.css";
 type Tab = "create" | "join"; // deux onglet creer et joindre
 
 function ModalAddEvent({ isOpen, onClose }: ModalAddEventProps) {
-  const [activeTab, setActiveTab] = useState<Tab>("create"); // initialise le modal sur l'onglet creer un evenement
+  const [activeTab, setActiveTab] = useState<Tab>("create"); // met le modal directement sur l'onglet creer un evenement
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 

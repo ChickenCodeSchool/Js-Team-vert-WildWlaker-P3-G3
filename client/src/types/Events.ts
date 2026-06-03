@@ -23,3 +23,10 @@ export interface CreateFormProps {
 export interface JoinFormProps {
   onClose: () => void;
 }
+
+export type FilterType = "all" | "ongoing" | "finished";
+
+export interface FilterProps {
+  activeFilter: FilterType;
+  onFilterChange: (filter: FilterType) => void;
+}
