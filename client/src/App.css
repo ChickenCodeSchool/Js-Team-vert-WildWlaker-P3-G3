@@ -1,3 +1,7 @@
+* {
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
 :root {
   /* User */
   --bg-neutral: #ffffff; /*cards*/
