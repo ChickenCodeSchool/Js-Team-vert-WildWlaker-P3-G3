@@ -5,7 +5,7 @@ import "./ButtonAddEvent.css";
 function ButtonAddEvent({ onClick }: ButtonAddEventProps) {
   return (
     <button type="button" className="ButtonAddEvent" onClick={onClick}>
-      + Créer un événement
+      Gérer mes évenement
     </button>
   );
 }

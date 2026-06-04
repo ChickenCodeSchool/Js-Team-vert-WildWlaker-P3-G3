@@ -1,0 +1,61 @@
+.CreateForm-Body {
+  margin: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  .CreateForm-Field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    .CreateForm-Label {
+      padding-left: 2rem;
+      font-size: 0.8rem;
+      color: var(--font-gray);
+    }
+  }
+  .CreateForm-Input {
+    height: 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    padding-left: 0.5rem;
+  }
+  .CreateForm-TextArea {
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    padding-left: 0.5rem;
+    padding-top: 0.2rem;
+  }
+}
+.CreateForm-Footer {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+  .CreateForm-ButtonCancel {
+    width: 5rem;
+    height: 2rem;
+    border-radius: 1rem;
+    border: none;
+    background: var(--button-color);
+    color: var(--font-neutral);
+    transition: transform 0.2s;
+  }
+  .CreateForm-ButtonCancel:hover {
+    transform: scale(0.95);
+  }
+  .CreateForm-ButtonSubmit {
+    width: 10rem;
+    height: 2rem;
+    border-radius: 1rem;
+    border: none;
+    background: var(--button-color);
+    color: var(--font-neutral);
+    transition: transform 0.2s;
+  }
+  .CreateForm-ButtonSubmit:disabled {
+    background: lightgray;
+    color: black;
+  }
+  .CreateForm-ButtonSubmit:hover {
+    transform: scale(0.95);
+  }
+}

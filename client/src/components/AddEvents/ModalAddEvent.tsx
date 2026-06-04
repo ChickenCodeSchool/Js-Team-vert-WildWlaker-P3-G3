@@ -23,43 +23,31 @@ function ModalAddEvent({ isOpen, onClose }: ModalAddEventProps) {
   }, [isOpen]); //le const dialogRef et le useEffect indique que si on ouvre le modal ca l'affiche sinon il est fermé
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
-    if (e.target === e.currentTarget) onClose();
-  }; // quand tu clique en dehors du modal ca le ferme
-
-  const handleBackdropKeyDown = (e: React.KeyboardEvent<HTMLDialogElement>) => {
+    const rect = dialogRef.current?.getBoundingClientRect();
+    if (!rect) return;
     if (
-      (e.key === "Escape" || e.key === "Enter") &&
-      e.target === e.currentTarget
-    )
+      e.clientX < rect.left ||
+      e.clientX > rect.right ||
+      e.clientY < rect.top ||
+      e.clientY > rect.bottom
+    ) {
       onClose();
-  }; // pareil avec echap et entrer
+    }
+  }; // quand tu clique en dehors du modal ca le ferme
 
   return (
     <dialog
       ref={dialogRef}
       className="ModalAddEvent-Backdrop"
       onClick={handleBackdropClick}
-      onKeyDown={handleBackdropKeyDown}
+      onKeyUp={() => {}}
+      onCancel={onClose}
       aria-labelledby="modal-title"
     >
       {" "}
       {/* la balise dialog est faite expres pour le modal 
       aria indique pour les personnes non voyante que c'est un modal avec le titre (pour le referencement et l'accessibilité) */}
       <div className="ModalAddEvent-Global">
-        <div className="ModalAddEvent-Header">
-          <h2 className="ModalAddEvent-Title" id="modal-title">
-            Créer un événement
-          </h2>
-          <button
-            type="button"
-            className="ModalAddEvent-Close"
-            onClick={onClose}
-            aria-label="Fermer"
-          >
-            ✕
-          </button>
-        </div>
-
         <div className="ModalAddEvent-Tabs">
           <button
             type="button"
@@ -76,7 +64,6 @@ function ModalAddEvent({ isOpen, onClose }: ModalAddEventProps) {
             Rejoindre un événement
           </button>
         </div>
-
         {activeTab === "create" ? (
           <CreateForm onClose={onClose} />
         ) : (

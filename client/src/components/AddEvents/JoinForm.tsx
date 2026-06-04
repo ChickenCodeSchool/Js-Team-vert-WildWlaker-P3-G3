@@ -21,9 +21,13 @@ function JoinForm({ onClose }: JoinFormProps) {
   return (
     <>
       <div className="JoinForm-Body">
+        <h2 className="JoinForm-Title" id="modal-title">
+          Rejoingnez un événement
+        </h2>
         <div className="JoinForm-Field">
           <label className="JoinForm-Label" htmlFor="code">
-            Code de l'événement
+            Pour rejoindre un événement, veuillez renseigner le code événement
+            partagé par l'organisateur
           </label>
           <input
             ref={inputRef}
@@ -36,9 +40,6 @@ function JoinForm({ onClose }: JoinFormProps) {
             onChange={(e) => setCode(e.target.value)}
             maxLength={6} // limite a 6 caracteres
           />
-          <span className="JoinForm-Hint">
-            Entrez le code partagé par l'organisateur.
-          </span>
         </div>
       </div>
 
