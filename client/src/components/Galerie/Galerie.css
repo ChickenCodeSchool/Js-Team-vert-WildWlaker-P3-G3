@@ -53,9 +53,44 @@
 }
 
 .galerie-item {
+  position: relative;
+
   overflow: hidden;
 
   border-radius: 12px;
+}
+
+.delete-button {
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  cursor: pointer;
+
+  opacity: 0;
+
+  transition: 0.2s ease;
+}
+
+.galerie-item:hover .delete-button {
+  opacity: 1;
+}
+
+.delete-button:hover {
+  transform: scale(1.1);
 }
 
 .photo {

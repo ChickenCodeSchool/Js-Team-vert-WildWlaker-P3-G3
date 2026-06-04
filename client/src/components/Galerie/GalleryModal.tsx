@@ -4,9 +4,10 @@ import { useState } from "react";
 
 type GalleryModalProps = {
   onClose: () => void;
+  onAddPhoto: (imageUrl: string) => void;
 };
 
-function GalleryModal({ onClose }: GalleryModalProps) {
+function GalleryModal({ onClose, onAddPhoto }: GalleryModalProps) {
   const [preview, setPreview] = useState<string | null>(null);
 
   const [error, setError] = useState("");
@@ -33,6 +34,14 @@ function GalleryModal({ onClose }: GalleryModalProps) {
     setPreview(URL.createObjectURL(file));
   };
 
+  const handleAddClick = () => {
+    if (!preview) {
+      return;
+    }
+
+    onAddPhoto(preview);
+  };
+
   return (
     <div className="modal-overlay">
       <div className="modal">
@@ -50,9 +59,15 @@ function GalleryModal({ onClose }: GalleryModalProps) {
           <img src={preview} alt="Prévisualisation" className="preview-image" />
         )}
 
-        <button type="button" onClick={onClose}>
-          Fermer
-        </button>
+        <div className="modal-actions">
+          <button type="button" onClick={onClose}>
+            Fermer
+          </button>
+
+          <button type="button" onClick={handleAddClick} disabled={!preview}>
+            Ajouter
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import "./Galerie.css";
 
 import { useState } from "react";
 
-import { ImagePlus } from "lucide-react";
+import { ImagePlus, Trash2 } from "lucide-react";
 
 import GalleryModal from "./GalleryModal";
 
@@ -17,7 +17,7 @@ import music from "../../assets/images/music.png";
 function Galerie() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const photos = [
+  const [photos, setPhotos] = useState([
     {
       id: 1,
       link: eventMain,
@@ -53,7 +53,26 @@ function Galerie() {
       link: lounge,
       description: "Espace lounge décoré pour l'événement",
     },
-  ];
+  ]);
+
+  const handleDeletePhoto = (photoId: number) => {
+    setPhotos((currentPhotos) =>
+      currentPhotos.filter((photo) => photo.id !== photoId),
+    );
+  };
+
+  const handleAddPhoto = (imageUrl: string) => {
+    setPhotos((currentPhotos) => [
+      {
+        id: Date.now(),
+        link: imageUrl,
+        description: "Photo ajoutée",
+      },
+      ...currentPhotos,
+    ]);
+
+    setIsModalOpen(false);
+  };
 
   return (
     <section className="galerie">
@@ -74,11 +93,24 @@ function Galerie() {
         {photos.map((photo) => (
           <article key={photo.id} className="galerie-item">
             <img src={photo.link} alt={photo.description} className="photo" />
+
+            <button
+              type="button"
+              className="delete-button"
+              onClick={() => handleDeletePhoto(photo.id)}
+            >
+              <Trash2 size={18} />
+            </button>
           </article>
         ))}
       </div>
 
-      {isModalOpen && <GalleryModal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <GalleryModal
+          onClose={() => setIsModalOpen(false)}
+          onAddPhoto={handleAddPhoto}
+        />
+      )}
     </section>
   );
 }
