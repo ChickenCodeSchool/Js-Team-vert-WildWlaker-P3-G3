@@ -17,6 +17,8 @@ import music from "../../assets/images/music.png";
 function Galerie() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [photoToDelete, setPhotoToDelete] = useState<number | null>(null);
+
   const [photos, setPhotos] = useState([
     {
       id: 1,
@@ -55,12 +57,6 @@ function Galerie() {
     },
   ]);
 
-  const handleDeletePhoto = (photoId: number) => {
-    setPhotos((currentPhotos) =>
-      currentPhotos.filter((photo) => photo.id !== photoId),
-    );
-  };
-
   const handleAddPhoto = (imageUrl: string) => {
     setPhotos((currentPhotos) => [
       {
@@ -72,6 +68,18 @@ function Galerie() {
     ]);
 
     setIsModalOpen(false);
+  };
+
+  const confirmDeletePhoto = () => {
+    if (photoToDelete === null) {
+      return;
+    }
+
+    setPhotos((currentPhotos) =>
+      currentPhotos.filter((photo) => photo.id !== photoToDelete),
+    );
+
+    setPhotoToDelete(null);
   };
 
   return (
@@ -97,7 +105,7 @@ function Galerie() {
             <button
               type="button"
               className="delete-button"
-              onClick={() => handleDeletePhoto(photo.id)}
+              onClick={() => setPhotoToDelete(photo.id)}
             >
               <Trash2 size={18} />
             </button>
@@ -110,6 +118,26 @@ function Galerie() {
           onClose={() => setIsModalOpen(false)}
           onAddPhoto={handleAddPhoto}
         />
+      )}
+
+      {photoToDelete !== null && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Supprimer cette photo ?</h2>
+
+            <p>Cette action est irréversible.</p>
+
+            <div className="modal-actions">
+              <button type="button" onClick={() => setPhotoToDelete(null)}>
+                Annuler
+              </button>
+
+              <button type="button" onClick={confirmDeletePhoto}>
+                Supprimer
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );
