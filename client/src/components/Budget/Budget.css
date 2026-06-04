@@ -1,13 +1,10 @@
-@import "../App.css";
+@import "../../App.css";
 
 :root {
-  --green-color: #059669;
-  --green-background: rgba(5, 150, 105, 0.2);
+  --green-background: rgba(28, 164, 121, 0.2);
+  --red-background: rgba(182, 46, 46, 0.2);
 
-  --red-color: #a61b1b;
-  --red-background: rgba(166, 27, 27, 0.2);
-
-  --beige-color: rgb(198, 137, 79);
+  --beige-color: rgb(235, 175, 119);
 }
 
 .budget {
@@ -39,7 +36,7 @@
       align-items: center;
 
       h1 {
-        color: var(--color-dark);
+        color: var(--font-darkBrown);
         font-size: 6vw;
       }
     }
@@ -52,7 +49,7 @@
       justify-content: space-between;
 
       h1 {
-        color: var(--color-dark);
+        color: var(--font-darkBrown);
         font-size: 3vw;
       }
     }
@@ -60,9 +57,9 @@
     button {
       height: 40px;
       border-radius: 50px;
-      background: var(--gradient-orange);
+      background: var(--button-color);
       border-style: none;
-      color: white;
+      color: var(--bg-neutral);
       font-family: "Be Vietnam Pro", sans-serif;
       font-weight: 400;
       font-style: normal;
@@ -106,7 +103,7 @@
       background: linear-gradient(135deg, #ff7b5a, #b94424);
       border-radius: 22px;
       padding: 24px 32px;
-      color: white;
+      color: var(--bg-neutral);
 
       /* -- Mobile -- */
       @media screen and (max-width: 429px) {
@@ -187,11 +184,11 @@
   }
 
   .positif {
-    color: var(--green-color);
+    color: var(--font-green);
   }
 
   .negatif {
-    color: var(--red-color);
+    color: var(--font-red);
   }
 
   .depensesEquilibres {
@@ -271,10 +268,10 @@
         flex-direction: column;
 
         article {
-          background: white;
+          background: var(--bg-neutral);
           padding: 20px;
           border: 2px var(--beige-color) solid;
-          border-bottom-color: white;
+          border-bottom-color: var(--bg-neutral);
           font-weight: bold;
 
           display: flex;
@@ -312,7 +309,7 @@
     /* -- Mobile -- */
     @media screen and (max-width: 429px) {
       color: black;
-      background: var(--color-light);
+      background: var(--hover-color);
       border: none;
       border-radius: 10px;
       padding: 10px;

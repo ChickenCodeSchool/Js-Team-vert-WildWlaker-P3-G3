@@ -1,0 +1,102 @@
+import databaseClient from "../../../database/client";
+
+import type { Result, Rows } from "../../../database/client";
+
+type Budget = {
+  budget_id: number;
+  budget_id_event: number;
+  budget_id_user: number;
+  user_username: string;
+  user_name: string;
+  budget_price: number;
+  budget_creation_date: string;
+};
+
+type BudgetByUser = {
+  user_id: number;
+  user_username: string;
+  user_name: string;
+  total_price: number;
+};
+
+type BudgetTotalEvent = {
+  event_id: number;
+  event_name: string;
+  total_price: number;
+};
+
+class budgetRepository {
+  async readByEvent(id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `SELECT 
+        b.budget_id, 
+        b.budget_id_event, 
+        u.user_username, 
+        u.user_name, 
+        b.budget_name, 
+        b.budget_price, 
+        b.budget_creation_date
+    FROM budget AS b
+    JOIN user AS u ON u.user_id = b.budget_id_user
+    WHERE b.budget_id_event = ?;`,
+      [id],
+    );
+
+    return rows as Budget[];
+  }
+
+  async readAllTotalBudgetByEvent(id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `SELECT 
+        u.user_id, 
+        u.user_username, 
+        u.user_name, 
+        COALESCE(SUM(b.budget_price), 0) AS total_price 
+      FROM event_user_joining AS euj
+      JOIN user AS u ON u.user_id = euj.euj_id_user
+      LEFT JOIN budget AS b ON b.budget_id_user = euj.euj_id_user
+      WHERE euj.euj_id_event = ?
+      GROUP BY u.user_id, u.user_username, u.user_name`,
+      [id],
+    );
+    return rows as BudgetByUser[];
+  }
+
+  async readBudgetInfoByUser(id_event: number, id_user: number) {
+    // return user id, username, name and the total of all budget for a specific user
+    const [rows] = await databaseClient.query<Rows>(
+      `SELECT 
+        u.user_id, 
+        u.user_username, 
+        u.user_name, 
+        COALESCE(SUM(b.budget_price), 0) AS total_price 
+      FROM event_user_joining AS euj
+      JOIN user AS u ON u.user_id = euj.euj_id_user
+      LEFT JOIN budget AS b ON b.budget_id_user = euj.euj_id_user
+      WHERE euj.euj_id_event = ? AND u.user_id = ?
+      GROUP BY u.user_id, u.user_username, u.user_name`,
+      [id_event, id_user],
+    );
+
+    return rows[0] as BudgetByUser[];
+  }
+
+  async readBudgetInfoEvent(id: number) {
+    // return event id, name and the total of all budget
+    const [rows] = await databaseClient.query<Rows>(
+      `SELECT 
+        e.event_id, 
+        e.event_name,
+        COALESCE(SUM(b.budget_price), 0) AS total_price 
+      FROM budget AS b
+      JOIN event AS e ON e.event_id = b.budget_id_event
+      WHERE e.event_id = ?
+      GROUP BY b.budget_id_event`,
+      [id],
+    );
+
+    return rows as BudgetTotalEvent[];
+  }
+}
+
+export default new budgetRepository();
