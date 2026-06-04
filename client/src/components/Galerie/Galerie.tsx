@@ -1,6 +1,10 @@
 import "./Galerie.css";
 
+import { useState } from "react";
+
 import { ImagePlus } from "lucide-react";
+
+import GalleryModal from "./GalleryModal";
 
 import campfire from "../../assets/images/campfire.png";
 import champagne from "../../assets/images/champagne.png";
@@ -11,6 +15,8 @@ import lounge from "../../assets/images/lounge.png";
 import music from "../../assets/images/music.png";
 
 function Galerie() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const photos = [
     {
       id: 1,
@@ -54,19 +60,25 @@ function Galerie() {
       <div className="galerie-header">
         <h1>Nom de l'événement</h1>
 
-        <button type="button" className="galerie-button">
+        <button
+          type="button"
+          className="galerie-button"
+          onClick={() => setIsModalOpen(true)}
+        >
           <ImagePlus size={18} />
           Ajouter une photo
         </button>
       </div>
 
-      <ul className="galerie-grid" aria-label="Galerie de l'événement">
+      <div className="galerie-grid" aria-label="Galerie de l'événement">
         {photos.map((photo) => (
-          <li key={photo.id} className="galerie-item">
+          <article key={photo.id} className="galerie-item">
             <img src={photo.link} alt={photo.description} className="photo" />
-          </li>
+          </article>
         ))}
-      </ul>
+      </div>
+
+      {isModalOpen && <GalleryModal onClose={() => setIsModalOpen(false)} />}
     </section>
   );
 }
