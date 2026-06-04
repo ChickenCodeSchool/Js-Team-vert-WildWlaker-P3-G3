@@ -1,0 +1,105 @@
+.messagerie {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  height: 90vh;
+  width: 30vw;
+  margin-top: 5vh;
+  h1 {
+    color: var(--font-brown);
+  }
+
+  .messagerie-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 80vh;
+    .messagerie-box-messages {
+      height: 70vh;
+      overflow-y: auto;
+      /* scrollbar-width: thin;
+      scrollbar-color: transparent transparent; */
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: none;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #ff7e5f;
+        border-radius: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        /* background: #e96b4d; */
+        scrollbar-color: #ff7e5f transparent;
+      }
+      .messagerie-box-messages-friends {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 5px;
+        padding: 2px 0 2px 0;
+        img {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+        }
+
+        div {
+          background-color: #fff8f5;
+          border: 1px solid #dec0b9;
+          padding: 5px;
+          border-radius: 12px 12px 12px 0;
+        }
+      }
+
+      .messagerie-box-messages-user {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        padding: 2px 0 2px 0;
+        div {
+          background-color: #fff8f5;
+          border: 1px solid #dec0b9;
+          padding: 5px;
+          border-radius: 12px 12px 0 12px;
+        }
+      }
+    }
+
+    .massagerie-input {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 5px;
+      height: 6%;
+      border: 1px solid #ff7e5f;
+      border-radius: 21px;
+      input {
+        padding-left: 10px;
+        width: 90%;
+        border-style: none;
+        background: none;
+      }
+      input:focus-visible {
+        outline: none;
+      }
+      button {
+        border-radius: 21px;
+        border-style: none;
+        background-color: #ff7e5f;
+        height: 30px;
+        width: 30px;
+        padding: 5px 2px 0 0;
+        cursor: pointer;
+        .send {
+          color: white;
+        }
+      }
+    }
+  }
+}
