@@ -1,6 +1,10 @@
 import "./Galerie.css";
 
-import { ImagePlus } from "lucide-react";
+import { useState } from "react";
+
+import { ImagePlus, Trash2 } from "lucide-react";
+
+import GalleryModal from "./GalleryModal";
 
 import campfire from "../../assets/images/campfire.png";
 import champagne from "../../assets/images/champagne.png";
@@ -11,7 +15,11 @@ import lounge from "../../assets/images/lounge.png";
 import music from "../../assets/images/music.png";
 
 function Galerie() {
-  const photos = [
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [photoToDelete, setPhotoToDelete] = useState<number | null>(null);
+
+  const [photos, setPhotos] = useState([
     {
       id: 1,
       link: eventMain,
@@ -47,26 +55,90 @@ function Galerie() {
       link: lounge,
       description: "Espace lounge décoré pour l'événement",
     },
-  ];
+  ]);
+
+  const handleAddPhoto = (imageUrl: string) => {
+    setPhotos((currentPhotos) => [
+      {
+        id: Date.now(),
+        link: imageUrl,
+        description: "Photo ajoutée",
+      },
+      ...currentPhotos,
+    ]);
+
+    setIsModalOpen(false);
+  };
+
+  const confirmDeletePhoto = () => {
+    if (photoToDelete === null) {
+      return;
+    }
+
+    setPhotos((currentPhotos) =>
+      currentPhotos.filter((photo) => photo.id !== photoToDelete),
+    );
+
+    setPhotoToDelete(null);
+  };
 
   return (
     <section className="galerie">
       <div className="galerie-header">
         <h1>Nom de l'événement</h1>
 
-        <button type="button" className="galerie-button">
+        <button
+          type="button"
+          className="galerie-button"
+          onClick={() => setIsModalOpen(true)}
+        >
           <ImagePlus size={18} />
           Ajouter une photo
         </button>
       </div>
 
-      <ul className="galerie-grid" aria-label="Galerie de l'événement">
+      <div className="galerie-grid" aria-label="Galerie de l'événement">
         {photos.map((photo) => (
-          <li key={photo.id} className="galerie-item">
+          <article key={photo.id} className="galerie-item">
             <img src={photo.link} alt={photo.description} className="photo" />
-          </li>
+
+            <button
+              type="button"
+              className="delete-button"
+              onClick={() => setPhotoToDelete(photo.id)}
+            >
+              <Trash2 size={18} />
+            </button>
+          </article>
         ))}
-      </ul>
+      </div>
+
+      {isModalOpen && (
+        <GalleryModal
+          onClose={() => setIsModalOpen(false)}
+          onAddPhoto={handleAddPhoto}
+        />
+      )}
+
+      {photoToDelete !== null && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Supprimer cette photo ?</h2>
+
+            <p>Cette action est irréversible.</p>
+
+            <div className="modal-actions">
+              <button type="button" onClick={() => setPhotoToDelete(null)}>
+                Annuler
+              </button>
+
+              <button type="button" onClick={confirmDeletePhoto}>
+                Supprimer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
