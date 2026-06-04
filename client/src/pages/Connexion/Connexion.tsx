@@ -91,7 +91,7 @@ function Connexion() {
               required
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
-              className={`email-input ${submitted && !identifierValid ? "input-error" : ""}`}
+              className={`input-focus email-input ${submitted && !identifierValid ? "input-error" : ""}`}
             />
             {identifier && (
               <p className={identifierValid ? "success" : "error"}>
@@ -115,7 +115,7 @@ function Connexion() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`password-input ${submitted && !passwordRules ? "input-error" : ""}`}
+                className={`input-focus password-input ${submitted && !passwordRules ? "input-error" : ""}`}
               />
               <button
                 type="button"

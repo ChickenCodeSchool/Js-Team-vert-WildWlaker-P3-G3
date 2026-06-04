@@ -1,8 +1,19 @@
+import crypto from "node:crypto";
+import bcrypt from "bcrypt";
 import type { RequestHandler } from "express";
+import nodemailer from "nodemailer";
+import databaseClient from "../../../database/client";
 import userRepository from "./userRepository";
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 // GET /api/users
-const browse: RequestHandler = async (req, res, next) => {
+const browseInscription: RequestHandler = async (req, res, next) => {
   try {
     const users = await userRepository.readAll();
 
@@ -44,9 +55,7 @@ const add: RequestHandler = async (req, res, next) => {
     );
 
     if (existingUsername) {
-      res.status(409).json({
-        message: "Ce pseudo existe déjà",
-      });
+      res.status(409).json({ message: "Ce pseudo existe déjà" });
       return;
     }
 
@@ -55,15 +64,30 @@ const add: RequestHandler = async (req, res, next) => {
     );
 
     if (existingEmail) {
-      res.status(409).json({
-        message: "Cet email existe déjà",
-      });
+      res.status(409).json({ message: "Cet email existe déjà" });
       return;
     }
 
     const insertId = await userRepository.create(newUser);
 
-    res.status(201).json({ insertId });
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: newUser.email,
+      subject: "Bienvenue sur Wedoo",
+      html: `
+        <h1>Bienvenue sur Wedoo 🎉</h1>
+        <p>Votre compte a été créé avec succès.</p>
+        <p>Pseudo : ${newUser.username}</p>
+      `,
+    });
+
+    console.log("Email de bienvenue envoyé à :", newUser.email);
+
+    res.status(201).json({
+      message: "Inscription réussie 🎉",
+      insertId,
+    });
+    return;
   } catch (err) {
     next(err);
   }
@@ -99,10 +123,130 @@ const login: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const browse: RequestHandler = async (req, res, next) => {
+  try {
+    const eventId = Number(req.params.id);
+
+    const event = await userRepository.readUserDescriptionEvent(eventId);
+
+    res.json(event);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const browseUserAndBudget: RequestHandler = async (req, res, next) => {
+  try {
+    const eventId = Number(req.params.id);
+
+    const event = await userRepository.readUserAndBudgetOnDashboard(eventId);
+
+    res.json(event);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const forgotPassword: RequestHandler = async (req, res, next) => {
+  try {
+    const { identifier } = req.body;
+
+    // 🧨 AJOUT IMPORTANT
+    if (!identifier) {
+      res.status(400).json({ message: "Identifier manquant" });
+      return;
+    }
+
+    const user = await userRepository.findByEmailOrUsername(identifier);
+
+    if (!user) {
+      res.status(401).json({
+        message: "Pseudo ou email incorrect",
+      });
+      return;
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const expires = Date.now() + 1000 * 60 * 1;
+
+    await userRepository.saveResetToken(user.user_id, token, expires);
+
+    const link = `http://localhost:3000/resetpassword?token=${token}`;
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: user.user_mail,
+      subject: "Réinitialisation du mot de passe",
+      html: `
+    <h1>Wedoo<h1>
+    <h2>Réinitialisation du mot de passe</h2>
+    <p>Cliquez sur le lien suivant :</p>
+    <a href="${link}">${link}</a>
+  `,
+    });
+
+    console.log("Email envoyé à :", user.user_mail);
+
+    res.json({ message: "Lien envoyé" });
+  } catch (err) {
+    console.error("FORGOT PASSWORD ERROR:", err); // 🔥 IMPORTANT
+    next(err);
+  }
+};
+
+const resetPassword: RequestHandler = async (req, res, next) => {
+  try {
+    const { token, password } = req.body;
+
+    const user = await userRepository.findByResetToken(token);
+
+    if (!user) {
+      res.status(401).json({ message: "Token invalide" });
+      return;
+    }
+
+    if (!user.reset_expires || Date.now() > user.reset_expires) {
+      res.status(401).json({ message: "Token expiré" });
+      return;
+    }
+
+    const isSamePassword = await bcrypt.compare(password, user.user_password);
+
+    if (isSamePassword) {
+      res.status(400).json({
+        message: "Vous ne pouvez pas utiliser l'ancien mot de passe",
+      });
+      return;
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await userRepository.resetPassword(user.user_id, hashedPassword);
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: user.user_mail,
+      subject: "Mot de passe modifié",
+      html: `
+        <h1>Wedoo</h1>
+        <p>Votre mot de passe a été modifié avec succès.</p>
+      `,
+    });
+
+    res.json({
+      message: "Mot de passe modifié avec succès",
+    });
+    return;
+  } catch (err) {
+    next(err);
+  }
+};
 
 export default {
   browse,
+  browseInscription,
   read,
   add,
   login,
+  browseUserAndBudget,
+  forgotPassword,
+  resetPassword,
 };

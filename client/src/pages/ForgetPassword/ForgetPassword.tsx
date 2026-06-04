@@ -1,6 +1,6 @@
 import "./ForgetPassword.css";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import connexionImg from "../../assets/images/Connexion-img.png";
 import logo from "../../assets/images/logo-wedoo.png";
 
@@ -12,6 +12,31 @@ function ForgetPassword() {
   const isUsername = identifier.trim().length >= 3;
   const identifierValid = isEmail || isUsername;
   const formValid = identifierValid;
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const res = await fetch("http://localhost:3310/api/auth/forgot-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ identifier }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message);
+      return;
+    }
+
+    alert("Un email de réinitialisation a été envoyé.");
+
+    navigate("/connexion");
+  };
 
   return (
     <>
@@ -37,9 +62,9 @@ function ForgetPassword() {
             </p>
           </div>
         </div>
-        <form className="forgetPassword-content">
+        <form className="forgetPassword-content" onSubmit={handleSubmit}>
           <div className="wel-para-title-forgetPassword">
-            <h2>Mot de passe oublier ?</h2>
+            <h2>Mot de passe oublié ?</h2>
             <p className="Welcome-forgetPassword-para">
               Entrez votre email ou votre pseudo pour recevoir un lien de
               réinitialisation.
@@ -56,7 +81,7 @@ function ForgetPassword() {
               required
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
-              className={`email-input-forgetPassword ${submitted && !identifierValid ? "input-error" : ""}`}
+              className={`input-focus email-input-forgetPassword ${submitted && !identifierValid ? "input-error" : ""}`}
             />
             {identifier && (
               <p className={identifierValid ? "success" : "error"}>
