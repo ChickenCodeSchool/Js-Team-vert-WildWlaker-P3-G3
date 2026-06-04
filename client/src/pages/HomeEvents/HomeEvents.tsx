@@ -59,6 +59,15 @@ const events = [
       "Découvrez les œuvres d'artistes contemporains du monde entier.",
     location: "Lyon, France",
   },
+  {
+    id: 6,
+    image: "https://picsum.photos/400/205",
+    imageAlt: "je ne sais pas ",
+    date: "2025-06-02",
+    title: "Je ne sais pas",
+    description: "On ne sais pas ce qui va se passer.",
+    location: "Jenecpaou, Kelkepar",
+  },
 ];
 
 function HomeEvents() {

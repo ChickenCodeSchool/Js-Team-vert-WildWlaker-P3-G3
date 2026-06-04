@@ -8,27 +8,34 @@
     flex-direction: column;
     gap: 0.5rem;
     .CreateForm-Label {
-      padding-left: 2rem;
       font-size: 0.8rem;
       color: var(--font-gray);
     }
   }
   .CreateForm-Input {
     height: 2rem;
-    border-radius: 0.5rem;
     border: 1px solid var(--border-color);
     padding-left: 0.5rem;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+  }
+  .CreateForm-Input:focus {
+    outline: none;
   }
   .CreateForm-TextArea {
-    border-radius: 0.5rem;
     border: 1px solid var(--border-color);
     padding-left: 0.5rem;
     padding-top: 0.2rem;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+  }
+  .CreateForm-TextArea:focus {
+    outline: none;
   }
 }
 .CreateForm-Footer {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   margin-bottom: 2rem;
   .CreateForm-ButtonCancel {
     width: 5rem;

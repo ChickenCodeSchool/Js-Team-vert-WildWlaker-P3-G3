@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 
 import type { JoinFormProps } from "../../types/Events";
 
+import "./JoinForm.css";
+
 function JoinForm({ onClose }: JoinFormProps) {
   const [code, setCode] = useState("");
 
@@ -27,7 +29,7 @@ function JoinForm({ onClose }: JoinFormProps) {
         <div className="JoinForm-Field">
           <label className="JoinForm-Label" htmlFor="code">
             Pour rejoindre un événement, veuillez renseigner le code événement
-            partagé par l'organisateur
+            partagé par l'organisateur.
           </label>
           <input
             ref={inputRef}
@@ -42,7 +44,6 @@ function JoinForm({ onClose }: JoinFormProps) {
           />
         </div>
       </div>
-
       <div className="JoinForm-Footer">
         <button
           type="button"
