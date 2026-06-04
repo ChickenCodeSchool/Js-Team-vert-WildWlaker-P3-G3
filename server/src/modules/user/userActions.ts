@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
 });
-// GET /api/users
+
 const browseInscription: RequestHandler = async (req, res, next) => {
   try {
     const users = await userRepository.readAll();
@@ -23,7 +23,6 @@ const browseInscription: RequestHandler = async (req, res, next) => {
   }
 };
 
-// GET /api/users/:id
 const read: RequestHandler = async (req, res, next) => {
   try {
     const userId = Number(req.params.id);
@@ -41,7 +40,6 @@ const read: RequestHandler = async (req, res, next) => {
   }
 };
 
-// POST /api/users
 const add: RequestHandler = async (req, res, next) => {
   try {
     const newUser = {
@@ -93,7 +91,6 @@ const add: RequestHandler = async (req, res, next) => {
   }
 };
 
-// POST /api/login
 const login: RequestHandler = async (req, res, next) => {
   try {
     const { identifier, password } = req.body;
@@ -151,7 +148,6 @@ const forgotPassword: RequestHandler = async (req, res, next) => {
   try {
     const { identifier } = req.body;
 
-    // 🧨 AJOUT IMPORTANT
     if (!identifier) {
       res.status(400).json({ message: "Identifier manquant" });
       return;
@@ -189,7 +185,7 @@ const forgotPassword: RequestHandler = async (req, res, next) => {
 
     res.json({ message: "Lien envoyé" });
   } catch (err) {
-    console.error("FORGOT PASSWORD ERROR:", err); // 🔥 IMPORTANT
+    console.error("FORGOT PASSWORD ERROR:", err);
     next(err);
   }
 };
