@@ -23,25 +23,28 @@
         height: 30px;
       }
       .logo-sidebar-h2 {
-        color: #ff7e5f;
+        color: var(--font-brown);
       }
     }
     .sidebar-menu {
       list-style: none;
       padding: 0;
       width: 100%;
+
       li {
         display: flex;
         align-items: center;
         height: 50px;
         gap: 8px;
         width: 100%;
+
         .layout,
         .message,
         .book,
         .dollar,
         .image {
           margin: 0 0 0 20px;
+          cursor: pointer;
         }
         button {
           border-style: none;
@@ -49,6 +52,7 @@
           display: flex;
           align-items: center;
           gap: 10px;
+          cursor: pointer;
         }
       }
       li.active {
@@ -74,6 +78,7 @@
           display: flex;
           align-items: center;
           gap: 10px;
+          cursor: pointer;
         }
       }
       .sidebar-delete-event {
@@ -87,6 +92,7 @@
           display: flex;
           align-items: center;
           gap: 10px;
+          cursor: pointer;
         }
       }
     }

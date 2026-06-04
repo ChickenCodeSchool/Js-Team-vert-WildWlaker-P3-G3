@@ -78,7 +78,12 @@ function Dashboard() {
 
     return reservationDate < today ? "Passé" : "À venir";
   }
+  function getReservationStatusCss(date: string) {
+    const today = new Date();
+    const reservationDate = new Date(date);
 
+    return reservationDate < today ? "passe" : "a_venir";
+  }
   return (
     <div className="dashboard">
       <h1>{eventName}</h1>
@@ -117,7 +122,7 @@ function Dashboard() {
               <h4>Organisateur</h4>
               <h4>Lieux</h4>
               <h4>Date</h4>
-              <h4>Statut</h4>
+              <h4 className="statut">Statut</h4>
             </div>
 
             {reservationData.map((reservation) => (
@@ -134,7 +139,13 @@ function Dashboard() {
 
                 <p>{formatDate(reservation.reservation_date)}</p>
 
-                <p>{getReservationStatus(reservation.reservation_date)}</p>
+                <p
+                  className={getReservationStatusCss(
+                    reservation.reservation_date,
+                  )}
+                >
+                  {getReservationStatus(reservation.reservation_date)}
+                </p>
               </div>
             ))}
           </div>
