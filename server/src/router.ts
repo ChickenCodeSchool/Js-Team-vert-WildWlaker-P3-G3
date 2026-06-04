@@ -1,5 +1,7 @@
 import express from "express";
 
+import eventActions from "./modules/event/eventActions";
+
 const router = express.Router();
 
 /* ************************************************************************* */
@@ -25,7 +27,18 @@ router.get("/api/items", itemActions.browse);
 router.get("/api/items/:id", itemActions.read);
 router.post("/api/items", itemActions.add);
 
+// routes for create events
+router.get("/api/events", eventActions.browse);
+router.post("/api/events", eventActions.add);
+
 /* ************************************************************************* */
+// todoActions routes
+import todoActions from "./modules/todo/todoActions";
+
+router.get("/api/todo/:eventId", todoActions.browse);
+router.post("/api/todo", todoActions.add);
+router.put("/api/todo/:todo_id", todoActions.edit);
+router.delete("/api/todo/:todo_id", todoActions.destroy);
 
 router.post("/api/login", userActions.login);
 router.post("/api/auth/forgot-password", userActions.forgotPassword);

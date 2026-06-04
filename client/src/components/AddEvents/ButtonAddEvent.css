@@ -1,0 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: 0;
+}
+
+.ButtonAddEvent {
+  background: linear-gradient(to right, #ff7e5f, #a53b22);
+  color: var(--font-neutral);
+  border-radius: 5rem;
+  width: 11rem;
+  height: 2rem;
+  border: none;
+  box-shadow: 1px 1px 5px black;
+  transition: transform 0.2s;
+}
+.ButtonAddEvent:hover {
+  transform: scale(0.95);
+}
