@@ -1,5 +1,7 @@
 import express from "express";
 
+import eventActions from "./modules/event/eventActions";
+
 const router = express.Router();
 
 /* ************************************************************************* */
@@ -20,6 +22,10 @@ router.get("/api/users/:id/userAndBudget", userActions.browseUserAndBudget);
 router.get("/api/items", itemActions.browse);
 router.get("/api/items/:id", itemActions.read);
 router.post("/api/items", itemActions.add);
+
+// routes for create events
+router.get("/api/events", eventActions.browse);
+router.post("/api/events", eventActions.add);
 
 /* ************************************************************************* */
 // todoActions routes
