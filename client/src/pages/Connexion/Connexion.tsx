@@ -1,6 +1,6 @@
 import "./Connexion.css";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import connexionImg from "../../assets/images/Connexion-img.png";
 import eye from "../../assets/images/eye.png";
 import hide from "../../assets/images/hide.png";
@@ -11,6 +11,7 @@ function Connexion() {
   const [identifier, setIdentifier] = useState("");
   const [submitted, _setSubmitted] = useState(false);
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
   const isUsername = identifier.trim().length >= 3;
@@ -22,9 +23,11 @@ function Connexion() {
     /\d/.test(password) &&
     /[@$!%*?&]/.test(password);
   const formValid = identifierValid && passwordRules;
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMessage("");
 
     try {
       const res = await fetch("http://localhost:3310/api/login", {
@@ -38,14 +41,18 @@ function Connexion() {
         }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        throw new Error("Login failed");
+        setErrorMessage(data.message || "Erreur de connexion");
+        return;
       }
 
-      const data = await res.json();
-      console.log("USER CONNECTED:", data);
+      localStorage.setItem("user", JSON.stringify(data));
+
+      navigate("/homeevents");
     } catch (err) {
-      console.error(err);
+      setErrorMessage("Erreur serveur");
     }
   };
 
@@ -93,11 +100,6 @@ function Connexion() {
               onChange={(e) => setIdentifier(e.target.value)}
               className={`input-focus email-input ${submitted && !identifierValid ? "input-error" : ""}`}
             />
-            {identifier && (
-              <p className={identifierValid ? "success" : "error"}>
-                {identifierValid ? "" : "✗ Pseudo ou Adresse mail incorrect"}
-              </p>
-            )}
           </div>
 
           <div className="password-input-label">
@@ -128,9 +130,7 @@ function Connexion() {
                 />
               </button>
             </div>
-            {password && !passwordRules && (
-              <p className="error">✗ Mot de passe invalide</p>
-            )}
+            {errorMessage && <p className="error">{errorMessage}</p>}
           </div>
           <button
             type="submit"
@@ -139,6 +139,7 @@ function Connexion() {
           >
             Connexion
           </button>
+
           <h5 className="register-link-connection">
             Pas encore inscrit ?{""}
             <Link to="/register" className="register-link">

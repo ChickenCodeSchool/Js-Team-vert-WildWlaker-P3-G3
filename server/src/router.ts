@@ -28,6 +28,7 @@ router.get("/api/items/:id", itemActions.read);
 router.post("/api/items", itemActions.add);
 
 // routes for create events
+// router.get("/api/users/:id/events", userActions.getUserEvents);
 router.get("/api/events", eventActions.browse);
 router.post("/api/events", eventActions.add);
 
