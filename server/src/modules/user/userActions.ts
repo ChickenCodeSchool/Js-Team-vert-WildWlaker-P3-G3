@@ -42,10 +42,11 @@ const read: RequestHandler = async (req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const newUser = {
       username: req.body.username,
       email: req.body.email,
-      password: req.body.password,
+      password: hashedPassword,
     };
 
     const existingUsername = await userRepository.findByEmailOrUsername(
@@ -104,7 +105,9 @@ const login: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    if (user.user_password !== password) {
+    const isPasswordValid = await bcrypt.compare(password, user.user_password);
+
+    if (!isPasswordValid) {
       res.status(401).json({
         message: "Mot de passe incorrect",
       });
