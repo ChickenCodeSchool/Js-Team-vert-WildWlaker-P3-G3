@@ -1,68 +1,52 @@
 import "./Galerie.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ImagePlus, Trash2 } from "lucide-react";
 
 import GalleryModal from "./GalleryModal";
 
-import campfire from "../../assets/images/campfire.png";
-import champagne from "../../assets/images/champagne.png";
-import cocktail from "../../assets/images/cocktail.png";
-import dessert from "../../assets/images/dessert.png";
-import eventMain from "../../assets/images/event-main.png";
-import lounge from "../../assets/images/lounge.png";
-import music from "../../assets/images/music.png";
+import { getGallery } from "../../services/galleryService";
+
+type Gallery = {
+  gallery_id: number;
+  gallery_id_event: number;
+  gallery_id_user: number;
+  gallery_link: string;
+  gallery_description: string | null;
+  gallery_creation_date: string | null;
+};
 
 function Galerie() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [photoToDelete, setPhotoToDelete] = useState<number | null>(null);
 
-  const [photos, setPhotos] = useState([
-    {
-      id: 1,
-      link: eventMain,
-      description: "Réception de mariage au coucher du soleil",
-    },
-    {
-      id: 2,
-      link: cocktail,
-      description: "Cocktails servis pendant la réception",
-    },
-    {
-      id: 3,
-      link: campfire,
-      description: "Invités réunis autour d'un feu de camp",
-    },
-    {
-      id: 4,
-      link: music,
-      description: "Groupe de musique jouant en soirée",
-    },
-    {
-      id: 5,
-      link: dessert,
-      description: "Buffet de desserts pour les invités",
-    },
-    {
-      id: 6,
-      link: champagne,
-      description: "Toast au champagne pendant la célébration",
-    },
-    {
-      id: 7,
-      link: lounge,
-      description: "Espace lounge décoré pour l'événement",
-    },
-  ]);
+  const [photos, setPhotos] = useState<Gallery[]>([]);
+
+  useEffect(() => {
+    const loadGallery = async () => {
+      try {
+        const data = await getGallery(2);
+
+        setPhotos(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadGallery();
+  }, []);
 
   const handleAddPhoto = (imageUrl: string) => {
     setPhotos((currentPhotos) => [
       {
-        id: Date.now(),
-        link: imageUrl,
-        description: "Photo ajoutée",
+        gallery_id: Date.now(),
+        gallery_id_event: 1,
+        gallery_id_user: 1,
+        gallery_link: imageUrl,
+        gallery_description: "Photo ajoutée",
+        gallery_creation_date: null,
       },
       ...currentPhotos,
     ]);
@@ -76,7 +60,7 @@ function Galerie() {
     }
 
     setPhotos((currentPhotos) =>
-      currentPhotos.filter((photo) => photo.id !== photoToDelete),
+      currentPhotos.filter((photo) => photo.gallery_id !== photoToDelete),
     );
 
     setPhotoToDelete(null);
@@ -99,13 +83,17 @@ function Galerie() {
 
       <div className="galerie-grid" aria-label="Galerie de l'événement">
         {photos.map((photo) => (
-          <article key={photo.id} className="galerie-item">
-            <img src={photo.link} alt={photo.description} className="photo" />
+          <article key={photo.gallery_id} className="galerie-item">
+            <img
+              src={photo.gallery_link}
+              alt={photo.gallery_description ?? "Photo de la galerie"}
+              className="photo"
+            />
 
             <button
               type="button"
               className="delete-button"
-              onClick={() => setPhotoToDelete(photo.id)}
+              onClick={() => setPhotoToDelete(photo.gallery_id)}
             >
               <Trash2 size={18} />
             </button>
