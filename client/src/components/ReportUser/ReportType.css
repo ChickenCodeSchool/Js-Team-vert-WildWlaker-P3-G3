@@ -1,0 +1,40 @@
+.reportType-global {
+  border: none;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 24px;
+
+  & legend {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  & .reportType-cards {
+    display: flex;
+    gap: 12px;
+
+    & .reportType-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      & input[type="radio"] {
+        display: none;
+      }
+
+      &:has(input[type="radio"]:checked) {
+        background-color: #f2d4ce;
+        border-color: #c0614f;
+      }
+    }
+  }
+}

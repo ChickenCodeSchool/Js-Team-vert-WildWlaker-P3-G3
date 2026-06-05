@@ -1,0 +1,38 @@
+.reportDetails-global {
+  border: none;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 24px;
+
+  & legend {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  & .reportDetails-label {
+    display: block;
+    width: 100%;
+
+    & .reportDetails-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 10px;
+      background-color: #fdf6f5;
+      resize: vertical;
+      font-size: 0.95rem;
+      color: #333;
+
+      &::placeholder {
+        color: #bbb;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: #c0614f;
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+import "./ReportType.css";
+
+function ReportType() {
+  return (
+    <fieldset className="reportType-global">
+      <legend>Nature du signalement</legend>
+      <div className="reportType-cards">
+        <label className="reportType-card">
+          <input type="radio" name="reportType" value="evenement" />
+          Un événement
+        </label>
+        <label className="reportType-card">
+          <input type="radio" name="reportType" value="utilisateur" />
+          Un utilisateur
+        </label>
+        <label className="reportType-card">
+          <input type="radio" name="reportType" value="bug" />
+          Bug technique
+        </label>
+      </div>
+    </fieldset>
+  );
+}
+
+export default ReportType;

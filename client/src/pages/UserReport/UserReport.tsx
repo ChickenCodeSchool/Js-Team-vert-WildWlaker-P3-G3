@@ -1,3 +1,6 @@
+import ReportDetails from "../../components/ReportUser/ReportDetails";
+import ReportEvidence from "../../components/ReportUser/ReportEvidence";
+import ReportType from "../../components/ReportUser/ReportType";
 import "./UserReport.css";
 
 function UserReport() {
@@ -13,9 +16,9 @@ function UserReport() {
           </p>
         </header>
         <form className="userReport-Form">
-          <div>composant : NATURE DU SIGNALEMENT</div>
-          <div>composant : DETAILS DU PROBLEME</div>
-          <div>composant : PREUVES & CAPTURES D'ECRAN</div>
+          <ReportType />
+          <ReportDetails />
+          <ReportEvidence />
           <div className="userReport-Btn">
             <button type="submit">Signaler</button>
             <button type="button">Annuler</button>
@@ -23,7 +26,10 @@ function UserReport() {
         </form>
       </main>
       <footer className="userReport-Footer">
-        <p>blablabla</p>
+        <p>
+          En soumettant ce formulaire, vous acceptez nos conditions
+          d'utilisation et ntre politique de confidentialité
+        </p>
       </footer>
     </>
   );
