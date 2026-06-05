@@ -9,7 +9,7 @@
   --bg-color: #fcddd79a;
   --bg-color-1: #fff8f5;
 
-  --sideBar-color: #feb47b5b;
+  --sideBar-color: #dec0b9; /*add 23% opacity*/
   --hover-color: #a53b22; /*hover & icons*/
   --input-color: #8b716b;
   --border-color: #414141;
