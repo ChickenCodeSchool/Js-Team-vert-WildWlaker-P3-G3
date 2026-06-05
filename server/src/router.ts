@@ -27,6 +27,7 @@ router.post("/api/items", itemActions.add);
 router.get("/api/events", eventActions.browse);
 router.post("/api/events", eventActions.add);
 
+import galleryActions from "./modules/gallery/galleryActions";
 /* ************************************************************************* */
 // todoActions routes
 import todoActions from "./modules/todo/todoActions";
@@ -35,5 +36,12 @@ router.get("/api/todo/:eventId", todoActions.browse);
 router.post("/api/todo", todoActions.add);
 router.put("/api/todo/:todo_id", todoActions.edit);
 router.delete("/api/todo/:todo_id", todoActions.destroy);
+
+// routes gallery
+router.get("/api/gallery/:eventId", galleryActions.browse);
+
+router.post("/api/gallery", galleryActions.add);
+
+router.delete("/api/gallery/:gallery_id", galleryActions.destroy);
 
 export default router;
