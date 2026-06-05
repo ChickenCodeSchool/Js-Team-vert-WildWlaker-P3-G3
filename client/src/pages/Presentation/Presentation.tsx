@@ -1,4 +1,5 @@
 import "./Presentation.css";
+import { useNavigate } from "react-router";
 import budget from "../../assets/images/logo-feature-budget.png";
 import gallerie from "../../assets/images/logo-feature-gallerie.png";
 import messagerie from "../../assets/images/logo-feature-messagerie.png";
@@ -9,6 +10,8 @@ import user from "../../assets/images/logo-info-user.png";
 import logo from "../../assets/images/logo-wedoo.png";
 
 function Presentation() {
+  const navigate = useNavigate();
+
   return (
     <div className="presentation-content">
       <div className="navbar-presentation">
@@ -20,7 +23,22 @@ function Presentation() {
       <div className="text-presentation">
         <h1 className="h1-organisez">Organisez</h1>
         <h1 className="h1-inoubliable">l'inoubliable</h1>
-        <button type="button">Créez un évenement</button>
+        <button
+          type="button"
+          onClick={() => {
+            const user = JSON.parse(localStorage.getItem("user") || "null");
+
+            if (!user?.id) {
+              navigate("/connexion");
+              return;
+            }
+
+            navigate("/homeevents");
+          }}
+        >
+          Créez un évenement
+        </button>
+
         <p>Créez, gérez et partagez avec Wedoo en toute simplicité.</p>
       </div>
       <div className="features-wedoo-presentation">
