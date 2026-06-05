@@ -5,6 +5,8 @@ import "./App.css";
 // import { Home } from "lucide-react";
 // import { Outlet } from "react-router";
 // import Presentation from "./pages/Presentation/Presentation";
+import "./App.css";
+// import Presentation from "./pages/Presentation/Presentation";
 
 function App() {
   return (

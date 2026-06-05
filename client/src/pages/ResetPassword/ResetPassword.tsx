@@ -1,6 +1,7 @@
 import "./ResetPassword.css";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useSearchParams } from "react-router";
 import connexionImg from "../../assets/images/Connexion-img.png";
 import eye from "../../assets/images/eye.png";
 import hide from "../../assets/images/hide.png";
@@ -26,6 +27,36 @@ function ResetPassword() {
 
   const formValid = passwordValid && passwordsMatch;
 
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+
+  const navigate = useNavigate();
+
+  const handleReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const res = await fetch("http://localhost:3310/api/auth/reset-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, password }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message);
+      return;
+    }
+
+    alert(
+      "Mot de passe changé avec succès. Vous allez être redirigé vers la connexion.",
+    );
+
+    setTimeout(() => {
+      navigate("/connexion");
+    }, 2000);
+  };
+
   return (
     <>
       <div className="navbar-resetpassword">
@@ -50,7 +81,7 @@ function ResetPassword() {
             </p>
           </div>
         </div>
-        <form className="resetpassword-content">
+        <form className="resetpassword-content" onSubmit={handleReset}>
           <div className="resetpassword-para-title">
             <h2>Changez votre mot de passe.</h2>
           </div>
@@ -64,7 +95,7 @@ function ResetPassword() {
                 type={showPassword ? "text" : "password"}
                 placeholder="Entrer votre nouveau mot de passe"
                 required
-                className="password-input-resetpassword"
+                className="input-focus password-input-resetpassword"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -111,7 +142,7 @@ function ResetPassword() {
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirmer votre mot de passe"
                 required
-                className="password-input-confor-resetpassword"
+                className="input-focus password-input-confor-resetpassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />

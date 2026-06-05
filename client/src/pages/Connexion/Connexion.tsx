@@ -1,6 +1,6 @@
 import "./Connexion.css";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import connexionImg from "../../assets/images/Connexion-img.png";
 import eye from "../../assets/images/eye.png";
 import hide from "../../assets/images/hide.png";
@@ -11,6 +11,7 @@ function Connexion() {
   const [identifier, setIdentifier] = useState("");
   const [submitted, _setSubmitted] = useState(false);
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
   const isUsername = identifier.trim().length >= 3;
@@ -22,6 +23,38 @@ function Connexion() {
     /\d/.test(password) &&
     /[@$!%*?&]/.test(password);
   const formValid = identifierValid && passwordRules;
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setErrorMessage("");
+
+    try {
+      const res = await fetch("http://localhost:3310/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          identifier,
+          password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrorMessage(data.message || "Erreur de connexion");
+        return;
+      }
+
+      localStorage.setItem("user", JSON.stringify(data));
+
+      navigate("/homeevents");
+    } catch (err) {
+      setErrorMessage("Erreur serveur");
+    }
+  };
 
   return (
     <>
@@ -47,7 +80,7 @@ function Connexion() {
             </p>
           </div>
         </div>
-        <form className="connection-content">
+        <form className="connection-content" onSubmit={handleSubmit}>
           <div className="wel-para-title">
             <h2 className="Welcome-title">Bienvenue</h2>
             <p className="Welcome-para">
@@ -65,13 +98,8 @@ function Connexion() {
               required
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
-              className={`email-input ${submitted && !identifierValid ? "input-error" : ""}`}
+              className={`input-focus email-input ${submitted && !identifierValid ? "input-error" : ""}`}
             />
-            {identifier && (
-              <p className={identifierValid ? "success" : "error"}>
-                {identifierValid ? "" : "✗ Pseudo ou Adresse mail incorrect"}
-              </p>
-            )}
           </div>
 
           <div className="password-input-label">
@@ -89,7 +117,7 @@ function Connexion() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`password-input ${submitted && !passwordRules ? "input-error" : ""}`}
+                className={`input-focus password-input ${submitted && !passwordRules ? "input-error" : ""}`}
               />
               <button
                 type="button"
@@ -102,9 +130,7 @@ function Connexion() {
                 />
               </button>
             </div>
-            {password && !passwordRules && (
-              <p className="error">✗ Mot de passe invalide</p>
-            )}
+            {errorMessage && <p className="error">{errorMessage}</p>}
           </div>
           <button
             type="submit"
@@ -113,6 +139,7 @@ function Connexion() {
           >
             Connexion
           </button>
+
           <h5 className="register-link-connection">
             Pas encore inscrit ?{""}
             <Link to="/register" className="register-link">
