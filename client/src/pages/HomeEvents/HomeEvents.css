@@ -1,8 +1,8 @@
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: 0;
-}
+} */
 .HomeEvents-Global {
   background-color: var(--bg-color);
   min-height: 100vh;

@@ -35,7 +35,7 @@ const router = createBrowserRouter([
   // Renders the App component for the home page
 
   {
-    path: "/HomeEvents/",
+    path: "/HomeEvents",
     element: <HomeEvents />,
   },
   {

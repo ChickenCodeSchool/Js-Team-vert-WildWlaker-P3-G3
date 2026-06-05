@@ -1,0 +1,62 @@
+.profil {
+  .button {
+    background-color: black;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    /* img {
+    } */
+  }
+
+  .modal-overlay {
+    .modal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 16vw;
+      min-height: 30vh;
+      padding: 0;
+      h2 {
+        margin: 0;
+        padding: 15px 0 15px 0;
+      }
+
+      button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border-style: none;
+        cursor: pointer;
+        gap: 5px;
+        width: 100%;
+        /* svg {
+        } */
+      }
+
+      .deconnexion-event {
+        color: red;
+        padding: 10px 0 10px 0;
+        cursor: pointer;
+        /* svg {
+        } */
+      }
+
+      .fermer {
+        width: 30%;
+        padding-bottom: 10px;
+      }
+      .sub-modal {
+        /* h3 {
+        }
+        input {
+        }
+
+        textarea {
+        } */
+      }
+    }
+  }
+}
