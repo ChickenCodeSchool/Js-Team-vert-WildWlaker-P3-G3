@@ -1,39 +1,59 @@
+fieldset {
+  min-width: 0;
+}
+
 .reportType-global {
   border: none;
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 24px;
+  background: var(--bg-neutral);
+  padding: 16px;
 
-  & legend {
+  legend {
     font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 16px;
   }
 
-  & .reportType-cards {
+  .reportType-cards {
     display: flex;
-    gap: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    gap: 16px;
 
-    & .reportType-card {
+    .reportType-card {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 16px;
-      border: 1.5px solid #e0e0e0;
+      padding: 36px;
+      border: 2px solid var(--border-color);
       border-radius: 10px;
       cursor: pointer;
       transition: all 0.2s ease;
 
-      & input[type="radio"] {
+      input[type="radio"] {
         display: none;
       }
 
       &:has(input[type="radio"]:checked) {
-        background-color: #f2d4ce;
-        border-color: #c0614f;
+        background: var(--bg-color);
+        border-color: var(--hover-color);
+      }
+    }
+  }
+}
+
+.reportType-icon {
+  color: var(--hover-color);
+}
+
+@media (max-width: 428px) {
+  .reportType-global {
+    .reportType-cards {
+      flex-direction: column;
+
+      .reportType-card {
+        padding: 16px;
       }
     }
   }

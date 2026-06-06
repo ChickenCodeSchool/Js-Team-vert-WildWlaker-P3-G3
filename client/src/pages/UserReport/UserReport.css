@@ -1,4 +1,122 @@
 .userReport-Main {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--bg-color-1);
+  padding-top: 24px;
+
+  .userReport-Header {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 700px;
+    gap: 24px;
+    margin-bottom: 24px;
+
+    .userReport-Back {
+      background: none;
+      border: none;
+      color: var(--hover-color);
+      cursor: pointer;
+      padding: 0;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    .userReport-HeaderText {
+      text-align: center;
+
+      h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      p {
+        font-size: 0.8rem;
+        color: color-mix(in srgb, var(--font-grey) 90%, transparent);
+      }
+    }
+  }
+
+  .userReport-Form {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-neutral);
+    gap: 16px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 25px;
+    padding: 40px;
+    width: 100%;
+    max-width: 700px;
+
+    .userReport-Btn {
+      display: flex;
+      padding: 0px 18px 0px;
+      gap: 24px;
+
+      button[type="submit"] {
+        flex: 1;
+        padding: 14px;
+        background: var(--button-color);
+        color: var(--font-neutral);
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        cursor: pointer;
+
+        &:hover {
+          background: var(--hover-color);
+          transform: scale(1.05);
+        }
+      }
+
+      button[type="button"] {
+        padding: 14px 24px;
+        background-color: transparent;
+        border: 2px solid var(--hover-color);
+        border-radius: 25px;
+        color: var(--hover-color);
+        font-size: 1rem;
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--bg-neutral);
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+}
+
+.userReport-Footer {
+  padding: 20px 16px 16px;
+  text-align: center;
+  font-size: 0.6rem;
+  color: color-mix(in srgb, var(--font-grey) 80%, transparent);
+}
+
+@media (max-width: 428px) {
+  .userReport-Main {
+    .userReport-Header {
+      position: relative;
+      justify-content: center;
+      width: 100%;
+      padding: 0 60px;
+
+      .userReport-Back {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+
+        &:hover {
+          transform: translateY(-50%) scale(1.1);
+        }
+      }
+    }
+  }
 }

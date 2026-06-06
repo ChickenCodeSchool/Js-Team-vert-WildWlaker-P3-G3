@@ -1,37 +1,39 @@
+fieldset {
+  min-width: 0;
+}
+
 .reportDetails-global {
   border: none;
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 24px;
+  background: var(--bg-neutral);
+  padding: 16px;
 
-  & legend {
+  legend {
     font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 16px;
   }
 
-  & .reportDetails-label {
+  .reportDetails-label {
     display: block;
     width: 100%;
 
-    & .reportDetails-textarea {
+    .reportDetails-textarea {
       width: 100%;
       min-height: 120px;
       padding: 12px;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 10px;
-      background-color: #fdf6f5;
+      border: 2px solid var(--border-color);
+      border-radius: 10px 10px 0 0;
+      background: var(--input-color);
       resize: vertical;
       font-size: 0.95rem;
-      color: #333;
+      color: var(--font-black);
 
       &::placeholder {
-        color: #bbb;
+        color: color-mix(in srgb, var(--font-grey) 70%, transparent);
       }
 
       &:focus {
         outline: none;
-        border-color: #c0614f;
+        border-color: var(--hover-color);
       }
     }
   }
