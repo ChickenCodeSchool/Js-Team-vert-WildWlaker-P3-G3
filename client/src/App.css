@@ -1,27 +1,41 @@
 @import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap");
+
 * {
   font-family: "Be Vietnam Pro", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-color);
 }
 
 :root {
   /* User */
   --bg-neutral: #ffffff; /*cards*/
-  --bg-color: #fcddd79a;
-  --bg-color-1: #fff8f5;
+  --bg-color: #fff8f5; /*background*/
+  --bg-sidebar: rgba(227, 150, 108, 0.3); /*opacity 23%*/
+  --bg-positive: #d1fae5;
+  --bg-negative: #ffe4e6;
 
-  --sideBar-color: #dec0b9; /*add 23% opacity*/
-  --hover-color: #a53b22; /*hover & icons*/
-  --input-color: #8b716b;
-  --border-color: #414141;
+  --hover-sidebar: rgba(218, 148, 95, 0.3); /*opacity 30%*/
+
+  --sideBar-color: #feb47b5b;
+
+  --icon-color: #a53b22; /*hover & icons*/
+  --hover-signalement: #ffdad2;
+  --input-color: rgba(222, 192, 185, 30%);
+  --border-color: #dec0b9;
   --button-color: linear-gradient(to right, #ff7e5f, #a53b22); /*fonctionne uniquement avec background ou background-image*/
 
   --font-black: #1f1b18;
   --font-neutral: #ffffff;
-  --font-darkBrown: #5d2e00;
+  --font-darkBrown: #57423d;
   --font-brown: #a53b22; /*Wedoo title*/
   --font-red: #e11d48;
   --font-green: #059669;
-  --font-gray: #414141;
+  --font-grey: #414141;
 
   /* status user*/
   --bg-confirm-state: #cde5ff;
@@ -36,4 +50,6 @@
 
   --bg-pending-state: #ba1a1a;
   --font-pending-state: #93000a;
+
+  --color-chat: #ff7e5f;
 }
