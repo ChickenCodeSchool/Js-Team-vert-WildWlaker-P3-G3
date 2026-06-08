@@ -5,12 +5,96 @@ import { Camera } from "lucide-react";
 import { ShieldUser } from "lucide-react";
 import { LogOut } from "lucide-react";
 import { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
-function Profil() {
-  const [isMainModalOpen, setIsMainModalOpen] = useState(false);
 
+function Profil() {
+  const [userName, setUserName] = useState("");
+  const [isMainModalOpen, setIsMainModalOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [preview, setPreview] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("http://localhost:3310/api/1/photo")
+      .then((res) => res.json())
+      .then((data) => {
+        setProfilePicture(data.user_profile_picture);
+      });
+  }, []);
+
+  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      setPhoto(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  }
+
+  async function handleUploadPhoto() {
+    if (!photo) {
+      alert("Choisis une image");
+      return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("photo", photo);
+
+    try {
+      const response = await fetch("http://localhost:3310/api/users/photo", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message);
+        return;
+      }
+
+      alert("Photo uploadée avec succès");
+    } catch (error) {
+      console.error(error);
+      alert("Erreur serveur");
+    }
+  }
+
+  async function updateUserName(user_name: string, user_id: number) {
+    if (!user_name.trim()) {
+      setErrorMessage("Rentrer un pseudo");
+      return;
+    }
+
+    try {
+      setErrorMessage("");
+
+      const response = await fetch(
+        `http://localhost:3310/api/users/${user_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_name,
+          }),
+        },
+      );
+
+      const data = await response.json();
+      console.log(data);
+
+      setUserName("");
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
     <div className="profil">
       <button
@@ -18,25 +102,35 @@ function Profil() {
         type="button"
         onClick={() => setIsMainModalOpen(true)}
       >
-        <img src="#" alt="#" />
+        <img
+          src={`http://localhost:3310${profilePicture}`}
+          alt="photo-profil"
+        />
       </button>
       {isMainModalOpen && (
-        <button
-          type="button"
+        <div
           className="modal-overlay"
           onClick={() => {
             setIsMainModalOpen(false);
             setActiveModal(null);
           }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              setActiveModal(null);
+            }
+          }}
         >
-          <button
-            type="button"
+          <div
             className="modal"
             onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                setActiveModal(null);
+              }
+            }}
           >
             <h2>Parametre du profil</h2>
 
-            {/* 3 boutons */}
             <button
               type="button"
               onClick={() => setActiveModal("Changer le pseudo")}
@@ -46,25 +140,29 @@ function Profil() {
             </button>
 
             {activeModal === "Changer le pseudo" && (
-              <div className="sub-modal">
-                <input type="text" placeholder="Nouveau pseudo" />
+              <div className="change-pseudo">
+                <input
+                  type="text"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  placeholder="Changer le nom"
+                />
+                {errorMessage && (
+                  <p className="error-message">{errorMessage}</p>
+                )}
+                <button
+                  type="button"
+                  onClick={() => updateUserName(userName, 1)}
+                >
+                  Valider
+                </button>
               </div>
             )}
 
-            <button
-              type="button"
-              onClick={() => setActiveModal("Changer le mot de passe")}
-            >
+            <button type="button" onClick={() => navigate("/resetpassword")}>
               <LockKeyhole size={15} />
               Changer le mot de passe
             </button>
-
-            {activeModal === "Changer le mot de passe" && (
-              <div className="sub-modal">
-                <input type="text" placeholder="Changer le mot de passe" />
-                <input type="text" placeholder="Valider le mot de passe" />
-              </div>
-            )}
 
             <button
               type="button"
@@ -76,7 +174,23 @@ function Profil() {
 
             {activeModal === "Changer la photo de profil" && (
               <div className="sub-modal">
-                <textarea />
+                <label htmlFor="photo-upload" className="custom-upload">
+                  Choisir une image
+                </label>
+
+                <input
+                  id="photo-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoChange}
+                  className="hidden-input"
+                />
+                {preview && (
+                  <img src={preview} alt="preview" className="photo-preview" />
+                )}
+                <button type="button" onClick={handleUploadPhoto}>
+                  Enregistrer la photo
+                </button>
               </div>
             )}
 
@@ -102,8 +216,8 @@ function Profil() {
             >
               Fermer
             </button>
-          </button>
-        </button>
+          </div>
+        </div>
       )}
     </div>
   );
