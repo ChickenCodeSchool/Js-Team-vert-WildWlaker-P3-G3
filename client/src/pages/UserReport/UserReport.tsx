@@ -4,10 +4,15 @@ import ReportDetails from "../../components/ReportUser/ReportDetails";
 import ReportEvidence from "../../components/ReportUser/ReportEvidence";
 import ReportType from "../../components/ReportUser/ReportType";
 import "./UserReport.css";
+import { useState } from "react";
 
 function UserReport() {
   const navigate = useNavigate();
   const { eventId } = useParams();
+
+  const [repType, setRepType] = useState<string>("");
+  const [repDetail, setRepDetail] = useState<string>("");
+  const [repEvidence, setRepEvidence] = useState<File[]>([]);
 
   const handleGoBack = () => {
     navigate(-1);
@@ -40,9 +45,15 @@ function UserReport() {
           </div>
         </header>
         <form className="userReport-Form">
-          <ReportType />
-          <ReportDetails />
-          <ReportEvidence />
+          <ReportType reportType={repType} setReportType={setRepType} />
+          <ReportDetails
+            reportDetail={repDetail}
+            setReportDetail={setRepDetail}
+          />
+          <ReportEvidence
+            reportEvidence={repEvidence}
+            setReportEvidence={setRepEvidence}
+          />
           <div className="userReport-Btn">
             <button type="submit">Signaler</button>
             <button type="button" onClick={handleCancel}>

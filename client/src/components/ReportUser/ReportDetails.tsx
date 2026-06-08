@@ -1,6 +1,11 @@
 import "./ReportDetails.css";
 
-function ReportDetails() {
+interface ReportDetailProps {
+  reportDetail: string;
+  setReportDetail: (value: string) => void;
+}
+
+function ReportDetails({ reportDetail, setReportDetail }: ReportDetailProps) {
   return (
     <fieldset className="reportDetails-global">
       <legend>Détails du problème</legend>
@@ -8,6 +13,8 @@ function ReportDetails() {
         <textarea
           className="reportDetails-textarea"
           placeholder="Décrivez la situation avec autant de détails que possible..."
+          value={reportDetail}
+          onChange={(e) => setReportDetail(e.target.value)}
         />
       </label>
     </fieldset>
