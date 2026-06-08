@@ -18,6 +18,17 @@ function UserReport() {
     navigate(-1);
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!repType || !repDetail || repEvidence.length === 0) {
+      alert("Veuillez remplir les champs pour envoyer votre demande.");
+      return;
+    }
+
+    // fetch ici
+  };
+
   const handleCancel = () => {
     navigate(`/events/${eventId}`);
     //chemin à confirmer il est tard je suis pas sur de moi c'est event ou dashbord faire vérif avec futur composant dans router. mashallah.
@@ -44,7 +55,7 @@ function UserReport() {
             </p>
           </div>
         </header>
-        <form className="userReport-Form">
+        <form className="userReport-Form" onSubmit={handleSubmit}>
           <ReportType reportType={repType} setReportType={setRepType} />
           <ReportDetails
             reportDetail={repDetail}
