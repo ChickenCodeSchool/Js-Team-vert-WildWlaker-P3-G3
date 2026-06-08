@@ -3,16 +3,14 @@ import eventRepository from "./eventRepository";
 
 const browse: RequestHandler = async (req, res, next) => {
   try {
-    // const events = await eventRepository.browse();
-    // res.json(events);
+    const events = await eventRepository.readAll();
+    res.json(events);
   } catch (error) {
-    // res
-    //   .status(500)
-    //   .json({ message: "Erreur lors de la récupération des événements" });
+    next(error);
   }
 };
 
-const add: RequestHandler = async (req, res) => {
+const add: RequestHandler = async (req, res, next) => {
   const {
     event_name,
     event_date,
@@ -38,12 +36,10 @@ const add: RequestHandler = async (req, res) => {
       event_location,
       event_link_id,
     });
-    res.json(insertId);
+    const newEvent = await eventRepository.read(insertId);
+    res.status(201).json(newEvent);
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ message: "Erreur lors de la création de l'événement" });
+    next(error);
   }
 };
 
