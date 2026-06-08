@@ -6,7 +6,7 @@ import { ImagePlus, Trash2 } from "lucide-react";
 
 import GalleryModal from "./GalleryModal";
 
-import { getGallery } from "../../services/galleryService";
+const API_URL = import.meta.env.VITE_API_URL;
 
 type Gallery = {
   gallery_id: number;
@@ -27,7 +27,9 @@ function Galerie() {
   useEffect(() => {
     const loadGallery = async () => {
       try {
-        const data = await getGallery(2);
+        const response = await fetch(`${API_URL}/api/gallery/2`);
+
+        const data = await response.json();
 
         setPhotos(data);
       } catch (error) {
