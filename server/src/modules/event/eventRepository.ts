@@ -11,7 +11,7 @@ const generateLinkKey = (): string => {
 }; //creation de la cle pour rejoindre un event
 
 class EventRepository {
-  async create(event: Omit<EventData, "event_id">) {
+  async create(event: Omit<EventData, "event_id" | "event_link_key">) {
     const linkKey = generateLinkKey();
 
     const [result] = await databaseClient.query<Result>(
@@ -37,9 +37,14 @@ class EventRepository {
     return rows[0] as EventData;
   }
 
-  async readAll() {
+  async readAll(userId: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT * FROM event ORDER BY event_date ASC",
+      `SELECT DISTINCT e.* FROM event e
+      LEFT JOIN event_user_joining euj ON euj.euj_id_event = e.event_id
+ WHERE e.event_host_id = ?
+ OR euj.euj_id_user = ?
+     ORDER BY e.event_date ASC`,
+      [userId, userId],
     );
 
     return rows as EventData[];

@@ -18,6 +18,11 @@
     padding-left: 0.5rem;
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
+    background: var(--input-color);
+    color: var(--font-input);
+    &::placeholder {
+      color: var(--font-placeholder);
+    }
   }
   .CreateForm-Input:focus {
     outline: none;
@@ -28,6 +33,11 @@
     padding-top: 0.2rem;
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
+    background: var(--input-color);
+    color: var(--font-input);
+    &::placeholder {
+      color: var(--font-placeholder);
+    }
   }
   .CreateForm-TextArea:focus {
     outline: none;
@@ -50,7 +60,7 @@
     transform: scale(0.95);
   }
   .CreateForm-ButtonSubmit {
-    width: 10rem;
+    width: 20rem;
     height: 2rem;
     border-radius: 1rem;
     border: none;
@@ -59,8 +69,9 @@
     transition: transform 0.2s;
   }
   .CreateForm-ButtonSubmit:disabled {
-    background: lightgray;
-    color: black;
+    opacity: 0.5;
+    background: var(--button-color-disable);
+    color: var(--font-button-color-disable);
   }
   .CreateForm-ButtonSubmit:hover {
     transform: scale(0.95);

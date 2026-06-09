@@ -31,6 +31,10 @@ body {
   --input-color: rgba(222, 192, 185, 30%);
   --border-color: #dec0b9;
   --button-color: linear-gradient(to right, #ff7e5f, #a53b22); /*fonctionne uniquement avec background ou background-image*/
+  --button-color-disable: lightgrey;
+  --font-button-color-disable: black;
+  --font-input: #8b716b;
+  --font-placeholder: rgba(139, 113, 107, 0.6);
 
   --font-black: #1f1b18;
   --font-neutral: #ffffff;

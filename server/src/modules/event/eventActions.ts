@@ -3,7 +3,8 @@ import eventRepository from "./eventRepository";
 
 const browse: RequestHandler = async (req, res, next) => {
   try {
-    const events = await eventRepository.readAll();
+    const userId = Number(req.query.userId);
+    const events = await eventRepository.readAll(userId);
     res.json(events);
   } catch (error) {
     next(error);
@@ -18,7 +19,6 @@ const add: RequestHandler = async (req, res, next) => {
     event_host_id,
     event_description,
     event_location,
-    event_link_id,
   } = req.body;
 
   if (!event_name || !event_date || !event_description || !event_location) {
@@ -34,7 +34,6 @@ const add: RequestHandler = async (req, res, next) => {
       event_picture,
       event_description,
       event_location,
-      event_link_id,
     });
     const newEvent = await eventRepository.read(insertId);
     res.status(201).json(newEvent);

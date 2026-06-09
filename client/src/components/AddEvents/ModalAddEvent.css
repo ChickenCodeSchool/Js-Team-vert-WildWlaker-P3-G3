@@ -16,7 +16,7 @@
 .ModalAddEvent-Global {
   width: 35rem;
   min-height: 30rem;
-  background: var(--bg-color-1);
+  background: var(--bg-color);
   border-radius: 2rem;
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.18);
   overflow: hidden;
@@ -24,11 +24,11 @@
     width: 50%;
     height: 3rem;
     object-fit: cover;
-    background: var(--bg-color-1);
+    background: var(--bg-color);
     border: none;
   }
   .ModalAddEvent-Tab--active {
-    border-bottom: 3px solid var(--hover-color);
+    border-bottom: 3px solid var(--icon-color);
   }
   .ModalAddEvent-Header {
     margin: 3rem;
