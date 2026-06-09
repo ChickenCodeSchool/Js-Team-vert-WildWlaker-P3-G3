@@ -17,8 +17,6 @@ function Messagerie() {
     ReceptionMessagesUser[]
   >([]);
 
-  console.log(receptionMessagesUser);
-
   useEffect(() => {
     fetchMessages();
   }, []);

@@ -1,8 +1,8 @@
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: 0;
-}
+} */
 .Filter-Global {
   display: flex;
   gap: 1rem;

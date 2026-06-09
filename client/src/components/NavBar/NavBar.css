@@ -1,0 +1,18 @@
+.navbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  .logo-sidebar-container {
+    margin: 0 0 0 20px;
+    display: flex;
+    align-items: center;
+    .logo-sidebar-image {
+      width: 30px;
+      height: 30px;
+    }
+    .logo-sidebar-h2 {
+      color: var(--font-brown);
+    }
+  }
+}
