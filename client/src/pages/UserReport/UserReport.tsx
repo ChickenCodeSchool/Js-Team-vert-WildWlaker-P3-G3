@@ -4,13 +4,77 @@ import ReportDetails from "../../components/ReportUser/ReportDetails";
 import ReportEvidence from "../../components/ReportUser/ReportEvidence";
 import ReportType from "../../components/ReportUser/ReportType";
 import "./UserReport.css";
+import { useState } from "react";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 function UserReport() {
   const navigate = useNavigate();
   const { eventId } = useParams();
 
+  const [repType, setRepType] = useState<string>("");
+  const [repDetail, setRepDetail] = useState<string>("");
+  const [repEvidence, setRepEvidence] = useState<File[]>([]);
+
   const handleGoBack = () => {
     navigate(-1);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!repType || !repDetail || repEvidence.length === 0) {
+      alert("Veuillez remplir les champs pour envoyer votre demande.");
+      return;
+    }
+
+    //On utilise un switch ici pcq une ternaire gère que 2 cas (vrai ou faux), un switch en gère plusieurs sans que ça devienne illisible et trop verbeux.
+
+    switch (repType) {
+      case "utilisateur": {
+        const formData = new FormData();
+        formData.append("reported_user_description", repDetail);
+        formData.append("reported_user_by_id_user", "");
+        for (const file of repEvidence) {
+          formData.append("reported_user_image", file);
+        }
+        await fetch(`${API_URL}/api/userreport-user`, {
+          method: "POST",
+          body: formData,
+        });
+        break;
+      }
+      case "evenement": {
+        const formData = new FormData();
+        formData.append("reported_event_description", repDetail);
+        formData.append("reported_event_by_id_user", "");
+        for (const file of repEvidence) {
+          formData.append("reported_event_image", file);
+        }
+        await fetch(`${API_URL}/api/userreport-event`, {
+          method: "POST",
+          body: formData,
+        });
+        break;
+      }
+      case "bug": {
+        const formData = new FormData();
+        formData.append("reported_bug_description", repDetail);
+        formData.append("reported_bug_by_id_user", "");
+        for (const file of repEvidence) {
+          formData.append("reported_bug_image", file);
+        }
+        await fetch(`${API_URL}/api/userreport-bug`, {
+          method: "POST",
+          body: formData,
+        });
+        break;
+      }
+    }
+    alert(
+      "Votre signalement a bien été pris en compte, merci pour votre retour! !\nL'équipe Wedoo.",
+    );
+    navigate(`/events/${eventId}`);
   };
 
   const handleCancel = () => {
@@ -39,10 +103,16 @@ function UserReport() {
             </p>
           </div>
         </header>
-        <form className="userReport-Form">
-          <ReportType />
-          <ReportDetails />
-          <ReportEvidence />
+        <form className="userReport-Form" onSubmit={handleSubmit}>
+          <ReportType reportType={repType} setReportType={setRepType} />
+          <ReportDetails
+            reportDetail={repDetail}
+            setReportDetail={setRepDetail}
+          />
+          <ReportEvidence
+            reportEvidence={repEvidence}
+            setReportEvidence={setRepEvidence}
+          />
           <div className="userReport-Btn">
             <button type="submit">Signaler</button>
             <button type="button" onClick={handleCancel}>

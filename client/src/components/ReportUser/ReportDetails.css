@@ -20,7 +20,7 @@ fieldset {
       width: 100%;
       min-height: 120px;
       padding: 12px;
-      border: 2px solid var(--border-color);
+      border: 1.8px solid var(--border-color);
       border-radius: 10px 10px 0 0;
       background: var(--input-color);
       resize: vertical;
@@ -33,7 +33,7 @@ fieldset {
 
       &:focus {
         outline: none;
-        border-color: var(--hover-color);
+        border-color: var(--icon-color);
       }
     }
   }
