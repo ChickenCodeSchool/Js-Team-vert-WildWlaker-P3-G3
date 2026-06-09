@@ -4,9 +4,14 @@ import "./ReportType.css";
 interface ReportTypeProps {
   reportType: string;
   setReportType: (value: string) => void;
+  setIsModalOpen: (value: boolean) => void;
 }
 
-function ReportType({ reportType, setReportType }: ReportTypeProps) {
+function ReportType({
+  reportType,
+  setReportType,
+  setIsModalOpen,
+}: ReportTypeProps) {
   return (
     <fieldset className="reportType-global">
       <legend>Nature du signalement</legend>
@@ -29,7 +34,10 @@ function ReportType({ reportType, setReportType }: ReportTypeProps) {
             name="reportType"
             value="utilisateur"
             checked={reportType === "utilisateur"}
-            onChange={(e) => setReportType(e.target.value)}
+            onChange={(e) => {
+              setReportType(e.target.value);
+              setIsModalOpen(true);
+            }}
           />
           Un utilisateur
         </label>

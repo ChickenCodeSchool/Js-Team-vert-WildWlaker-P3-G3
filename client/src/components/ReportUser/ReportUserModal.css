@@ -1,0 +1,100 @@
+.reportUserModal {
+  border: none;
+  border-radius: 16px;
+  padding: 28px 24px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  & .reportUserModal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    & h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2b2b2b;
+      margin: 0;
+    }
+
+    & .reportUserModal-close {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: #999;
+      cursor: pointer;
+      line-height: 1;
+
+      &:hover {
+        color: #2b2b2b;
+      }
+    }
+  }
+
+  & .reportUserModal-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    & .reportUserModal-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border: 1px solid #f0ebe8;
+      border-radius: 10px;
+      background: #faf6f3;
+
+      & .reportUserModal-userInfo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        & .reportUserModal-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+          background: #e8ddd8;
+        }
+
+        & .reportUserModal-userName {
+          font-size: 13px;
+          font-weight: 600;
+          color: #2b2b2b;
+        }
+      }
+
+      & .reportUserModal-btn {
+        background: #c75b39;
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        padding: 7px 16px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 0.2s;
+
+        &:hover {
+          background: #a84a2e;
+        }
+      }
+    }
+  }
+}

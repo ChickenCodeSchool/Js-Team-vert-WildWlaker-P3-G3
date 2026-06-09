@@ -4,7 +4,7 @@ import eventUserJoiningRepository from "./eventUserJoiningRepository";
 
 const browse: RequestHandler = async (req, res, next) => {
   try {
-    const eventUserId = Number(req.params.euj_id_event);
+    const eventUserId = Number(req.params.eventId);
     const euj = await eventUserJoiningRepository.readAll(eventUserId);
 
     res.json(euj);
