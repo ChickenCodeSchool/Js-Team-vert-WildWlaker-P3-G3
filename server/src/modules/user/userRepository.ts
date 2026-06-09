@@ -148,6 +148,36 @@ class UserRepository {
       [password, userId],
     );
   }
+  async updatePhoto(userId: number, photoUrl: string) {
+    const [result] = await databaseClient.query(
+      "UPDATE user SET user_profile_picture = ? WHERE user_id = ?",
+      [photoUrl, userId],
+    );
+
+    return result;
+  }
+  async readUserPhoto(userId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `
+    SELECT user_profile_picture
+    FROM user
+    WHERE user_id = ?
+    `,
+      [userId],
+    );
+
+    return rows[0];
+  }
+  async updateUserName(userId: number, userName: string) {
+    await databaseClient.query(
+      `
+    UPDATE user
+    SET user_name = ?
+    WHERE user_id = ?
+    `,
+      [userName, userId],
+    );
+  }
 }
 
 export default new UserRepository();
