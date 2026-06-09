@@ -59,9 +59,59 @@ const browseEvent: RequestHandler = async (req, res, next) => {
   }
 };
 
+const create: RequestHandler = async (req, res, next) => {
+  try {
+    const event = Number(req.query.id_event);
+    const user = Number(req.query.id_user);
+    const name = String(req.query.name);
+    const price = Number(req.query.price);
+
+    const budget = await budgetRepository.create(event, user, name, price);
+
+    res.json(budget);
+
+    // Error
+  } catch (err) {
+    next(err);
+  }
+};
+
+const update: RequestHandler = async (req, res, next) => {
+  try {
+    const id_budget = Number(req.query.id_budget);
+    const name = String(req.query.name);
+    const price = Number(req.query.price);
+
+    const budget = await budgetRepository.update(id_budget, name, price);
+
+    res.json(budget);
+
+    // Error
+  } catch (err) {
+    next(err);
+  }
+};
+
+const del: RequestHandler = async (req, res, next) => {
+  try {
+    const id_budget = Number(req.query.id_budget);
+
+    const budget = await budgetRepository.delete(id_budget);
+
+    res.json(budget);
+
+    // Error
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   browse,
   browseTotalUser,
   browseUser,
   browseEvent,
+  create,
+  update,
+  del,
 };

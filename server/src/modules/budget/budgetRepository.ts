@@ -6,6 +6,7 @@ type Budget = {
   budget_id: number;
   budget_id_event: number;
   budget_id_user: number;
+  budget_name: string;
   user_username: string;
   user_name: string;
   budget_price: number;
@@ -31,9 +32,10 @@ class budgetRepository {
       `SELECT 
         b.budget_id, 
         b.budget_id_event, 
+        b.budget_id_user,
+        b.budget_name, 
         u.user_username, 
         u.user_name, 
-        b.budget_name, 
         b.budget_price, 
         b.budget_creation_date
     FROM budget AS b
@@ -96,6 +98,49 @@ class budgetRepository {
     );
 
     return rows as BudgetTotalEvent[];
+  }
+
+  async create(id_event: number, id_user: number, name: string, price: number) {
+    // Execute the SQL INSERT query to add a new item to the "item" table
+    const [result] = await databaseClient.query<Result>(
+      `INSERT INTO budget 
+        (budget_id_event, 
+        budget_id_user, 
+        budget_name, 
+        budget_price)
+      VALUES (?, ?, ?, ?);`,
+      [id_event, id_user, name, price],
+    );
+
+    // Return the ID of the newly inserted item
+    return result.insertId;
+  }
+
+  async update(id_budget: number, name: string, price: number) {
+    // update an already existing budget
+
+    const [result] = await databaseClient.query<Result>(
+      `
+      UPDATE budget
+      SET budget.budget_name = ?, 
+	      budget.budget_price = ?
+      WHERE budget.budget_id = ?`,
+      [name, price, id_budget],
+    );
+
+    return result.affectedRows;
+  }
+
+  async delete(id: number) {
+    // delete an existing budget
+
+    const [result] = await databaseClient.query<Result>(
+      `DELETE FROM budget 
+      WHERE budget.budget_id = ?;`,
+      [id],
+    );
+
+    return result.affectedRows;
   }
 }
 

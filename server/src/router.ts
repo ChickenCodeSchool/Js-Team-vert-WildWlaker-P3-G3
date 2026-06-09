@@ -18,6 +18,10 @@ router.get("/api/budget/:id", budgetActions.browse);
 router.get("/api/budget/:id/totalUsers", budgetActions.browseTotalUser);
 router.get("/api/budget/user/:id_event/:id_user", budgetActions.browseUser);
 router.get("/api/budget/event/:id", budgetActions.browseEvent);
+// > post
+router.post("/api/budget/add", budgetActions.create);
+router.post("/api/budget/update", budgetActions.update);
+router.post("/api/budget/delete", budgetActions.del);
 
 // --> reservation
 // > get

@@ -15,6 +15,7 @@ type Budget = {
   budget_id: number;
   budget_id_event: number;
   budget_id_user: number;
+  budget_name: string;
   user_username: string;
   user_name: string;
   budget_price: number;
@@ -95,7 +96,7 @@ function Budget() {
 
     fetch(`${apiUrl}/api/budget/event/${eventID}`)
       .then((res) => res.json())
-      .then((data: BudgetTotalEvent) => setBudgetEvent(data));
+      .then((data: BudgetTotalEvent[]) => setBudgetEvent(data[0]));
   }, []);
 
   const userBudget = getUserBudget(listBudgetUser, userID);
@@ -110,7 +111,7 @@ function Budget() {
   return (
     <div className="budget">
       <header>
-        <h1>Nom de l'event</h1>
+        <h1>{budgetEvent?.event_name}</h1>
         <button type="button">
           <FilePlusCorner size={20} />
           <span> Ajouter une dépense</span>
@@ -130,13 +131,13 @@ function Budget() {
           <div className="positif">
             <ArrowDown size={20} className="lucid" /> <br />
             <span> dépense globales </span>
-            <h3> 12 450 € </h3>
+            <h3> {budgetEvent?.total_price} € </h3>
           </div>
 
           <div className="negatif">
             <ArrowUp size={20} className="lucid" /> <br />
             <span> mes dépenses</span>
-            <h3> 5 165 € </h3>
+            <h3> {userBudget?.total_price} € </h3>
           </div>
         </article>
       </section>
@@ -147,40 +148,45 @@ function Budget() {
             <h5>Dépenses</h5> <button type="button"> voir plus</button>
           </div>
           <section>
-            <article>
-              <span>Billetterie Stripe</span>
-              <span className="positif">+450,00 €</span>
-            </article>
-
-            <article>
-              <span>Location Salle</span>
-              <span className="negatif">-1200,00 €</span>
-            </article>
-
-            <article>
-              <span>Sponsor TechCorp</span>
-              <span className="positif">-1200,00 €</span>
-            </article>
+            {listBudget.map((row) => {
+              console.log(row);
+              return (
+                <article key={row.budget_id}>
+                  <span>{row.budget_name}</span>
+                  <span
+                    className={
+                      row.budget_id_user !== userID ? "positif" : "negatif"
+                    }
+                  >
+                    {row.budget_id_user !== userID
+                      ? `+${row.budget_price}`
+                      : `-${row.budget_price}`}
+                    €
+                  </span>
+                </article>
+              );
+            })}
           </section>
         </div>
 
         <div className="equilibres">
           <h5>Equilibres</h5>
           <section>
-            <article>
-              <span>Yoan</span>
-              <span className="positif">+450,00 €</span>
-            </article>
-
-            <article>
-              <span>Bosila</span>
-              <span className="negatif">-1200,00 €</span>
-            </article>
-
-            <article>
-              <span>Michel</span>
-              <span className="positif">+1200,00 €</span>
-            </article>
+            {getBalancePrice(listBudgetUser).map((row) => {
+              return (
+                <article key={row.user_id}>
+                  <span>{row.user_name}</span>
+                  <span
+                    className={row.total_price >= 0 ? "positif" : "negatif"}
+                  >
+                    {row.total_price >= 0
+                      ? `+${row.total_price}`
+                      : `${row.total_price}`}
+                    €
+                  </span>
+                </article>
+              );
+            })}
           </section>
         </div>
       </section>
