@@ -1,5 +1,7 @@
+import { CircleX } from "lucide-react";
 import type EventUserJoin from "../../types/eventUserJoining";
 import "./ReportUserModal.css";
+import { useEffect, useRef } from "react";
 
 interface ReportUserModalProps {
   euj: EventUserJoin[];
@@ -12,17 +14,23 @@ function ReportUserModal({
   setIsModalOpen,
   setReportedUserId,
 }: ReportUserModalProps) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    dialogRef.current?.showModal();
+  }, []);
+
   return (
-    <dialog className="reportUserModal" open>
+    <dialog className="reportUserModal" ref={dialogRef}>
       <header className="reportUserModal-header">
-        <h2>Select a user</h2>
+        <h2>Sélectionner un utilisateur</h2>
         <button
           type="button"
           className="reportUserModal-close"
           onClick={() => setIsModalOpen(false)}
           aria-label="Close modal"
         >
-          ✕
+          <CircleX size={20} />
         </button>
       </header>
       <ul className="reportUserModal-list">
@@ -46,7 +54,7 @@ function ReportUserModal({
                 setIsModalOpen(false);
               }}
             >
-              Report
+              Signaler
             </button>
           </li>
         ))}
