@@ -32,21 +32,29 @@ function Dashboard() {
   useEffect(() => {
     fetch("http://localhost:3310/api/reservations/2")
       .then((res) => res.json())
-      .then((data) => setReservationData(data));
+      .then((data) => {
+        console.log("reservations:", data);
+        setReservationData(Array.isArray(data) ? data : []);
+      });
   }, []);
 
   useEffect(() => {
     fetch("http://localhost:3310/api/users/2")
       .then((res) => res.json())
-      .then((data) => setEventData(data));
+      .then((data) => {
+        console.log("eventData:", data);
+        setEventData(Array.isArray(data) ? data : []);
+      });
   }, []);
 
   useEffect(() => {
     fetch("http://localhost:3310/api/users/2/userAndBudget")
       .then((res) => res.json())
-      .then((data) => setUserAndBudgetData(data));
+      .then((data) => {
+        console.log("userAndBudget:", data);
+        setUserAndBudgetData(Array.isArray(data) ? data : []);
+      });
   }, []);
-
   const totalReservations = new Set(
     eventData.map((item) => item.reservation_id).filter((id) => id !== null),
   ).size;
