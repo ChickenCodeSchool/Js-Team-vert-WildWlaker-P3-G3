@@ -42,7 +42,6 @@ function Connexion() {
       });
 
       const data = await res.json();
-      console.log(data);
 
       if (!res.ok) {
         setErrorMessage(data.message || "Erreur de connexion");
