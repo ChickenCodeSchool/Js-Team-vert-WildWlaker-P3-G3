@@ -1,11 +1,6 @@
 import databaseClient from "../../../database/client";
 import type { Rows } from "../../../database/client";
-
-type EventUserJoin = {
-  euj_id_event: number;
-  euj_id_user: number;
-};
-export type { EventUserJoin };
+import type EventUserJoin from "../../types/eventUserJoining";
 
 class eventUserJoiningRepository {
   async readAll(euj_id_event: number) {

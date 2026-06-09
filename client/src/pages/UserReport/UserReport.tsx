@@ -4,7 +4,8 @@ import ReportDetails from "../../components/ReportUser/ReportDetails";
 import ReportEvidence from "../../components/ReportUser/ReportEvidence";
 import ReportType from "../../components/ReportUser/ReportType";
 import "./UserReport.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type EventUserJoin from "../../types/eventUserJoining";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -15,6 +16,15 @@ function UserReport() {
   const [repType, setRepType] = useState<string>("");
   const [repDetail, setRepDetail] = useState<string>("");
   const [repEvidence, setRepEvidence] = useState<File[]>([]);
+  const [_euj, setEuj] = useState<EventUserJoin[]>([]);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/events/${eventId}/users`)
+      .then((response) => response.json())
+      .then((data: EventUserJoin[]) => {
+        setEuj(data);
+      });
+  }, [eventId]);
 
   const handleGoBack = () => {
     navigate(-1);
