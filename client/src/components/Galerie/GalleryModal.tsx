@@ -9,7 +9,7 @@ type GalleryModalProps = {
 
 function GalleryModal({ onClose, onAddPhoto }: GalleryModalProps) {
   const [preview, setPreview] = useState<string | null>(null);
-
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [error, setError] = useState("");
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,16 +30,39 @@ function GalleryModal({ onClose, onAddPhoto }: GalleryModalProps) {
     }
 
     setError("");
-
+    setSelectedFile(file);
     setPreview(URL.createObjectURL(file));
   };
 
-  const handleAddClick = () => {
-    if (!preview) {
+  const handleAddClick = async () => {
+    if (!selectedFile) {
       return;
     }
 
-    onAddPhoto(preview);
+    try {
+      const formData = new FormData();
+      formData.append("photo", selectedFile);
+      formData.append("gallery_id_event", "2");
+      formData.append("gallery_id_user", "3");
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/gallery`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+
+      console.log("STATUS:", response.status);
+      const data = await response.json();
+      console.log("DATA:", data);
+
+      onAddPhoto(data.photoUrl);
+
+      onClose();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
