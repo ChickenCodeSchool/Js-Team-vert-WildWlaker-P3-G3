@@ -42,6 +42,7 @@ function Connexion() {
       });
 
       const data = await res.json();
+      console.log(data);
 
       if (!res.ok) {
         setErrorMessage(data.message || "Erreur de connexion");
@@ -50,7 +51,11 @@ function Connexion() {
 
       localStorage.setItem("user", JSON.stringify(data));
 
-      navigate("/homeevents");
+      if (data.isAdmin) {
+        navigate("/admin");
+      } else {
+        navigate("/homeevents");
+      }
     } catch (err) {
       setErrorMessage("Erreur serveur");
     }

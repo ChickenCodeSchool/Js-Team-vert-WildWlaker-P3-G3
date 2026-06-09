@@ -118,6 +118,7 @@ const login: RequestHandler = async (req, res, next) => {
       id: user.user_id,
       username: user.user_username,
       email: user.user_mail,
+      isAdmin: user.user_is_admin,
     });
   } catch (err) {
     next(err);
