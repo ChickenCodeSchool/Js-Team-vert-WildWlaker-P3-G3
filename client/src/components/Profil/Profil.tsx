@@ -194,7 +194,7 @@ function Profil() {
               </div>
             )}
 
-            <button type="button" onClick={() => navigate("/ProfilAdmin")}>
+            <button type="button" onClick={() => navigate("/admin")}>
               <ShieldUser size={15} />
               Profil Admin
             </button>
