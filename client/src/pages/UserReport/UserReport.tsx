@@ -6,6 +6,8 @@ import ReportType from "../../components/ReportUser/ReportType";
 import "./UserReport.css";
 import { useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function UserReport() {
   const navigate = useNavigate();
   const { eventId } = useParams();
@@ -18,7 +20,7 @@ function UserReport() {
     navigate(-1);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!repType || !repDetail || repEvidence.length === 0) {
@@ -26,7 +28,53 @@ function UserReport() {
       return;
     }
 
-    // fetch ici
+    //On utilise un switch ici pcq une ternaire gère que 2 cas (vrai ou faux), un switch en gère plusieurs sans que ça devienne illisible et trop verbeux.
+
+    switch (repType) {
+      case "utilisateur": {
+        const formData = new FormData();
+        formData.append("reported_user_description", repDetail);
+        formData.append("reported_user_by_id_user", "");
+        for (const file of repEvidence) {
+          formData.append("reported_user_image", file);
+        }
+        await fetch(`${API_URL}/api/userreport-user`, {
+          method: "POST",
+          body: formData,
+        });
+        break;
+      }
+      case "evenement": {
+        const formData = new FormData();
+        formData.append("reported_event_description", repDetail);
+        formData.append("reported_event_by_id_user", "");
+        for (const file of repEvidence) {
+          formData.append("reported_event_image", file);
+        }
+        await fetch(`${API_URL}/api/userreport-event`, {
+          method: "POST",
+          body: formData,
+        });
+        break;
+      }
+      case "bug": {
+        const formData = new FormData();
+        formData.append("reported_bug_description", repDetail);
+        formData.append("reported_bug_by_id_user", "");
+        for (const file of repEvidence) {
+          formData.append("reported_bug_image", file);
+        }
+        await fetch(`${API_URL}/api/userreport-bug`, {
+          method: "POST",
+          body: formData,
+        });
+        break;
+      }
+    }
+    alert(
+      "Votre signalement a bien été pris en compte, merci pour votre retour! !\nL'équipe Wedoo.",
+    );
+    navigate(`/events/${eventId}`);
   };
 
   const handleCancel = () => {
