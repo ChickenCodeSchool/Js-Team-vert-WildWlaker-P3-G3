@@ -13,14 +13,14 @@ const browse: RequestHandler = async (req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
-    const newReport = {
+    const newReportUser = {
       reported_user_id_user: req.body.reported_user_id_user,
       reported_user_description: req.body.reported_user_description,
       reported_user_image: req.body.reported_user_image,
       reported_user_by_id_user: req.body.reported_user_by_id_user,
     };
 
-    const insertId = await reportUserRepository.create(newReport);
+    const insertId = await reportUserRepository.create(newReportUser);
 
     res.status(201).json({ insertId });
   } catch (err) {
