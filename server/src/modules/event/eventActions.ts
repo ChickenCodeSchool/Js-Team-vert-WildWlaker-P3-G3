@@ -42,4 +42,29 @@ const add: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, add };
+const join: RequestHandler = async (req, res, next) => {
+  const { event_link_key, user_id } = req.body;
+
+  if (!event_link_key || !user_id) {
+    res.status(400).json({ message: "Code et utilisateur requis." });
+    return;
+  }
+
+  try {
+    const event = await eventRepository.readByLinkKey(event_link_key);
+
+    if (!event) {
+      res
+        .status(404)
+        .json({ message: "Code invalide ou événement introuvable." });
+      return;
+    }
+
+    await eventRepository.joinEvent(event.event_id, user_id);
+    res.status(201).json(event);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { browse, add, join };

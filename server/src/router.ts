@@ -23,6 +23,7 @@ router.post("/api/items", itemActions.add);
 
 // EventActions routes
 // router.get("/api/users/:id/events", userActions.getUserEvents);
+router.post("/api/events/join", eventActions.join);
 router.get("/api/events", eventActions.browse);
 router.post("/api/events", eventActions.add);
 

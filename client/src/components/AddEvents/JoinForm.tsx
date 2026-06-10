@@ -1,24 +1,54 @@
 import { useEffect, useRef, useState } from "react";
 
-import type { JoinFormProps } from "../../types/Events";
+import type { EventData, JoinFormProps } from "../../types/Events";
 
 import "./JoinForm.css";
 
-function JoinForm({ onClose }: JoinFormProps) {
+function JoinForm({ onClose, onEventCreated }: JoinFormProps) {
   const [code, setCode] = useState("");
-
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // ca empeche de recharger la page quand on clique
-    // console.log("Code pour rejoindre :", code); // en attendant le fetch ca permet de vérifier dans la console si c'est bien pris en compte
-    setCode(""); // ca remet le code a zero
-    onClose(); // ca ferme le modal
-  };
+  const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []); // le useRef et useEffect met directement le curseur dans le champs
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/events/join`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            event_link_key: code.trim().toUpperCase(),
+            user_id,
+          }),
+        },
+      );
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message);
+      }
+
+      const newEvent: EventData = await res.json();
+      onEventCreated(newEvent);
+      setCode("");
+      onClose();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Une erreur est survenue.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -52,13 +82,14 @@ function JoinForm({ onClose }: JoinFormProps) {
         >
           Annuler
         </button>
+        {error && <p className="JoinForm-Error">{error}</p>}
         <button
           type="button"
           className="JoinForm-ButtonSubmit"
           onClick={handleSubmit}
-          disabled={!code.trim()}
+          disabled={!code.trim() || isLoading}
         >
-          Rejoindre
+          {isLoading ? "Vérification..." : "Rejoindre"}
         </button>
       </div>
     </>

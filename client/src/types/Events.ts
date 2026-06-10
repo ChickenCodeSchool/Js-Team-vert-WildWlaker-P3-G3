@@ -35,6 +35,7 @@ export interface CreateFormProps {
 
 export interface JoinFormProps {
   onClose: () => void;
+  onEventCreated: (event: EventData) => void;
 }
 
 export type FilterType = "all" | "ongoing" | "finished";

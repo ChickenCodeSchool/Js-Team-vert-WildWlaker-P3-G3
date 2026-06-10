@@ -73,7 +73,7 @@ function ModalAddEvent({
         {activeTab === "create" ? (
           <CreateForm onClose={onClose} onEventCreated={onEventCreated} />
         ) : (
-          <JoinForm onClose={onClose} />
+          <JoinForm onClose={onClose} onEventCreated={onEventCreated} />
         )}
       </div>
     </dialog>

@@ -41,13 +41,27 @@ class EventRepository {
     const [rows] = await databaseClient.query<Rows>(
       `SELECT DISTINCT e.* FROM event e
       LEFT JOIN event_user_joining euj ON euj.euj_id_event = e.event_id
- WHERE e.event_host_id = ?
- OR euj.euj_id_user = ?
-     ORDER BY e.event_date ASC`,
+      WHERE e.event_host_id = ?
+      OR euj.euj_id_user = ?
+      ORDER BY e.event_date ASC`,
       [userId, userId],
     );
 
     return rows as EventData[];
+  }
+  async readByLinkKey(linkKey: string) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT * FROM event WHERE event_link_key = ?",
+      [linkKey],
+    );
+    return rows[0] as EventData | undefined;
+  }
+
+  async joinEvent(eventId: number, userId: number) {
+    await databaseClient.query<Result>(
+      "INSERT INTO event_user_joining (euj_id_event, euj_id_user) VALUES (?, ?)",
+      [eventId, userId],
+    );
   }
 }
 
