@@ -5,7 +5,7 @@ import Galerie from "../../components/Galerie/Galerie";
 import Messagerie from "../../components/Messagerie/Messagerie";
 import SideBar from "../../components/SideBar/SideBar";
 import "./TableauDeBord.css";
-import NavBar from "../../components/NavBar/NavBar.tsx";
+import Profil from "../../components/Profil/Profil.tsx";
 // import Dashboard from "../components/Dashboard";
 // import Messagerie from "../components/Messagerie";
 // import Reservation from "../components/Reservation";
@@ -17,7 +17,7 @@ function TableauDeBord() {
 
   return (
     <>
-      <NavBar />
+      <Profil />
       <div className="dashboard-page">
         <SideBar active={active} setActive={setActive} />
         <main className="content">

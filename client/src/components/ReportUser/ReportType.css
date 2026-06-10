@@ -36,15 +36,15 @@ fieldset {
       }
 
       &:has(input[type="radio"]:checked) {
-        background: var(--bg-color);
-        border-color: var(--hover-color);
+        background: var(--hover-signalement);
+        border-color: var(--icon-color);
       }
     }
   }
 }
 
 .reportType-icon {
-  color: var(--hover-color);
+  color: var(--icon-color);
 }
 
 @media (max-width: 428px) {
