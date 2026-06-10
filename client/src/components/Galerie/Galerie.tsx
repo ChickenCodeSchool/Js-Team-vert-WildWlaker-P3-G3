@@ -1,9 +1,7 @@
 import "./Galerie.css";
 
+import { ImagePlus, Pencil, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-
-import { ImagePlus, Trash2 } from "lucide-react";
-
 import GalleryModal from "./GalleryModal";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -18,11 +16,16 @@ type Gallery = {
 };
 
 function Galerie() {
+  const currentUser = { id: 5 };
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [photoToDelete, setPhotoToDelete] = useState<number | null>(null);
-
+  const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
   const [photos, setPhotos] = useState<Gallery[]>([]);
+
+  const [photoToEdit, setPhotoToEdit] = useState<Gallery | null>(null);
+  const [newDescription, setNewDescription] = useState("");
 
   useEffect(() => {
     const loadGallery = async () => {
@@ -44,10 +47,10 @@ function Galerie() {
     setPhotos((currentPhotos) => [
       {
         gallery_id: Date.now(),
-        gallery_id_event: 1,
-        gallery_id_user: 1,
+        gallery_id_event: 2,
+        gallery_id_user: currentUser.id,
         gallery_link: imageUrl,
-        gallery_description: "Photo ajoutée",
+        gallery_description: "Ajout galerie",
         gallery_creation_date: null,
       },
       ...currentPhotos,
@@ -56,16 +59,67 @@ function Galerie() {
     setIsModalOpen(false);
   };
 
-  const confirmDeletePhoto = () => {
+  const confirmDeletePhoto = async () => {
     if (photoToDelete === null) {
       return;
     }
 
-    setPhotos((currentPhotos) =>
-      currentPhotos.filter((photo) => photo.gallery_id !== photoToDelete),
-    );
+    try {
+      const response = await fetch(`${API_URL}/api/gallery/${photoToDelete}`, {
+        method: "DELETE",
+      });
 
-    setPhotoToDelete(null);
+      if (response.ok) {
+        setPhotos((currentPhotos) =>
+          currentPhotos.filter((photo) => photo.gallery_id !== photoToDelete),
+        );
+        console.log("Photo supprimée avec succès du serveur et de la BDD !");
+      } else {
+        console.error("Le serveur a refusé de supprimer la photo.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la communication avec l'API :", error);
+    } finally {
+      setPhotoToDelete(null);
+    }
+  };
+
+  const handleUpdateDescription = async () => {
+    if (!photoToEdit) return;
+
+    try {
+      const response = await fetch(
+        `${API_URL}/api/gallery/${photoToEdit.gallery_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ gallery_description: newDescription }),
+        },
+      );
+
+      if (response.ok) {
+        setPhotos((currentPhotos) =>
+          currentPhotos.map((photo) =>
+            photo.gallery_id === photoToEdit.gallery_id
+              ? { ...photo, gallery_description: newDescription }
+              : photo,
+          ),
+        );
+        setPhotoToEdit(null);
+        console.log("Description mise à jour en BDD avec succès !");
+      } else {
+        console.error("Le serveur a refusé la modification.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la modification :", error);
+    }
+  };
+
+  const formatImageUrl = (link: string) => {
+    if (!link) return "";
+    return link.startsWith("http") ? link : `${API_URL}${link}`;
   };
 
   return (
@@ -86,19 +140,46 @@ function Galerie() {
       <div className="galerie-grid" aria-label="Galerie de l'événement">
         {photos.map((photo) => (
           <article key={photo.gallery_id} className="galerie-item">
-            <img
-              src={photo.gallery_link}
-              alt={photo.gallery_description ?? "Photo de la galerie"}
-              className="photo"
-            />
-
             <button
               type="button"
-              className="delete-button"
-              onClick={() => setPhotoToDelete(photo.gallery_id)}
+              className="photo-button"
+              onClick={() => setSelectedPhoto(photo.gallery_link)}
             >
-              <Trash2 size={18} />
+              <img
+                src={formatImageUrl(photo.gallery_link)}
+                alt={photo.gallery_description ?? "Galerie événement"}
+                className="photo"
+              />
             </button>
+
+            <p className="photo-description">
+              {photo.gallery_description ?? "Aucune description"}
+            </p>
+
+            {photo.gallery_id_user === currentUser.id && (
+              <div className="photo-actions">
+                <button
+                  type="button"
+                  className="edit-button"
+                  onClick={() => {
+                    setPhotoToEdit(photo);
+                    setNewDescription(photo.gallery_description ?? "");
+                  }}
+                  aria-label="Modifier la description"
+                >
+                  <Pencil size={18} />
+                </button>
+
+                <button
+                  type="button"
+                  className="delete-button"
+                  onClick={() => setPhotoToDelete(photo.gallery_id)}
+                  aria-label="Supprimer la photo"
+                >
+                  <Trash2 size={18} />
+                </button>
+              </div>
+            )}
           </article>
         ))}
       </div>
@@ -108,6 +189,32 @@ function Galerie() {
           onClose={() => setIsModalOpen(false)}
           onAddPhoto={handleAddPhoto}
         />
+      )}
+
+      {photoToEdit !== null && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Modifier la description</h2>
+            <p>Donnez une nouvelle légende à votre image :</p>
+
+            <input
+              type="text"
+              className="modal-input"
+              value={newDescription}
+              onChange={(e) => setNewDescription(e.target.value)}
+              placeholder="Écrivez ici..."
+            />
+
+            <div className="modal-actions">
+              <button type="button" onClick={() => setPhotoToEdit(null)}>
+                Annuler
+              </button>
+              <button type="button" onClick={handleUpdateDescription}>
+                Enregistrer
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {photoToDelete !== null && (
@@ -127,6 +234,23 @@ function Galerie() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {selectedPhoto && (
+        <div className="image-modal-overlay">
+          <button
+            type="button"
+            className="overlay-close"
+            aria-label="Fermer l'aperçu"
+            onClick={() => setSelectedPhoto(null)}
+          />
+
+          <img
+            src={formatImageUrl(selectedPhoto)}
+            alt="Agrandissement"
+            className="image-modal"
+          />
         </div>
       )}
     </section>

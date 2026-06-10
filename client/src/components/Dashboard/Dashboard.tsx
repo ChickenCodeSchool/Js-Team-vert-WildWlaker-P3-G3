@@ -55,7 +55,6 @@ function Dashboard() {
         setUserAndBudgetData(Array.isArray(data) ? data : []);
       });
   }, []);
-
   const totalReservations = new Set(
     eventData.map((item) => item.reservation_id).filter((id) => id !== null),
   ).size;

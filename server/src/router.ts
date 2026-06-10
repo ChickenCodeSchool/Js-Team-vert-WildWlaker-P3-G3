@@ -68,6 +68,9 @@ router.delete("/api/todo/:todo_id", todoActions.destroy);
 
 // gallery routes
 router.get("/api/gallery/:eventId", galleryActions.browse);
+
+router.post("/api/gallery", upload.single("photo"), galleryActions.uploadPhoto);
+
 router.post("/api/gallery", galleryActions.add);
 router.delete("/api/gallery/:gallery_id", galleryActions.destroy);
 

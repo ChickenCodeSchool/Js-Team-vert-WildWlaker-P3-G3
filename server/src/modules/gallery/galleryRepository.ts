@@ -49,6 +49,15 @@ class GalleryRepository {
 
     return result.affectedRows;
   }
+
+  async updateDescription(gallery_id: number, gallery_description: string) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE gallery SET gallery_description = ? WHERE gallery_id = ?",
+      [gallery_description, gallery_id],
+    );
+
+    return result.affectedRows;
+  }
 }
 
 export default new GalleryRepository();
