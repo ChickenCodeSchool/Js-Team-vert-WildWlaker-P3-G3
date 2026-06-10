@@ -60,7 +60,7 @@ const router = createBrowserRouter([
     element: <ResetPassword />,
   },
   {
-    path: "/userreport",
+    path: "/events/:eventId/report",
     element: <UserReport />,
   },
   // {

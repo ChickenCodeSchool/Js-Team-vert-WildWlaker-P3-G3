@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 
 import eventActions from "./modules/event/eventActions";
+import eventUserJoiningActions from "./modules/event_user_joining/eventUserJoiningActions";
 import galleryActions from "./modules/gallery/galleryActions";
 import itemActions from "./modules/item/itemActions";
 import messageActions from "./modules/message/messageActions";
@@ -78,4 +79,7 @@ router.post("/api/userreport-bug", reportBugActions.add);
 
 router.get("/api/userreport-event", reportEventActions.browse);
 router.post("/api/userreport-event", reportEventActions.add);
+
+// event user joining route
+router.get("/api/events/:eventId/users", eventUserJoiningActions.browse);
 export default router;
