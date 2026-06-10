@@ -123,7 +123,7 @@ const login: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
-const browse: RequestHandler = async (req, res, next) => {
+const readUserDescriptionEvent: RequestHandler = async (req, res, next) => {
   try {
     const eventId = Number(req.params.id);
 
@@ -293,7 +293,7 @@ const editUserName: RequestHandler = async (req, res, next) => {
   }
 };
 export default {
-  browse,
+  readUserDescriptionEvent,
   browseInscription,
   browsePhoto,
   read,

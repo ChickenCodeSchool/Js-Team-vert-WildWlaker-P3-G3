@@ -1,5 +1,7 @@
 import "./Dashboard.css";
 import { useEffect, useState } from "react";
+import GalerieDashboard from "../GalerieDashboard/GalerieDashboard";
+import TodoList from "../ToDoList/TodoList";
 
 type EventDashboard = {
   event_name: string;
@@ -30,7 +32,7 @@ function Dashboard() {
   );
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/reservations/1")
+    fetch("http://localhost:3310/api/reservations/2")
       .then((res) => res.json())
       .then((data) => {
         console.log("reservations:", data);
@@ -39,7 +41,7 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/users/1")
+    fetch("http://localhost:3310/api/users/description/2")
       .then((res) => res.json())
       .then((data) => {
         console.log("eventData:", data);
@@ -94,8 +96,8 @@ function Dashboard() {
   }
   return (
     <div className="dashboard">
-      <h1>{eventName}</h1>
-      <h1>Salut, {userAndBudgetData[0]?.user_name}</h1>
+      <h1 className="event-name">{eventName}</h1>
+      <h1 className="user-name">Salut, {userAndBudgetData[0]?.user_name}</h1>
       <p>Description Event</p>
 
       <div className="dashboard-stats">
@@ -132,35 +134,36 @@ function Dashboard() {
               <h4>Date</h4>
               <h4 className="statut">Statut</h4>
             </div>
+            <div className="scroll">
+              {reservationData.map((reservation) => (
+                <div className="row" key={`${reservation.reservation_id}`}>
+                  <div className="name">
+                    <p className="initials">
+                      {getInitials(reservation.user_name)}
+                    </p>
 
-            {reservationData.map((reservation) => (
-              <div className="row" key={`${reservation.reservation_id}`}>
-                <div className="name">
-                  <p className="initials">
-                    {getInitials(reservation.user_name)}
+                    <p>{reservation.user_name}</p>
+                  </div>
+
+                  <p>{reservation.reservation_location}</p>
+
+                  <p>{formatDate(reservation.reservation_date)}</p>
+
+                  <p
+                    className={getReservationStatusCss(
+                      reservation.reservation_date,
+                    )}
+                  >
+                    {getReservationStatus(reservation.reservation_date)}
                   </p>
-
-                  <p>{reservation.user_name}</p>
                 </div>
-
-                <p>{reservation.reservation_location}</p>
-
-                <p>{formatDate(reservation.reservation_date)}</p>
-
-                <p
-                  className={getReservationStatusCss(
-                    reservation.reservation_date,
-                  )}
-                >
-                  {getReservationStatus(reservation.reservation_date)}
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* component todo */}
-        {/* component galerie */}
+        <TodoList eventId={2} todo_id_user={1} />
+        <GalerieDashboard />
       </div>
     </div>
   );

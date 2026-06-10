@@ -4,6 +4,7 @@
   font-family: "Be Vietnam Pro", sans-serif;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -14,9 +15,10 @@ body {
   /* User */
   --bg-neutral: #ffffff; /*cards*/
   --bg-color: #fff8f5; /*background*/
-  --bg-sidebar: rgba(227, 150, 108, 0.3); /*opacity 23%*/
+  --bg-sidebar: #e3966c; /*opacity 23%*/
   --bg-positive: #d1fae5;
   --bg-negative: #ffe4e6;
+  --bg-composant-dash: #fbf2ed;
 
   --hover-sidebar: rgba(218, 148, 95, 0.3); /*opacity 30%*/
 
