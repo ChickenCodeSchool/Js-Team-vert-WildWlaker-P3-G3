@@ -17,13 +17,13 @@ fieldset {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: color-mix(in srgb, var(--font-grey) 70%, transparent);
+    color: color-mix(in srgb, var(--font-black) 80%, transparent);
     gap: 8px;
     width: 100%;
     padding: 32px;
     border: 2px dashed var(--border-color);
     border-radius: 10px;
-    background: var(--bg-color);
+    background: var(--bg-neutral);
     cursor: pointer;
 
     input[type="file"] {
@@ -31,18 +31,27 @@ fieldset {
     }
 
     &:hover {
-      border-color: var(--hover-color);
+      border-color: var(--icon-color);
     }
   }
 
   p {
     text-align: center;
-    font-size: 0.8rem;
-    color: color-mix(in srgb, var(--font-black) 60%, transparent);
-    margin-top: 8px;
+    font-size: 0.7rem;
+    color: color-mix(in srgb, var(--font-grey) 80%, transparent);
   }
 }
 
-.reportEvidences-icon {
-  color: var(--hover-color);
+.reportEvidence-logoIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--hover-signalement);
+  width: 64px;
+  height: 64px;
+  border-radius: 50px;
+
+  .reportEvidences-icon {
+    color: var(--icon-color);
+  }
 }

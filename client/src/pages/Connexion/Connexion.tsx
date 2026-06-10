@@ -50,7 +50,11 @@ function Connexion() {
 
       localStorage.setItem("user", JSON.stringify(data));
 
-      navigate("/homeevents");
+      if (data.isAdmin) {
+        navigate("/admin");
+      } else {
+        navigate("/homeevents");
+      }
     } catch (err) {
       setErrorMessage("Erreur serveur");
     }
