@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 
+import adminActions from "./modules/admin/adminActions";
 import eventActions from "./modules/event/eventActions";
 import eventUserJoiningActions from "./modules/event_user_joining/eventUserJoiningActions";
 import galleryActions from "./modules/gallery/galleryActions";
@@ -83,3 +84,13 @@ router.post("/api/userreport-event", reportEventActions.add);
 // event user joining route
 router.get("/api/events/:eventId/users", eventUserJoiningActions.browse);
 export default router;
+
+// admin route
+router.get("/api/admin/reportUser", adminActions.readReportUser);
+router.get("/api/admin/reportBug", adminActions.readReportBug);
+router.get("/api/admin/reportEvent", adminActions.readReportEvent);
+router.get("/api/admin/dashboard-chart", adminActions.readDashboardChart);
+router.get("/api/admin/arrayUser", adminActions.readArrayUsers);
+router.get("/api/admin/arrayReport", adminActions.readArrayReport);
+router.get("/api/admin/events", adminActions.readAllEvents);
+router.get("/api/admin/users", adminActions.readAllUsers);
