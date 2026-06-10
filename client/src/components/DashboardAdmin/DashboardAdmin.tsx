@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import "./DashboardAdmin.css";
-import { Users, Calendar, TriangleAlert } from "lucide-react";
+import { Calendar, TriangleAlert, Users } from "lucide-react";
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
   CartesianGrid,
   Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 
 type AllReports = {

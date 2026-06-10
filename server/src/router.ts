@@ -7,13 +7,13 @@ const upload = multer({
   dest: "public/uploads/",
 });
 
+import adminActions from "./modules/admin/adminActions";
+import galleryActions from "./modules/gallery/galleryActions";
 import itemActions from "./modules/item/itemActions";
 import messageActions from "./modules/message/messageActions";
 import reservationActions from "./modules/reservation/reservationActions";
 import todoActions from "./modules/todo/todoActions";
 import userActions from "./modules/user/userActions";
-import galleryActions from "./modules/gallery/galleryActions";
-import adminActions from "./modules/admin/adminActions";
 
 router.put("/api/todo/:todo_id", todoActions.edit);
 router.put("/api/users/:id", userActions.editUserName);

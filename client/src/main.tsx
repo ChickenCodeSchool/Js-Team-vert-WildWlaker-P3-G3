@@ -5,19 +5,19 @@ import { RouterProvider, createBrowserRouter } from "react-router";
 
 /* ************************************************************************* */
 
+// import TodoList from "./components/ToDoList/TodoList";
+import Admin from "../src/pages/Admin/Admin";
 // Import the main app component
 import App from "./App";
 import Connexion from "./pages/Connexion/Connexion";
 import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
+// Import additional components for new routes
+// Try creating these components in the "pages" folder
+import HomeEvents from "./pages/HomeEvents/HomeEvents";
 // import Presentation from "./pages/Presentation/Presentation";
 import Register from "./pages/Register/Register";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import TableauDeBord from "./pages/TableauDeBord/TableauDeBord";
-// import TodoList from "./components/ToDoList/TodoList";
-import Admin from "../src/pages/Admin/Admin";
-// Import additional components for new routes
-// Try creating these components in the "pages" folder
-import HomeEvents from "./pages/HomeEvents/HomeEvents";
 import UserReport from "./pages/UserReport/UserReport";
 
 // import About from "./pages/About";

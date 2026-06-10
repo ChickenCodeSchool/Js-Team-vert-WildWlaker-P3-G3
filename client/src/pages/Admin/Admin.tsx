@@ -1,8 +1,8 @@
 import "./Admin.css";
 import { useState } from "react";
-import SideBarAdmin from "../../components/SideBarAdmin/SideBarAdmin";
-import Profil from "../../components/Profil/Profil";
 import DashboardAdmin from "../../components/DashboardAdmin/DashboardAdmin";
+import Profil from "../../components/Profil/Profil";
+import SideBarAdmin from "../../components/SideBarAdmin/SideBarAdmin";
 function Admin() {
   const [active, setActive] = useState("tableau");
 
