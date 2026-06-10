@@ -4,7 +4,7 @@
   align-items: center;
   min-height: 100vh;
   background: var(--bg-color-1);
-  padding-top: 24px;
+  padding-top: 12px;
 
   .userReport-Header {
     display: flex;
@@ -110,7 +110,7 @@
       .userReport-Back {
         position: absolute;
         left: 16px;
-        top: 50%;
+        top: 25%;
         transform: translateY(-50%);
 
         &:hover {

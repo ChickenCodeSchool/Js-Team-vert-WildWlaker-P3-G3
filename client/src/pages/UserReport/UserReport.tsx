@@ -1,4 +1,5 @@
 import { ArrowLeft } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import NavBar from "../../components/NavBar/NavBar";
 import ReportDetails from "../../components/ReportUser/ReportDetails";
@@ -6,7 +7,6 @@ import ReportEvidence from "../../components/ReportUser/ReportEvidence";
 import ReportType from "../../components/ReportUser/ReportType";
 import ReportUserModal from "../../components/ReportUser/ReportUserModal";
 import "./UserReport.css";
-import { useEffect, useState } from "react";
 import type EventUserJoin from "../../types/eventUserJoining";
 
 const API_URL = import.meta.env.VITE_API_URL;
