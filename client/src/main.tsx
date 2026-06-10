@@ -14,7 +14,7 @@ import Register from "./pages/Register/Register";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import TableauDeBord from "./pages/TableauDeBord/TableauDeBord";
 // import TodoList from "./components/ToDoList/TodoList";
-
+import Admin from "../src/pages/Admin/Admin";
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
 import HomeEvents from "./pages/HomeEvents/HomeEvents";
@@ -62,6 +62,10 @@ const router = createBrowserRouter([
   {
     path: "/userreport",
     element: <UserReport />,
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
   },
   // {
   //   path: "/todoList",

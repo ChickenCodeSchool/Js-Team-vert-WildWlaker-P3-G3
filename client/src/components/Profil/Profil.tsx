@@ -9,6 +9,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 function Profil() {
+  const navigate = useNavigate();
+
   const [userName, setUserName] = useState("");
   const [isMainModalOpen, setIsMainModalOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<string | null>(null);
@@ -16,7 +18,6 @@ function Profil() {
   const [preview, setPreview] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:3310/api/1/photo")
@@ -194,7 +195,7 @@ function Profil() {
               </div>
             )}
 
-            <button type="button" onClick={() => navigate("/ProfilAdmin")}>
+            <button type="button" onClick={() => navigate("/admin")}>
               <ShieldUser size={15} />
               Profil Admin
             </button>
