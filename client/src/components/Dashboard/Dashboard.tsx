@@ -8,7 +8,7 @@ type EventDashboard = {
   budget_price: string | number | null;
 };
 type ReservationDashboard = {
-  event_id: number;
+  event_id: number | null;
   user_name: string;
   reservation_location: string;
   reservation_date: string;
@@ -30,7 +30,7 @@ function Dashboard() {
   );
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/reservations/2")
+    fetch("http://localhost:3310/api/reservations/1")
       .then((res) => res.json())
       .then((data) => {
         console.log("reservations:", data);
@@ -39,7 +39,7 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/users/2")
+    fetch("http://localhost:3310/api/users/1")
       .then((res) => res.json())
       .then((data) => {
         console.log("eventData:", data);
@@ -48,14 +48,13 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/users/2/userAndBudget")
+    fetch("http://localhost:3310/api/users/1/userAndBudget")
       .then((res) => res.json())
       .then((data) => {
         console.log("userAndBudget:", data);
         setUserAndBudgetData(Array.isArray(data) ? data : []);
       });
   }, []);
-
   const totalReservations = new Set(
     eventData.map((item) => item.reservation_id).filter((id) => id !== null),
   ).size;
@@ -73,7 +72,7 @@ function Dashboard() {
   function getInitials(userName: string) {
     return userName
       .split(" ")
-      .map((word) => word[0].toUpperCase())
+      .map((word) => word[0]?.toUpperCase())
       .join("");
   }
 

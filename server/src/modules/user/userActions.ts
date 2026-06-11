@@ -2,7 +2,6 @@ import crypto from "node:crypto";
 import bcrypt from "bcrypt";
 import type { RequestHandler } from "express";
 import nodemailer from "nodemailer";
-import databaseClient from "../../../database/client";
 import userRepository from "./userRepository";
 
 const transporter = nodemailer.createTransport({
@@ -118,6 +117,7 @@ const login: RequestHandler = async (req, res, next) => {
       id: user.user_id,
       username: user.user_username,
       email: user.user_mail,
+      isAdmin: user.user_is_admin,
     });
   } catch (err) {
     next(err);
@@ -239,13 +239,69 @@ const resetPassword: RequestHandler = async (req, res, next) => {
   }
 };
 
+const uploadPhoto: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = 1; // temporaire, plus tard user connecté
+
+    if (!req.file) {
+      res.status(400).json({ message: "Aucune image envoyée" });
+      return;
+    }
+
+    const photoUrl = `/uploads/${req.file.filename}`;
+
+    await userRepository.updatePhoto(userId, photoUrl);
+
+    res.status(200).json({
+      message: "Photo mise à jour",
+      photoUrl,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const browsePhoto: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.id);
+
+    if (Number.isNaN(userId)) {
+      res.status(400).json({
+        message: "ID invalide",
+      });
+      return;
+    }
+
+    const photo = await userRepository.readUserPhoto(userId);
+
+    res.json(photo);
+  } catch (error) {
+    next(error);
+  }
+};
+const editUserName: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.id);
+    const { user_name } = req.body;
+
+    await userRepository.updateUserName(userId, user_name);
+
+    res.status(200).json({
+      message: "Nom modifié",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 export default {
   browse,
   browseInscription,
+  browsePhoto,
   read,
   add,
   login,
   browseUserAndBudget,
   forgotPassword,
   resetPassword,
+  uploadPhoto,
+  editUserName,
 };

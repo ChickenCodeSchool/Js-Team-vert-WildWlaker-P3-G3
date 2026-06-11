@@ -1,0 +1,10 @@
+.dashboard-page-admin {
+  display: flex;
+  flex-direction: row;
+  gap: 3vw;
+  padding-left: 2vw;
+  padding-top: 3vh;
+  .content {
+    padding-top: 13vh;
+  }
+}

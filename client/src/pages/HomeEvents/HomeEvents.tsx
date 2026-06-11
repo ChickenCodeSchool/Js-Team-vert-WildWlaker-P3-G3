@@ -16,7 +16,7 @@ function HomeEvents() {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const user = JSON.parse(localStorage.getItem("user") || "{}"); // --> recupere dans le local storage l'user id
     fetch(`${import.meta.env.VITE_API_URL}/api/events?userId=${user.id}`) // --> il recupere l'userid pour afficher les events de l'id connecté
       .then((res) => res.json())
       .then((data) => setEvents(data))
