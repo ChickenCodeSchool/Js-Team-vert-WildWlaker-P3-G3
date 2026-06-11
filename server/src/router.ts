@@ -25,12 +25,12 @@ router.get("/api/users", userActions.browseInscription);
 // router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
 // TODO: vérifier avec l'équipe — deux routes identiques sur /api/users/:id
 // userActions.browse -> à confirmer : liste filtrée ou profil ?
-router.get("/api/users/:id", userActions.browse);
+router.get("/api/users/description/:id", userActions.readUserDescriptionEvent);
 // userActions.read -> à confirmer : profil utilisateur unique ?
 router.get("/api/users/:id", userActions.read);
 router.get("/api/users/:id/userAndBudget", userActions.browseUserAndBudget);
 router.get("/api/:id/photo", userActions.browsePhoto);
-router.get("/:id", userActions.browse);
+// router.get("/:id", userActions.browse); browse pas declaré
 router.post("/api/users", userActions.add);
 router.post(
   "/api/users/photo",
@@ -42,7 +42,7 @@ router.post("/api/auth/forgot-password", userActions.forgotPassword);
 router.post("/api/auth/reset-password", userActions.resetPassword);
 router.put("/api/users/:id", userActions.editUserName);
 router.put("/api/users/change-password", userActions.forgotPassword);
-
+router.get("/api/users/admin/:id", userActions.browseUserAdmin);
 // event routes
 // router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
 router.get("/api/events", eventActions.browse);
@@ -86,7 +86,6 @@ router.post("/api/userreport-event", reportEventActions.add);
 
 // event user joining route
 router.get("/api/events/:eventId/users", eventUserJoiningActions.browse);
-export default router;
 
 // admin route
 router.get("/api/admin/reportUser", adminActions.readReportUser);
@@ -97,3 +96,5 @@ router.get("/api/admin/arrayUser", adminActions.readArrayUsers);
 router.get("/api/admin/arrayReport", adminActions.readArrayReport);
 router.get("/api/admin/events", adminActions.readAllEvents);
 router.get("/api/admin/users", adminActions.readAllUsers);
+
+export default router;

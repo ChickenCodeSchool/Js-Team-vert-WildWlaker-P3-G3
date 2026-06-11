@@ -123,7 +123,7 @@ const login: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
-const browse: RequestHandler = async (req, res, next) => {
+const readUserDescriptionEvent: RequestHandler = async (req, res, next) => {
   try {
     const eventId = Number(req.params.id);
 
@@ -241,7 +241,7 @@ const resetPassword: RequestHandler = async (req, res, next) => {
 
 const uploadPhoto: RequestHandler = async (req, res, next) => {
   try {
-    const userId = 1; // temporaire, plus tard user connecté
+    const userId = Number(req.params.id);
 
     if (!req.file) {
       res.status(400).json({ message: "Aucune image envoyée" });
@@ -292,8 +292,19 @@ const editUserName: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const browseUserAdmin: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.id);
+
+    const user = await userRepository.readUserAdmin(userId);
+
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+};
 export default {
-  browse,
+  readUserDescriptionEvent,
   browseInscription,
   browsePhoto,
   read,
@@ -304,4 +315,5 @@ export default {
   resetPassword,
   uploadPhoto,
   editUserName,
+  browseUserAdmin,
 };

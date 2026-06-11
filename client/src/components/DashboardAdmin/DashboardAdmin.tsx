@@ -113,19 +113,19 @@ function DashboardAdmin() {
     <main className="admin-dashboard">
       <section className="stats-grid">
         <article className="stat-card">
-          <Calendar size={20} />
+          <Calendar />
           <p>Total des evenements</p>
           <h2>{totalIdsEvents}</h2>
         </article>
 
         <article className="stat-card">
-          <Users size={20} />
+          <Users />
           <p>Total des utilisateurs</p>
           <h2>{totalIdsUsers}</h2>
         </article>
 
         <article className="stat-card">
-          <TriangleAlert size={20} />
+          <TriangleAlert />
           <p>Rapports actifs</p>
           <h2>{totalReports}</h2>
         </article>
@@ -138,43 +138,44 @@ function DashboardAdmin() {
             <p>Évolution mensuelle des utilisateurs, événements et reports</p>
           </div>
         </div>
+        <div className="chart-container">
+          <ResponsiveContainer width="100%" height={320}>
+            <LineChart data={graphic}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
 
-        <ResponsiveContainer width="100%" height={320}>
-          <LineChart data={graphic}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="month" axisLine={false} tickLine={false} />
 
-            <XAxis dataKey="month" axisLine={false} tickLine={false} />
+              <YAxis axisLine={false} tickLine={false} />
 
-            <YAxis axisLine={false} tickLine={false} />
+              <Tooltip />
+              <Legend />
 
-            <Tooltip />
-            <Legend />
+              <Line
+                type="monotone"
+                dataKey="users"
+                name="Utilisateurs"
+                stroke="#ff7e5f"
+                strokeWidth={3}
+              />
 
-            <Line
-              type="monotone"
-              dataKey="users"
-              name="Utilisateurs"
-              stroke="#ff7e5f"
-              strokeWidth={3}
-            />
+              <Line
+                type="monotone"
+                dataKey="events"
+                name="Événements"
+                stroke="#3b82f6"
+                strokeWidth={3}
+              />
 
-            <Line
-              type="monotone"
-              dataKey="events"
-              name="Événements"
-              stroke="#3b82f6"
-              strokeWidth={3}
-            />
-
-            <Line
-              type="monotone"
-              dataKey="reports"
-              name="Reports"
-              stroke="#ef4444"
-              strokeWidth={3}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+              <Line
+                type="monotone"
+                dataKey="reports"
+                name="Reports"
+                stroke="#ef4444"
+                strokeWidth={3}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </section>
 
       <section className="bottom-grid">

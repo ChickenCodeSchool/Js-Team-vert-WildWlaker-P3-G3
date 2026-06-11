@@ -1,10 +1,18 @@
-.dashboard-page-admin {
-  display: flex;
-  flex-direction: row;
-  gap: 3vw;
-  padding-left: 2vw;
-  padding-top: 3vh;
-  .content {
-    padding-top: 13vh;
+@media screen and (min-width: 429px) {
+  .dashboard-page-admin {
+    display: flex;
+    flex-direction: row;
+    gap: 3vw;
+    padding-left: 2vw;
+    padding-top: 3vh;
+    .content {
+      padding-top: 13vh;
+    }
+  }
+}
+@media screen and (max-width: 428px) {
+  .dashboard-page-admin {
+    width: 100%;
+    padding-top: 11vh;
   }
 }
