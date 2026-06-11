@@ -72,8 +72,8 @@ router.get("/api/gallery/:eventId", galleryActions.browse);
 router.post("/api/gallery", upload.single("photo"), galleryActions.uploadPhoto);
 
 router.post("/api/gallery", galleryActions.add);
-router.delete("/api/gallery/:gallery_id", galleryActions.destroy);
-
+router.delete("/api/gallery/:gallery_id/:userId", galleryActions.destroy);
+router.put("/api/gallery/:gallery_id/:userId", galleryActions.edit);
 // report user routes
 router.get("/api/userreport-user", reportUserActions.browse);
 router.post("/api/userreport-user", reportUserActions.add);

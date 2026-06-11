@@ -21,6 +21,14 @@ class GalleryRepository {
     return rows as Gallery[];
   }
 
+  async read(gallery_id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT * FROM gallery WHERE gallery_id = ?",
+      [gallery_id],
+    );
+    return rows[0] as Gallery | undefined;
+  }
+
   async create(gallery: Omit<Gallery, "gallery_id" | "gallery_creation_date">) {
     const [result] = await databaseClient.query<Result>(
       `INSERT INTO gallery (
@@ -57,6 +65,26 @@ class GalleryRepository {
     );
 
     return result.affectedRows;
+  }
+
+  async checkUserPermissions(gallery_id_event: number, user_id: number) {
+    const [eventRows] = await databaseClient.query<Rows>(
+      "SELECT event_host_id FROM event WHERE event_id = ?",
+      [gallery_id_event],
+    );
+    const isHost =
+      eventRows.length > 0 && eventRows[0].event_host_id === user_id;
+
+    const [joiningRows] = await databaseClient.query<Rows>(
+      "SELECT COUNT(*) AS total FROM event_user_joining WHERE euj_id_event = ? AND euj_id_user = ?",
+      [gallery_id_event, user_id],
+    );
+    const isParticipant = joiningRows.length > 0 && joiningRows[0].total > 0;
+
+    return {
+      isHost,
+      isParticipant: isParticipant || isHost,
+    };
   }
 }
 

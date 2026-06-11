@@ -5,9 +5,16 @@ import { useState } from "react";
 type GalleryModalProps = {
   onClose: () => void;
   onAddPhoto: (imageUrl: string) => void;
+  eventId: number;
+  userId: number;
 };
 
-function GalleryModal({ onClose, onAddPhoto }: GalleryModalProps) {
+function GalleryModal({
+  onClose,
+  onAddPhoto,
+  eventId,
+  userId,
+}: GalleryModalProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [error, setError] = useState("");
@@ -42,8 +49,8 @@ function GalleryModal({ onClose, onAddPhoto }: GalleryModalProps) {
     try {
       const formData = new FormData();
       formData.append("photo", selectedFile);
-      formData.append("gallery_id_event", "2");
-      formData.append("gallery_id_user", "3");
+      formData.append("gallery_id_event", eventId.toString());
+      formData.append("gallery_id_user", userId.toString());
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/gallery`,
@@ -53,15 +60,21 @@ function GalleryModal({ onClose, onAddPhoto }: GalleryModalProps) {
         },
       );
 
-      console.log("STATUS:", response.status);
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(
+          errorData.message || "Une erreur est survenue lors de l'envoi.",
+        );
+        return;
+      }
+
       const data = await response.json();
-      console.log("DATA:", data);
 
       onAddPhoto(data.photoUrl);
-
       onClose();
     } catch (error) {
       console.error(error);
+      setError("Impossible de contacter le serveur.");
     }
   };
 
@@ -76,7 +89,11 @@ function GalleryModal({ onClose, onAddPhoto }: GalleryModalProps) {
           onChange={handleFileChange}
         />
 
-        {error && <p className="error-message">{error}</p>}
+        {error && (
+          <p className="error-message" style={{ color: "red" }}>
+            {error}
+          </p>
+        )}
 
         {preview && (
           <img src={preview} alt="Prévisualisation" className="preview-image" />
