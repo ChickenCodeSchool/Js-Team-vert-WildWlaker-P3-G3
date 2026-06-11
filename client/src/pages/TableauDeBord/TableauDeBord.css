@@ -1,7 +1,15 @@
-.dashboard-page {
-  display: flex;
-  flex-direction: row;
-  gap: 10vw;
-  padding-left: 2vw;
-  padding-top: 3vh;
+@media screen and (min-width: 429px) {
+  .dashboard-page {
+    display: flex;
+    flex-direction: row;
+    gap: 10vw;
+    padding-left: 2vw;
+    padding-top: 3vh;
+  }
+}
+
+@media screen and (max-width: 428px) {
+  .dashboard-page {
+    width: 100%;
+  }
 }
