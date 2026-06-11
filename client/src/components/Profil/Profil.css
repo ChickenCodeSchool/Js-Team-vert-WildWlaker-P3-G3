@@ -1,5 +1,6 @@
 .profil {
   position: absolute;
+  z-index: 1000;
   right: 30px;
   top: 30px;
   .button {

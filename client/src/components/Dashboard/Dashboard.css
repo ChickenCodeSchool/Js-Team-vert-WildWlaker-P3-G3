@@ -160,28 +160,8 @@
           flex-direction: column;
           max-height: 16vh;
           overflow-y: auto;
-
-          scrollbar-width: none; /* Firefox */
-
-          /* Chrome, Edge, Safari */
-          .ma-div::-webkit-scrollbar {
-            width: 0;
-            transition: width 0.2s ease;
-          }
-
-          /* Affiche la scrollbar au hover */
-          .ma-div:hover::-webkit-scrollbar {
-            width: 8px;
-          }
-
-          .ma-div::-webkit-scrollbar-track {
-            background: transparent;
-          }
-
-          .ma-div::-webkit-scrollbar-thumb {
-            background: #ff7e5f;
-            border-radius: 20px;
-          }
+          scrollbar-width: thin;
+          scrollbar-color: transparent transparent;
           .row {
             border: var(--border-color);
             display: flex;

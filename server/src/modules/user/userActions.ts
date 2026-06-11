@@ -292,6 +292,17 @@ const editUserName: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const browseUserAdmin: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.id);
+
+    const user = await userRepository.readUserAdmin(userId);
+
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+};
 export default {
   readUserDescriptionEvent,
   browseInscription,
@@ -304,4 +315,5 @@ export default {
   resetPassword,
   uploadPhoto,
   editUserName,
+  browseUserAdmin,
 };

@@ -4,38 +4,26 @@
   font-style: normal;
   height: 90vh;
   width: 40vw;
-  margin-top: 5vh;
+  background: var(--bg-composant-dash);
+  padding: 0 30px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
   h1 {
     color: var(--font-brown);
+    padding-top: 15px;
   }
 
   .messagerie-box {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 80vh;
+    height: 83vh;
     .messagerie-box-messages {
       height: 70vh;
       overflow-y: auto;
-      /* scrollbar-width: thin;
-      scrollbar-color: transparent transparent; */
-      &::-webkit-scrollbar {
-        width: 4px;
-      }
+      scrollbar-width: thin;
+      scrollbar-color: transparent transparent;
 
-      &::-webkit-scrollbar-track {
-        background: none;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: #ff7e5f;
-        border-radius: 10px;
-      }
-
-      &::-webkit-scrollbar-thumb:hover {
-        /* background: #e96b4d; */
-        scrollbar-color: #ff7e5f transparent;
-      }
       .messagerie-box-messages-friends {
         display: flex;
         flex-direction: row;

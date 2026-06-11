@@ -42,7 +42,7 @@ router.post("/api/auth/forgot-password", userActions.forgotPassword);
 router.post("/api/auth/reset-password", userActions.resetPassword);
 router.put("/api/users/:id", userActions.editUserName);
 router.put("/api/users/change-password", userActions.forgotPassword);
-
+router.get("/api/users/admin/:id", userActions.browseUserAdmin);
 // event routes
 // router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
 router.get("/api/events", eventActions.browse);
