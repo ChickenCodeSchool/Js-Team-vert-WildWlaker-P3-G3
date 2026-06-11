@@ -1,6 +1,6 @@
 import "./GalerieDashboard.css";
-
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -20,13 +20,15 @@ function GalerieDashboard() {
     if (!link) return "";
     return link.startsWith("http") ? link : `${API_URL}${link}`;
   };
+  const { id } = useParams();
+  const event = Number(id);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/gallery/2`)
+    fetch(`${API_URL}/api/gallery/${event}`)
       .then((res) => res.json())
       .then((data) => setPhotos(data))
       .catch((error) => console.error(error));
-  }, []);
+  }, [event]);
 
   return (
     <section className="galerie-dash">

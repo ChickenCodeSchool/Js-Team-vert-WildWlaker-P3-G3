@@ -241,7 +241,7 @@ const resetPassword: RequestHandler = async (req, res, next) => {
 
 const uploadPhoto: RequestHandler = async (req, res, next) => {
   try {
-    const userId = 1; // temporaire, plus tard user connecté
+    const userId = Number(req.params.id);
 
     if (!req.file) {
       res.status(400).json({ message: "Aucune image envoyée" });

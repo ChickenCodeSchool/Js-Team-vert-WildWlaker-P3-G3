@@ -21,18 +21,24 @@ function Profil() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
 
+  const isAdminPage = location.pathname === "/admin";
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const userId = user?.id;
+
   useEffect(() => {
-    fetch("http://localhost:3310/api/1/photo")
+    fetch("`http://localhost:3310/api/${userId}/photo`")
       .then((res) => res.json())
       .then((data) => {
         setProfilePicture(data.user_profile_picture);
       });
   }, []);
+
   useEffect(() => {
-    fetch("http://localhost:3310/api/users/admin/3")
+    fetch("`http://localhost:3310/api/users/admin/${userId}`")
       .then((res) => res.json())
       .then((data) => setIsAdmin(Boolean(data.user_is_admin)));
   }, []);
+
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
 
@@ -102,7 +108,6 @@ function Profil() {
       console.error(error);
     }
   }
-  const isAdminPage = location.pathname === "/admin";
   return (
     <div className="profil">
       <button
@@ -160,7 +165,7 @@ function Profil() {
                 )}
                 <button
                   type="button"
-                  onClick={() => updateUserName(userName, 1)}
+                  onClick={() => updateUserName(userName, userId)}
                 >
                   Valider
                 </button>
