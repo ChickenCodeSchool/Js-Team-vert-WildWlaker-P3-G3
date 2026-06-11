@@ -9,67 +9,6 @@ import ModalAddEvent from "../../components/AddEvents/ModalAddEvent";
 
 import "./HomeEvents.css";
 
-// const events = [
-//   {
-//     id: 1,
-//     image: "https://picsum.photos/400/200",
-//     imageAlt: "Concert de jazz",
-//     date: "2026-05-10",
-//     title: "Festival de Jazz",
-//     description: "Une soirée inoubliable avec les meilleurs musiciens de jazz.",
-//     location: "Paris, France",
-//   },
-//   {
-//     id: 2,
-//     image: "https://picsum.photos/400/201",
-//     imageAlt: "Exposition d'art",
-//     date: "2026-06-22",
-//     title: "Exposition Art Moderne",
-//     description:
-//       "Découvrez les œuvres d'artistes contemporains du monde entier.",
-//     location: "Lyon, France",
-//   },
-//   {
-//     id: 3,
-//     image: "https://picsum.photos/400/203",
-//     imageAlt: "Exposition d'art",
-//     date: "2026-06-15",
-//     title: "Expo",
-//     description:
-//       "Découvrez les œuvres d'artistes contemporains du monde entier.",
-//     location: "Lyon, France",
-//   },
-//   {
-//     id: 4,
-//     image: "https://picsum.photos/400/204",
-//     imageAlt: "Exposition d'art",
-//     date: "2026-11-22",
-//     title: "Exposition Art Moderne",
-//     description:
-//       "Découvrez les œuvres d'artistes contemporains du monde entier.",
-//     location: "Lyon, France",
-//   },
-//   {
-//     id: 5,
-//     image: "https://picsum.photos/400/205",
-//     imageAlt: "Exposition d'art",
-//     date: "2026-06-03",
-//     title: "Exposition Art Moderne",
-//     description:
-//       "Découvrez les œuvres d'artistes contemporains du monde entier.",
-//     location: "Lyon, France",
-//   },
-//   {
-//     id: 6,
-//     image: "https://picsum.photos/400/205",
-//     imageAlt: "je ne sais pas ",
-//     date: "2025-06-02",
-//     title: "Je ne sais pas",
-//     description: "On ne sais pas ce qui va se passer.",
-//     location: "Jenecpaou, Kelkepar",
-//   },
-// ];
-
 function HomeEvents() {
   const [events, setEvents] = useState<EventData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -117,6 +56,7 @@ function HomeEvents() {
         {filteredEvents.map((event) => (
           <CardEvents
             key={event.event_id}
+            event_id={event.event_id}
             image={event.event_picture}
             imageAlt={event.event_name}
             date={event.event_date}

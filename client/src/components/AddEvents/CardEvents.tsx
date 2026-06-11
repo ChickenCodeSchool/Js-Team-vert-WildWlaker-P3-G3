@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router";
+
 import type { CardEventsProps } from "../../types/Events";
 
 import { MapPin } from "lucide-react";
@@ -27,6 +29,7 @@ const formatMonth = (date: string): string => {
 };
 
 function CardEvents({
+  event_id,
   image,
   imageAlt,
   date,
@@ -34,8 +37,16 @@ function CardEvents({
   description,
   location,
 }: CardEventsProps) {
+  const navigate = useNavigate();
   return (
-    <div className="CardEvents-Global">
+    <button
+      type="button"
+      className="CardEvents-Global"
+      onClick={() => navigate(`/tableaudebord?eventId=${event_id}`)}
+      onKeyUp={(e) =>
+        e.key === "Enter" && navigate(`/tableaudebord?eventId=${event_id}`)
+      }
+    >
       <div className="CardEvents-ImageDate">
         <img className="CardEvents-Image" src={image} alt={imageAlt} />
         <span className="CardEvents-Date">
@@ -51,7 +62,7 @@ function CardEvents({
           <MapPin size={14} /> {location}
         </span>
       </div>
-    </div>
+    </button>
   );
 }
 

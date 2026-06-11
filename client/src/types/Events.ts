@@ -10,6 +10,7 @@ export interface EventData {
 }
 
 export interface CardEventsProps {
+  event_id: number;
   image: string;
   imageAlt: string;
   date: string;
