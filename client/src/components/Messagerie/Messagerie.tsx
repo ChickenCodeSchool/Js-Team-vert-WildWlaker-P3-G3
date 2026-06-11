@@ -1,6 +1,7 @@
 import "./Messagerie.css";
 import { Send } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import Profil from "../../assets/images/img-card-retraite.png";
 
 type ReceptionMessagesUser = {
@@ -17,28 +18,36 @@ function Messagerie() {
     ReceptionMessagesUser[]
   >([]);
 
+  const { id } = useParams();
+  const event = Number(id);
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const userId = user?.id;
+
   useEffect(() => {
     fetchMessages();
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/messages/2")
+    fetch(`http://localhost:3310/api/messages/${event}`)
       .then((res) => res.json())
       .then((data) => setReceptionMessagesUser(data));
-  }, []);
+  }, [event]);
 
   async function handleSendMessage() {
     try {
-      const response = await fetch("http://localhost:3310/api/messages/2", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:3310/api/messages/${event}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: userId,
+            messagesUser: messagesUser,
+          }),
         },
-        body: JSON.stringify({
-          userId: 3,
-          messagesUser: messagesUser,
-        }),
-      });
+      );
 
       console.log("Messagerie: réponse status", response.status);
 
@@ -52,12 +61,10 @@ function Messagerie() {
   }
 
   function fetchMessages() {
-    fetch("http://localhost:3310/api/messages/2")
+    fetch(`http://localhost:3310/api/messages/${event}`)
       .then((res) => res.json())
       .then((data) => setReceptionMessagesUser(data));
   }
-
-  const userId = 3;
 
   return (
     <div className="messagerie">

@@ -4,20 +4,22 @@
     font-family: "Be Vietnam Pro", sans-serif;
     font-weight: 300;
     font-style: normal;
-    min-height: 100vh;
+    max-height: 90vh;
     display: flex;
     align-items: flex-start;
     width: 14vw;
     padding: 20px 0 0 0;
-
+    margin-top: 3vh;
     flex-direction: column;
     position: relative;
-    background-color: #feb47b5b;
+    background: var(--sideBar-color);
     border-radius: 40px;
     .logo-sidebar-container {
       margin: 0 0 0 20px;
       display: flex;
       align-items: center;
+      padding-bottom: 3vh;
+
       .logo-sidebar-image {
         width: 30px;
         height: 30px;

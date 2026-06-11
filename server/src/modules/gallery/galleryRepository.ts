@@ -14,7 +14,13 @@ type Gallery = {
 class GalleryRepository {
   async readAll(gallery_id_event: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT * FROM gallery WHERE gallery_id_event = ?",
+      `
+      SELECT * 
+      FROM gallery 
+      WHERE gallery_id_event = ?
+      ORDER BY gallery_creation_date DESC
+      `,
+
       [gallery_id_event],
     );
 
