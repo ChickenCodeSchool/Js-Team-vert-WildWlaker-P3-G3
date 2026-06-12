@@ -2,14 +2,15 @@ import "./Profil.css";
 import { Pencil } from "lucide-react";
 import { LockKeyhole } from "lucide-react";
 import { Camera } from "lucide-react";
-import { ShieldUser } from "lucide-react";
+import { ShieldUser, User } from "lucide-react";
 import { LogOut } from "lucide-react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 function Profil() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [userName, setUserName] = useState("");
   const [isMainModalOpen, setIsMainModalOpen] = useState(false);
@@ -18,13 +19,24 @@ function Profil() {
   const [preview, setPreview] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const isAdminPage = location.pathname === "/admin";
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const userId = user?.id;
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/1/photo")
+    fetch("`http://localhost:3310/api/${userId}/photo`")
       .then((res) => res.json())
       .then((data) => {
         setProfilePicture(data.user_profile_picture);
       });
+  }, []);
+
+  useEffect(() => {
+    fetch("`http://localhost:3310/api/users/admin/${userId}`")
+      .then((res) => res.json())
+      .then((data) => setIsAdmin(Boolean(data.user_is_admin)));
   }, []);
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -153,7 +165,7 @@ function Profil() {
                 )}
                 <button
                   type="button"
-                  onClick={() => updateUserName(userName, 1)}
+                  onClick={() => updateUserName(userName, userId)}
                 >
                   Valider
                 </button>
@@ -195,10 +207,24 @@ function Profil() {
               </div>
             )}
 
-            <button type="button" onClick={() => navigate("/admin")}>
-              <ShieldUser size={15} />
-              Profil Admin
-            </button>
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={() => navigate(isAdminPage ? "/HomeEvents" : "/admin")}
+              >
+                {isAdminPage ? (
+                  <>
+                    <User size={15} />
+                    Profil User
+                  </>
+                ) : (
+                  <>
+                    <ShieldUser size={15} />
+                    Profil Admin
+                  </>
+                )}
+              </button>
+            )}
             <button
               className="deconnexion-event"
               type="button"

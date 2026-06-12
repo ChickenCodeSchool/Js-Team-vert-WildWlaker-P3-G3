@@ -118,7 +118,7 @@ function TodoList(props: { eventId: number; todo_id_user: number }) {
 
   return (
     <div className="todolist-global">
-      <h2 className="todolist-title">To-do list</h2>
+      <h3 className="todolist-title">To-do list</h3>
       <div className="todolist-text">
         <input
           type="text"

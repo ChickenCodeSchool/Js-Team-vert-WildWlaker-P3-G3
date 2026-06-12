@@ -1,6 +1,5 @@
 import Logo from "../../assets/images/logo-wedoo.png";
 import "./NavBar.css";
-import Profil from "../Profil/Profil";
 
 function NavBar() {
   return (
@@ -12,7 +11,6 @@ function NavBar() {
             WE<i>D</i>OO
           </h2>
         </div>
-        <Profil />
       </nav>
     </>
   );

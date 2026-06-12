@@ -18,6 +18,9 @@ type Gallery = {
 function Galerie() {
   const currentUser = { id: 5 };
 
+  // Event host ID (simulated as 3 by default)
+  const [eventHostId, setEventHostId] = useState<number>(3);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [photoToDelete, setPhotoToDelete] = useState<number | null>(null);
@@ -35,6 +38,10 @@ function Galerie() {
         const data = await response.json();
 
         setPhotos(data);
+
+        // Retrieving the event creator from the database.
+        // Later, this will be, for example: setEventHostId(data[0].event_host_id);
+        setEventHostId(3);
       } catch (error) {
         console.error(error);
       }
@@ -65,15 +72,18 @@ function Galerie() {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/gallery/${photoToDelete}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${API_URL}/api/gallery/${photoToDelete}/${currentUser.id}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (response.ok) {
         setPhotos((currentPhotos) =>
           currentPhotos.filter((photo) => photo.gallery_id !== photoToDelete),
         );
-        console.log("Photo supprimée avec succès du serveur et de la BDD !");
+        console.log("Photo supprimée avec succès !");
       } else {
         console.error("Le serveur a refusé de supprimer la photo.");
       }
@@ -89,12 +99,13 @@ function Galerie() {
 
     try {
       const response = await fetch(
-        `${API_URL}/api/gallery/${photoToEdit.gallery_id}`,
+        `${API_URL}/api/gallery/${photoToEdit.gallery_id}/${currentUser.id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
+
           body: JSON.stringify({ gallery_description: newDescription }),
         },
       );
@@ -138,56 +149,64 @@ function Galerie() {
       </div>
 
       <div className="galerie-grid" aria-label="Galerie de l'événement">
-        {photos.map((photo) => (
-          <article key={photo.gallery_id} className="galerie-item">
-            <button
-              type="button"
-              className="photo-button"
-              onClick={() => setSelectedPhoto(photo.gallery_link)}
-            >
-              <img
-                src={formatImageUrl(photo.gallery_link)}
-                alt={photo.gallery_description ?? "Galerie événement"}
-                className="photo"
-              />
-            </button>
+        {photos.map((photo) => {
+          const estAuteur = photo.gallery_id_user === currentUser.id;
+          const estHoteEvenement = currentUser.id === eventHostId;
+          const aLeDroitDeModifier = estAuteur || estHoteEvenement;
 
-            <p className="photo-description">
-              {photo.gallery_description ?? "Aucune description"}
-            </p>
+          return (
+            <article key={photo.gallery_id} className="galerie-item">
+              <button
+                type="button"
+                className="photo-button"
+                onClick={() => setSelectedPhoto(photo.gallery_link)}
+              >
+                <img
+                  src={formatImageUrl(photo.gallery_link)}
+                  alt={photo.gallery_description ?? "Galerie événement"}
+                  className="photo"
+                />
+              </button>
 
-            {photo.gallery_id_user === currentUser.id && (
-              <div className="photo-actions">
-                <button
-                  type="button"
-                  className="edit-button"
-                  onClick={() => {
-                    setPhotoToEdit(photo);
-                    setNewDescription(photo.gallery_description ?? "");
-                  }}
-                  aria-label="Modifier la description"
-                >
-                  <Pencil size={18} />
-                </button>
+              <p className="photo-description">
+                {photo.gallery_description ?? "Aucune description"}
+              </p>
 
-                <button
-                  type="button"
-                  className="delete-button"
-                  onClick={() => setPhotoToDelete(photo.gallery_id)}
-                  aria-label="Supprimer la photo"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            )}
-          </article>
-        ))}
+              {aLeDroitDeModifier && (
+                <div className="photo-actions">
+                  <button
+                    type="button"
+                    className="edit-button"
+                    onClick={() => {
+                      setPhotoToEdit(photo);
+                      setNewDescription(photo.gallery_description ?? "");
+                    }}
+                    aria-label="Modifier la description"
+                  >
+                    <Pencil size={18} />
+                  </button>
+
+                  <button
+                    type="button"
+                    className="delete-button"
+                    onClick={() => setPhotoToDelete(photo.gallery_id)}
+                    aria-label="Supprimer la photo"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              )}
+            </article>
+          );
+        })}
       </div>
 
       {isModalOpen && (
         <GalleryModal
           onClose={() => setIsModalOpen(false)}
           onAddPhoto={handleAddPhoto}
+          eventId={2}
+          userId={currentUser.id}
         />
       )}
 
