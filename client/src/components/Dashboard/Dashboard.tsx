@@ -9,6 +9,7 @@ type EventDashboard = {
   euj_id_user: number | null;
   reservation_id: number | null;
   budget_price: string | number | null;
+  event_description: string | null;
 };
 type ReservationDashboard = {
   event_id: number | null;
@@ -28,13 +29,25 @@ function Dashboard() {
   const [reservationData, setReservationData] = useState<
     ReservationDashboard[]
   >([]);
+  const [userName, setUserName] = useState<string>("");
   const [userAndBudgetData, setUserAndBudgetData] = useState<UserAndBudget[]>(
     [],
   );
   const { id } = useParams();
   const event = Number(id);
+  console.log(id);
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
+
+  useEffect(() => {
+    if (!userId) return;
+    fetch(`http://localhost:3310/api/username/${userId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data); // vérifie ce que tu reçois vraiment
+        setUserName(data.username); // doit matcher ce que retourne l'API
+      });
+  }, [userId]);
 
   useEffect(() => {
     fetch(`http://localhost:3310/api/reservations/${event}`)
@@ -102,8 +115,8 @@ function Dashboard() {
   return (
     <div className="dashboard">
       <h1 className="event-name">{eventName}</h1>
-      <h1 className="user-name">Salut, {userAndBudgetData[0]?.user_name}</h1>
-      <p>Description Event</p>
+      <h1 className="user-name">Salut, {userName}</h1>
+      <p> {eventData[0]?.event_description}</p>
 
       <div className="dashboard-stats">
         <div className="stat-1">
@@ -120,7 +133,7 @@ function Dashboard() {
         </div>
         <div className="stat-4">
           <p>Budget propre</p>
-          <h2>{userAndBudgetData[0]?.budget_price}€</h2>
+          <h2>{userAndBudgetData[0]?.budget_price || 0}€</h2>
         </div>
       </div>
 

@@ -1,13 +1,9 @@
-/* * {
-  margin: 0;
-  padding: 0;
-  box-sizing: 0;
-} */
 .HomeEvents-Global {
   background-color: var(--bg-color);
   min-height: 100vh;
-  padding: 10%;
-
+  padding: 8% 10%;
+  margin: 0;
+  box-sizing: 0;
   .HomeEvents-Title {
     font-family: var();
     color: var(--font-darkBrown);
@@ -15,7 +11,7 @@
   .HomeEvents-FilterAdd {
     display: flex;
     justify-content: space-between;
-    padding-block: 2rem;
+    padding: 2rem 2rem 4rem 2rem;
   }
   .HomeEvents-CardGlobal {
     display: flex;

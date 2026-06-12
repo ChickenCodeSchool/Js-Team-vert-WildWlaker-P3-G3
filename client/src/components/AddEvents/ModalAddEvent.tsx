@@ -9,7 +9,11 @@ import "./ModalAddEvent.css";
 
 type Tab = "create" | "join"; // deux onglet creer et joindre
 
-function ModalAddEvent({ isOpen, onClose }: ModalAddEventProps) {
+function ModalAddEvent({
+  isOpen,
+  onClose,
+  onEventCreated,
+}: ModalAddEventProps) {
   const [activeTab, setActiveTab] = useState<Tab>("create"); // met le modal directement sur l'onglet creer un evenement
 
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -17,6 +21,8 @@ function ModalAddEvent({ isOpen, onClose }: ModalAddEventProps) {
   useEffect(() => {
     if (isOpen) {
       dialogRef.current?.showModal();
+      const firstInput = dialogRef.current?.querySelector("input");
+      firstInput?.focus(); // --> met le focus sur le 1er input pour taper directement dans le modal
     } else {
       dialogRef.current?.close();
     }
@@ -65,9 +71,9 @@ function ModalAddEvent({ isOpen, onClose }: ModalAddEventProps) {
           </button>
         </div>
         {activeTab === "create" ? (
-          <CreateForm onClose={onClose} />
+          <CreateForm onClose={onClose} onEventCreated={onEventCreated} />
         ) : (
-          <JoinForm onClose={onClose} />
+          <JoinForm onClose={onClose} onEventCreated={onEventCreated} />
         )}
       </div>
     </dialog>

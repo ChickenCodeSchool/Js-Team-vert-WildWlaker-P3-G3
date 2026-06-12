@@ -19,26 +19,26 @@ function Profil() {
   const [preview, setPreview] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const isAdminPage = location.pathname === "/admin";
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
 
   useEffect(() => {
-    fetch("`http://localhost:3310/api/${userId}/photo`")
+    fetch(`http://localhost:3310/api/${userId}/photo`)
       .then((res) => res.json())
       .then((data) => {
         setProfilePicture(data.user_profile_picture);
       });
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
-    fetch("`http://localhost:3310/api/users/admin/${userId}`")
+    fetch(`http://localhost:3310/api/users/admin/${userId}`)
       .then((res) => res.json())
       .then((data) => setIsAdmin(Boolean(data.user_is_admin)));
-  }, []);
-
+  }, [userId]);
+  console.log(isAdmin);
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
 
