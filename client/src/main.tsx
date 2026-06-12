@@ -41,7 +41,7 @@ const router = createBrowserRouter([
     element: <HomeEvents />,
   },
   {
-    path: "/tableaudebord/id",
+    path: "/tableaudebord/:id",
     element: <TableauDeBord />,
   },
   {

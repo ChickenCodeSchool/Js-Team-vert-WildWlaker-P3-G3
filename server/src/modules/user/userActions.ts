@@ -39,6 +39,23 @@ const read: RequestHandler = async (req, res, next) => {
   }
 };
 
+const readUserName: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.id);
+
+    const userName = await userRepository.readUserName(userId);
+
+    if (!userName) {
+      res.sendStatus(404);
+      return;
+    }
+
+    res.json(userName);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const add: RequestHandler = async (req, res, next) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -366,4 +383,5 @@ export default {
   uploadPhoto,
   editUserName,
   browseUserAdmin,
+  readUserName,
 };

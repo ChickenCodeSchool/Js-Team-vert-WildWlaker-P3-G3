@@ -9,6 +9,7 @@ type User = {
 };
 
 type UserRow = {
+  user_name: string;
   user_id: number;
   user_username: string;
   user_mail: string;
@@ -71,6 +72,21 @@ class UserRepository {
       password: user.user_password,
     }));
   }
+  async readUserName(id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT user_name FROM user WHERE user_id = ?",
+      [id],
+    );
+    const user = rows[0] as UserRow;
+
+    if (!user) {
+      return null;
+    }
+
+    return {
+      username: user.user_name,
+    };
+  }
   async readUserDescriptionEvent(eventId: number) {
     const [rows] = await databaseClient.query(
       `
@@ -78,8 +94,8 @@ class UserRepository {
         e.event_name,
         euj.euj_id_user,
         r.reservation_id,
-        b.budget_price
-
+        b.budget_price,
+        e.event_description
       FROM event AS e
 
       LEFT JOIN event_user_joining AS euj

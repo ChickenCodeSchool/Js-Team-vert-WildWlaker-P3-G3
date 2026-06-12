@@ -6,9 +6,9 @@ import ButtonAddEvent from "../../components/AddEvents/ButtonAddEvent";
 import CardEvents from "../../components/AddEvents/CardEvents";
 import Filter from "../../components/AddEvents/Filter";
 import ModalAddEvent from "../../components/AddEvents/ModalAddEvent";
+import NavBar from "../../components/NavBar/NavBar";
 
 import "./HomeEvents.css";
-import NavBar from "../../components/NavBar/NavBar";
 
 function HomeEvents() {
   const [events, setEvents] = useState<EventData[]>([]);
