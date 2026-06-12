@@ -20,7 +20,8 @@ router.get("/api/budget/user/:id_event/:id_user", budgetActions.browseUser);
 router.get("/api/budget/event/:id", budgetActions.browseEvent);
 // > post
 router.post("/api/budget/add", budgetActions.create);
-router.post("/api/budget/update", budgetActions.update);
+// > put
+router.put("/api/budget/update", budgetActions.update);
 // > delete
 router.delete("/api/budget/:id", budgetActions.destroy);
 

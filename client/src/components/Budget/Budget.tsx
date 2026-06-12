@@ -107,6 +107,11 @@ function Budget() {
   const [nameCreateForm, setNameCreateForm] = useState<string>("");
   const [priceCreateForm, setPriceCreateForm] = useState<number>();
 
+  /* -- Update form -- 
+
+  const [nameUpdateForm, setNameUpdateForm] = useState<string>("");
+  const [priceUpdateForm, setPriceUpdateForm] = useState<number>();*/
+
   /* -- Fonctions -- */
 
   function addBudget(e: React.FormEvent) {
@@ -122,6 +127,21 @@ function Budget() {
       }),
     });
   }
+
+  /*
+  function updateBudget(e: React.FormEvent) {
+    e.preventDefault;
+    fetch(`${apiUrl}/api/budget/add`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id_event: eventID,
+        id_user: userID,
+        name: String(nameUpdateForm),
+        price: Number(priceUpdateForm),
+      }),
+    });
+  }*/
 
   function updateBudget() {}
   function deleteBudget() {}
