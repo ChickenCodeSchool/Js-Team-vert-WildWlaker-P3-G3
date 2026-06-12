@@ -172,7 +172,7 @@ function Profil() {
               </div>
             )}
 
-            <button type="button" onClick={() => navigate("/resetpassword")}>
+            <button type="button" onClick={() => navigate("/changepassword")}>
               <LockKeyhole size={15} />
               Changer le mot de passe
             </button>

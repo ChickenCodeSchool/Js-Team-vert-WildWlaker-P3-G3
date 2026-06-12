@@ -40,6 +40,7 @@ router.post(
 router.post("/api/login", userActions.login);
 router.post("/api/auth/forgot-password", userActions.forgotPassword);
 router.post("/api/auth/reset-password", userActions.resetPassword);
+router.put("/api/auth/change-password", userActions.changePassword);
 router.put("/api/users/:id", userActions.editUserName);
 router.put("/api/users/change-password", userActions.forgotPassword);
 router.get("/api/users/admin/:id", userActions.browseUserAdmin);
