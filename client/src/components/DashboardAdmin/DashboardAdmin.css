@@ -26,22 +26,28 @@
     padding: 22px;
     .lucide.lucide-users {
       background-color: var(--bg-confirm-state);
-      padding: 10px;
-      border-radius: 10px;
+      border-radius: 5px;
+      height: 35px;
+      width: 35px;
+      padding: 4px;
     }
     .lucide.lucide-calendar {
       background-color: var(--bg-valid-state);
-      padding: 10px;
-      border-radius: 10px;
+      border-radius: 5px;
+      height: 35px;
+      width: 35px;
+      padding: 4px;
     }
     .lucide.lucide-triangle-alert {
       background-color: var(--font-red);
-      padding: 10px;
-      border-radius: 10px;
+      border-radius: 5px;
+      height: 35px;
+      width: 35px;
+      padding: 4px;
     }
 
     p {
-      margin: 0 0 10px;
+      margin: 17px 0;
       font-size: 12px;
       text-transform: uppercase;
       font-weight: 700;
@@ -58,7 +64,13 @@
   .chart-card {
     padding: 28px 32px;
     margin-bottom: 28px;
-
+    .chart-container {
+      .recharts-wrapper,
+      .recharts-surface {
+        position: relative;
+        z-index: 1;
+      }
+    }
     .chart-header {
       display: flex;
       justify-content: space-between;
@@ -88,6 +100,7 @@
   .reports-card,
   .users-card {
     padding: 26px;
+    max-height: 400px;
 
     .card-title {
       display: flex;
@@ -130,6 +143,15 @@
         display: flex;
         flex-direction: column;
         gap: 25px;
+        overflow-y: auto;
+        max-height: 200px;
+
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
         div {
           display: flex;
           flex-direction: row;
@@ -149,6 +171,15 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
+      overflow-y: auto;
+      max-height: 250px;
+
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       .user-row {
         display: grid;
@@ -179,22 +210,125 @@
   }
 }
 
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 428px) {
   .admin-dashboard {
-    .stats-grid,
-    .bottom-grid {
-      grid-template-columns: 1fr;
-    }
+    width: 100%;
+    min-height: 100vh;
+    padding: 16px;
+    overflow-x: hidden;
 
-    .chart-card {
-      .chart-header {
-        flex-direction: column;
-      }
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
     }
 
     .stat-card {
+      padding: 18px;
+
+      .lucide.lucide-users,
+      .lucide.lucide-calendar,
+      .lucide.lucide-triangle-alert {
+        padding: 8px;
+        width: 18px;
+        height: 18px;
+      }
+
+      p {
+        font-size: 11px;
+      }
+
       h2 {
         font-size: 26px;
+      }
+    }
+
+    .chart-card {
+      padding: 20px 12px;
+      margin-bottom: 20px;
+
+      .chart-header {
+        flex-direction: column;
+        gap: 8px;
+
+        h2 {
+          font-size: 18px;
+        }
+
+        p {
+          margin-top: 8px;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .bottom-grid {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      width: 100%;
+      padding-bottom: 90px;
+    }
+
+    .reports-card,
+    .users-card {
+      width: 100%;
+      max-width: 100%;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .reports-card {
+      .card-title {
+        padding-left: 0;
+      }
+
+      .tableau-rapport {
+        width: 100%;
+        overflow-x: auto;
+
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+        .titre-tableau-rapport,
+        .contenu-tableau-rapport div {
+          min-width: 350px;
+        }
+
+        .titre-tableau-rapport h3,
+        .contenu-tableau-rapport div p {
+          width: 25%;
+          padding-left: 10px;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .users-card {
+      .users-list {
+        max-height: 300px;
+        align-items: flex-start;
+        .user-row {
+          display: flex;
+          align-items: center;
+          gap: 36px;
+          padding-left: 20px;
+          img {
+            width: 40px;
+            height: 40px;
+          }
+
+          h3 {
+            font-size: 14px;
+          }
+
+          p {
+            font-size: 11px;
+          }
+        }
       }
     }
   }

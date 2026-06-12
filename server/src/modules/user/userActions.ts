@@ -79,8 +79,6 @@ const add: RequestHandler = async (req, res, next) => {
       `,
     });
 
-    console.log("Email de bienvenue envoyé à :", newUser.email);
-
     res.status(201).json({
       message: "Inscription réussie 🎉",
       insertId,
@@ -123,7 +121,7 @@ const login: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
-const browse: RequestHandler = async (req, res, next) => {
+const readUserDescriptionEvent: RequestHandler = async (req, res, next) => {
   try {
     const eventId = Number(req.params.id);
 
@@ -184,8 +182,6 @@ const forgotPassword: RequestHandler = async (req, res, next) => {
   `,
     });
 
-    console.log("Email envoyé à :", user.user_mail);
-
     res.json({ message: "Lien envoyé" });
   } catch (err) {
     console.error("FORGOT PASSWORD ERROR:", err);
@@ -238,10 +234,63 @@ const resetPassword: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const changePassword: RequestHandler = async (req, res, next) => {
+  try {
+    const { userId, currentPassword, newPassword } = req.body;
+
+    const user = await userRepository.read(userId);
+
+    if (!user) {
+      res.status(404).json({
+        message: "Utilisateur introuvable",
+      });
+      return;
+    }
+
+    const isValid = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isValid) {
+      res.status(400).json({
+        message: "Ancien mot de passe incorrect",
+      });
+      return;
+    }
+
+    const samePassword = await bcrypt.compare(newPassword, user.password);
+
+    if (samePassword) {
+      res.status(400).json({
+        message: "Le nouveau mot de passe doit être différent",
+      });
+      return;
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await userRepository.resetPassword(userId, hashedPassword);
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: user.email,
+      subject: "Mot de passe modifié",
+      html: `
+        <h1>Wedoo</h1>
+        <p>Votre mot de passe a été modifié avec succès.</p>
+        <p>Si ce n’était pas vous, contactez le support client.</p>
+      `,
+    });
+
+    res.status(200).json({
+      message: "Mot de passe modifié avec succès",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 const uploadPhoto: RequestHandler = async (req, res, next) => {
   try {
-    const userId = 1; // temporaire, plus tard user connecté
+    const userId = Number(req.params.id);
 
     if (!req.file) {
       res.status(400).json({ message: "Aucune image envoyée" });
@@ -292,8 +341,19 @@ const editUserName: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const browseUserAdmin: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.id);
+
+    const user = await userRepository.readUserAdmin(userId);
+
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+};
 export default {
-  browse,
+  readUserDescriptionEvent,
   browseInscription,
   browsePhoto,
   read,
@@ -302,6 +362,8 @@ export default {
   browseUserAndBudget,
   forgotPassword,
   resetPassword,
+  changePassword,
   uploadPhoto,
   editUserName,
+  browseUserAdmin,
 };

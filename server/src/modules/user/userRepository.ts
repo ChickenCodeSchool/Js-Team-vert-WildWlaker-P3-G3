@@ -178,6 +178,18 @@ class UserRepository {
       [userName, userId],
     );
   }
+  async readUserAdmin(userId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `
+    SELECT user_is_admin
+    FROM user
+    WHERE user_id = ?
+    `,
+      [userId],
+    );
+
+    return rows[0];
+  }
 }
 
 export default new UserRepository();
