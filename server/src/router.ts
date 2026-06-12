@@ -22,6 +22,7 @@ const upload = multer({ dest: "public/uploads/" });
 
 // user routes
 router.get("/api/users", userActions.browseInscription);
+router.get("/api/username/:id", userActions.readUserName);
 // router.get("/api/users/:id", userActions.read); // TODO: à réactiver après vérification
 // router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
 // TODO: vérifier avec l'équipe — deux routes identiques sur /api/users/:id
@@ -63,7 +64,14 @@ router.get("/api/items/:id", itemActions.read);
 // > post
 router.post("/api/items", itemActions.add);
 
-// todo routes
+// EventActions routes
+// router.get("/api/users/:id/events", userActions.getUserEvents);
+router.get("/api/events", eventActions.browse);
+router.get("/api/events/random-image", eventActions.browseRandomImage);
+router.post("/api/events/join", eventActions.join);
+router.post("/api/events", eventActions.add);
+
+// todoActions routes
 router.get("/api/todo/:eventId", todoActions.browse);
 router.post("/api/todo", todoActions.add);
 router.put("/api/todo/:todo_id", todoActions.edit);

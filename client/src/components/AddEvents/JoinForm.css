@@ -10,15 +10,30 @@
     .JoinForm-Label {
       margin-top: 2rem;
     }
-    .JoinForm-Input {
-      height: 2rem;
-      border-top-left-radius: 0.5rem;
-      border-top-right-radius: 0.5rem;
-      border: 1px solid var(--border-color);
-      padding-left: 0.5rem;
-    }
-    .JoinForm-Input:focus {
-      outline: none;
+    .JoinForm-InputGlobal {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      .JoinForm-Input {
+        height: 2rem;
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+        border: 1px solid var(--border-color);
+        padding-left: 0.5rem;
+        background: var(--input-color);
+        color: var(--font-input);
+        &::placeholder {
+          color: var(--font-placeholder);
+        }
+      }
+      .JoinForm-Input:focus {
+        outline: none;
+      }
+      .JoinForm-Error {
+        color: var(--input-error);
+        font-size: 0.8rem;
+        font-weight: 300;
+      }
     }
   }
 }
@@ -40,7 +55,7 @@
     transform: scale(0.95);
   }
   .JoinForm-ButtonSubmit {
-    width: 10rem;
+    width: 20rem;
     height: 2rem;
     border-radius: 1rem;
     border: none;
@@ -49,6 +64,7 @@
     transition: transform 0.2s;
   }
   .JoinForm-ButtonSubmit:disabled {
+    opacity: 0.5;
     background: lightgray;
     color: black;
   }
