@@ -57,6 +57,7 @@ app.use(express.urlencoded());
 app.use(express.text());
 app.use(express.raw());
 app.use("/uploads", express.static("public/uploads"));
+app.use(express.static(path.join(process.cwd(), "public")));
 /* ************************************************************************* */
 
 // Import the API router

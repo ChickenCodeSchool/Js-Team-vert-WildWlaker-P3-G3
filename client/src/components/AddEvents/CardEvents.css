@@ -1,4 +1,6 @@
 .CardEvents-Global {
+  display: flex;
+  flex-direction: column;
   width: 16rem;
   border: none;
   border-radius: 1rem;
@@ -7,14 +9,17 @@
   overflow: hidden;
   margin-bottom: 3rem;
   transition: transform linear 0.125s;
-  .CardEvents-Image {
-    width: 100%;
-    height: 12rem;
-    object-fit: cover;
-    display: block;
-  }
   .CardEvents-ImageDate {
     position: relative;
+    height: 12rem;
+    flex-shrink: 0;
+    overflow: hidden;
+    .CardEvents-Image {
+      width: 100%;
+      height: 100%;
+      object-position: top;
+      display: block;
+    }
     .CardEvents-Date {
       position: absolute;
       display: flex;

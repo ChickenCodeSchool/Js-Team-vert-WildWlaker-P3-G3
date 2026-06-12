@@ -43,11 +43,6 @@ router.post("/api/auth/reset-password", userActions.resetPassword);
 router.put("/api/users/:id", userActions.editUserName);
 router.put("/api/users/change-password", userActions.forgotPassword);
 
-// event routes
-// router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
-router.get("/api/events", eventActions.browse);
-router.post("/api/events", eventActions.add);
-
 // message routes
 router.get("/api/messages/:id", messageActions.browseMessagesByEventId);
 router.post("/api/messages/:id", messageActions.addMessage);
@@ -62,8 +57,9 @@ router.post("/api/items", itemActions.add);
 
 // EventActions routes
 // router.get("/api/users/:id/events", userActions.getUserEvents);
-router.post("/api/events/join", eventActions.join);
 router.get("/api/events", eventActions.browse);
+router.get("/api/events/random-image", eventActions.browseRandomImage);
+router.post("/api/events/join", eventActions.join);
 router.post("/api/events", eventActions.add);
 
 // todoActions routes
@@ -92,7 +88,6 @@ router.post("/api/userreport-event", reportEventActions.add);
 
 // event user joining route
 router.get("/api/events/:eventId/users", eventUserJoiningActions.browse);
-export default router;
 
 // admin route
 router.get("/api/admin/reportUser", adminActions.readReportUser);
@@ -103,3 +98,5 @@ router.get("/api/admin/arrayUser", adminActions.readArrayUsers);
 router.get("/api/admin/arrayReport", adminActions.readArrayReport);
 router.get("/api/admin/events", adminActions.readAllEvents);
 router.get("/api/admin/users", adminActions.readAllUsers);
+
+export default router;

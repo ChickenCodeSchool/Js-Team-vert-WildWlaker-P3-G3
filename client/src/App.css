@@ -27,6 +27,7 @@ body {
   --icon-color: #a53b22; /*hover & icons*/
   --hover-signalement: #ffdad2;
   --input-color: rgba(222, 192, 185, 30%);
+  --input-error: #ba1a1a;
   --border-color: #dec0b9;
   --button-color: linear-gradient(to right, #ff7e5f, #a53b22); /*fonctionne uniquement avec background ou background-image*/
   --button-color-disable: lightgrey;

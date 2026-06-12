@@ -14,10 +14,16 @@ function JoinForm({ onClose, onEventCreated }: JoinFormProps) {
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, []); // le useRef et useEffect met directement le curseur dans le champs
+  }, []); // le inputRef et useEffect met directement le curseur dans le champs
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (code.trim().length === 6) {
+      submitCode();
+    }
+  }, [code]); // ca verifie le code des qu'il a 6 caracteres de rentrés
+
+  const submitCode = async () => {
+    if (isLoading) return;
     setIsLoading(true);
     setError(null);
 
@@ -50,28 +56,40 @@ function JoinForm({ onClose, onEventCreated }: JoinFormProps) {
     }
   };
 
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    submitCode();
+  };
+
   return (
     <>
       <div className="JoinForm-Body">
         <h2 className="JoinForm-Title" id="modal-title">
-          Rejoingnez un événement
+          Rejoignez un événement
         </h2>
         <div className="JoinForm-Field">
           <label className="JoinForm-Label" htmlFor="code">
             Pour rejoindre un événement, veuillez renseigner le code événement
             partagé par l'organisateur.
           </label>
-          <input
-            ref={inputRef}
-            id="code"
-            className="JoinForm-Input JoinForm-Input--code"
-            type="text"
-            name="code"
-            placeholder="Ex : ABC123"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            maxLength={6} // limite a 6 caracteres
-          />
+          <section className="JoinForm-InputGlobal">
+            <input
+              ref={inputRef}
+              id="code"
+              className="JoinForm-Input JoinForm-Input--code"
+              type="text"
+              name="code"
+              placeholder="Ex : ABC123"
+              value={code}
+              onChange={(e) => {
+                setError(null);
+                setCode(e.target.value);
+              }}
+              maxLength={6} // limite a 6 caracteres
+              disabled={isLoading}
+            />
+            {error && <p className="JoinForm-Error">{error}</p>}
+          </section>
         </div>
       </div>
       <div className="JoinForm-Footer">
@@ -79,15 +97,16 @@ function JoinForm({ onClose, onEventCreated }: JoinFormProps) {
           type="button"
           className="JoinForm-ButtonCancel"
           onClick={onClose}
+          disabled={isLoading}
         >
           Annuler
         </button>
-        {error && <p className="JoinForm-Error">{error}</p>}
+
         <button
           type="button"
           className="JoinForm-ButtonSubmit"
           onClick={handleSubmit}
-          disabled={!code.trim() || isLoading}
+          disabled={code.trim().length !== 6 || isLoading}
         >
           {isLoading ? "Vérification..." : "Rejoindre"}
         </button>

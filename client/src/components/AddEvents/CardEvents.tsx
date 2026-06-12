@@ -42,9 +42,9 @@ function CardEvents({
     <button
       type="button"
       className="CardEvents-Global"
-      onClick={() => navigate(`/tableaudebord?eventId=${event_id}`)}
+      onClick={() => navigate(`/tableaudebord/${event_id}`)}
       onKeyUp={(e) =>
-        e.key === "Enter" && navigate(`/tableaudebord?eventId=${event_id}`)
+        e.key === "Enter" && navigate(`/tableaudebord/${event_id}`)
       }
     >
       <div className="CardEvents-ImageDate">

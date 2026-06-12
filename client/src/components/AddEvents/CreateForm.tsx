@@ -4,8 +4,6 @@ import type { CreateFormProps, EventData } from "../../types/Events";
 
 import "./CreateForm.css";
 
-const DEFAULT_PICTURE = "https://picsum.photos/400/200";
-
 function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
   const [form, setForm] = useState({
     title: "",
@@ -19,18 +17,30 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const getRandomImage = async (): Promise<string> => {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/events/random-image`,
+    );
+    const data = await res.json();
+    return `${import.meta.env.VITE_API_URL}${data.url}`;
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  }; // met a jour l'etat et la valeur du champs modifier
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value.charAt(0).toUpperCase() + value.slice(1),
+    }));
+  }; // met a jour l'etat et la valeur du champs modifier + met directement une majuscule dans tous les inputs
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-
     try {
+      const randomPicture = await getRandomImage();
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -40,7 +50,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
           event_description: form.description,
           event_location: form.location,
           event_host_id: user_id,
-          event_picture: DEFAULT_PICTURE,
+          event_picture: randomPicture,
         }),
       });
 

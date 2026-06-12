@@ -8,6 +8,7 @@ import Filter from "../../components/AddEvents/Filter";
 import ModalAddEvent from "../../components/AddEvents/ModalAddEvent";
 
 import "./HomeEvents.css";
+import NavBar from "../../components/NavBar/NavBar";
 
 function HomeEvents() {
   const [events, setEvents] = useState<EventData[]>([]);
@@ -44,34 +45,42 @@ function HomeEvents() {
   };
 
   return (
-    <div className="HomeEvents-Global">
-      <div className="HomeEvents-Title">
-        <h1>Mes Evénements</h1>
-      </div>
-      <div className="HomeEvents-FilterAdd">
-        <Filter activeFilter={activeFilter} onFilterChange={setActiveFilter} />
-        <ButtonAddEvent onClick={() => setIsModalOpen(true)} />
-      </div>
-      <div className="HomeEvents-CardGlobal">
-        {filteredEvents.map((event) => (
-          <CardEvents
-            key={event.event_id}
-            event_id={event.event_id}
-            image={event.event_picture}
-            imageAlt={event.event_name}
-            date={event.event_date}
-            title={event.event_name}
-            description={event.event_description}
-            location={event.event_location}
+    <>
+      <header>
+        <NavBar />
+      </header>
+      <div className="HomeEvents-Global">
+        <div className="HomeEvents-Title">
+          <h1>Mes Evénements</h1>
+        </div>
+        <div className="HomeEvents-FilterAdd">
+          <Filter
+            activeFilter={activeFilter}
+            onFilterChange={setActiveFilter}
           />
-        ))}
+          <ButtonAddEvent onClick={() => setIsModalOpen(true)} />
+        </div>
+        <div className="HomeEvents-CardGlobal">
+          {filteredEvents.map((event) => (
+            <CardEvents
+              key={event.event_id}
+              event_id={event.event_id}
+              image={event.event_picture}
+              imageAlt={event.event_name}
+              date={event.event_date}
+              title={event.event_name}
+              description={event.event_description}
+              location={event.event_location}
+            />
+          ))}
+        </div>
+        <ModalAddEvent
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onEventCreated={handleEventCreated}
+        />
       </div>
-      <ModalAddEvent
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onEventCreated={handleEventCreated}
-      />
-    </div>
+    </>
   );
 }
 
