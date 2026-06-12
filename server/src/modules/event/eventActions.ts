@@ -1,7 +1,7 @@
-import type { RequestHandler } from "express";
-import eventRepository from "./eventRepository";
 import fs from "node:fs";
 import path from "node:path";
+import type { RequestHandler } from "express";
+import eventRepository from "./eventRepository";
 
 const browse: RequestHandler = async (req, res, next) => {
   try {
