@@ -1,0 +1,335 @@
+.admin-dashboard {
+  min-height: 100vh;
+  width: 98%;
+  background: #fff6f2;
+  font-family: Arial, sans-serif;
+  color: #2d2522;
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card,
+  .chart-card,
+  .reports-card,
+  .users-card {
+    background: white;
+    border: 1px solid #f0e1dc;
+    border-radius: 18px;
+    box-shadow: 0 6px 18px rgba(90, 50, 35, 0.05);
+  }
+
+  .stat-card {
+    padding: 22px;
+    .lucide.lucide-users {
+      background-color: var(--bg-confirm-state);
+      border-radius: 5px;
+      height: 35px;
+      width: 35px;
+      padding: 4px;
+    }
+    .lucide.lucide-calendar {
+      background-color: var(--bg-valid-state);
+      border-radius: 5px;
+      height: 35px;
+      width: 35px;
+      padding: 4px;
+    }
+    .lucide.lucide-triangle-alert {
+      background-color: var(--font-red);
+      border-radius: 5px;
+      height: 35px;
+      width: 35px;
+      padding: 4px;
+    }
+
+    p {
+      margin: 17px 0;
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #6d5d57;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 400;
+    }
+  }
+
+  .chart-card {
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    .chart-container {
+      .recharts-wrapper,
+      .recharts-surface {
+        position: relative;
+        z-index: 1;
+      }
+    }
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+
+      h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+
+      p {
+        margin: 18px 0 0;
+        font-size: 13px;
+        color: #584b46;
+      }
+    }
+  }
+
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    padding-bottom: 5vh;
+  }
+
+  .reports-card,
+  .users-card {
+    padding: 26px;
+    max-height: 400px;
+
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+
+      h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+
+      button {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        color: #c14b32;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .reports-card {
+    width: 42vw;
+    .card-title {
+      padding-left: 20px;
+    }
+    .tableau-rapport {
+      .titre-tableau-rapport {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-bottom: 3vh;
+        h3 {
+          width: 25%;
+          padding-left: 20px;
+        }
+      }
+      .contenu-tableau-rapport {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        overflow-y: auto;
+        max-height: 200px;
+
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        div {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          p {
+            width: 25%;
+            font-size: 13px;
+            padding-left: 20px;
+          }
+        }
+      }
+    }
+  }
+
+  .users-card {
+    .users-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+      max-height: 250px;
+
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .user-row {
+        display: grid;
+        grid-template-columns: 44px 1fr;
+        align-items: center;
+        gap: 14px;
+
+        img {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        h3 {
+          margin: 0 0 4px;
+          font-size: 15px;
+        }
+
+        p {
+          margin: 0;
+          font-size: 12px;
+          color: #5e514c;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 428px) {
+  .admin-dashboard {
+    width: 100%;
+    min-height: 100vh;
+    padding: 16px;
+    overflow-x: hidden;
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      padding: 18px;
+
+      .lucide.lucide-users,
+      .lucide.lucide-calendar,
+      .lucide.lucide-triangle-alert {
+        padding: 8px;
+        width: 18px;
+        height: 18px;
+      }
+
+      p {
+        font-size: 11px;
+      }
+
+      h2 {
+        font-size: 26px;
+      }
+    }
+
+    .chart-card {
+      padding: 20px 12px;
+      margin-bottom: 20px;
+
+      .chart-header {
+        flex-direction: column;
+        gap: 8px;
+
+        h2 {
+          font-size: 18px;
+        }
+
+        p {
+          margin-top: 8px;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .bottom-grid {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      width: 100%;
+      padding-bottom: 90px;
+    }
+
+    .reports-card,
+    .users-card {
+      width: 100%;
+      max-width: 100%;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .reports-card {
+      .card-title {
+        padding-left: 0;
+      }
+
+      .tableau-rapport {
+        width: 100%;
+        overflow-x: auto;
+
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+        .titre-tableau-rapport,
+        .contenu-tableau-rapport div {
+          min-width: 350px;
+        }
+
+        .titre-tableau-rapport h3,
+        .contenu-tableau-rapport div p {
+          width: 25%;
+          padding-left: 10px;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .users-card {
+      .users-list {
+        max-height: 300px;
+        align-items: flex-start;
+        .user-row {
+          display: flex;
+          align-items: center;
+          gap: 36px;
+          padding-left: 20px;
+          img {
+            width: 40px;
+            height: 40px;
+          }
+
+          h3 {
+            font-size: 14px;
+          }
+
+          p {
+            font-size: 11px;
+          }
+        }
+      }
+    }
+  }
+}

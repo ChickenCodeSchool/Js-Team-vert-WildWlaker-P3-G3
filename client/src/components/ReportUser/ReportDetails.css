@@ -1,0 +1,40 @@
+fieldset {
+  min-width: 0;
+}
+
+.reportDetails-global {
+  border: none;
+  background: var(--bg-neutral);
+  padding: 16px;
+
+  legend {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .reportDetails-label {
+    display: block;
+    width: 100%;
+
+    .reportDetails-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      border: 1.8px solid var(--border-color);
+      border-radius: 10px 10px 0 0;
+      background: var(--input-color);
+      resize: vertical;
+      font-size: 0.95rem;
+      color: var(--font-black);
+
+      &::placeholder {
+        color: color-mix(in srgb, var(--font-grey) 70%, transparent);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: var(--icon-color);
+      }
+    }
+  }
+}

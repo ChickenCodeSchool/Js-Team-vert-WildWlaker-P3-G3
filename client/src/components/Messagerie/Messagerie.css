@@ -1,0 +1,150 @@
+.messagerie {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  height: 90vh;
+  width: 40vw;
+  background: var(--bg-composant-dash);
+  padding: 0 30px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  h1 {
+    color: var(--font-brown);
+    padding-top: 15px;
+  }
+
+  .messagerie-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 83vh;
+    .messagerie-box-messages {
+      height: 70vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: transparent transparent;
+
+      .messagerie-box-messages-friends {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 5px;
+        padding: 2px 0 2px 0;
+        img {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+        }
+
+        div {
+          background-color: #fff8f5;
+          border: 1px solid #dec0b9;
+          padding: 5px;
+          border-radius: 12px 12px 12px 0;
+        }
+      }
+
+      .messagerie-box-messages-user {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        padding: 2px 0 2px 0;
+        div {
+          background-color: #fff8f5;
+          border: 1px solid #dec0b9;
+          padding: 5px;
+          border-radius: 12px 12px 0 12px;
+        }
+      }
+    }
+
+    .massagerie-input {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 5px;
+      height: 6%;
+      border: 1px solid #ff7e5f;
+      border-radius: 21px;
+      input {
+        padding-left: 10px;
+        width: 90%;
+        border-style: none;
+        background: none;
+      }
+      input:focus-visible {
+        outline: none;
+      }
+      button {
+        border-radius: 21px;
+        border-style: none;
+        background-color: #ff7e5f;
+        height: 30px;
+        width: 30px;
+        padding: 5px 2px 0 0;
+        cursor: pointer;
+        .send {
+          color: white;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 428px) {
+  .messagerie {
+    width: 100%;
+    height: 100vh;
+    margin-top: 0;
+    padding: 16px;
+
+    h1 {
+      font-size: 28px;
+      margin: 0 0 20px;
+    }
+
+    .messagerie-box {
+      height: calc(100vh - 90px);
+
+      .messagerie-box-messages {
+        height: calc(100% - 60px);
+        padding-right: 4px;
+
+        .messagerie-box-messages-friends,
+        .messagerie-box-messages-user {
+          padding: 6px 0;
+
+          div {
+            max-width: 75%;
+            font-size: 14px;
+            line-height: 1.4;
+            padding: 8px 10px;
+          }
+        }
+
+        .messagerie-box-messages-friends {
+          img {
+            width: 28px;
+            height: 28px;
+          }
+        }
+      }
+
+      .massagerie-input {
+        height: 44px;
+        margin-top: 12px;
+        margin-bottom: 7vh;
+
+        input {
+          width: 85%;
+          font-size: 14px;
+        }
+
+        button {
+          width: 36px;
+          height: 36px;
+        }
+      }
+    }
+  }
+}

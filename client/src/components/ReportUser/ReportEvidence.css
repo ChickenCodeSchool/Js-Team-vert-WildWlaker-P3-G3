@@ -1,0 +1,57 @@
+fieldset {
+  min-width: 0;
+}
+
+.reportEvidence-global {
+  border: none;
+  background-color: var(--bg-neutral);
+  padding: 16px;
+
+  legend {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .reportEvidence-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: color-mix(in srgb, var(--font-black) 80%, transparent);
+    gap: 8px;
+    width: 100%;
+    padding: 32px;
+    border: 2px dashed var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-neutral);
+    cursor: pointer;
+
+    input[type="file"] {
+      display: none;
+    }
+
+    &:hover {
+      border-color: var(--icon-color);
+    }
+  }
+
+  p {
+    text-align: center;
+    font-size: 0.7rem;
+    color: color-mix(in srgb, var(--font-grey) 80%, transparent);
+  }
+}
+
+.reportEvidence-logoIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--hover-signalement);
+  width: 64px;
+  height: 64px;
+  border-radius: 50px;
+
+  .reportEvidences-icon {
+    color: var(--icon-color);
+  }
+}

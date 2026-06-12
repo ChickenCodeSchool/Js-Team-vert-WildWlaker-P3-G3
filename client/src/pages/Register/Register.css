@@ -3,6 +3,13 @@
 body {
   font-family: "Be Vietnam Pro", sans-serif;
 }
+
+.input-focus:focus {
+  outline: none;
+  border: 1px solid var(--border-color);
+  box-shadow: none;
+}
+
 .register-section {
   display: flex;
   justify-content: center;
@@ -79,7 +86,7 @@ body {
 }
 
 .wel-para-title-register {
-  margin: 10vh 2vw 0 2vw;
+  margin: 2vh 2vw 0 2vw;
 }
 
 .Welcome-title-register {
@@ -114,8 +121,8 @@ body {
   box-sizing: border-box;
   padding: 0 15px;
   border-radius: 10px 10px 0 0;
-  background-color: rgba(226, 154, 154, 0.189);
-  border-color: rgba(194, 118, 118, 0.282);
+  background: var(--input-color);
+  border: 1px solid var(--border-color);
 }
 
 .password-input-register {
@@ -123,7 +130,7 @@ body {
 }
 
 .password-input-confor-register {
-  padding: 0 35px 0 15px;
+  padding: 0 45px 0 15px;
 }
 
 .container-password-register {
@@ -131,13 +138,23 @@ body {
   width: 100%;
 }
 
+::placeholder {
+  color: var(--font-placeholder);
+}
+
 .img-password-eye-register {
   width: 20px;
   position: absolute;
   right: 20px;
   top: 55%;
-  transform: translateY(-95%);
+  transform: translateY(-50%);
   cursor: pointer;
+}
+.container-password-register button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
 .checkbox-input-register {
@@ -166,6 +183,8 @@ body {
 .button-register-submit:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  background: var(--button-color-disable);
+  color: var(--font-button-color-disable);
 }
 
 .register-link {
@@ -176,7 +195,7 @@ body {
 .register-link-connection {
   margin-top: 2vh;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 .cgd-register {

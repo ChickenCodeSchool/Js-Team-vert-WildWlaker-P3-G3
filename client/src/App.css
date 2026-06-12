@@ -1,21 +1,46 @@
-@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Carter+One&family=Inter:ital,opsz,wght@0,14..32,800;1,14..32,800&family=Lexend:wght@100..900&family=Limelight&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Display:ital,wght@0,100..900;1,100..900&family=Oi&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playfair:ital,opsz,wght@1,5..1200,300..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Space+Grotesk:wght@300..700&family=Ultra&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+  font-family: "Be Vietnam Pro", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-color);
+}
 
 :root {
   /* User */
   --bg-neutral: #ffffff; /*cards*/
-  --bg-color: #fcddd79a;
+  --bg-color: #fff8f5; /*background*/
+  --bg-sidebar: #e3966c; /*opacity 23%*/
+  --bg-positive: #d1fae5;
+  --bg-negative: #ffe4e6;
+  --bg-composant-dash: #fbf2ed;
+
+  --hover-sidebar: rgba(218, 148, 95, 0.3); /*opacity 30%*/
 
   --sideBar-color: #feb47b5b;
-  --hover-color: #a53b22; /*hover & icons*/
-  --input-color: #8b716b;
+
+  --icon-color: #a53b22; /*hover & icons*/
+  --hover-signalement: #ffdad2;
+  --input-color: rgba(222, 192, 185, 30%);
+  --border-color: #dec0b9;
   --button-color: linear-gradient(to right, #ff7e5f, #a53b22); /*fonctionne uniquement avec background ou background-image*/
+  --button-color-disable: lightgrey;
+  --font-button-color-disable: black;
+  --font-input: #8b716b;
+  --font-placeholder: rgba(139, 113, 107, 0.6);
 
   --font-black: #1f1b18;
   --font-neutral: #ffffff;
-  --font-darkBrown: #5d2e00;
+  --font-darkBrown: #57423d;
   --font-brown: #a53b22; /*Wedoo title*/
   --font-red: #e11d48;
   --font-green: #059669;
+  --font-grey: #414141;
 
   /* status user*/
   --bg-confirm-state: #cde5ff;
@@ -30,6 +55,8 @@
 
   --bg-pending-state: #ba1a1a;
   --font-pending-state: #93000a;
+
+  --color-chat: #ff7e5f;
 }
 
 * {
