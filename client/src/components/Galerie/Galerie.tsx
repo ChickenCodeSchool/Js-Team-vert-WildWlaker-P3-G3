@@ -13,14 +13,13 @@ type Gallery = {
   gallery_link: string;
   gallery_description: string | null;
   gallery_creation_date: string | null;
+  event_host_id: number;
 };
 
 function Galerie() {
-  const currentUser = { id: 5 };
+  const currentUser = JSON.parse(localStorage.getItem("user") || '{"id": 0}');
 
-  // Event host ID (simulated as 3 by default)
-  const [eventHostId, setEventHostId] = useState<number>(3);
-
+  const [eventHostId, setEventHostId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [photoToDelete, setPhotoToDelete] = useState<number | null>(null);
@@ -39,9 +38,9 @@ function Galerie() {
 
         setPhotos(data);
 
-        // Retrieving the event creator from the database.
-        // Later, this will be, for example: setEventHostId(data[0].event_host_id);
-        setEventHostId(3);
+        if (data.length > 0 && data[0].event_host_id) {
+          setEventHostId(data[0].event_host_id);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -59,7 +58,8 @@ function Galerie() {
         gallery_link: imageUrl,
         gallery_description: "Ajout galerie",
         gallery_creation_date: null,
-      },
+        event_host_id: eventHostId ?? 0,
+      } as Gallery,
       ...currentPhotos,
     ]);
 
