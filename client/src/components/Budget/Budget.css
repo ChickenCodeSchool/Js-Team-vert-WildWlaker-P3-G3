@@ -80,7 +80,7 @@
     }
   }
 
-  .monEquilibres {
+  .myBalance {
     /* -- Mobile -- */
     @media screen and (max-width: 429px) {
       display: flex;
@@ -99,7 +99,7 @@
       font-size: 1.5rem;
     }
 
-    .monEquilibresBox {
+    .myBalanceBox {
       background: linear-gradient(135deg, #ff7b5a, #b94424);
       border-radius: 22px;
       padding: 24px 32px;
@@ -191,7 +191,7 @@
     color: var(--font-red);
   }
 
-  .depensesEquilibres {
+  .expensesAndBalance {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -211,8 +211,8 @@
 
     /* -- Mobile -- */
     @media screen and (max-width: 429px) {
-      .depenses {
-        .mobileDepenses {
+      .expenses {
+        .mobileExpenses {
           display: flex;
           flex-direction: row;
           justify-content: space-between;
@@ -229,20 +229,55 @@
             background: none;
             color: rgb(225, 178, 27);
           }
+
+          .icons {
+            display: none;
+          }
         }
       }
     }
 
     /* -- Desktop -- */
     @media screen and (min-width: 429px) {
-      .depenses {
+      .expenses {
         button {
           display: none;
+        }
+
+        section {
+          height: 30vh;
+          overflow-y: auto;
+
+          span {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+
+            .icons {
+              display: flex;
+              flex-direction: row;
+              color: black;
+              visibility: hidden;
+            }
+
+            .Noicons {
+              display: flex;
+              flex-direction: row;
+              color: black;
+              visibility: hidden;
+            }
+          }
+
+          :hover {
+            .icons {
+              visibility: visible;
+            }
+          }
         }
       }
     }
 
-    .equilibres {
+    .balance {
       /* -- Mobile -- */
       @media screen and (max-width: 429px) {
         display: none;
@@ -270,7 +305,6 @@
         article {
           background: var(--bg-neutral);
           padding: 20px;
-          border: 2px var(--beige-color) solid;
           border-bottom-color: var(--bg-neutral);
           font-weight: bold;
 
@@ -305,7 +339,7 @@
     }
   }
 
-  .plusButton {
+  .addButton {
     /* -- Mobile -- */
     @media screen and (max-width: 429px) {
       color: black;

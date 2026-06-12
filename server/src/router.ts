@@ -21,7 +21,8 @@ router.get("/api/budget/event/:id", budgetActions.browseEvent);
 // > post
 router.post("/api/budget/add", budgetActions.create);
 router.post("/api/budget/update", budgetActions.update);
-router.post("/api/budget/delete", budgetActions.del);
+// > delete
+router.delete("/api/budget/:id", budgetActions.destroy);
 
 // --> reservation
 // > get

@@ -6,7 +6,9 @@ import {
   ArrowUp,
   FilePlusCorner,
   History,
+  Pen,
   Plus,
+  Trash,
 } from "lucide-react";
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -39,8 +41,12 @@ function getBalancePrice(array: BudgetByUser[]) {
   const result: BudgetByUser[] = [];
 
   if (array.length === 1) {
-    result[0].total_price = 0;
-    return result;
+    return [
+      {
+        ...array[0],
+        total_price: 0,
+      },
+    ];
   }
 
   for (let i = 0; i < array.length; i++) {
@@ -65,63 +71,105 @@ function getBalancePrice(array: BudgetByUser[]) {
 }
 
 function getUserBudget(array: BudgetByUser[], id_user: number) {
-  for (let i = 0; i < array.length; i++) {
-    if (array[i].user_id === id_user) {
-      return array[i];
-    }
-  }
+  return array.find((user) => user.user_id === id_user);
 }
 
 function Budget() {
   const eventID = 1;
   const userID = 5;
 
-  const [listBudget, setListBudget] = useState<Budget[]>([]);
-  const [listBudgetUser, setListBudgetUser] = useState<BudgetByUser[]>([]);
-  const [budgetUser, setBudgetUser] = useState<BudgetByUser>();
   const [budgetEvent, setBudgetEvent] = useState<BudgetTotalEvent>();
+  const [listUserBudget, setListUserBudget] = useState<BudgetByUser[]>([]);
+  const [listBudget, setListBudget] = useState<Budget[]>([]);
 
   useEffect(() => {
-    fetch(`${apiUrl}/api/budget/${eventID}`)
-      .then((res) => res.json())
-      .then((data: Budget[]) => setListBudget(data));
-
-    fetch(`${apiUrl}/api/budget/${eventID}/totalUsers`)
-      .then((res) => res.json())
-      .then((data: BudgetByUser[]) => setListBudgetUser(data));
-
-    fetch(`${apiUrl}/api/budget/user/${eventID}/${userID}`)
-      .then((res) => res.json())
-      .then((data: BudgetByUser) => setBudgetUser(data));
-
     fetch(`${apiUrl}/api/budget/event/${eventID}`)
       .then((res) => res.json())
       .then((data: BudgetTotalEvent[]) => setBudgetEvent(data[0]));
+
+    fetch(`${apiUrl}/api/budget/${eventID}/totalUsers`)
+      .then((res) => res.json())
+      .then((data: BudgetByUser[]) => setListUserBudget(data));
+
+    fetch(`${apiUrl}/api/budget/${eventID}`)
+      .then((res) => res.json())
+      .then((data: Budget[]) => setListBudget(data));
   }, []);
 
-  const userBudget = getUserBudget(listBudgetUser, userID);
+  const userBudget = getUserBudget(listUserBudget, userID)?.total_price ?? 0;
+  const listBalance = getBalancePrice(listUserBudget);
+  const userBalance = getUserBudget(listBalance, userID)?.total_price ?? 0;
 
-  console.log(listBudget);
-  console.log(listBudgetUser);
-  console.log(getBalancePrice(listBudgetUser));
-  console.log(budgetUser);
-  console.log(budgetEvent);
-  console.log(userBudget);
+  const [showCreateForm, setShowCreateForm] = useState<boolean>(false);
+
+  /* -- Create form -- */
+
+  const [nameCreateForm, setNameCreateForm] = useState<string>("");
+  const [priceCreateForm, setPriceCreateForm] = useState<number>();
+
+  /* -- Fonctions -- */
+
+  function addBudget(e: React.FormEvent) {
+    e.preventDefault;
+    fetch(`${apiUrl}/api/budget/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id_event: eventID,
+        id_user: userID,
+        name: String(nameCreateForm),
+        price: Number(priceCreateForm),
+      }),
+    });
+  }
+
+  function updateBudget() {}
+  function deleteBudget() {}
 
   return (
     <div className="budget">
       <header>
         <h1>{budgetEvent?.event_name}</h1>
-        <button type="button">
+        <button
+          type="button"
+          onClick={() => setShowCreateForm(!showCreateForm)}
+        >
           <FilePlusCorner size={20} />
           <span> Ajouter une dépense</span>
         </button>
       </header>
 
-      <section className="monEquilibres">
-        <article className="monEquilibresBox">
-          <span> tu dois </span>
-          <h2>+1 285,00 €</h2>
+      {showCreateForm ? (
+        /* -- Create Form -- */
+        <form onSubmit={(e) => addBudget(e)}>
+          {/* Name */}
+          <input
+            type="text"
+            placeholder="Le nom du budget"
+            onChange={(e) => setNameCreateForm(e.target.value)}
+            required
+          />
+
+          {/* Name */}
+          <input
+            type="number"
+            placeholder="Le prix du budget"
+            onChange={(e) => setPriceCreateForm(Number(e.target.value))}
+            required
+          />
+
+          <button type="submit">Ajout le budget</button>
+        </form>
+      ) : (
+        ""
+      )}
+
+      <section className="myBalance">
+        <article className="myBalanceBox">
+          {userBalance > 0 && <span>on te doit</span>}
+          {userBalance < 0 && <span>tu dois</span>}
+          {userBalance === 0 && <span>comptes équilibrés</span>}
+          <h2>{userBalance}€</h2>
           <small>
             <History /> last update : yesterday
           </small>
@@ -137,14 +185,14 @@ function Budget() {
           <div className="negatif">
             <ArrowUp size={20} className="lucid" /> <br />
             <span> mes dépenses</span>
-            <h3> {userBudget?.total_price} € </h3>
+            <h3> {userBudget} € </h3>
           </div>
         </article>
       </section>
 
-      <section className="depensesEquilibres">
-        <div className="depenses">
-          <div className="mobileDepenses">
+      <section className="expensesAndBalance">
+        <div className="expenses">
+          <div className="mobileExpenses">
             <h5>Dépenses</h5> <button type="button"> voir plus</button>
           </div>
           <section>
@@ -162,6 +210,18 @@ function Budget() {
                       ? `+${row.budget_price}`
                       : `-${row.budget_price}`}
                     €
+                    <div
+                      className={
+                        row.budget_id_user === userID ? "icons" : "Noicons"
+                      }
+                    >
+                      {/* <button type="button" onClick={updateBudget}>*/}
+                      <Pen onClick={updateBudget} />
+                      {/*</button>*/}
+                      {/*<button type="button" onClick={deleteBudget}>*/}
+                      <Trash onClick={deleteBudget} />
+                      {/*</button>*/}
+                    </div>
                   </span>
                 </article>
               );
@@ -169,10 +229,10 @@ function Budget() {
           </section>
         </div>
 
-        <div className="equilibres">
+        <div className="balance">
           <h5>Equilibres</h5>
           <section>
-            {getBalancePrice(listBudgetUser).map((row) => {
+            {listBalance.map((row) => {
               return (
                 <article key={row.user_id}>
                   <span>{row.user_name}</span>
@@ -191,7 +251,7 @@ function Budget() {
         </div>
       </section>
 
-      <button type="button" className="plusButton">
+      <button type="button" className="addButton">
         <Plus size={20} />
       </button>
     </div>

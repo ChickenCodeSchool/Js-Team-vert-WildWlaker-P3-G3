@@ -92,11 +92,11 @@ const update: RequestHandler = async (req, res, next) => {
   }
 };
 
-const del: RequestHandler = async (req, res, next) => {
+const destroy: RequestHandler = async (req, res, next) => {
   try {
-    const id_budget = Number(req.query.id_budget);
+    const id = Number(req.params.id);
 
-    const budget = await budgetRepository.delete(id_budget);
+    const budget = await budgetRepository.delete(id);
 
     res.json(budget);
 
@@ -113,5 +113,5 @@ export default {
   browseEvent,
   create,
   update,
-  del,
+  destroy,
 };
