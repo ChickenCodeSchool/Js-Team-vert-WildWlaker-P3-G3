@@ -9,10 +9,13 @@ import logo from "../../assets/images/logo-wedoo.png";
 function ChangePassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const passwordRules = {
     length: password.length >= 12,
@@ -23,19 +26,15 @@ function ChangePassword() {
   };
 
   const passwordValid = Object.values(passwordRules).every(Boolean);
-
   const passwordsMatch = password === confirmPassword && confirmPassword !== "";
 
   const formValid = currentPassword !== "" && passwordValid && passwordsMatch;
-
-  const navigate = useNavigate();
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
-      const userId = user.id;
 
       const res = await fetch(
         "http://localhost:3310/api/auth/change-password",
@@ -45,7 +44,7 @@ function ChangePassword() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            userId,
+            userId: user.id,
             currentPassword,
             newPassword: password,
           }),
@@ -60,7 +59,6 @@ function ChangePassword() {
       }
 
       alert("Mot de passe modifié avec succès");
-
       navigate("/connexion");
     } catch (error) {
       console.error("CHANGE PASSWORD ERROR :", error);
@@ -70,87 +68,85 @@ function ChangePassword() {
 
   return (
     <>
-      <div className="navbar-changepassword">
-        <Link to="/" className="nav-changepassword">
+      <nav className="navbar-changepassword">
+        <Link to="/">
           <img src={logo} alt="logo-wedoo" />
           <h1>
             WE<i>D</i>OO
           </h1>
         </Link>
-      </div>
-      <div className="changepassword-section">
-        <div className="changepassword-img-text">
-          <img
-            src={connexionImg}
-            alt="changepassword-img"
-            className="changepassword-img"
-          />
-          <div className="changepassword-text">
+      </nav>
+
+      <section className="changepassword-section">
+        <div className="image-side">
+          <img src={connexionImg} alt="Illustration connexion" />
+
+          <div className="text-overlay">
             <h2>Facilitez vos prochains événements.</h2>
-            <p className="changepassword-parag">
+            <p>
               Wedoo vous propose une expérience utilisateur simple et efficace.
             </p>
           </div>
         </div>
+
         <form
           className="changepassword-content"
           onSubmit={handleChangePassword}
         >
-          <div className="changepassword-para-title">
+          <header>
             <h2>Changez votre mot de passe.</h2>
-          </div>
-          <div className="password-input-label-changepassword">
-            <label htmlFor="password" className="password-changepassword">
-              Ancien mot de passe
-            </label>
-            <br />
-            <div className="container-password-changepassword">
+          </header>
+
+          <div className="field">
+            <label htmlFor="currentPassword">Ancien mot de passe</label>
+
+            <div className="password-container">
               <input
+                id="currentPassword"
                 type={showCurrentPassword ? "text" : "password"}
                 placeholder="Entrer votre ancien mot de passe"
-                required
-                className="input-focus password-input-confor-changepassword"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
+                required
               />
+
               <button
                 type="button"
                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
               >
                 <img
                   src={showCurrentPassword ? eye : hide}
-                  alt="afficher/ne pas afficher"
-                  className="img-password-eye"
+                  alt="Afficher le mot de passe"
                 />
               </button>
             </div>
           </div>
-          <div className="password-input-label-changepassword">
-            <label htmlFor="password" className="password-changepassword">
-              Nouveau mot de passe
-            </label>
-            <br />
-            <div className="container-password-changepassword">
+
+          <div className="field">
+            <label htmlFor="newPassword">Nouveau mot de passe</label>
+
+            <div className="password-container">
               <input
+                id="newPassword"
                 type={showPassword ? "text" : "password"}
                 placeholder="Entrer votre nouveau mot de passe"
-                required
-                className="input-focus password-input-changepassword"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
+
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 <img
                   src={showPassword ? eye : hide}
-                  alt="afficher/ne pas afficher"
-                  className="img-password-eye"
+                  alt="Afficher le mot de passe"
                 />
               </button>
             </div>
-            <div>
+
+            <div className="password-rules">
               <p className={passwordRules.length ? "success" : "error"}>
                 Minimum 12 caractères
               </p>
@@ -172,44 +168,41 @@ function ChangePassword() {
               </p>
             </div>
           </div>
-          <div className="password-input-label-changepassword">
-            <label htmlFor="password" className="password-changepassword">
-              Confirmez le mot de passe
-            </label>
-            <br />
-            <div className="container-password-changepassword">
+
+          <div className="field">
+            <label htmlFor="confirmPassword">Confirmez le mot de passe</label>
+
+            <div className="password-container">
               <input
+                id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirmer votre mot de passe"
-                required
-                className="input-focus password-input-confor-changepassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                required
               />
+
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 <img
                   src={showConfirmPassword ? eye : hide}
-                  alt="afficher/ne pas afficher"
-                  className="img-password-eye"
+                  alt="Afficher le mot de passe"
                 />
               </button>
             </div>
+
             {password !== confirmPassword && confirmPassword !== "" && (
               <p className="error">✗ Le mot de passe ne correspond pas</p>
             )}
           </div>
-          <button
-            type="submit"
-            className="button-changepassword-submit"
-            disabled={!formValid}
-          >
+
+          <button type="submit" disabled={!formValid} className="submit-btn">
             Réinitialiser
           </button>
         </form>
-      </div>
+      </section>
     </>
   );
 }
