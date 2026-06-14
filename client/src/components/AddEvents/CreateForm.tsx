@@ -7,7 +7,8 @@ import "./CreateForm.css";
 function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
   const [form, setForm] = useState({
     title: "",
-    date: "",
+    dateStart: "",
+    dateEnd: "",
     description: "",
     location: "",
   }); //etat et valeurs de titre, date, description et ville donc vide au depart
@@ -29,11 +30,12 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: value.charAt(0).toUpperCase() + value.slice(1),
-    }));
-  }; // met a jour l'etat et la valeur du champs modifier + met directement une majuscule dans tous les inputs
+    const formatted =
+      name === "dateStart" || name === "dateEnd"
+        ? value
+        : value.charAt(0).toUpperCase() + value.slice(1);
+    setForm((prev) => ({ ...prev, [name]: formatted }));
+  }; // met directement une majuscule dans tous les inputs mais exclu dateStart et dateEnd
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -46,7 +48,8 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           event_name: form.title,
-          event_date: form.date,
+          event_date_start: form.dateStart,
+          event_date_end: form.dateEnd,
           event_description: form.description,
           event_location: form.location,
           event_host_id: user_id,
@@ -58,7 +61,13 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
 
       const newEvent: EventData = await res.json();
       onEventCreated(newEvent);
-      setForm({ title: "", date: "", description: "", location: "" });
+      setForm({
+        title: "",
+        dateStart: "",
+        dateEnd: "",
+        description: "",
+        location: "",
+      });
       onClose();
     } catch {
       setError("Une erreur est survenue, veuillez réessayer.");
@@ -68,17 +77,21 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
   };
 
   const isFormValid =
-    form.title && form.date && form.description && form.location; // indique qu'il faut les champs renseignés
+    form.title &&
+    form.dateStart &&
+    form.dateEnd &&
+    form.description &&
+    form.location; // indique qu'il faut les champs renseignés
   return (
     <>
-      <div className="CreateForm-Body">
+      <main className="CreateForm-Body">
         <h2 className="CreateForm-Title" id="modal-title">
           Créez votre événement
         </h2>
 
         {error && <p className="CreateForm-Error">{error}</p>}
 
-        <div className="CreateForm-Field">
+        <form className="CreateForm-Field">
           <label className="CreateForm-Label" htmlFor="title">
             {/* htmlFor permet de mettre le curseur dans l'input quand on clique sur le nom du champs */}
             NOM DE VOTRE EVENEMENT
@@ -92,23 +105,40 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
             value={form.title}
             onChange={handleChange}
           />
-        </div>
+        </form>
 
-        <div className="CreateForm-Field">
-          <label className="CreateForm-Label" htmlFor="date">
-            DATE
-          </label>
-          <input
-            id="date"
-            className="CreateForm-Input"
-            type="date"
-            name="date"
-            value={form.date}
-            onChange={handleChange}
-          />
-        </div>
+        <form className="CreateForm-Field">
+          <article className="CreateForm-DateGlobal">
+            <aside className="CreateForm-Date">
+              <label className="CreateForm-Label" htmlFor="date">
+                DATE DE DEBUT
+              </label>
+              <input
+                id="date"
+                className="CreateForm-DateInput"
+                type="date"
+                name="dateStart"
+                value={form.dateStart}
+                onChange={handleChange}
+              />
+            </aside>
+            <aside className="CreateForm-Date">
+              <label className="CreateForm-Label" htmlFor="date">
+                DATE DE FIN
+              </label>
+              <input
+                id="date"
+                className="CreateForm-DateInput"
+                type="date"
+                name="dateEnd"
+                value={form.dateEnd}
+                onChange={handleChange}
+              />
+            </aside>
+          </article>
+        </form>
 
-        <div className="CreateForm-Field">
+        <form className="CreateForm-Field">
           <label className="CreateForm-Label" htmlFor="description">
             DESCRIPTION
           </label>
@@ -121,9 +151,9 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
             onChange={handleChange}
             rows={4}
           />
-        </div>
+        </form>
 
-        <div className="CreateForm-Field">
+        <form className="CreateForm-Field">
           <label className="CreateForm-Label" htmlFor="location">
             LIEUX
           </label>
@@ -135,10 +165,10 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
             value={form.location}
             onChange={handleChange}
           />
-        </div>
-      </div>
+        </form>
+      </main>
 
-      <div className="CreateForm-Footer">
+      <footer className="CreateForm-Footer">
         <button
           type="button"
           className="CreateForm-ButtonCancel"
@@ -155,7 +185,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
         >
           {isLoading ? "Création..." : "Créer l'événement"}
         </button>
-      </div>
+      </footer>
     </>
   );
 }

@@ -37,14 +37,21 @@ const browseRandomImage: RequestHandler = (req, res, next) => {
 const add: RequestHandler = async (req, res, next) => {
   const {
     event_name,
-    event_date,
+    event_date_start,
+    event_date_end,
     event_picture,
     event_host_id,
     event_description,
     event_location,
   } = req.body;
 
-  if (!event_name || !event_date || !event_description || !event_location) {
+  if (
+    !event_name ||
+    !event_date_start ||
+    !event_date_end ||
+    !event_description ||
+    !event_location
+  ) {
     res.status(400).json({ message: "Veuillez remplir tous les champs." });
     return;
   }
@@ -52,7 +59,8 @@ const add: RequestHandler = async (req, res, next) => {
   try {
     const insertId = await eventRepository.create({
       event_name,
-      event_date,
+      event_date_start,
+      event_date_end,
       event_host_id,
       event_picture,
       event_description,
