@@ -84,14 +84,14 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
     form.location; // indique qu'il faut les champs renseignés
   return (
     <>
-      <main className="CreateForm-Body">
+      <form className="CreateForm-Body">
         <h2 className="CreateForm-Title" id="modal-title">
           Créez votre événement
         </h2>
 
         {error && <p className="CreateForm-Error">{error}</p>}
 
-        <form className="CreateForm-Field">
+        <div className="CreateForm-Field">
           <label className="CreateForm-Label" htmlFor="title">
             {/* htmlFor permet de mettre le curseur dans l'input quand on clique sur le nom du champs */}
             NOM DE VOTRE EVENEMENT
@@ -104,41 +104,42 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
             placeholder="Ex : Festival de Jazz"
             value={form.title}
             onChange={handleChange}
+            maxLength={45}
           />
-        </form>
+        </div>
 
-        <form className="CreateForm-Field">
-          <article className="CreateForm-DateGlobal">
-            <aside className="CreateForm-Date">
-              <label className="CreateForm-Label" htmlFor="date">
+        <div className="CreateForm-Field">
+          <div className="CreateForm-DateGlobal">
+            <div className="CreateForm-Date">
+              <label className="CreateForm-Label" htmlFor="dateStart">
                 DATE DE DEBUT
               </label>
               <input
-                id="date"
+                id="dateStart"
                 className="CreateForm-DateInput"
                 type="date"
                 name="dateStart"
                 value={form.dateStart}
                 onChange={handleChange}
               />
-            </aside>
-            <aside className="CreateForm-Date">
-              <label className="CreateForm-Label" htmlFor="date">
+            </div>
+            <div className="CreateForm-Date">
+              <label className="CreateForm-Label" htmlFor="dateEnd">
                 DATE DE FIN
               </label>
               <input
-                id="date"
+                id="dateEnd"
                 className="CreateForm-DateInput"
                 type="date"
                 name="dateEnd"
                 value={form.dateEnd}
                 onChange={handleChange}
               />
-            </aside>
-          </article>
-        </form>
+            </div>
+          </div>
+        </div>
 
-        <form className="CreateForm-Field">
+        <div className="CreateForm-Field">
           <label className="CreateForm-Label" htmlFor="description">
             DESCRIPTION
           </label>
@@ -150,10 +151,14 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
             value={form.description}
             onChange={handleChange}
             rows={4}
+            maxLength={255}
           />
-        </form>
+          <span className="CreateForm-Counter">
+            {form.description.length}/255
+          </span>
+        </div>
 
-        <form className="CreateForm-Field">
+        <div className="CreateForm-Field">
           <label className="CreateForm-Label" htmlFor="location">
             LIEUX
           </label>
@@ -164,9 +169,10 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
             placeholder="Ex : Paris"
             value={form.location}
             onChange={handleChange}
+            maxLength={100}
           />
-        </form>
-      </main>
+        </div>
+      </form>
 
       <footer className="CreateForm-Footer">
         <button

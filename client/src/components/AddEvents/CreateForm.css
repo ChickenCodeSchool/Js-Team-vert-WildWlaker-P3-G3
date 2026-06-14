@@ -59,12 +59,18 @@
     border-top-right-radius: 0.5rem;
     background: var(--input-color);
     color: var(--font-input);
+    resize: vertical;
     &::placeholder {
       color: var(--font-placeholder);
     }
   }
   .CreateForm-TextArea:focus {
     outline: none;
+  }
+  .CreateForm-Counter {
+    text-align: end;
+    font-size: x-small;
+    font-weight: 200;
   }
 }
 .CreateForm-Footer {
