@@ -33,6 +33,7 @@
         color: var(--input-error);
         font-size: 0.8rem;
         font-weight: 300;
+        font-style: italic;
       }
     }
   }
