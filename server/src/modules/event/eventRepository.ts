@@ -64,6 +64,12 @@ class EventRepository {
       [eventId, userId],
     );
   }
+  async updatePicture(eventId: number, pictureUrl: string) {
+    await databaseClient.query<Result>(
+      "UPDATE event SET event_picture = ? WHERE event_id = ?",
+      [pictureUrl, eventId],
+    );
+  }
 }
 
 export default new EventRepository();

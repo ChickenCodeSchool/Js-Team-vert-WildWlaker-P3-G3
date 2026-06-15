@@ -104,4 +104,46 @@ const join: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, add, join, browseRandomImage };
+const browseImages: RequestHandler = (req, res, next) => {
+  try {
+    const dir = path.join(process.cwd(), "public/assets/images");
+    const files = fs
+      .readdirSync(dir)
+      .filter((f) => /\.(jpg|jpeg|png|webp|gif)$/i.test(f));
+
+    if (!files.length) {
+      res.status(404).json({ message: "Aucune image disponible." });
+      return;
+    }
+
+    res.json(files.map((f) => `/assets/images/${f}`));
+  } catch (error) {
+    next(error);
+  }
+};
+
+const editPicture: RequestHandler = async (req, res, next) => {
+  const eventId = Number(req.params.id);
+  const { event_picture } = req.body;
+
+  if (!event_picture) {
+    res.status(400).json({ message: "Image requise." });
+    return;
+  }
+
+  try {
+    await eventRepository.updatePicture(eventId, event_picture);
+    res.json({ event_picture });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default {
+  browse,
+  add,
+  join,
+  browseRandomImage,
+  browseImages,
+  editPicture,
+};

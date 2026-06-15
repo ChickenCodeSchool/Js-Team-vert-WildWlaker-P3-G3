@@ -12,6 +12,7 @@ export interface EventData {
 
 export interface CardEventsProps {
   event_id: number;
+  event_host_id: number;
   image: string;
   imageAlt: string;
   date: string;
@@ -45,4 +46,11 @@ export type FilterType = "all" | "ongoing" | "finished";
 export interface FilterProps {
   activeFilter: FilterType;
   onFilterChange: (filter: FilterType) => void;
+}
+
+export interface ModalImagePickerProps {
+  isOpen: boolean;
+  onClose: () => void;
+  images: string[];
+  onSelectImage: (imageUrl: string) => void;
 }

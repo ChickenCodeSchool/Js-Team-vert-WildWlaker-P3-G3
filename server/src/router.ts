@@ -66,8 +66,10 @@ router.post("/api/items", itemActions.add);
 // router.get("/api/users/:id/events", userActions.getUserEvents);
 router.get("/api/events", eventActions.browse);
 router.get("/api/events/random-image", eventActions.browseRandomImage);
+router.get("/api/events/images", eventActions.browseImages);
 router.post("/api/events/join", eventActions.join);
 router.post("/api/events", eventActions.add);
+router.put("/api/events/:id/picture", eventActions.editPicture);
 
 // todoActions routes
 router.get("/api/todo/:eventId", todoActions.browse);
