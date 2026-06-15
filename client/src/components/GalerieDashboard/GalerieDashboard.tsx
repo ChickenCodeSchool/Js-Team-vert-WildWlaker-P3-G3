@@ -33,7 +33,7 @@ function GalerieDashboard() {
   return (
     <section className="galerie-dash">
       <div className="galerie-header">
-        <h1>Nom de l'événement</h1>
+        <h1>Galerie récente</h1>
       </div>
 
       <div className="galerie-grid">
