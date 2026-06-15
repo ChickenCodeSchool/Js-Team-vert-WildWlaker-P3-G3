@@ -19,7 +19,17 @@ const add: RequestHandler = async (req, res, next) => {
       reported_user_image: req.body.reported_user_image,
       reported_user_by_id_user: req.body.reported_user_by_id_user,
     };
+    const alreadyExists = await reportUserRepository.exists(
+      newReportUser.reported_user_by_id_user,
+      newReportUser.reported_user_id_user,
+    );
 
+    if (alreadyExists) {
+      res
+        .status(409)
+        .json({ message: "Vous avez déjà signalé cet utilisateur récemment." });
+      return;
+    }
     const insertId = await reportUserRepository.create(newReportUser);
 
     res.status(201).json({ insertId });
