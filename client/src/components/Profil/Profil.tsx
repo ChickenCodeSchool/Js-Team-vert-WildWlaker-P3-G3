@@ -19,7 +19,7 @@ function Profil() {
   const [preview, setPreview] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const isAdminPage = location.pathname === "/admin";
   const user = JSON.parse(localStorage.getItem("user") || "null");

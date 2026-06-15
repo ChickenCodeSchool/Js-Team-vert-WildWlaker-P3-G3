@@ -1,47 +1,95 @@
 import { useEffect, useRef, useState } from "react";
 
-import type { JoinFormProps } from "../../types/Events";
+import type { EventData, JoinFormProps } from "../../types/Events";
 
 import "./JoinForm.css";
 
-function JoinForm({ onClose }: JoinFormProps) {
+function JoinForm({ onClose, onEventCreated }: JoinFormProps) {
   const [code, setCode] = useState("");
-
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // ca empeche de recharger la page quand on clique
-    // console.log("Code pour rejoindre :", code); // en attendant le fetch ca permet de vérifier dans la console si c'est bien pris en compte
-    setCode(""); // ca remet le code a zero
-    onClose(); // ca ferme le modal
-  };
+  const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, []); // le useRef et useEffect met directement le curseur dans le champs
+  }, []); // le inputRef et useEffect met directement le curseur dans le champs
+
+  useEffect(() => {
+    if (code.trim().length === 6) {
+      submitCode();
+    }
+  }, [code]); // ca verifie le code des qu'il a 6 caracteres de rentrés
+
+  const submitCode = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/events/join`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            event_link_key: code.trim().toUpperCase(),
+            user_id,
+          }),
+        },
+      );
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message);
+      }
+
+      const newEvent: EventData = await res.json();
+      onEventCreated(newEvent);
+      setCode("");
+      onClose();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Une erreur est survenue.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    submitCode();
+  };
 
   return (
     <>
       <div className="JoinForm-Body">
         <h2 className="JoinForm-Title" id="modal-title">
-          Rejoingnez un événement
+          Rejoignez un événement
         </h2>
         <div className="JoinForm-Field">
           <label className="JoinForm-Label" htmlFor="code">
             Pour rejoindre un événement, veuillez renseigner le code événement
             partagé par l'organisateur.
           </label>
-          <input
-            ref={inputRef}
-            id="code"
-            className="JoinForm-Input JoinForm-Input--code"
-            type="text"
-            name="code"
-            placeholder="Ex : ABC123"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            maxLength={6} // limite a 6 caracteres
-          />
+          <section className="JoinForm-InputGlobal">
+            <input
+              ref={inputRef}
+              id="code"
+              className="JoinForm-Input JoinForm-Input--code"
+              type="text"
+              name="code"
+              placeholder="Ex : ABC123"
+              value={code}
+              onChange={(e) => {
+                setError(null);
+                setCode(e.target.value);
+              }}
+              maxLength={6} // limite a 6 caracteres
+              disabled={isLoading}
+            />
+            {error && <p className="JoinForm-Error">{error}</p>}
+          </section>
         </div>
       </div>
       <div className="JoinForm-Footer">
@@ -49,16 +97,18 @@ function JoinForm({ onClose }: JoinFormProps) {
           type="button"
           className="JoinForm-ButtonCancel"
           onClick={onClose}
+          disabled={isLoading}
         >
           Annuler
         </button>
+
         <button
           type="button"
           className="JoinForm-ButtonSubmit"
           onClick={handleSubmit}
-          disabled={!code.trim()}
+          disabled={code.trim().length !== 6 || isLoading}
         >
-          Rejoindre
+          {isLoading ? "Vérification..." : "Rejoindre"}
         </button>
       </div>
     </>

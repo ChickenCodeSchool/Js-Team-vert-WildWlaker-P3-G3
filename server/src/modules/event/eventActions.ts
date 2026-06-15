@@ -1,29 +1,57 @@
+import fs from "node:fs";
+import path from "node:path";
 import type { RequestHandler } from "express";
 import eventRepository from "./eventRepository";
 
 const browse: RequestHandler = async (req, res, next) => {
   try {
-    // const events = await eventRepository.browse();
-    // res.json(events);
+    const userId = Number(req.query.userId);
+    const events = await eventRepository.readAll(userId);
+    res.json(events);
   } catch (error) {
-    // res
-    //   .status(500)
-    //   .json({ message: "Erreur lors de la récupération des événements" });
+    next(error);
   }
 };
 
-const add: RequestHandler = async (req, res) => {
+const browseRandomImage: RequestHandler = (req, res, next) => {
+  try {
+    const dir = path.join(process.cwd(), "public/assets/images"); //ca donne le chemin des images
+    console.log("Chemin du dossier :", dir);
+    console.log("Fichiers trouvés :", fs.readdirSync(dir));
+    const files = fs
+      .readdirSync(dir)
+      .filter((f) => /\.(jpg|jpeg|png|webp|gif)$/i.test(f)); // ca verifie et prend les image avec ces formats
+
+    if (!files.length) {
+      res.status(404).json({ message: "Aucune image disponible." }); // tableau vide -> erreur
+      return;
+    }
+
+    const random = files[Math.floor(Math.random() * files.length)]; // fonction de random d'image
+    res.json({ url: `/assets/images/${random}` });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const add: RequestHandler = async (req, res, next) => {
   const {
     event_name,
-    event_date,
+    event_date_start,
+    event_date_end,
     event_picture,
     event_host_id,
     event_description,
     event_location,
-    event_link_id,
   } = req.body;
 
-  if (!event_name || !event_date || !event_description || !event_location) {
+  if (
+    !event_name ||
+    !event_date_start ||
+    !event_date_end ||
+    !event_description ||
+    !event_location
+  ) {
     res.status(400).json({ message: "Veuillez remplir tous les champs." });
     return;
   }
@@ -31,20 +59,91 @@ const add: RequestHandler = async (req, res) => {
   try {
     const insertId = await eventRepository.create({
       event_name,
-      event_date,
+      event_date_start,
+      event_date_end,
       event_host_id,
       event_picture,
       event_description,
       event_location,
-      event_link_id,
     });
-    res.json(insertId);
+    const newEvent = await eventRepository.read(insertId);
+    res.status(201).json(newEvent);
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ message: "Erreur lors de la création de l'événement" });
+    next(error);
   }
 };
 
-export default { browse, add };
+const join: RequestHandler = async (req, res, next) => {
+  const { event_link_key, user_id } = req.body;
+
+  if (!event_link_key || !user_id) {
+    res.status(400).json({ message: "Code et utilisateur requis." });
+    return;
+  }
+
+  try {
+    const event = await eventRepository.readByLinkKey(event_link_key);
+
+    if (!event) {
+      res
+        .status(404)
+        .json({ message: "Code invalide ou événement introuvable." });
+      return;
+    }
+
+    await eventRepository.joinEvent(event.event_id, user_id);
+    res.status(201).json(event);
+  } catch (error: unknown) {
+    if ((error as { code?: string })?.code === "ER_DUP_ENTRY") {
+      res
+        .status(409)
+        .json({ message: "Vous participez déjà à cet événement." });
+      return;
+    }
+    next(error);
+  }
+};
+
+const browseImages: RequestHandler = (req, res, next) => {
+  try {
+    const dir = path.join(process.cwd(), "public/assets/images");
+    const files = fs
+      .readdirSync(dir)
+      .filter((f) => /\.(jpg|jpeg|png|webp|gif)$/i.test(f));
+
+    if (!files.length) {
+      res.status(404).json({ message: "Aucune image disponible." });
+      return;
+    }
+
+    res.json(files.map((f) => `/assets/images/${f}`));
+  } catch (error) {
+    next(error);
+  }
+};
+
+const editPicture: RequestHandler = async (req, res, next) => {
+  const eventId = Number(req.params.id);
+  const { event_picture } = req.body;
+
+  if (!event_picture) {
+    res.status(400).json({ message: "Image requise." });
+    return;
+  }
+
+  try {
+    await eventRepository.updatePicture(eventId, event_picture);
+    res.json({ event_picture });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default {
+  browse,
+  add,
+  join,
+  browseRandomImage,
+  browseImages,
+  editPicture,
+};

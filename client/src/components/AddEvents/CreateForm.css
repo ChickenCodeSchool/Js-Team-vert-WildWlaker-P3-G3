@@ -16,21 +16,61 @@
     height: 2rem;
     border: 1px solid var(--border-color);
     padding-left: 0.5rem;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background: var(--input-color);
+    color: var(--font-input);
+    &::placeholder {
+      color: var(--font-placeholder);
+    }
   }
   .CreateForm-Input:focus {
     outline: none;
   }
+  .CreateForm-DateGlobal {
+    display: flex;
+    justify-content: space-between;
+    .CreateForm-Date {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      .CreateForm-DateInput {
+        height: 2rem;
+        width: 13rem;
+        border: 1px solid var(--border-color);
+        padding-left: 0.5rem;
+        border-radius: 0.5rem 0.5rem 0 0;
+        background: var(--input-color);
+        color: var(--font-input);
+        &::placeholder {
+          color: var(--font-placeholder);
+        }
+      }
+      .CreateForm-DateInput:focus {
+        outline: none;
+      }
+    }
+  }
+
   .CreateForm-TextArea {
     border: 1px solid var(--border-color);
     padding-left: 0.5rem;
     padding-top: 0.2rem;
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
+    background: var(--input-color);
+    color: var(--font-input);
+    resize: vertical;
+    &::placeholder {
+      color: var(--font-placeholder);
+    }
   }
   .CreateForm-TextArea:focus {
     outline: none;
+  }
+  .CreateForm-Counter {
+    text-align: end;
+    font-size: x-small;
+    font-weight: 200;
   }
 }
 .CreateForm-Footer {
@@ -50,7 +90,7 @@
     transform: scale(0.95);
   }
   .CreateForm-ButtonSubmit {
-    width: 10rem;
+    width: 20rem;
     height: 2rem;
     border-radius: 1rem;
     border: none;
@@ -59,8 +99,9 @@
     transition: transform 0.2s;
   }
   .CreateForm-ButtonSubmit:disabled {
-    background: lightgray;
-    color: black;
+    opacity: 0.5;
+    background: var(--button-color-disable);
+    color: var(--font-button-color-disable);
   }
   .CreateForm-ButtonSubmit:hover {
     transform: scale(0.95);

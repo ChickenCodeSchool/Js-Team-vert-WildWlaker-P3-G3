@@ -1,8 +1,3 @@
-/* * {
-  margin: 0;
-  padding: 0;
-  box-sizing: 0;
-} */
 .Filter-Global {
   display: flex;
   gap: 1rem;
@@ -16,7 +11,7 @@
     transition: all 0.4s;
   }
   .Filter-Button--active {
-    background: var(--hover-color);
+    background: var(--icon-color);
     color: var(--font-neutral);
   }
 }
