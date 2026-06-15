@@ -26,18 +26,20 @@ function Profil() {
   const userId = user?.id;
 
   useEffect(() => {
-    fetch("`http://localhost:3310/api/${userId}/photo`")
+    fetch(`http://localhost:3310/api/${userId}/photo`)
       .then((res) => res.json())
       .then((data) => {
         setProfilePicture(data.user_profile_picture);
       });
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
-    fetch("`http://localhost:3310/api/users/admin/${userId}`")
+    if (!userId) return;
+    fetch(`http://localhost:3310/api/users/admin/${userId}`)
       .then((res) => res.json())
-      .then((data) => setIsAdmin(Boolean(data.user_is_admin)));
-  }, []);
+      .then((data) => setIsAdmin(Boolean(data.user_is_admin)))
+      .catch((err) => console.error(err));
+  }, [userId]);
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
