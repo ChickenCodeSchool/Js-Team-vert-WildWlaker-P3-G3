@@ -30,11 +30,11 @@ router.get("/api/users/description/:id", userActions.readUserDescriptionEvent);
 // userActions.read -> à confirmer : profil utilisateur unique ?
 router.get("/api/users/:id", userActions.read);
 router.get("/api/users/:id/userAndBudget", userActions.browseUserAndBudget);
-router.get("/api/:id/photo", userActions.browsePhoto);
 // router.get("/:id", userActions.browse); browse pas declaré
 router.post("/api/users", userActions.add);
+router.get("/api/users/:id/photo", userActions.browsePhoto);
 router.post(
-  "/api/users/photo",
+  "/api/users/:id/photo",
   upload.single("photo"),
   userActions.uploadPhoto,
 );
