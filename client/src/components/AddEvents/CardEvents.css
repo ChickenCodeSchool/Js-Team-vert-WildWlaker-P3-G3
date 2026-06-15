@@ -19,6 +19,7 @@
       height: 100%;
       object-position: top;
       display: block;
+      background: var(--bg-composant-dash);
     }
     .CardEvents-Date {
       position: absolute;

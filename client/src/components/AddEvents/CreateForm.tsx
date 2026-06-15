@@ -18,14 +18,6 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getRandomImage = async (): Promise<string> => {
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/events/random-image`,
-    );
-    const data = await res.json();
-    return `${import.meta.env.VITE_API_URL}${data.url}`;
-  };
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -42,7 +34,6 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
     setIsLoading(true);
     setError(null);
     try {
-      const randomPicture = await getRandomImage();
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -53,7 +44,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
           event_description: form.description,
           event_location: form.location,
           event_host_id: user_id,
-          event_picture: randomPicture,
+          event_picture: `${import.meta.env.VITE_API_URL}/assets/images/logo-wedoo.png`,
         }),
       });
 

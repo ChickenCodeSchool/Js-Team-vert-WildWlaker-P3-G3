@@ -1,9 +1,9 @@
 import { MapPin, PencilLine } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import type { CardEventsProps } from "../../types/Events";
+import type { CardEventsProps, EventData } from "../../types/Events";
 
-import ModalImagePicker from "./ModalImagePicker";
+import ModalEditEvent from "./ModalEditEvent";
 import "./CardEvents.css";
 
 const formatDay = (date: string): string => {
@@ -43,29 +43,9 @@ function CardEvents({
   const isHost = user_id === event_host_id;
   const [currentImage, setCurrentImage] = useState(image);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [images, setImages] = useState<string[]>([]);
 
-  const openImageModal = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/events/images`,
-    );
-    const data = await res.json();
-    setImages(data);
-    setIsModalOpen(true);
-  };
-  const handleSelectImage = async (imageUrl: string) => {
-    const fullUrl = `${import.meta.env.VITE_API_URL}${imageUrl}`;
-    await fetch(
-      `${import.meta.env.VITE_API_URL}/api/events/${event_id}/picture`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ event_picture: fullUrl }),
-      },
-    );
-    setCurrentImage(fullUrl);
-    setIsModalOpen(false);
+  const handleEventUpdated = (updatedEvent: EventData) => {
+    setCurrentImage(updatedEvent.event_picture);
   };
   return (
     <>
@@ -97,16 +77,29 @@ function CardEvents({
         <button
           type="button"
           className="CardEvents-EditImage"
-          onClick={openImageModal}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsModalOpen(true);
+          }}
         >
           <PencilLine size={16} />
         </button>
       )}
-      <ModalImagePicker
+      <ModalEditEvent
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        images={images}
-        onSelectImage={handleSelectImage}
+        event={{
+          event_id,
+          event_host_id,
+          event_name: title,
+          event_date_start: date,
+          event_date_end: date,
+          event_description: description,
+          event_location: location,
+          event_picture: currentImage,
+          event_link_key: "",
+        }}
+        onEventUpdated={handleEventUpdated}
       />
     </>
   );

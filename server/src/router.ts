@@ -45,7 +45,7 @@ router.put("/api/auth/change-password", userActions.changePassword);
 router.put("/api/users/:id", userActions.editUserName);
 router.put("/api/users/change-password", userActions.forgotPassword);
 router.get("/api/users/admin/:id", userActions.browseUserAdmin);
-// event routes
+
 // router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
 router.get("/api/events", eventActions.browse);
 router.post("/api/events", eventActions.add);
@@ -65,11 +65,14 @@ router.post("/api/items", itemActions.add);
 // EventActions routes
 // router.get("/api/users/:id/events", userActions.getUserEvents);
 router.get("/api/events", eventActions.browse);
-router.get("/api/events/random-image", eventActions.browseRandomImage);
 router.get("/api/events/images", eventActions.browseImages);
 router.post("/api/events/join", eventActions.join);
 router.post("/api/events", eventActions.add);
-router.put("/api/events/:id/picture", eventActions.editPicture);
+router.put(
+  "/api/events/:id/picture",
+  upload.single("picture"),
+  eventActions.edit,
+);
 
 // todoActions routes
 router.get("/api/todo/:eventId", todoActions.browse);
