@@ -28,5 +28,16 @@ class reportUserRepository {
     );
     return result.insertId;
   }
+
+  async exists(
+    reported_user_by_id_user: number,
+    reported_user_id_user: number,
+  ) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT * FROM reported_user WHERE reported_user_by_id_user = ? AND reported_user_id_user = ? AND reported_user_date > NOW() - INTERVAL 72 HOUR",
+      [reported_user_by_id_user, reported_user_id_user],
+    );
+    return rows.length > 0;
+  }
 }
 export default new reportUserRepository();
