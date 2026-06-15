@@ -15,10 +15,11 @@ class EventRepository {
     const linkKey = generateLinkKey();
 
     const [result] = await databaseClient.query<Result>(
-      "INSERT INTO event (event_name, event_date, event_host_id, event_picture, event_description, event_location, event_link_key) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO event (event_name, event_date_start, event_date_end, event_host_id, event_picture, event_description, event_location, event_link_key) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
       [
         event.event_name,
-        event.event_date,
+        event.event_date_start,
+        event.event_date_end,
         event.event_host_id,
         event.event_picture,
         event.event_description,
@@ -43,7 +44,7 @@ class EventRepository {
       LEFT JOIN event_user_joining euj ON euj.euj_id_event = e.event_id
       WHERE e.event_host_id = ?
       OR euj.euj_id_user = ?
-      ORDER BY e.event_date ASC`,
+      ORDER BY e.event_date_start ASC`,
       [userId, userId],
     );
 
@@ -61,6 +62,12 @@ class EventRepository {
     await databaseClient.query<Result>(
       "INSERT INTO event_user_joining (euj_id_event, euj_id_user) VALUES (?, ?)",
       [eventId, userId],
+    );
+  }
+  async updatePicture(eventId: number, pictureUrl: string) {
+    await databaseClient.query<Result>(
+      "UPDATE event SET event_picture = ? WHERE event_id = ?",
+      [pictureUrl, eventId],
     );
   }
 }

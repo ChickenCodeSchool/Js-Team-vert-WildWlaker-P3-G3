@@ -14,7 +14,7 @@ function HomeEvents() {
   const [events, setEvents] = useState<EventData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [activeFilter, setActiveFilter] = useState<FilterType>("all");
+  const [activeFilter, setActiveFilter] = useState<FilterType>("ongoing");
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}"); // --> recupere dans le local storage l'user id
@@ -28,17 +28,24 @@ function HomeEvents() {
   today.setHours(0, 0, 0, 0); // je met l'heure à 00h00m00s00ms pour comparer les jours sans l'heure
 
   const filteredEvents = events
-    .sort(
-      (a, b) =>
-        new Date(a.event_date).getTime() - new Date(b.event_date).getTime(),
-    ) // filtre directement les cards par ordre chronologique
     .filter((event) => {
-      const eventDate = new Date(event.event_date);
-      if (activeFilter === "ongoing") return eventDate >= today;
-      if (activeFilter === "finished") return eventDate < today;
+      const endDate = new Date(event.event_date_end);
+      if (activeFilter === "ongoing") return endDate >= today;
+      if (activeFilter === "finished") return endDate < today;
       return true;
-    });
-  // filtre quand le bouton est activé si c'est en cours ou terminé
+    }) // filtre quand le bouton est activé si c'est en cours ou terminé
+    .sort((a, b) => {
+      if (activeFilter === "finished") {
+        return (
+          new Date(b.event_date_end).getTime() -
+          new Date(a.event_date_end).getTime()
+        );
+      }
+      return (
+        new Date(a.event_date_start).getTime() -
+        new Date(b.event_date_start).getTime()
+      );
+    }); // filtre directement les cards par ordre chronologique
 
   const handleEventCreated = (newEvent: EventData) => {
     setEvents((prev) => [...prev, newEvent]);
@@ -65,9 +72,10 @@ function HomeEvents() {
             <CardEvents
               key={event.event_id}
               event_id={event.event_id}
+              event_host_id={event.event_host_id}
               image={event.event_picture}
               imageAlt={event.event_name}
-              date={event.event_date}
+              date={event.event_date_start}
               title={event.event_name}
               description={event.event_description}
               location={event.event_location}
