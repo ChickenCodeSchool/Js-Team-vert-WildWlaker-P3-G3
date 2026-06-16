@@ -5,13 +5,13 @@ import "./Budget.css";
 import {
   ArrowDown,
   ArrowUp,
+  Check,
   FilePlusCorner,
   History,
   Pen,
   Plus,
   Trash,
   X,
-  Check,
 } from "lucide-react";
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -107,12 +107,8 @@ function Budget() {
   );
 
   useEffect(() => {
-    fetch(`${apiUrl}/api/budget/event/${eventID}`)
-      .then((res) => res.json())
-      .then((data: BudgetTotalEvent[]) => setBudgetEvent(data[0]));
-
     fetchBudgetLists();
-  }, [eventID]);
+  }, []);
 
   const userBudget = getUserBudget(listUserBudget, userID)?.total_price ?? 0;
   const listBalance = getBalancePrice(listUserBudget);
@@ -121,6 +117,9 @@ function Budget() {
   /* -- Fonctions -- */
 
   function fetchBudgetLists() {
+    fetch(`${apiUrl}/api/budget/event/${eventID}`)
+      .then((res) => res.json())
+      .then((data: BudgetTotalEvent[]) => setBudgetEvent(data[0]));
     fetch(`${apiUrl}/api/budget/${eventID}/totalUsers`)
       .then((res) => res.json())
       .then((data: BudgetByUser[]) => setListUserBudget(data));

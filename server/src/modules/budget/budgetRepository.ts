@@ -90,10 +90,9 @@ class budgetRepository {
         e.event_id, 
         e.event_name,
         COALESCE(SUM(b.budget_price), 0) AS total_price 
-      FROM budget AS b
-      JOIN event AS e ON e.event_id = b.budget_id_event
-      WHERE e.event_id = ?
-      GROUP BY b.budget_id_event`,
+      FROM event AS e
+      LEFT JOIN budget AS b ON b.budget_id_event = e.event_id
+      WHERE e.event_id = ?`,
       [id],
     );
 
