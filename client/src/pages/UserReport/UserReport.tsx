@@ -104,7 +104,7 @@ function UserReport() {
 
   return (
     <>
-      <nav className="userReport-Nav">composant/nav</nav>
+      <header className="userReport-Nav">composant/nav</header>
       <main className="userReport-Main">
         <header className="userReport-Header">
           <button

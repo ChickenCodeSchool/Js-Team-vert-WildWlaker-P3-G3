@@ -1,0 +1,146 @@
+.banModal {
+  margin: auto;
+  width: 380px;
+  max-width: 90vw;
+  border: none;
+  border-radius: 20px;
+  padding: 24px;
+  background: var(--bg-neutral);
+
+  &::backdrop {
+    background: rgba(31, 27, 24, 0.5);
+  }
+
+  @media (max-width: 420px) {
+    width: 100%;
+    max-width: 100%;
+    margin: auto auto 0;
+    border-radius: 20px 20px 0 0;
+
+    .banModal-Footer {
+      button {
+        flex: 1;
+      }
+    }
+  }
+
+  .banModal-Header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--font-black);
+      margin: 0;
+    }
+
+    .banModal-Close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      color: var(--font-grey);
+      cursor: pointer;
+      padding: 0;
+
+      &:hover {
+        color: var(--font-black);
+      }
+    }
+  }
+
+  .banModal-Options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+
+    .banModal-Option {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      text-align: left;
+      width: 100%;
+      background: var(--bg-composant-dash);
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+
+      &:hover {
+        border-color: var(--border-color);
+      }
+
+      &[aria-pressed="true"] {
+        border-color: var(--icon-color);
+        background: var(--hover-signalement);
+      }
+
+      .banModal-OptionIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--icon-color);
+        flex-shrink: 0;
+      }
+
+      .banModal-OptionText {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        .banModal-OptionTitle {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: var(--font-black);
+        }
+
+        .banModal-OptionDesc {
+          font-size: 0.75rem;
+          color: var(--font-grey);
+        }
+      }
+    }
+  }
+
+  .banModal-Footer {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+
+    button {
+      padding: 10px 22px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(0.95);
+      }
+    }
+
+    .banModal-Cancel {
+      background: var(--bg-neutral);
+      border: 1.5px solid var(--border-color);
+      color: var(--font-black);
+    }
+
+    .banModal-Confirm {
+      background: var(--button-color);
+      border: none;
+      color: var(--font-neutral);
+
+      &:disabled {
+        background: var(--button-color-disable);
+        color: var(--font-button-color-disable);
+        cursor: not-allowed;
+        transform: none;
+      }
+    }
+  }
+}
