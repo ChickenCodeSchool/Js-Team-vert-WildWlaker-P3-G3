@@ -60,3 +60,10 @@ body {
 
   --color-chat: #ff7e5f;
 }
+
+* {
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+body {
+  background: var(--bg-color);
+}
