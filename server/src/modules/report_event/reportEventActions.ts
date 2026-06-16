@@ -20,6 +20,18 @@ const add: RequestHandler = async (req, res, next) => {
       reported_event_by_id_user: req.body.reported_event_by_id_user,
     };
 
+    const alreadyExists = await reportEventRepository.exists(
+      newReportEvent.reported_event_by_id_user,
+      newReportEvent.reported_event_id_event,
+    );
+
+    if (alreadyExists) {
+      res
+        .status(409)
+        .json({ message: "Vous avez déjà signalé cet événement récemment." });
+      return;
+    }
+
     const insertId = await reportEventRepository.create(newReportEvent);
 
     res.status(201).json({ insertId });

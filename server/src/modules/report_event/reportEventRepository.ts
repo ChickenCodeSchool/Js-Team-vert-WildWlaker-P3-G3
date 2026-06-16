@@ -28,5 +28,15 @@ class reportEventRepository {
     );
     return result.insertId;
   }
+  async exists(
+    reported_event_by_id_user: number,
+    reported_event_id_event: number,
+  ) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT * FROM reported_event WHERE reported_event_by_id_user = ? AND reported_event_id_event = ? AND reported_event_date > NOW() - INTERVAL 72 HOUR",
+      [reported_event_by_id_user, reported_event_id_event],
+    );
+    return rows.length > 0;
+  }
 }
 export default new reportEventRepository();
