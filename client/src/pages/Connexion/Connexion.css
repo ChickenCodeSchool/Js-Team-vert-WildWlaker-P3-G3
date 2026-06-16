@@ -4,254 +4,237 @@ body {
   font-family: "Be Vietnam Pro", sans-serif;
 }
 
+.navbar-connexion {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .nav-connexion {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #ff7e5f;
+
+    img {
+      width: 35px;
+      height: 35px;
+    }
+
+    h1 {
+      font-size: 22px;
+    }
+  }
+}
+
 .connection-section {
   display: flex;
   justify-content: center;
   margin: 5vh 20vw;
   border-radius: 20px;
-  box-shadow: 0px 15px 50px rgba(0, 0, 0, 0.207);
-}
+  background: white;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.207);
 
-.navbar-connexion {
-  width: 100%;
-  margin-top: 20px;
-  align-items: center;
-  display: flex;
-  justify-content: center;
+  .connection-img-text {
+    position: relative;
+    display: inline-block;
 
-  img {
-    width: 35px;
-    height: 35px;
+    .connection-img {
+      width: 30vw;
+      border-radius: 20px 0 0 20px;
+      display: block;
+    }
+
+    .connection-text {
+      position: absolute;
+      bottom: 0;
+      color: white;
+      margin: 6vh;
+      font-size: 20px;
+
+      p {
+        margin-top: 5px;
+        font-size: 10px;
+      }
+    }
   }
 
-  h1 {
-    font-size: 22px;
-  }
-  .nav-connexion {
-    text-decoration: none;
-    font-size: 22px;
-    color: #ff7e5f;
+  .connection-content {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    background-color: white;
+    margin: 0 2vw;
+    border-radius: 0 20px 20px 0;
+    width: 30vw;
+
+    .wel-para-title {
+      margin: 10vh 2vw 0;
+
+      h2 {
+        font-size: 40px;
+      }
+
+      p {
+        font-size: 17px;
+      }
+    }
+
+    .email-input-label,
+    .password-input-label {
+      margin: 2vh 2vw;
+
+      label {
+        font-size: 12px;
+        font-weight: 700;
+      }
+    }
+
+    .password-forget {
+      font-size: 12px;
+      margin-left: 6vw;
+      color: brown;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .container-password {
+      position: relative;
+      width: 100%;
+
+      button {
+        background: transparent;
+        border: none;
+        position: absolute;
+        right: 15px;
+        top: 60%;
+        transform: translateY(-50%);
+        cursor: pointer;
+
+        img {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+
+    .email-input,
+    .password-input {
+      width: 100%;
+      height: 50px;
+      margin-top: 8px;
+      padding: 0 45px 0 15px;
+      border-radius: 10px 10px 0 0;
+      background: var(--input-color);
+      border: 1px solid var(--border-color);
+    }
+
+    .input-focus:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    .button-connection-submit {
+      margin: 1vh 2vw;
+      padding: 10px;
+      border-radius: 20px;
+      border: none;
+      background: var(--button-color);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: var(--button-color-disable);
+        color: var(--font-button-color-disable);
+      }
+    }
+
+    .register-link-connection {
+      text-align: center;
+
+      .register-link {
+        text-decoration: none;
+        color: brown;
+      }
+    }
+
+    .error {
+      color: #ff3b3b;
+      font-size: 12px;
+      margin-top: 6px;
+      margin-left: 2px;
+    }
   }
 }
 
-.connection-img {
-  width: 30vw;
-  border-radius: 20px 0 0 20px;
-}
-
-.connection-img-text {
-  position: relative;
-  display: inline-block;
-}
-
-.connection-img-text img {
-  display: block;
-}
-
-.connection-text {
-  position: absolute;
-  bottom: 0;
-  color: white;
-  margin: 6vh;
-  font-size: 20px;
-}
-
-.connection-parag {
-  margin-top: 5px;
-  font-size: 10px;
-}
-
-.connection-img-text p {
-  font-size: 10px;
-}
-
-.connection-content {
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  margin: 0 2vw;
-  border-radius: 0 20px 20px 0;
-  width: 30vw;
-}
-
-.title-connection {
-  text-align: center;
-  margin: 20px;
-}
-
-.wel-para-title {
-  margin: 10vh 2vw 0 2vw;
-}
-
-.Welcome-title {
-  font-size: 40px;
-}
-
-.Welcome-para {
-  font-size: 17px;
-}
-
-.email-input-label {
-  margin: 5vh 2vw 1vh 2vw;
-}
-
-.password-input-label {
-  margin: 1vh 2vw;
-}
-
-.container-password {
-  position: relative;
-  width: 100%;
-}
-
-.email-input,
-.password-input {
-  margin-top: 8px;
-  width: 100%;
-  height: 50px;
-  padding: 0 45px 0 15px;
-  border-radius: 10px 10px 0 0;
-  background: var(--input-color);
-  border: 1px solid var(--border-color);
-}
-.email-connexion,
-.password-connexion {
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.input-focus:focus {
-  outline: none;
-  border: 1px solid var(--border-color);
-  box-shadow: none;
-}
-
-.container-password button {
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  position: absolute;
-  right: 10px;
-  top: 40%;
-  transform: translateY(-50%);
-  cursor: pointer;
-}
-
-.button-connection-submit {
-  margin: 1vh 2vw;
-  padding: 10px;
-  border-radius: 20px;
-  border: none;
-  background: var(--button-color);
-  color: white;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.button-connection-submit:active {
-  transform: scale(0.95);
-}
-
-.button-connection-submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  background: var(--button-color-disable);
-  color: var(--font-button-color-disable);
-}
 ::placeholder {
   color: var(--font-placeholder);
 }
-.password-forget {
-  font-size: 12px;
-  margin-left: 6vw;
-  color: brown;
-  font-weight: 600;
-  text-decoration: none;
-}
 
-.register-link {
-  text-decoration: none;
-  color: brown;
-}
-
-.error {
-  color: #ff3b3b;
-  font-size: 12px;
-  margin-top: 6px;
-  margin-left: 2px;
-}
-
-.success {
-  color: #2ecc71;
-  font-size: 12px;
-  margin-top: 6px;
-  margin-left: 2px;
-}
 @media screen and (max-width: 768px) {
   .connection-section {
     flex-direction: column;
     margin: 20px;
-  }
 
-  .connection-img,
-  .connection-content {
-    width: 100%;
-  }
+    .connection-img-text {
+      .connection-img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 20px 20px 0 0;
+      }
 
-  .connection-img {
-    height: 250px;
-    object-fit: cover;
-    border-radius: 20px 20px 0 0;
-  }
+      .connection-text {
+        margin: 20px;
+        font-size: 16px;
 
-  .connection-content {
-    margin: 0;
-    border-radius: 0 0 20px 20px;
-    padding-bottom: 20px;
-  }
+        p {
+          font-size: 12px;
+        }
+      }
+    }
 
-  .connection-text {
-    margin: 20px;
-    font-size: 16px;
-    text-shadow: 2px 10px 5px rgba(0, 0, 0, 0.5);
-  }
+    .connection-content {
+      width: 100%;
+      margin: 0;
+      border-radius: 0 0 20px 20px;
+      padding-bottom: 20px;
 
-  .connection-parag {
-    font-size: 12px;
-  }
+      .wel-para-title {
+        margin: 2vh 5vw;
 
-  .connection-img-text p {
-    font-size: 12px;
-  }
+        h2 {
+          font-size: 28px;
+        }
 
-  .Welcome-title {
-    font-size: 28px;
-  }
+        p {
+          font-size: 14px;
+        }
+      }
+      .email-input-label,
+      .password-input-label {
+        margin: 2vh 5vw;
 
-  .Welcome-para {
-    font-size: 14px;
-  }
+        label {
+          font-size: 12px;
+          font-weight: 700;
+        }
+      }
+      .button-connection-submit {
+        width: 90%;
+        margin: 15px auto;
+      }
 
-  .wel-para-title,
-  .email-input-label,
-  .password-input-label {
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-
-  .button-connection-submit {
-    width: 90%;
-    margin: 15px 20px;
-  }
-
-  .register-link-connection {
-    margin-bottom: 20px;
-  }
-
-  .password-forget {
-    margin-left: 27vw;
+      .password-forget {
+        margin-left: 26vw;
+      }
+    }
   }
 }

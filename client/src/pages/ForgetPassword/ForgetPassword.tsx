@@ -6,36 +6,43 @@ import logo from "../../assets/images/logo-wedoo.png";
 
 function ForgetPassword() {
   const [identifier, setIdentifier] = useState("");
-  const [submitted, _setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const navigate = useNavigate();
 
   const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
   const isUsername = identifier.trim().length >= 3;
   const identifierValid = isEmail || isUsername;
-  const formValid = identifierValid;
 
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMessage("");
 
-    const res = await fetch("http://localhost:3310/api/auth/forgot-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ identifier }),
-    });
+    try {
+      const res = await fetch(
+        "http://localhost:3310/api/auth/forgot-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ identifier }),
+        },
+      );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.message);
-      return;
+      if (!res.ok) {
+        setErrorMessage(data.message || "Erreur serveur");
+        return;
+      }
+
+      alert("Un email de réinitialisation a été envoyé.");
+
+      navigate("/connexion");
+    } catch {
+      setErrorMessage("Erreur serveur");
     }
-
-    alert("Un email de réinitialisation a été envoyé.");
-
-    navigate("/connexion");
   };
 
   return (
@@ -52,9 +59,10 @@ function ForgetPassword() {
         <div className="forgetPassword-img-text">
           <img
             src={connexionImg}
-            alt="forgetPassword-img"
+            alt="forgetPassword"
             className="forgetPassword-img"
           />
+
           <div className="forgetPassword-text">
             <h2>Facilitez vos prochains événements.</h2>
             <p className="forgetPassword-parag">
@@ -71,28 +79,23 @@ function ForgetPassword() {
             </p>
           </div>
           <div className="email-input-label-forgetPassword">
-            <label htmlFor="email" className="email-forgetPassword">
-              Pseudo ou Email
-            </label>
-            <br />
+            <label htmlFor="id">Pseudo ou Email</label>
             <input
               type="text"
               placeholder="Entrez votre pseudo ou email"
-              required
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
-              className={`input-focus email-input-forgetPassword ${submitted && !identifierValid ? "input-error" : ""}`}
+              className="input-focus email-input-forgetPassword"
             />
-            {identifier && (
-              <p className={identifierValid ? "success" : "error"}>
-                {identifierValid ? "" : "✗ Pseudo ou Adresse mail incorrect"}
-              </p>
+            {identifier && !identifierValid && (
+              <p className="error">✗ Pseudo ou adresse email invalide</p>
             )}
           </div>
+          {errorMessage && <p className="error">{errorMessage}</p>}
           <button
             type="submit"
             className="button-forgetPassword-submit"
-            disabled={!formValid}
+            disabled={!identifierValid}
           >
             Envoyer
           </button>
@@ -103,10 +106,9 @@ function ForgetPassword() {
             </Link>
           </h5>
           <h5 className="register-link-connection-forgetPassword">
-            Pas encore inscrit ?{""}
+            Pas encore inscrit ?{" "}
             <Link to="/register" className="register-link-forgetPassword">
-              {" "}
-              Rejoins nous ici
+              Rejoins-nous ici
             </Link>
           </h5>
         </form>

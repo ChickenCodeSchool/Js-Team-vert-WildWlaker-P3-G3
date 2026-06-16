@@ -17,6 +17,7 @@ body {
   border-radius: 20px;
   box-shadow: 0px 15px 50px rgba(0, 0, 0, 0.207);
   max-width: 1100px;
+  background: white;
 }
 .navbar-register {
   width: 100%;
