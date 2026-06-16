@@ -61,10 +61,10 @@ const browseEvent: RequestHandler = async (req, res, next) => {
 
 const create: RequestHandler = async (req, res, next) => {
   try {
-    const event = Number(req.query.id_event);
-    const user = Number(req.query.id_user);
-    const name = String(req.query.name);
-    const price = Number(req.query.price);
+    const event = Number(req.body.id_event);
+    const user = Number(req.body.id_user);
+    const name = String(req.body.name);
+    const price = Number(req.body.price);
 
     const budget = await budgetRepository.create(event, user, name, price);
 
@@ -78,9 +78,9 @@ const create: RequestHandler = async (req, res, next) => {
 
 const update: RequestHandler = async (req, res, next) => {
   try {
-    const id_budget = Number(req.query.id_budget);
-    const name = String(req.query.name);
-    const price = Number(req.query.price);
+    const id_budget = Number(req.body.id_budget);
+    const name = String(req.body.name);
+    const price = Number(req.body.price);
 
     const budget = await budgetRepository.update(id_budget, name, price);
 

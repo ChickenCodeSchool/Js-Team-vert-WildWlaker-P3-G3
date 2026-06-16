@@ -8,105 +8,105 @@
 }
 
 .budget {
-  /* -- Mobile -- */
-  @media screen and (max-width: 429px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* -- Desktop -- */
-  @media screen and (min-width: 429px) {
-    width: 75vw;
-    height: 90vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    margin-left: 5vw;
-  }
-
-  header {
-    /* -- Mobile -- */
-    @media screen and (max-width: 429px) {
-      display: flex;
-      width: 100%;
-      justify-content: center;
-      align-items: center;
-
-      h1 {
-        color: var(--font-darkBrown);
-        font-size: 6vw;
-      }
-    }
-
-    /* -- Desktop -- */
-    @media screen and (min-width: 429px) {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      h1 {
-        color: var(--font-darkBrown);
-        font-size: 3vw;
-      }
-    }
-
-    button {
-      height: 40px;
-      border-radius: 50px;
-      background: var(--button-color);
-      border-style: none;
-      color: var(--bg-neutral);
-      font-family: "Be Vietnam Pro", sans-serif;
-      font-weight: 400;
-      font-style: normal;
-      padding: 10px;
-
-      display: flex;
-      align-items: center;
-      gap: 5px;
-
-      margin-right: 5vw;
-
-      box-shadow: 0 4px 8px rgba(108, 39, 13, 0.776);
-
-      /* -- Mobile -- */
-      @media screen and (max-width: 429px) {
-        display: none;
-      }
-    }
-  }
+  background: var(--bg-color);
+  padding: 2rem 3rem;
+  gap: 2rem;
 
   .myBalance {
-    /* -- Mobile -- */
-    @media screen and (max-width: 429px) {
-      display: flex;
-      justify-content: center;
-      font-size: 1rem;
-      width: 100%;
-    }
-
-    /* -- Desktop -- */
-    @media screen and (min-width: 429px) {
-      width: 90%;
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      grid-template-rows: 100%;
-      grid-gap: 3vw;
-      font-size: 1.5rem;
-    }
-
     .myBalanceBox {
       background: linear-gradient(135deg, #ff7b5a, #b94424);
       border-radius: 22px;
       padding: 24px 32px;
       color: var(--bg-neutral);
 
-      /* -- Mobile -- */
-      @media screen and (max-width: 429px) {
+      small {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        gap: 5px;
+      }
+    }
+  }
+
+  .positif {
+    color: var(--font-green);
+  }
+
+  .negatif {
+    color: var(--font-red);
+  }
+
+  .expensesAndBalance {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 2rem;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      section {
+        display: flex;
+        flex-direction: column;
+
+        article {
+          background: var(--bg-neutral);
+          padding: 20px;
+          border-bottom-color: var(--bg-neutral);
+          font-weight: bold;
+
+          display: flex;
+          justify-content: space-between;
+        }
+
+        :first-child {
+          border-top-left-radius: 15px;
+          border-top-right-radius: 15px;
+        }
+
+        :last-child {
+          border-bottom-left-radius: 15px;
+          border-bottom-right-radius: 15px;
+          border-bottom-color: var(--beige-color);
+        }
+      }
+    }
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media screen and (max-width: 429px) {
+  .budget {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    header {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+
+      h1 {
+        color: var(--font-brown);
+        font-size: 6vw;
+      }
+
+      button {
+        display: none;
+      }
+    }
+
+    .myBalance {
+      display: flex;
+      justify-content: center;
+      font-size: 1rem;
+      width: 100%;
+
+      .myBalanceBox {
         width: 80%;
 
         h2 {
@@ -116,11 +116,151 @@
         }
       }
 
-      /* -- Desktop -- */
-      @media screen and (min-width: 429px) {
-        height: 70%;
-        box-shadow: 0 14px 24px rgba(118, 23, 1, 0.718), 0 4px 8px
-          rgba(108, 39, 13, 0.776);
+      .total {
+        display: none;
+      }
+    }
+
+    .addButton {
+      color: black;
+      background: var(--hover-color);
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+
+      display: flex;
+      align-self: flex-end;
+
+      position: fixed;
+      bottom: 10vh;
+    }
+
+    .expensesAndBalance {
+      align-self: center;
+
+      .expenses {
+        .mobileExpenses {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          margin-top: 5vh;
+          margin-bottom: 10px;
+
+          h5 {
+            font-size: 1.5rem;
+            margin: 0;
+          }
+
+          button {
+            border-style: none;
+            background: none;
+            color: rgb(225, 178, 27);
+          }
+
+          .icons {
+            display: none;
+          }
+        }
+      }
+
+      .balance {
+        display: none;
+      }
+    }
+  }
+}
+
+/* ---------- Desktop ---------- */
+@media screen and (min-width: 429px) {
+  .budget {
+    width: 75vw;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    /*align-items: flex-start;
+    justify-content: center;*/
+
+    header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      h1 {
+        color: var(--font-brown);
+        font-size: 3vw;
+        font-weight: 600;
+      }
+
+      button {
+        height: 40px;
+        border-radius: 50px;
+        background: var(--button-color);
+        border-style: none;
+        color: var(--bg-neutral);
+        font-family: "Be Vietnam Pro", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        padding: 10px;
+
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        margin-right: 5vw;
+
+        box-shadow: 0 4px 8px rgba(108, 39, 13, 0.776);
+      }
+    }
+
+    .createForm {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      justify-content: center;
+
+      input {
+        padding: 12px;
+        border: 2px solid var(--beige-color);
+        border-radius: 10px;
+        outline: none;
+        transition: 0.2s;
+
+        &:focus {
+          border-color: var(--font-brown);
+          box-shadow: 0 0 5px rgba(185, 68, 36, 0.3);
+        }
+      }
+
+      button {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 10px;
+        background: var(--color-chat);
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+
+        &:hover {
+          background: var(--font-brown);
+        }
+      }
+    }
+
+    .myBalance {
+      /*width: 90%;*/
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 100%;
+      gap: 3rem;
+      font-size: 1.5rem;
+      align-items: stretch;
+      margin-left: 3vw;
+
+      .myBalanceBox {
+        height: 80%;
+        background: linear-gradient(135deg, #ff8a6a, #c24a2d);
+        box-shadow: 0 12px 30px rgba(100 35 19 / 65%);
 
         h2 {
           font-size: 5vw;
@@ -128,26 +268,10 @@
         }
       }
 
-      small {
-        display: flex;
-        align-items: center;
-        flex-direction: row;
-        gap: 5px;
-      }
-    }
-
-    .total {
-      /* -- Mobile -- */
-      @media screen and (max-width: 429px) {
-        display: none;
-      }
-
-      /* -- Desktop -- */
-      @media screen and (min-width: 429px) {
+      .total {
         display: flex;
         flex-direction: column;
-        gap: 4vh;
-        margin-left: 3vw;
+        gap: 16px;
         font-size: 1.2rem;
 
         h3 {
@@ -181,72 +305,37 @@
         }
       }
     }
-  }
 
-  .positif {
-    color: var(--font-green);
-  }
-
-  .negatif {
-    color: var(--font-red);
-  }
-
-  .expensesAndBalance {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: row;
-
-    /* -- Mobile -- */
-    @media screen and (max-width: 429px) {
-      align-self: center;
+    .addButton {
+      display: none;
     }
 
-    /* -- Desktop -- */
-    @media screen and (min-width: 429px) {
+    .expensesAndBalance {
       align-self: start;
-      margin-left: 4vw;
-      width: 80%;
-    }
+      margin-left: 3vw;
 
-    /* -- Mobile -- */
-    @media screen and (max-width: 429px) {
-      .expenses {
-        .mobileExpenses {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          margin-top: 5vh;
-          margin-bottom: 10px;
-
-          h5 {
-            font-size: 1.5rem;
-            margin: 0;
-          }
-
-          button {
-            border-style: none;
-            background: none;
-            color: rgb(225, 178, 27);
-          }
-
-          .icons {
-            display: none;
-          }
-        }
+      h5 {
+        font-size: 2rem;
       }
-    }
 
-    /* -- Desktop -- */
-    @media screen and (min-width: 429px) {
       .expenses {
+        width: 30vw;
+
         button {
           display: none;
         }
 
         section {
-          height: 30vh;
+          height: 25vh;
           overflow-y: auto;
+
+          input {
+            padding: 5px 10px;
+            border: 1px solid;
+            border-radius: 8px;
+            font-weight: bold;
+            width: 120px;
+          }
 
           span {
             display: flex;
@@ -257,7 +346,8 @@
               display: flex;
               flex-direction: row;
               color: black;
-              visibility: hidden;
+              width: 3vw;
+              height: auto;
             }
 
             .Noicons {
@@ -265,99 +355,21 @@
               flex-direction: row;
               color: black;
               visibility: hidden;
-            }
-          }
-
-          :hover {
-            .icons {
-              visibility: visible;
+              width: 3vw;
+              height: auto;
             }
           }
         }
       }
-    }
 
-    .balance {
-      /* -- Mobile -- */
-      @media screen and (max-width: 429px) {
-        display: none;
-      }
-    }
+      .balance {
+        width: 25vw;
 
-    div {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-
-      /* -- Desktop -- */
-      @media screen and (min-width: 429px) {
-        h5 {
-          font-size: 2rem;
-          margin-top: 10vh;
-          margin-bottom: 10px;
+        section {
+          height: 25vh;
+          overflow-y: auto;
         }
       }
-
-      section {
-        display: flex;
-        flex-direction: column;
-
-        article {
-          background: var(--bg-neutral);
-          padding: 20px;
-          border-bottom-color: var(--bg-neutral);
-          font-weight: bold;
-
-          display: flex;
-          justify-content: space-between;
-
-          /* -- Mobile -- */
-          @media screen and (max-width: 429px) {
-            gap: 10vw;
-          }
-          /* -- Laptop -- */
-          @media screen and (max-width: 1249px) and (min-width: 429px) {
-            gap: 2vw;
-          }
-          /* -- Desktop -- */
-          @media screen and (min-width: 1249px) {
-            gap: 10vw;
-          }
-        }
-
-        :first-child {
-          border-top-left-radius: 15px;
-          border-top-right-radius: 15px;
-        }
-
-        :last-child {
-          border-bottom-left-radius: 15px;
-          border-bottom-right-radius: 15px;
-          border-bottom-color: var(--beige-color);
-        }
-      }
-    }
-  }
-
-  .addButton {
-    /* -- Mobile -- */
-    @media screen and (max-width: 429px) {
-      color: black;
-      background: var(--hover-color);
-      border: none;
-      border-radius: 10px;
-      padding: 10px;
-
-      display: flex;
-      align-self: flex-end;
-
-      position: fixed;
-      bottom: 10vh;
-    }
-
-    /* -- Desktop -- */
-    @media screen and (min-width: 429px) {
-      display: none;
     }
   }
 }
