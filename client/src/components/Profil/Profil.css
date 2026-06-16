@@ -3,199 +3,191 @@
   z-index: 1000;
   right: 30px;
   top: 30px;
+
   .button {
     cursor: pointer;
-    border-style: none;
+    border: none;
     background: none;
+
     img {
-      width: 70px;
-      height: 70px;
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
       object-fit: cover;
-      object-position: center;
+      border: 3px solid white;
     }
   }
 
   .modal-overlay {
-    .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 110px 30px 0 0;
+    z-index: 999;
+  }
+
+  .modal {
+    position: absolute;
+    right: 42vw;
+    width: 320px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    animation: modalPop 0.25s ease;
+    img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid white;
+    }
+    h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      min-height: 44px;
+      border: none;
+      border-radius: 14px;
+      background: #f4f4f5;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      background: #111827;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .change-pseudo,
+    .sub-modal {
+      background: #fafafa;
+      border-radius: 16px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       gap: 10px;
-      width: 16vw;
-      min-height: 30vh;
-      padding: 0;
-      .change-pseudo {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        button:hover {
-          color: orangered;
-        }
+    }
 
-        .error-message {
-          color: red;
-          font-size: 12px;
-          margin: 0;
-        }
-      }
-      .sub-modal {
-        button:hover {
-          color: orangered;
-        }
-        .hidden-input {
-          display: none;
-        }
+    input {
+      width: 100%;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      padding: 0 10px;
+      outline: none;
+    }
 
-        .custom-upload {
-          cursor: pointer;
-          font-size: 13px;
-          padding: 0;
-          border-radius: 10px;
-        }
-        .custom-upload:hover {
-          cursor: pointer;
-          color: orangered;
-        }
-      }
-      h2 {
-        margin: 0;
-        padding: 15px 0 15px 0;
-      }
+    input:focus {
+      border-color: orangered;
+    }
 
-      button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: none;
-        border-style: none;
-        cursor: pointer;
-        gap: 5px;
-        width: 100%;
-        /* svg {
-        } */
-      }
+    .custom-upload {
+      cursor: pointer;
+      background: #111827;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
 
-      .deconnexion-event {
-        color: red;
-        padding: 10px 0 10px 0;
-        cursor: pointer;
-        /* svg {
-        } */
-      }
+    .hidden-input {
+      display: none;
+    }
 
-      .fermer {
-        width: 30%;
-        padding-bottom: 10px;
-      }
-      .sub-modal {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        align-items: center;
-        justify-content: center;
-        /* h3 {
-        } */
-        input {
-          border-radius: 6px;
-          display: flex;
-          flex-direction: column;
-        }
-        .photo-preview {
-          width: 100px;
-          height: 100px;
-          border-radius: 50%;
-          object-fit: cover;
-          object-position: center;
-        }
-      }
+    .photo-preview {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid white;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .error-message {
+      color: red;
+      font-size: 12px;
+      margin: 0;
+    }
+
+    .deconnexion-event {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .deconnexion-event:hover {
+      background: #dc2626;
+      color: white;
+    }
+
+    .fermer {
+      background: transparent;
+      color: #6b7280;
+    }
+
+    .fermer:hover {
+      background: #e5e7eb;
+      color: black;
     }
   }
 }
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @media screen and (max-width: 428px) {
   .profil {
     right: 16px;
     top: 16px;
 
-    .button {
-      img {
-        width: 50px;
-        height: 50px;
-      }
+    .button img {
+      width: 52px;
+      height: 52px;
     }
 
     .modal-overlay {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 0, 0.25);
-      z-index: 1000;
+      align-items: center;
+      padding: 0;
+    }
 
-      .modal {
-        width: 85vw;
-        min-height: auto;
-        max-height: 80vh;
-        padding: 20px 16px;
-        overflow-y: auto;
-        border-radius: 16px;
-        background: white;
+    .modal {
+      width: 88vw;
+      max-height: 82vh;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
 
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar {
-          display: none;
-        }
-
-        h2 {
-          font-size: 20px;
-          padding: 10px 0;
-        }
-
-        button {
-          font-size: 14px;
-          padding: 8px 0;
-        }
-
-        .change-pseudo {
-          width: 100%;
-
-          input {
-            width: 100%;
-            height: 36px;
-            padding-left: 8px;
-          }
-        }
-
-        .sub-modal {
-          width: 100%;
-
-          input {
-            width: 100%;
-            height: 36px;
-            padding-left: 8px;
-          }
-
-          .photo-preview {
-            width: 80px;
-            height: 80px;
-          }
-
-          .custom-upload {
-            font-size: 14px;
-          }
-        }
-
-        .deconnexion-event {
-          padding: 12px 0;
-        }
-
-        .fermer {
-          width: 50%;
-        }
-      }
+    .modal::-webkit-scrollbar {
+      display: none;
     }
   }
 }

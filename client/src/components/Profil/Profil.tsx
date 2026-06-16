@@ -6,6 +6,7 @@ import { ShieldUser, User } from "lucide-react";
 import { LogOut } from "lucide-react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useRef } from "react";
 import { useLocation, useNavigate } from "react-router";
 
 function Profil() {
@@ -21,6 +22,7 @@ function Profil() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const isAdminPage = location.pathname === "/admin";
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
@@ -80,7 +82,12 @@ function Profil() {
     }
 
     setProfilePicture(data.photoUrl);
-    alert("Photo uploadée avec succès");
+    setPhoto(null);
+    setPreview("");
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   }
 
   async function updateUserName(user_name: string, user_id: number) {
@@ -148,7 +155,10 @@ function Profil() {
             }}
           >
             <h2>Parametre du profil</h2>
-
+            <img
+              src={`http://localhost:3310${profilePicture}`}
+              alt="photo-profil"
+            />
             <button
               type="button"
               onClick={() => setActiveModal("Changer le pseudo")}
@@ -160,6 +170,7 @@ function Profil() {
             {activeModal === "Changer le pseudo" && (
               <div className="change-pseudo">
                 <input
+                  ref={fileInputRef}
                   type="text"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
