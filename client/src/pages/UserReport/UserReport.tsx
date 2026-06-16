@@ -36,6 +36,9 @@ function UserReport() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const userJson = localStorage.getItem("user");
+    const user = userJson ? JSON.parse(userJson) : null;
+
     if (!repType || !repDetail || repEvidence.length === 0) {
       alert("Veuillez remplir les champs pour envoyer votre demande.");
       return;
@@ -47,7 +50,8 @@ function UserReport() {
       case "utilisateur": {
         const formData = new FormData();
         formData.append("reported_user_description", repDetail);
-        formData.append("reported_user_by_id_user", reportedUserId.toString());
+        formData.append("reported_user_id_user", reportedUserId.toString());
+        formData.append("reported_user_by_id_user", user?.id?.toString() ?? "");
         for (const file of repEvidence) {
           formData.append("reported_user_image", file);
         }
@@ -60,7 +64,10 @@ function UserReport() {
       case "evenement": {
         const formData = new FormData();
         formData.append("reported_event_description", repDetail);
-        formData.append("reported_event_by_id_user", "");
+        formData.append(
+          "reported_event_by_id_user",
+          user?.id?.toString() ?? "",
+        );
         for (const file of repEvidence) {
           formData.append("reported_event_image", file);
         }
@@ -73,7 +80,7 @@ function UserReport() {
       case "bug": {
         const formData = new FormData();
         formData.append("reported_bug_description", repDetail);
-        formData.append("reported_bug_by_id_user", "");
+        formData.append("reported_bug_by_id_user", user?.id?.toString() ?? "");
         for (const file of repEvidence) {
           formData.append("reported_bug_image", file);
         }
