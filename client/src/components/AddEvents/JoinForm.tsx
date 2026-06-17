@@ -16,12 +16,6 @@ function JoinForm({ onClose, onEventCreated }: JoinFormProps) {
     inputRef.current?.focus();
   }, []); // le inputRef et useEffect met directement le curseur dans le champs
 
-  useEffect(() => {
-    if (code.trim().length === 6) {
-      submitCode();
-    }
-  }, [code]); // ca verifie le code des qu'il a 6 caracteres de rentrés
-
   const submitCode = async () => {
     if (isLoading) return;
     setIsLoading(true);

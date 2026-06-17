@@ -1,0 +1,131 @@
+.ModalEditEvent-Backdrop {
+  border: none;
+  border-radius: 2rem;
+  background: transparent;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.ModalEditEvent-Backdrop::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+}
+.ModalEditEvent-Global {
+  padding: 3rem 2rem;
+  width: 35rem;
+  min-height: 30rem;
+  background: var(--bg-color);
+  border-radius: 2rem;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  .ModalEditEvent-Title {
+    font-size: x-large;
+    color: var(--font-title);
+  }
+  .ModalEditEvent-Field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    .ModalEditEvent-Input {
+      height: 2rem;
+      border: 1px solid var(--border-color);
+      padding-left: 0.5rem;
+      border-radius: 0.5rem 0.5rem 0 0;
+      background: var(--input-color);
+      color: var(--font-input);
+      &::placeholder {
+        color: var(--font-placeholder);
+      }
+    }
+    .ModalEditEvent-Input:focus {
+      outline: none;
+    }
+    .ModalEditEvent-DateGlobal {
+      display: flex;
+      justify-content: space-between;
+      .ModalEditEvent-Date {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        .ModalEditEvent-DateInput {
+          background: var(--input-color);
+          color: var(--font-input);
+          width: 13rem;
+          height: 2rem;
+          padding-left: 0.5rem;
+          border: 1px solid var(--border-color);
+          border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .ModalEditEvent-DateInput:focus {
+          outline: none;
+        }
+      }
+    }
+    .ModalEditEvent-TextArea {
+      background: var(--input-color);
+      color: var(--font-input);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem 0.5rem 0 0;
+      padding-left: 0.5rem;
+      padding-top: 0.2rem;
+      resize: vertical;
+    }
+    .ModalEditEvent-ImageGlobal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      .ModalEditEvent-Preview {
+        width: 16rem;
+        height: 12rem;
+        border-radius: 1rem;
+      }
+      .ModalEditEvent-ImageButton {
+        width: 15rem;
+        height: 2rem;
+        border-radius: 5rem;
+        border: none;
+        box-shadow: 1px 1px 5px black;
+        transition: transform 0.2s;
+      }
+      .ModalEditEvent-ImageButton:hover {
+        transform: scale(0.95);
+      }
+    }
+  }
+  .ModalEditEvent-Footer {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    .ModalEditEvent-ButtonCancel {
+      height: 2rem;
+      width: 12rem;
+      border-radius: 5rem;
+      background: var(--button-color-disable);
+      color: var(--font-title);
+      border: none;
+      box-shadow: 1px 1px 5px black;
+      transition: transform 0.2s;
+    }
+    .ModalEditEvent-ButtonCancel:hover {
+      transform: scale(0.95);
+    }
+    .ModalEditEvent-ButtonSubmit {
+      height: 2rem;
+      width: 12rem;
+      border-radius: 5rem;
+      background: linear-gradient(to right, #ff7e5f, #a53b22);
+      color: var(--font-neutral);
+      border: none;
+      box-shadow: 1px 1px 5px black;
+      transition: transform 0.2s;
+    }
+    .ModalEditEvent-ButtonSubmit:hover {
+      transform: scale(0.95);
+    }
+  }
+}
