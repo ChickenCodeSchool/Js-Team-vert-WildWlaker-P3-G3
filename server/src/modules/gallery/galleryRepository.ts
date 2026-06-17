@@ -81,7 +81,7 @@ class GalleryRepository {
       eventRows.length > 0 && eventRows[0].event_host_id === user_id;
 
     const [joiningRows] = await databaseClient.query<Rows>(
-      "SELECT COUNT(*) AS total FROM event_user_joining WHERE joining_id_event = ? AND joining_id_user = ?",
+      "SELECT COUNT(*) AS total FROM event_user_joining WHERE euj_id_event = ? AND euj_id_user = ?",
       [gallery_id_event, user_id],
     );
     const isParticipant = joiningRows.length > 0 && joiningRows[0].total > 0;
