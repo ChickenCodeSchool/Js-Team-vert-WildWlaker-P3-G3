@@ -27,7 +27,11 @@ class EventRepository {
         linkKey,
       ],
     );
-    return result.insertId;
+    const eventId = result.insertId;
+
+    await this.joinEvent(eventId, event.event_host_id);
+
+    return eventId;
   }
   async read(id: number) {
     const [rows] = await databaseClient.query<Rows>(
