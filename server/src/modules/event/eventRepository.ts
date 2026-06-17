@@ -64,10 +64,28 @@ class EventRepository {
       [eventId, userId],
     );
   }
-  async updatePicture(eventId: number, pictureUrl: string) {
+  async update(
+    eventId: number,
+    event: {
+      event_name: string;
+      event_date_start: string;
+      event_date_end: string;
+      event_description: string;
+      event_location: string;
+      event_picture?: string;
+    },
+  ) {
     await databaseClient.query<Result>(
-      "UPDATE event SET event_picture = ? WHERE event_id = ?",
-      [pictureUrl, eventId],
+      "UPDATE event SET event_name = COALESCE(?, event_name), event_date_start = COALESCE(?, event_date_start), event_date_end = COALESCE(?, event_date_end), event_description = COALESCE(?, event_description), event_location = COALESCE(?, event_location), event_picture = COALESCE (?, event_picture) WHERE event_id = ?",
+      [
+        event.event_name ?? null,
+        event.event_date_start ?? null,
+        event.event_date_end ?? null,
+        event.event_description ?? null,
+        event.event_location ?? null,
+        event.event_picture ?? null,
+        eventId,
+      ],
     );
   }
 }

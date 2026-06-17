@@ -48,9 +48,9 @@ export interface FilterProps {
   onFilterChange: (filter: FilterType) => void;
 }
 
-export interface ModalImagePickerProps {
+export interface ModalEditEventProps {
   isOpen: boolean;
   onClose: () => void;
-  images: string[];
-  onSelectImage: (imageUrl: string) => void;
+  event: EventData;
+  onEventUpdated: (updatedEvent: EventData) => void;
 }
