@@ -1,71 +1,96 @@
-.CardEvents-Global {
-  display: flex;
-  flex-direction: column;
-  width: 16rem;
-  border: none;
-  border-radius: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  background: var(--bg-neutral);
-  overflow: hidden;
-  margin-bottom: 3rem;
-  transition: transform linear 0.125s;
-  .CardEvents-ImageDate {
-    position: relative;
-    height: 12rem;
-    flex-shrink: 0;
+.CardEvents-Wrapper {
+  position: relative;
+  width: fit-content;
+  height: 100%;
+
+  .CardEvents-Global {
+    display: flex;
+    flex-direction: column;
+    width: 16rem;
+    height: 100%;
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    background: var(--bg-neutral);
     overflow: hidden;
-    .CardEvents-Image {
-      width: 100%;
-      height: 100%;
-      object-position: top;
-      display: block;
+    margin-bottom: 3rem;
+    transition: transform linear 0.125s;
+    text-decoration: none;
+    color: inherit;
+    .CardEvents-ImageDate {
+      position: relative;
+      height: 12rem;
+      flex-shrink: 0;
+      overflow: hidden;
+      .CardEvents-Image {
+        width: 100%;
+        height: 100%;
+        object-position: top;
+        display: block;
+        background: var(--bg-composant-dash);
+      }
+      .CardEvents-Date {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        top: 0.75rem;
+        right: 0.75rem;
+        width: 2.5rem;
+        height: 3rem;
+        background: var(--bg-color);
+        border-radius: 0.5rem;
+        border: 1px solid black;
+        .CardEvents-Date-Day {
+          color: var(--font-darkBrown);
+          font-size: 1.25rem;
+          font-weight: bold;
+        }
+        .CardEvents-Date-Month {
+          color: var(--font-gray);
+          font-size: 0.75rem;
+        }
+      }
     }
-    .CardEvents-Date {
-      position: absolute;
+    .CardEvents-Container {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      top: 0.75rem;
-      right: 0.75rem;
-      width: 2.5rem;
-      height: 3rem;
-      background: var(--bg-color);
-      border-radius: 0.5rem;
-      border: 1px solid black;
-      .CardEvents-Date-Day {
-        color: var(--font-darkBrown);
-        font-size: 1.25rem;
+      padding: 2rem 1rem 0 1rem;
+      gap: 0.5rem;
+      .CardEvents-Title {
+        font-size: 1.5rem;
+        font-weight: 400;
+      }
+      .CardEvents-Description {
+        color: var(--font-input);
+        font-size: 0.8rem;
+      }
+      .CardEvents-Location {
+        font-size: 0.8rem;
         font-weight: bold;
       }
-      .CardEvents-Date-Month {
-        color: var(--font-gray);
-        font-size: 0.75rem;
+      .CardEvents-Title,
+      .CardEvents-Description,
+      .CardEvents-Location {
+        text-align: left;
       }
     }
   }
-  .CardEvents-Container {
-    display: flex;
-    flex-direction: column;
-    padding: 2rem 1rem;
-    gap: 0.5rem;
-    .CardEvents-Title {
-      font-size: 1.5rem;
-      font-weight: 400;
-    }
-    .CardEvents-Description {
-      color: var(--font-input);
-      font-size: 0.8rem;
-    }
-    .CardEvents-Location {
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
-    .CardEvents-Title,
-    .CardEvents-Description,
-    .CardEvents-Location {
-      text-align: left;
-    }
+  .CardEvents-Edit {
+    position: absolute;
+    padding: 0.5rem;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    z-index: 1;
+    border-radius: 0.5rem;
+    border: none;
+    opacity: 0.5;
+    transition: opacity linear 0.2s;
+  }
+  .CardEvents-Edit:hover {
+    border: 1px;
+    opacity: 1;
   }
 }
 .CardEvents-Global:hover {

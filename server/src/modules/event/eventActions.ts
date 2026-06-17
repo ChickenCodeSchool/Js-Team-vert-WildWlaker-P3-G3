@@ -13,27 +13,6 @@ const browse: RequestHandler = async (req, res, next) => {
   }
 };
 
-const browseRandomImage: RequestHandler = (req, res, next) => {
-  try {
-    const dir = path.join(process.cwd(), "public/assets/images"); //ca donne le chemin des images
-    console.log("Chemin du dossier :", dir);
-    console.log("Fichiers trouvés :", fs.readdirSync(dir));
-    const files = fs
-      .readdirSync(dir)
-      .filter((f) => /\.(jpg|jpeg|png|webp|gif)$/i.test(f)); // ca verifie et prend les image avec ces formats
-
-    if (!files.length) {
-      res.status(404).json({ message: "Aucune image disponible." }); // tableau vide -> erreur
-      return;
-    }
-
-    const random = files[Math.floor(Math.random() * files.length)]; // fonction de random d'image
-    res.json({ url: `/assets/images/${random}` });
-  } catch (error) {
-    next(error);
-  }
-};
-
 const add: RequestHandler = async (req, res, next) => {
   const {
     event_name,
@@ -122,18 +101,31 @@ const browseImages: RequestHandler = (req, res, next) => {
   }
 };
 
-const editPicture: RequestHandler = async (req, res, next) => {
+const edit: RequestHandler = async (req, res, next) => {
   const eventId = Number(req.params.id);
-  const { event_picture } = req.body;
+  const {
+    event_name,
+    event_date_start,
+    event_date_end,
+    event_description,
+    event_location,
+  } = req.body;
 
-  if (!event_picture) {
-    res.status(400).json({ message: "Image requise." });
-    return;
-  }
+  const event_picture = req.file
+    ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
+    : undefined;
 
   try {
-    await eventRepository.updatePicture(eventId, event_picture);
-    res.json({ event_picture });
+    await eventRepository.update(eventId, {
+      event_name,
+      event_date_start,
+      event_date_end,
+      event_description,
+      event_location,
+      event_picture,
+    });
+    const updatedEvent = await eventRepository.read(eventId);
+    res.json(updatedEvent);
   } catch (error) {
     next(error);
   }
@@ -143,7 +135,6 @@ export default {
   browse,
   add,
   join,
-  browseRandomImage,
   browseImages,
-  editPicture,
+  edit,
 };

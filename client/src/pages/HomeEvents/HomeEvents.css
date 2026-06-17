@@ -13,8 +13,25 @@
     padding: 2rem 2rem 4rem 2rem;
   }
   .HomeEvents-CardGlobal {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 16rem);
+    align-items: stretch;
+    gap: 3rem;
+  }
+}
+
+@media screen and (max-width: 428px) {
+  .HomeEvents-NavBar {
+    height: 5rem;
+  }
+  .HomeEvents-Global {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+    .HomeEvents-FilterAdd {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 2rem;
+    }
   }
 }

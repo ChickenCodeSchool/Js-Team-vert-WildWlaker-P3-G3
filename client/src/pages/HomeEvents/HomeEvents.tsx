@@ -53,7 +53,7 @@ function HomeEvents() {
 
   return (
     <>
-      <header>
+      <header className="HomeEvents-NavBar">
         <NavBar />
       </header>
       <div className="HomeEvents-Global">

@@ -1,9 +1,6 @@
 .ModalAddEvent-Backdrop {
-  margin: 0;
-  box-sizing: 0;
   border: none;
   background: transparent;
-  padding: 0;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -32,5 +29,10 @@
   }
   .ModalAddEvent-Header {
     margin: 3rem;
+  }
+}
+@media screen and (max-width: 428px) {
+  .ModalAddEvent-Global {
+    width: 23rem;
   }
 }

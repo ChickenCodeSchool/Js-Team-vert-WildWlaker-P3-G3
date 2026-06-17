@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 
 import adminActions from "./modules/admin/adminActions";
+import budgetActions from "./modules/budget/budgetActions";
 import eventActions from "./modules/event/eventActions";
 import eventUserJoiningActions from "./modules/event_user_joining/eventUserJoiningActions";
 import galleryActions from "./modules/gallery/galleryActions";
@@ -45,10 +46,8 @@ router.put("/api/auth/change-password", userActions.changePassword);
 router.put("/api/users/:id", userActions.editUserName);
 router.put("/api/users/change-password", userActions.forgotPassword);
 router.get("/api/users/admin/:id", userActions.browseUserAdmin);
-// event routes
+
 // router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
-router.get("/api/events", eventActions.browse);
-router.post("/api/events", eventActions.add);
 
 // message routes
 router.get("/api/messages/:id", messageActions.browseMessagesByEventId);
@@ -60,16 +59,16 @@ router.get("/api/reservations/:id", reservationActions.browse);
 // item routes
 router.get("/api/items", itemActions.browse);
 router.get("/api/items/:id", itemActions.read);
+// > post
 router.post("/api/items", itemActions.add);
 
 // EventActions routes
 // router.get("/api/users/:id/events", userActions.getUserEvents);
 router.get("/api/events", eventActions.browse);
-router.get("/api/events/random-image", eventActions.browseRandomImage);
 router.get("/api/events/images", eventActions.browseImages);
 router.post("/api/events/join", eventActions.join);
 router.post("/api/events", eventActions.add);
-router.put("/api/events/:id/picture", eventActions.editPicture);
+router.put("/api/events/:id/", upload.single("picture"), eventActions.edit);
 
 // todoActions routes
 router.get("/api/todo/:eventId", todoActions.browse);
@@ -107,5 +106,18 @@ router.get("/api/admin/arrayUser", adminActions.readArrayUsers);
 router.get("/api/admin/arrayReport", adminActions.readArrayReport);
 router.get("/api/admin/events", adminActions.readAllEvents);
 router.get("/api/admin/users", adminActions.readAllUsers);
+
+// --> budget
+// > get
+router.get("/api/budget/:id", budgetActions.browse);
+router.get("/api/budget/:id/totalUsers", budgetActions.browseTotalUser);
+router.get("/api/budget/user/:id_event/:id_user", budgetActions.browseUser);
+router.get("/api/budget/event/:id", budgetActions.browseEvent);
+// > post
+router.post("/api/budget/add", budgetActions.create);
+// > put
+router.put("/api/budget/update", budgetActions.update);
+// > delete
+router.delete("/api/budget/:id", budgetActions.destroy);
 
 export default router;
