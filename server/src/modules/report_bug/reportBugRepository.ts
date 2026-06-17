@@ -27,5 +27,12 @@ class reportBugRepository {
     );
     return result.insertId;
   }
+  async exists(reported_bug_by_id_user: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT * FROM reported_bug WHERE reported_bug_by_id_user = ? AND reported_bug_date > NOW() - INTERVAL 24 HOUR",
+      [reported_bug_by_id_user],
+    );
+    return rows.length > 0;
+  }
 }
 export default new reportBugRepository();

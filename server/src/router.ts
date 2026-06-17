@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 
 import adminActions from "./modules/admin/adminActions";
+import budgetActions from "./modules/budget/budgetActions";
 import eventActions from "./modules/event/eventActions";
 import eventUserJoiningActions from "./modules/event_user_joining/eventUserJoiningActions";
 import galleryActions from "./modules/gallery/galleryActions";
@@ -30,11 +31,11 @@ router.get("/api/users/description/:id", userActions.readUserDescriptionEvent);
 // userActions.read -> à confirmer : profil utilisateur unique ?
 router.get("/api/users/:id", userActions.read);
 router.get("/api/users/:id/userAndBudget", userActions.browseUserAndBudget);
-router.get("/api/:id/photo", userActions.browsePhoto);
 // router.get("/:id", userActions.browse); browse pas declaré
 router.post("/api/users", userActions.add);
+router.get("/api/users/:id/photo", userActions.browsePhoto);
 router.post(
-  "/api/users/photo",
+  "/api/users/:id/photo",
   upload.single("photo"),
   userActions.uploadPhoto,
 );
@@ -58,6 +59,7 @@ router.get("/api/reservations/:id", reservationActions.browse);
 // item routes
 router.get("/api/items", itemActions.browse);
 router.get("/api/items/:id", itemActions.read);
+// > post
 router.post("/api/items", itemActions.add);
 
 // EventActions routes
@@ -104,5 +106,18 @@ router.get("/api/admin/arrayUser", adminActions.readArrayUsers);
 router.get("/api/admin/arrayReport", adminActions.readArrayReport);
 router.get("/api/admin/events", adminActions.readAllEvents);
 router.get("/api/admin/users", adminActions.readAllUsers);
+
+// --> budget
+// > get
+router.get("/api/budget/:id", budgetActions.browse);
+router.get("/api/budget/:id/totalUsers", budgetActions.browseTotalUser);
+router.get("/api/budget/user/:id_event/:id_user", budgetActions.browseUser);
+router.get("/api/budget/event/:id", budgetActions.browseEvent);
+// > post
+router.post("/api/budget/add", budgetActions.create);
+// > put
+router.put("/api/budget/update", budgetActions.update);
+// > delete
+router.delete("/api/budget/:id", budgetActions.destroy);
 
 export default router;

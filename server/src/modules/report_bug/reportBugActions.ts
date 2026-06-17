@@ -19,6 +19,18 @@ const add: RequestHandler = async (req, res, next) => {
       reported_bug_by_id_user: req.body.reported_bug_by_id_user,
     };
 
+    const alreadyExists = await reportBugRepository.exists(
+      newReportBug.reported_bug_by_id_user,
+    );
+
+    if (alreadyExists) {
+      res.status(409).json({
+        message:
+          "Vous avez déjà signalé un bug récemment. Merci pour votre retour, vous pourrez en signaler un nouveau dans 24h.",
+      });
+      return;
+    }
+
     const insertId = await reportBugRepository.create(newReportBug);
 
     res.status(201).json({ insertId });

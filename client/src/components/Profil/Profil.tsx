@@ -6,6 +6,7 @@ import { ShieldUser, User } from "lucide-react";
 import { LogOut } from "lucide-react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useRef } from "react";
 import { useLocation, useNavigate } from "react-router";
 
 function Profil() {
@@ -21,12 +22,13 @@ function Profil() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const isAdminPage = location.pathname === "/admin";
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/${userId}/photo`)
+    fetch(`http://localhost:3310/api/users/${userId}/photo`)
       .then((res) => res.json())
       .then((data) => {
         setProfilePicture(data.user_profile_picture);
@@ -34,11 +36,13 @@ function Profil() {
   }, [userId]);
 
   useEffect(() => {
+    if (!userId) return;
     fetch(`http://localhost:3310/api/users/admin/${userId}`)
       .then((res) => res.json())
-      .then((data) => setIsAdmin(Boolean(data.user_is_admin)));
+      .then((data) => setIsAdmin(Boolean(data.user_is_admin)))
+      .catch((err) => console.error(err));
   }, [userId]);
-  console.log(isAdmin);
+
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
 
@@ -54,27 +58,35 @@ function Profil() {
       return;
     }
 
-    const formData = new FormData();
+    if (!userId) {
+      alert("Utilisateur introuvable");
+      return;
+    }
 
+    const formData = new FormData();
     formData.append("photo", photo);
 
-    try {
-      const response = await fetch("http://localhost:3310/api/users/photo", {
+    const response = await fetch(
+      `http://localhost:3310/api/users/${userId}/photo`,
+      {
         method: "POST",
         body: formData,
-      });
+      },
+    );
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (!response.ok) {
-        alert(data.message);
-        return;
-      }
+    if (!response.ok) {
+      alert(data.message);
+      return;
+    }
 
-      alert("Photo uploadée avec succès");
-    } catch (error) {
-      console.error(error);
-      alert("Erreur serveur");
+    setProfilePicture(data.photoUrl);
+    setPhoto(null);
+    setPreview("");
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   }
 
@@ -143,7 +155,10 @@ function Profil() {
             }}
           >
             <h2>Parametre du profil</h2>
-
+            <img
+              src={`http://localhost:3310${profilePicture}`}
+              alt="photo-profil"
+            />
             <button
               type="button"
               onClick={() => setActiveModal("Changer le pseudo")}
@@ -155,6 +170,7 @@ function Profil() {
             {activeModal === "Changer le pseudo" && (
               <div className="change-pseudo">
                 <input
+                  ref={fileInputRef}
                   type="text"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
