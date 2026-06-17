@@ -14,7 +14,8 @@
 
   .myBalance {
     .myBalanceBox {
-      background: linear-gradient(135deg, #ff7b5a, #b94424);
+      background: linear-gradient(135deg, #ff8a6a, #c24a2d);
+      box-shadow: 0 12px 30px rgba(100 35 19 / 65%);
       border-radius: 22px;
       padding: 24px 32px;
       color: var(--bg-neutral);
@@ -38,10 +39,6 @@
 
   .expensesAndBalance {
     width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    margin-top: 2rem;
 
     div {
       display: flex;
@@ -84,6 +81,8 @@
     flex-direction: column;
     align-items: center;
 
+    padding: 1rem;
+
     header {
       display: flex;
       width: 100%;
@@ -100,6 +99,94 @@
       }
     }
 
+    .form {
+      position: fixed;
+      inset: 0;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(3px);
+
+      z-index: 999;
+
+      .createForm {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        background: white;
+        padding: 20px;
+        border-radius: 16px;
+
+        width: 90%;
+        max-width: 400px;
+
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        animation: pop 0.2s ease-out;
+
+        .mobileOnly {
+          display: flex;
+          justify-content: space-between;
+          justify-self: center;
+
+          width: 100%;
+
+          color: var(--font-brown);
+
+          h5 {
+            font-size: 1rem;
+            font-weight: 700;
+          }
+
+          .icons {
+            width: 15px;
+            height: auto;
+          }
+        }
+
+        input {
+          padding: 12px;
+          border: 2px solid var(--beige-color);
+          border-radius: 10px;
+          outline: none;
+          transition: 0.2s;
+
+          &:focus {
+            border-color: var(--font-brown);
+            box-shadow: 0 0 5px rgba(185, 68, 36, 0.3);
+          }
+        }
+
+        button {
+          padding: 12px 20px;
+          border: none;
+          border-radius: 10px;
+          background: var(--color-chat);
+          color: white;
+          cursor: pointer;
+          font-weight: bold;
+
+          &:hover {
+            background: var(--font-brown);
+          }
+        }
+      }
+
+      @keyframes pop {
+        from {
+          transform: scale(0.95);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+    }
+
     .myBalance {
       display: flex;
       justify-content: center;
@@ -107,10 +194,10 @@
       width: 100%;
 
       .myBalanceBox {
-        width: 80%;
+        width: 100%;
 
         h2 {
-          font-size: 2rem;
+          font-size: 2.5rem;
           margin-top: 5px;
           margin-bottom: 15px;
         }
@@ -119,20 +206,6 @@
       .total {
         display: none;
       }
-    }
-
-    .addButton {
-      color: black;
-      background: var(--hover-color);
-      border: none;
-      border-radius: 10px;
-      padding: 10px;
-
-      display: flex;
-      align-self: flex-end;
-
-      position: fixed;
-      bottom: 10vh;
     }
 
     .expensesAndBalance {
@@ -151,14 +224,29 @@
             margin: 0;
           }
 
-          button {
-            border-style: none;
-            background: none;
-            color: rgb(225, 178, 27);
-          }
-
           .icons {
             display: none;
+          }
+        }
+
+        section {
+          height: 35vh;
+          overflow-y: auto;
+
+          article {
+            .price {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-end;
+
+              .icons {
+                display: flex;
+                flex-direction: row;
+                color: black;
+                width: 50px;
+                height: auto;
+              }
+            }
           }
         }
       }
@@ -166,6 +254,27 @@
       .balance {
         display: none;
       }
+    }
+
+    .addButton {
+      position: fixed;
+      right: 20px;
+      bottom: 90px;
+
+      width: 56px;
+      height: 56px;
+
+      border-radius: 16px;
+      border: none;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #ff7d5d;
+      color: var(--font-brown);
+
+      box-shadow: 0 8px 20px rgba(63, 29, 6, 0.384);
     }
   }
 }
@@ -177,8 +286,6 @@
     height: 90vh;
     display: flex;
     flex-direction: column;
-    /*align-items: flex-start;
-    justify-content: center;*/
 
     header {
       width: 100%;
@@ -218,6 +325,10 @@
       gap: 15px;
       align-items: center;
       justify-content: center;
+
+      .mobileOnly {
+        display: none;
+      }
 
       input {
         padding: 12px;
@@ -311,6 +422,11 @@
     }
 
     .expensesAndBalance {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 2rem;
+
       align-self: start;
       margin-left: 3vw;
 
