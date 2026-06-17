@@ -5,6 +5,13 @@ import ReportAdminModal, {
   type BanAction,
 } from "../../components/ReportAdmin/ReportAdminModal";
 import "./AdminReport.css";
+import {
+  ArrowLeft,
+  CalendarSync,
+  CircleEllipsis,
+  Gavel,
+  Trash2,
+} from "lucide-react";
 
 function AdminReport() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -25,13 +32,14 @@ function AdminReport() {
           <div className="adminReport-Leftside">
             <section className="adminReport-Title">
               <div className="adminReport-TitleText">
-                <p>Tableau de bord</p>
+                <p>
+                  <ArrowLeft size={11} /> Retour aux signalements
+                </p>
                 <h1>Signalement #id du ticket à traiter</h1>
               </div>
               <p>
                 <span aria-label="Statut">
-                  {" "}
-                  statut du ticket en cours ou finalisé
+                  <CircleEllipsis size={10} /> en cours
                 </span>
               </p>
             </section>
@@ -39,9 +47,15 @@ function AdminReport() {
             <section aria-labelledby="nature" className="adminReport-Type">
               <h2 id="nature">Nature du signalement</h2>
               <div className="adminReport-WrapType">
-                <p>
-                  ici on importe la narute du signalement, event user ou bug
-                </p>
+                <div className="adminReport-WrapType-Icon">
+                  <CalendarSync size={24} />
+                </div>
+                <div className="adminReport-WrapType-TypeText">
+                  <h3>Nom import</h3>
+                  <p>
+                    ici on importe la narute du signalement, event user ou bug
+                  </p>
+                </div>
               </div>
             </section>
 
@@ -81,7 +95,7 @@ function AdminReport() {
 
           <aside className="adminReport-Rightside">
             <section aria-labelledby="auteur" className="adminReport-User">
-              <h2 id="auteur">Auteur</h2>
+              <h2 id="auteur">Auteur du signalement</h2>
               <div className="adminReport-User-PP-Wrap">
                 <img src="img.ID du user" alt="profil pict user" />
               </div>
@@ -91,15 +105,14 @@ function AdminReport() {
 
             <section aria-labelledby="actions" className="adminReport-Action">
               <h2 id="actions">Actions</h2>
-              <button type="button">
-                Assigner
-                <br />
-                modérateur
-              </button>
               <button type="button" onClick={() => setIsModalOpen(true)}>
+                <Gavel size={16} />
                 Bannir
               </button>
-              <button type="button">Rejeter</button>
+              <button type="button">
+                <Trash2 size={16} />
+                Rejeter
+              </button>
             </section>
           </aside>
         </article>
