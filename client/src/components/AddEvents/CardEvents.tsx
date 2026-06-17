@@ -1,6 +1,6 @@
 import { MapPin, PencilLine } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link } from "react-router";
 import type { CardEventsProps, EventData } from "../../types/Events";
 
 import ModalEditEvent from "./ModalEditEvent";
@@ -38,64 +38,71 @@ function CardEvents({
   description,
   location,
 }: CardEventsProps) {
-  const navigate = useNavigate();
   const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
   const isHost = user_id === event_host_id;
   const [currentImage, setCurrentImage] = useState(image);
+  const [currentTitle, setCurrentTitle] = useState(title);
+  const [currentDescription, setCurrentDescription] = useState(description);
+  const [currentLocation, setCurrentLocation] = useState(location);
+  const [currentDate, setCurrentDate] = useState(date);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleEventUpdated = (updatedEvent: EventData) => {
     setCurrentImage(updatedEvent.event_picture);
+    setCurrentTitle(updatedEvent.event_name);
+    setCurrentDescription(updatedEvent.event_description);
+    setCurrentLocation(updatedEvent.event_location);
+    setCurrentDate(updatedEvent.event_date_start);
   };
   return (
     <>
-      <button
-        type="button"
-        className="CardEvents-Global"
-        onClick={() => navigate(`/tableaudebord/${event_id}`)}
-        onKeyUp={(e) =>
-          e.key === "Enter" && navigate(`/tableaudebord/${event_id}`)
-        }
-      >
-        <div className="CardEvents-ImageDate">
-          <img className="CardEvents-Image" src={currentImage} alt={imageAlt} />
-          <span className="CardEvents-Date">
-            <span className="CardEvents-Date-Day">{formatDay(date)}</span>
-            <span className="CardEvents-Date-Month">{formatMonth(date)}</span>
-          </span>
-        </div>
+      <div className="CardEvents-Wrapper">
+        <Link to={`/tableaudebord/${event_id}`} className="CardEvents-Global">
+          <div className="CardEvents-ImageDate">
+            <img
+              className="CardEvents-Image"
+              src={currentImage}
+              alt={imageAlt}
+            />
+            <span className="CardEvents-Date">
+              <span className="CardEvents-Date-Day">
+                {formatDay(currentDate)}
+              </span>
+              <span className="CardEvents-Date-Month">
+                {formatMonth(currentDate)}
+              </span>
+            </span>
+          </div>
+          <div className="CardEvents-Container">
+            <h3 className="CardEvents-Title">{currentTitle}</h3>
+            <p className="CardEvents-Description">{currentDescription}</p>
+            <span className="CardEvents-Location">
+              <MapPin size={14} /> {currentLocation}
+            </span>
+          </div>
+        </Link>
 
-        <div className="CardEvents-Container">
-          <h3 className="CardEvents-Title">{title}</h3>
-          <p className="CardEvents-Description">{description}</p>
-          <span className="CardEvents-Location">
-            <MapPin size={14} /> {location}
-          </span>
-        </div>
-      </button>
-      {isHost && (
-        <button
-          type="button"
-          className="CardEvents-EditImage"
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsModalOpen(true);
-          }}
-        >
-          <PencilLine size={16} />
-        </button>
-      )}
+        {isHost && (
+          <button
+            type="button"
+            className="CardEvents-Edit"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <PencilLine size={16} />
+          </button>
+        )}
+      </div>
       <ModalEditEvent
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         event={{
           event_id,
           event_host_id,
-          event_name: title,
-          event_date_start: date,
-          event_date_end: date,
-          event_description: description,
-          event_location: location,
+          event_name: currentTitle,
+          event_date_start: currentDate,
+          event_date_end: currentDate,
+          event_description: currentDescription,
+          event_location: currentLocation,
           event_picture: currentImage,
           event_link_key: "",
         }}

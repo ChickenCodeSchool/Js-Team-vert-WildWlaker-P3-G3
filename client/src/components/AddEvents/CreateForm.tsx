@@ -14,7 +14,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
   }); //etat et valeurs de titre, date, description et ville donc vide au depart
 
   const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}"); // --> recupere dans localstorage "user" l'id pour le passer en user_id
-
+  const today = new Date().toISOString().split("T")[0];
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -85,7 +85,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
         <div className="CreateForm-Field">
           <label className="CreateForm-Label" htmlFor="title">
             {/* htmlFor permet de mettre le curseur dans l'input quand on clique sur le nom du champs */}
-            NOM DE VOTRE EVENEMENT
+            Nom de votre événement
           </label>
           <input
             id="title"
@@ -103,7 +103,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
           <div className="CreateForm-DateGlobal">
             <div className="CreateForm-Date">
               <label className="CreateForm-Label" htmlFor="dateStart">
-                DATE DE DEBUT
+                Date de début
               </label>
               <input
                 id="dateStart"
@@ -112,11 +112,12 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
                 name="dateStart"
                 value={form.dateStart}
                 onChange={handleChange}
+                min={today}
               />
             </div>
             <div className="CreateForm-Date">
               <label className="CreateForm-Label" htmlFor="dateEnd">
-                DATE DE FIN
+                Date de fin
               </label>
               <input
                 id="dateEnd"
@@ -125,6 +126,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
                 name="dateEnd"
                 value={form.dateEnd}
                 onChange={handleChange}
+                min={today}
               />
             </div>
           </div>
@@ -132,7 +134,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
 
         <div className="CreateForm-Field">
           <label className="CreateForm-Label" htmlFor="description">
-            DESCRIPTION
+            Description
           </label>
           <textarea
             id="description"
@@ -151,7 +153,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
 
         <div className="CreateForm-Field">
           <label className="CreateForm-Label" htmlFor="location">
-            LIEUX
+            Lieux
           </label>
           <input
             id="location"

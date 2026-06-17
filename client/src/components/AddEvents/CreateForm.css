@@ -55,8 +55,7 @@
     border: 1px solid var(--border-color);
     padding-left: 0.5rem;
     padding-top: 0.2rem;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+    border-radius: 0.5rem 0.5rem 0 0;
     background: var(--input-color);
     color: var(--font-input);
     resize: vertical;

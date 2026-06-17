@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import type { EventData, ModalEditEventProps } from "../../types/Events";
 import "./ModalEditEvent.css";
 
+const formatDate = (date: string): string => {
+  return new Date(date).toISOString().split("T")[0];
+};
+
 function ModalEditEvent({
   isOpen,
   onClose,
@@ -16,19 +20,20 @@ function ModalEditEvent({
   const [previewImage, setPreviewImage] = useState<string>(event.event_picture);
   const [form, setForm] = useState({
     event_name: event.event_name,
-    event_date_start: event.event_date_start,
-    event_date_end: event.event_date_end,
+    event_date_start: formatDate(event.event_date_start),
+    event_date_end: formatDate(event.event_date_end),
     event_description: event.event_description,
     event_location: event.event_location,
   });
+  const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     if (isOpen) {
       dialogRef.current?.showModal();
       setForm({
         event_name: event.event_name,
-        event_date_start: event.event_date_start,
-        event_date_end: event.event_date_end,
+        event_date_start: formatDate(event.event_date_start),
+        event_date_end: formatDate(event.event_date_end),
         event_description: event.event_description,
         event_location: event.event_location,
       });
@@ -113,16 +118,20 @@ function ModalEditEvent({
       onCancel={onClose}
       aria-labelledby="modal-edit-title"
     >
-      <div className="ModalEditEvent-Global">
+      <div
+        className="ModalEditEvent-Global"
+        onClick={(e) => e.stopPropagation()}
+        onKeyUp={(e) => e.stopPropagation()}
+      >
         <h2 className="ModalEditEvent-Title" id="modal-edit-title">
-          Modifier l'événement
+          Modifiez votre événement
         </h2>
 
         {error && <p className="ModalEditEvent-Error">{error}</p>}
 
         <div className="ModalEditEvent-Field">
           <label className="ModalEditEvent-Label" htmlFor="event_name">
-            NOM DE L'ÉVÉNEMENT
+            Nom de l'événement
           </label>
           <input
             id="event_name"
@@ -142,7 +151,7 @@ function ModalEditEvent({
                 className="ModalEditEvent-Label"
                 htmlFor="event_date_start"
               >
-                DATE DE DÉBUT
+                Date de début
               </label>
               <input
                 id="event_date_start"
@@ -151,11 +160,12 @@ function ModalEditEvent({
                 name="event_date_start"
                 value={form.event_date_start}
                 onChange={handleChange}
+                min={today}
               />
             </div>
             <div className="ModalEditEvent-Date">
               <label className="ModalEditEvent-Label" htmlFor="event_date_end">
-                DATE DE FIN
+                Date de fin
               </label>
               <input
                 id="event_date_end"
@@ -164,6 +174,7 @@ function ModalEditEvent({
                 name="event_date_end"
                 value={form.event_date_end}
                 onChange={handleChange}
+                min={today}
               />
             </div>
           </div>
@@ -171,7 +182,7 @@ function ModalEditEvent({
 
         <div className="ModalEditEvent-Field">
           <label className="ModalEditEvent-Label" htmlFor="event_description">
-            DESCRIPTION
+            Description
           </label>
           <textarea
             id="event_description"
@@ -205,18 +216,21 @@ function ModalEditEvent({
           >
             IMAGE
           </label>
-          <img
-            src={previewImage}
-            alt="prévisualisation"
-            className="ModalEditEvent-Preview"
-          />
-          <button
-            type="button"
-            className="ModalEditEvent-ImageBtn"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            Changer l'image
-          </button>
+          <div className="ModalEditEvent-ImageGlobal">
+            <img
+              src={previewImage}
+              alt="prévisualisation"
+              className="ModalEditEvent-Preview"
+            />
+
+            <button
+              type="button"
+              className="ModalEditEvent-ImageButton"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              Changer l'image
+            </button>
+          </div>
           <input
             ref={fileInputRef}
             type="file"

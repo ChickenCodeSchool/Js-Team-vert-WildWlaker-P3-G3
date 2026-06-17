@@ -13,8 +13,9 @@
     padding: 2rem 2rem 4rem 2rem;
   }
   .HomeEvents-CardGlobal {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 16rem);
+    align-items: stretch;
+    gap: 3rem;
   }
 }
