@@ -89,26 +89,10 @@ const uploadPhoto: RequestHandler = async (req, res, next) => {
 const destroy: RequestHandler = async (req, res, next) => {
   try {
     const galleryId = Number(req.params.gallery_id);
-    const userIdConnecte = Number(req.params.userId);
 
     const photo = await galleryRepository.read(galleryId);
     if (!photo) {
       res.status(404).json({ message: "Photo introuvable" });
-      return;
-    }
-
-    const permissions = await galleryRepository.checkUserPermissions(
-      photo.gallery_id_event,
-      userIdConnecte,
-    );
-    const estAuteur = photo.gallery_id_user === userIdConnecte;
-    const estHote = permissions.isHost;
-
-    if (!estAuteur && !estHote) {
-      res.status(403).json({
-        message:
-          "Action interdite : seul l'auteur de la photo ou l'hôte de l'événement peut la supprimer.",
-      });
       return;
     }
 
@@ -122,38 +106,15 @@ const destroy: RequestHandler = async (req, res, next) => {
 const edit: RequestHandler = async (req, res, next) => {
   try {
     const galleryId = Number(req.params.gallery_id);
-    const userIdConnecte = Number(req.params.userId);
-    const description = req.body.gallery_description;
 
-    console.log(
-      `Tentative de modification - Photo: ${galleryId}, Par User: ${userIdConnecte}`,
-    );
+    const description = req.body.gallery_description;
 
     const photo = await galleryRepository.read(galleryId);
     if (!photo) {
       res.status(404).json({ message: "Photo introuvable" });
       return;
     }
-
-    const permissions = await galleryRepository.checkUserPermissions(
-      photo.gallery_id_event,
-      userIdConnecte,
-    );
-    const estAuteur = photo.gallery_id_user === userIdConnecte;
-    const estHote = permissions.isHost;
-
-    if (!estAuteur && !estHote) {
-      res.status(403).json({
-        message:
-          "Action interdite : seul l'auteur de la photo ou l'hôte de l'événement peut modifier la description.",
-      });
-      return;
-    }
-
-    const resultAffectedRows = await galleryRepository.updateDescription(
-      galleryId,
-      description,
-    );
+    await galleryRepository.updateDescription(galleryId, description);
 
     res.status(200).json({ message: "Description modifiée avec succès !" });
   } catch (err) {

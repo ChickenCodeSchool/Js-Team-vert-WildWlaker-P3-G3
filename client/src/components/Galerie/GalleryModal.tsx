@@ -4,7 +4,7 @@ import { useState } from "react";
 
 type GalleryModalProps = {
   onClose: () => void;
-  onAddPhoto: (imageUrl: string) => void;
+  onAddPhoto: (imageUrl: string, insertId: number) => void;
   eventId: number;
   userId: number;
 };
@@ -22,9 +22,7 @@ function GalleryModal({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
-    if (!file) {
-      return;
-    }
+    if (!file) return;
 
     const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
@@ -42,9 +40,7 @@ function GalleryModal({
   };
 
   const handleAddClick = async () => {
-    if (!selectedFile) {
-      return;
-    }
+    if (!selectedFile) return;
 
     try {
       const formData = new FormData();
@@ -70,7 +66,7 @@ function GalleryModal({
 
       const data = await response.json();
 
-      onAddPhoto(data.photoUrl);
+      onAddPhoto(data.photoUrl, data.insertId);
       onClose();
     } catch (error) {
       console.error(error);
