@@ -1,8 +1,8 @@
 /* STRUCTURE AND GALLERY GRID */
 .galerie {
-  width: 75vw;
+  width: 68.5vw;
   max-width: 1200px;
-  padding: 2rem 3rem;
+  padding: 2rem 3rem 2rem 0;
 
   h1 {
     color: #b2553d;

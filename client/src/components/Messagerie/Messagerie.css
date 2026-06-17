@@ -8,6 +8,7 @@
   padding: 0 30px;
   border-radius: 5px;
   border: 1px solid var(--border-color);
+  margin-top: 2vh;
   h1 {
     color: var(--font-brown);
     padding-top: 15px;

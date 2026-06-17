@@ -9,7 +9,7 @@
 
 .budget {
   background: var(--bg-color);
-  padding: 2rem 3rem;
+  padding: 2rem 3rem 2rem 0;
   gap: 2rem;
 
   .myBalance {
@@ -173,7 +173,7 @@
 /* ---------- Desktop ---------- */
 @media screen and (min-width: 429px) {
   .budget {
-    width: 75vw;
+    width: 70.5vw;
     height: 90vh;
     display: flex;
     flex-direction: column;

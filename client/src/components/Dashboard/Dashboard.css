@@ -5,7 +5,7 @@
   font-weight: 300;
   font-style: normal;
   height: 90vh;
-  width: 60vw;
+  width: 74vw;
   .user-name {
     font-weight: 400;
   }
@@ -100,7 +100,7 @@
   }
 
   .dashboard-components {
-    width: 100%;
+    width: 102%;
     height: 80%;
     display: grid;
     grid-template-columns: 2fr 1fr;
