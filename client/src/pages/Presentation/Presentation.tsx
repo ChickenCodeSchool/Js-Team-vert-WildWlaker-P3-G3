@@ -101,7 +101,9 @@ function Presentation() {
         </div>
       </div>
       <div className="exemple-cards-presentation">
-        <h2>Organisé pour chaque Occasion</h2>
+        <h2 className="title-cards-presentation">
+          Organisé pour chaque Occasion
+        </h2>
         <p>
           Des dinners intimes aux grands galas, orchetrez chaque details pour
           profiter du moment

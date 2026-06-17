@@ -32,7 +32,7 @@
 
   .modal {
     position: absolute;
-    right: 42vw;
+    right: 40vw;
     width: 320px;
     background: rgba(255, 255, 255, 0.95);
     border-radius: 22px;
@@ -174,12 +174,14 @@
     }
 
     .modal-overlay {
+      display: flex;
       justify-content: center;
       align-items: center;
       padding: 0;
     }
 
     .modal {
+      right: 6vw;
       width: 88vw;
       max-height: 82vh;
       overflow-y: auto;
