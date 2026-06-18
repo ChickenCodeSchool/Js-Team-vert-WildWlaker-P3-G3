@@ -17,6 +17,7 @@ function GalleryModal({
 }: GalleryModalProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [description, setDescription] = useState("");
   const [error, setError] = useState("");
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,9 +29,7 @@ function GalleryModal({
 
     if (!allowedTypes.includes(file.type)) {
       setError("Seuls les formats JPG, PNG et WEBP sont autorisés.");
-
       setPreview(null);
-
       return;
     }
 
@@ -43,10 +42,15 @@ function GalleryModal({
     if (!selectedFile) return;
 
     try {
+      setError("");
+
       const formData = new FormData();
-      formData.append("photo", selectedFile);
+
       formData.append("gallery_id_event", eventId.toString());
       formData.append("gallery_id_user", userId.toString());
+      formData.append("gallery_description", description);
+
+      formData.append("photo", selectedFile);
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/gallery`,
@@ -57,7 +61,9 @@ function GalleryModal({
       );
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response
+          .json()
+          .catch(() => ({ message: "Erreur serveur interne." }));
         setError(
           errorData.message || "Une erreur est survenue lors de l'envoi.",
         );
@@ -69,8 +75,8 @@ function GalleryModal({
       onAddPhoto(data.photoUrl, data.insertId);
       onClose();
     } catch (error) {
-      console.error(error);
-      setError("Impossible de contacter le serveur.");
+      console.error("Erreur de connexion :", error);
+      setError("Impossible de joindre le serveur. Vérifiez votre connexion.");
     }
   };
 
@@ -85,8 +91,19 @@ function GalleryModal({
           onChange={handleFileChange}
         />
 
+        <input
+          type="text"
+          placeholder="Ajouter une description (optionnel)..."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          style={{ marginTop: "0.5rem", width: "100%", padding: "0.4rem" }}
+        />
+
         {error && (
-          <p className="error-message" style={{ color: "red" }}>
+          <p
+            className="error-message"
+            style={{ color: "red", marginTop: "0.5rem" }}
+          >
             {error}
           </p>
         )}
