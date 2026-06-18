@@ -91,7 +91,19 @@ function DashboardAdmin() {
   useEffect(() => {
     fetch("http://localhost:3310/api/admin/dashboard-chart")
       .then((res) => res.json())
-      .then((data) => setGraphic(data));
+      .then((data) => {
+        console.log("GRAPHIC DATA =", data);
+
+        if (Array.isArray(data)) {
+          setGraphic(data);
+        } else if (Array.isArray(data.result)) {
+          setGraphic(data.result);
+        } else if (Array.isArray(data.rows)) {
+          setGraphic(data.rows);
+        } else {
+          setGraphic([]);
+        }
+      });
   }, []);
 
   const totalIdsUsers = allUsers.reduce((total, report) => {

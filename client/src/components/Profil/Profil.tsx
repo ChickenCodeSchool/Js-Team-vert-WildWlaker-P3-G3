@@ -12,7 +12,7 @@ import { useLocation, useNavigate } from "react-router";
 function Profil() {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const noneDeconnexion = location.pathname.startsWith("/homeevents");
   const [userName, setUserName] = useState("");
   const [isMainModalOpen, setIsMainModalOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<string | null>(null);
@@ -226,7 +226,7 @@ function Profil() {
             {isAdmin && (
               <button
                 type="button"
-                onClick={() => navigate(isAdminPage ? "/HomeEvents" : "/admin")}
+                onClick={() => navigate(isAdminPage ? "/homeevents" : "/admin")}
               >
                 {isAdminPage ? (
                   <>
@@ -242,9 +242,11 @@ function Profil() {
               </button>
             )}
             <button
-              className="deconnexion-event"
+              className={
+                noneDeconnexion ? "deconnexion-none" : "deconnexion-event"
+              }
               type="button"
-              onClick={() => navigate("/HomeEvents")}
+              onClick={() => navigate("/homeevents")}
             >
               <LogOut size={15} />
               Déconnexion de l'évenement
