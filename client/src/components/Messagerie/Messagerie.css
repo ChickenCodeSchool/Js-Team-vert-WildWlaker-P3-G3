@@ -116,7 +116,7 @@
     }
 
     .messagerie-box {
-      height: calc(95vh - 90px);
+      height: calc(84vh - 90px);
       width: calc(100vw - 32px);
 
       .messagerie-box-messages {
@@ -146,7 +146,7 @@
       .massagerie-input {
         height: 44px;
         margin-top: 12px;
-        margin-bottom: 6vh;
+        /* margin-bottom: 6vh; */
 
         input {
           width: 85%;

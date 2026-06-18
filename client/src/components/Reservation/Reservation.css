@@ -14,18 +14,19 @@
 
     button {
       display: flex;
-      justify-content: center;
+      gap: 0.4rem;
       align-items: center;
-      margin: 3vh;
-      background: linear-gradient(to right, #ff7e5f, #a53b22);
-      color: var(--font-neutral);
-      border-radius: 5rem;
-      width: 12rem;
-      height: 2rem;
+      padding: 0.65rem 1.5rem;
       border: none;
-      box-shadow: 1px 1px 5px black;
-      transition: transform 0.2s;
-      gap: 5px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ff8a65 0%, #b2553d 100%);
+      color: white;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      transition: opacity 0.2s ease, transform 0.1s ease;
+      width: auto;
 
       button:hover {
         transform: scale(0.95);
@@ -127,7 +128,7 @@
 }
 
 .reservation-card-global {
-  padding-top: 10vh;
+  padding-top: 2vh;
   display: grid;
   grid-template-columns: repeat(auto-fill, 16rem);
   align-items: stretch;
