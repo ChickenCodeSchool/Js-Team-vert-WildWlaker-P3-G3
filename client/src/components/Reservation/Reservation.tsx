@@ -88,104 +88,106 @@ function Reservation() {
   }
   return (
     <>
-      <div className="reservation-title">
-        <h1>Mes Réservations</h1>
-        <button type="button" onClick={() => setIsModalOpen(true)}>
-          <CalendarPlus size={20} />
-          <p>Ajouter une réservation</p>
-        </button>
-        {isModalOpen && (
-          <div
-            className="modal-overlay"
-            onClick={() => {
-              setIsModalOpen(false);
-              setActiveModal(null);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                setActiveModal(null);
-              }
-            }}
-          >
+      <div className="reservation">
+        <div className="reservation-title">
+          <h1>Mes Réservations</h1>
+          <button type="button" onClick={() => setIsModalOpen(true)}>
+            <CalendarPlus size={20} />
+            <p>Ajouter une réservation</p>
+          </button>
+          {isModalOpen && (
             <div
-              className="modal"
-              onClick={(e) => e.stopPropagation()}
+              className="modal-overlay"
+              onClick={() => {
+                setIsModalOpen(false);
+                setActiveModal(null);
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   setActiveModal(null);
                 }
               }}
             >
-              <h2>Nouvelle réservation</h2>
+              <div
+                className="modal"
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    setActiveModal(null);
+                  }
+                }}
+              >
+                <h2>Nouvelle réservation</h2>
 
-              <input
-                type="text"
-                placeholder="Nom"
-                value={reservationName}
-                onChange={(e) => setReservationName(e.target.value)}
-              />
+                <input
+                  type="text"
+                  placeholder="Nom"
+                  value={reservationName}
+                  onChange={(e) => setReservationName(e.target.value)}
+                />
 
-              <input
-                type="date"
-                value={reservationDate}
-                onChange={(e) => setReservationDate(e.target.value)}
-              />
+                <input
+                  type="date"
+                  value={reservationDate}
+                  onChange={(e) => setReservationDate(e.target.value)}
+                />
 
-              <input
-                type="text"
-                placeholder="Lieu"
-                value={reservationLocation}
-                onChange={(e) => setReservationLocation(e.target.value)}
-              />
+                <input
+                  type="text"
+                  placeholder="Lieu"
+                  value={reservationLocation}
+                  onChange={(e) => setReservationLocation(e.target.value)}
+                />
 
-              <textarea
-                placeholder="Description"
-                value={reservationDescription}
-                onChange={(e) => setReservationDescription(e.target.value)}
-              />
+                <textarea
+                  placeholder="Description"
+                  value={reservationDescription}
+                  onChange={(e) => setReservationDescription(e.target.value)}
+                />
 
-              {/* <input
+                {/* <input
                   type="text"
                   placeholder="URL image"
                   value={reservationPicture}
                   onChange={(e) => setReservationPicture(e.target.value)}
                 /> */}
-              <label htmlFor="photo-upload" className="custom-upload">
-                Choisir une image
-              </label>
+                <label htmlFor="photo-upload" className="custom-upload">
+                  Choisir une image
+                </label>
 
-              <input
-                id="photo-upload"
-                type="file"
-                accept="image/*"
-                onChange={handleReservationPictureChange}
-                className="hidden-input"
-              />
-              {preview && (
-                <img src={preview} alt="preview" className="photo-preview" />
-              )}
+                <input
+                  id="photo-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleReservationPictureChange}
+                  className="hidden-input"
+                />
+                {preview && (
+                  <img src={preview} alt="preview" className="photo-preview" />
+                )}
 
-              <button type="button" onClick={handleAddReservation}>
-                Enregistrer
-              </button>
+                <button type="button" onClick={handleAddReservation}>
+                  Enregistrer
+                </button>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-      <div className="reservation-card-global">
-        {reservations.map((event) => (
-          <CardEvents
-            key={event.reservation_id}
-            event_id={event.reservation_id}
-            event_host_id={null}
-            image={`http://localhost:3310${event.reservation_picture}`}
-            imageAlt={event.reservation_name}
-            date={event.reservation_date}
-            title={event.reservation_name}
-            description={event.reservation_description}
-            location={event.reservation_location}
-          />
-        ))}
+          )}
+        </div>
+        <div className="reservation-card-global">
+          {reservations.map((event) => (
+            <CardEvents
+              key={event.reservation_id}
+              event_id={event.reservation_id}
+              event_host_id={null}
+              image={`http://localhost:3310${event.reservation_picture}`}
+              imageAlt={event.reservation_name}
+              date={event.reservation_date}
+              title={event.reservation_name}
+              description={event.reservation_description}
+              location={event.reservation_location}
+            />
+          ))}
+        </div>
       </div>
     </>
   );

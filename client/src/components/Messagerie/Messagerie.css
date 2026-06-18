@@ -8,19 +8,22 @@
   padding: 0 30px;
   border-radius: 5px;
   border: 1px solid var(--border-color);
-  margin-top: 2vh;
+  display: flex;
+  flex-direction: column;
+  margin-top: 2.5vh;
   h1 {
     color: var(--font-brown);
-    padding-top: 15px;
+    padding-top: 3vh;
   }
 
   .messagerie-box {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 83vh;
+    flex: 1;
+    min-height: 0;
     .messagerie-box-messages {
-      height: 70vh;
+      flex: 1;
+      min-height: 0;
       overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: transparent transparent;
@@ -60,17 +63,18 @@
     }
 
     .massagerie-input {
+      flex-shrink: 0;
       width: 100%;
       display: flex;
-      flex-direction: row;
       align-items: center;
       gap: 5px;
-      height: 6%;
+      height: 48px;
       border: 1px solid #ff7e5f;
       border-radius: 21px;
+      margin-bottom: 10px;
       input {
         padding-left: 10px;
-        width: 90%;
+        width: 93%;
         border-style: none;
         background: none;
       }
@@ -134,7 +138,7 @@
       .massagerie-input {
         height: 44px;
         margin-top: 12px;
-        margin-bottom: 7vh;
+        margin-bottom: 10vh;
 
         input {
           width: 85%;
