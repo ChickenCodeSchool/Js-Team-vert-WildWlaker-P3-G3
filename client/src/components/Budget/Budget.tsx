@@ -79,13 +79,20 @@ function getUserBudget(array: BudgetByUser[], id_user: number) {
 
 function returnDateString(dateString: string) {
   const date = new Date(dateString);
+  const targetDay = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+  );
+
   const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const diffDays = Math.round(
+    (today.getTime() - targetDay.getTime()) / (1000 * 60 * 60 * 24),
+  );
 
-  if (diffDays < 0) return "aujourd’hui";
-  if (diffDays === 0) return "aujourd’hui";
+  if (diffDays <= 0) return "aujourd’hui";
   if (diffDays === 1) return "hier";
   if (diffDays === 2) return "avant-hier";
   if (diffDays <= 7) return `il y a ${diffDays} jours`;
@@ -305,14 +312,14 @@ function Budget() {
                       />
 
                       <Check
-                        className="positif"
+                        className="icons positif"
                         onClick={(e) => {
                           updateBudget(e);
                           setBudgetUpdate(null);
                         }}
                       />
                       <X
-                        className="negatif"
+                        className="icons negatif"
                         onClick={() => {
                           setBudgetUpdate(null);
                         }}

@@ -247,6 +247,22 @@
                 height: auto;
               }
             }
+
+            input {
+              display: flex;
+              flex-direction: row;
+              width: 30vw;
+
+              border: 2px solid var(--beige-color);
+              border-radius: 5px;
+              transition: 0.2s;
+
+              &:focus {
+                outline: none;
+                border-color: var(--font-brown);
+                box-shadow: none;
+              }
+            }
           }
         }
       }
