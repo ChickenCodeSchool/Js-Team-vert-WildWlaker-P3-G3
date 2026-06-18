@@ -55,6 +55,16 @@ router.post("/api/messages/:id", messageActions.addMessage);
 
 // reservation routes
 router.get("/api/reservations/:id", reservationActions.browse);
+router.get("/api/reservations/all/:id", reservationActions.readAllReservation);
+router.post(
+  "/api/reservations",
+  upload.single("reservation_picture"),
+  reservationActions.addReservation,
+);
+router.delete(
+  "/api/reservations/delete/:id",
+  reservationActions.deleteReservation,
+);
 
 // item routes
 router.get("/api/items", itemActions.browse);

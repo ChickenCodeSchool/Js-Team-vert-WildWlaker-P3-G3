@@ -35,7 +35,6 @@ function Dashboard() {
   );
   const { id } = useParams();
   const event = Number(id);
-  console.log(id);
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
 

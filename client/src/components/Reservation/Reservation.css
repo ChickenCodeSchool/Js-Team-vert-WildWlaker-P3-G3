@@ -1,0 +1,145 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Carter+One&family=Inter:ital,opsz,wght@0,14..32,800;1,14..32,800&family=Lexend:wght@100..900&family=Limelight&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Display:ital,wght@0,100..900;1,100..900&family=Oi&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playfair:ital,opsz,wght@1,5..1200,300..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Space+Grotesk:wght@300..700&family=Ultra&display=swap");
+
+.reservation-title {
+  display: flex;
+  justify-content: space-between;
+  width: 63vw;
+  h1 {
+    padding-top: 3vh;
+    color: var(--font-title);
+  }
+
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3vh;
+    background: linear-gradient(to right, #ff7e5f, #a53b22);
+    color: var(--font-neutral);
+    border-radius: 5rem;
+    width: 12rem;
+    height: 2rem;
+    border: none;
+    box-shadow: 1px 1px 5px black;
+    transition: transform 0.2s;
+    gap: 5px;
+
+    button:hover {
+      transform: scale(0.95);
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .modal {
+      width: min(90vw, 420px);
+      background: white;
+      border-radius: 22px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+
+      h2 {
+        margin: 0 0 8px;
+        text-align: center;
+        font-size: 24px;
+        color: #1f2937;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 12px 14px;
+        font-size: 14px;
+        outline: none;
+        background: #f9fafb;
+      }
+
+      input:focus,
+      textarea:focus {
+        border-color: #ff7e5f;
+        background: white;
+      }
+
+      textarea {
+        min-height: 90px;
+        resize: none;
+      }
+
+      .custom-upload {
+        cursor: pointer;
+        text-align: center;
+        background: #fff1ed;
+        color: #ff7e5f;
+        border: 1px dashed #ff7e5f;
+        border-radius: 14px;
+        padding: 12px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .hidden-input {
+        display: none;
+      }
+
+      .photo-preview {
+        width: 110px;
+        height: 110px;
+        border-radius: 18px;
+        object-fit: cover;
+        align-self: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+      }
+
+      button {
+        border: none;
+        border-radius: 14px;
+        padding: 12px;
+        cursor: pointer;
+        background: linear-gradient(135deg, #ff7e5f, #feb47b);
+        color: white;
+        font-weight: 700;
+        transition: 0.2s ease;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(255, 126, 95, 0.35);
+      }
+    }
+  }
+}
+
+.reservation-card-global {
+  padding-top: 10vh;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 16rem);
+  align-items: stretch;
+  gap: 3rem;
+
+  /* max-height: 100vh;
+  overflow-y: auto;
+
+  
+  scrollbar-width: none;
+
+ 
+  -ms-overflow-style: none;
+
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }  */
+}

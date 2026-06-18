@@ -111,11 +111,19 @@ import type { ErrorRequestHandler } from "express";
 // Define a middleware function to log errors
 const logErrors: ErrorRequestHandler = (err, req, res, next) => {
   // Log the error to the console for debugging purposes
-  console.error(err);
-  console.error("on req:", req.method, req.path);
+  console.error("Error occurred:", err.message);
+  console.error("Stack:", err.stack);
+  console.error("Request:", req.method, req.path);
 
-  // Pass the error to the next middleware in the stack
-  next(err);
+  // Send error response to client
+  const statusCode = err.statusCode || 500;
+  res.status(statusCode).json({
+    error:
+      process.env.NODE_ENV === "production"
+        ? "Internal Server Error"
+        : err.message,
+    status: statusCode,
+  });
 };
 
 // Mount the logErrors middleware globally
