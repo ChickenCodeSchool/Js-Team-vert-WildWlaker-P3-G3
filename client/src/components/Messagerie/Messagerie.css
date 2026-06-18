@@ -112,11 +112,12 @@
 
     h1 {
       font-size: 28px;
-      margin: 0 0 20px;
+      margin: 0;
+      padding: 0 0 30px 0;
     }
 
     .messagerie-box {
-      height: calc(84vh - 90px);
+      height: calc(84vh - 75px);
       width: calc(100vw - 32px);
 
       .messagerie-box-messages {
