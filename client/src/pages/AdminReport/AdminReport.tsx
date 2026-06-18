@@ -23,7 +23,7 @@ function AdminReport() {
 
   return (
     <div className="adminReport-Layout">
-      <header className="adminReport-headerNav">
+      <header className="adminReport-HeaderNav">
         <NavBar />
         <Profil />
       </header>
