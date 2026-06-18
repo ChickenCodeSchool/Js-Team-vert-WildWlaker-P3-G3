@@ -4,7 +4,7 @@
   min-height: 100vh;
   background: var(--bg-color);
 
-  .adminReport-headerNav {
+  .adminReport-HeaderNav {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -258,7 +258,7 @@
     }
   }
 }
-@media (max-width: 420px) {
+@media (max-width: 428px) {
   .adminReport-Layout main .adminReport-Global {
     grid-template-columns: 1fr;
   }
