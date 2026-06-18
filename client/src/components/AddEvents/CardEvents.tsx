@@ -1,8 +1,8 @@
-import { MapPin, PencilLine } from "lucide-react";
+import { MapPin, PencilLine, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
+import { useLocation } from "react-router";
 import type { CardEventsProps, EventData } from "../../types/Events";
-
 import ModalEditEvent from "./ModalEditEvent";
 import "./CardEvents.css";
 
@@ -38,6 +38,8 @@ function CardEvents({
   description,
   location,
 }: CardEventsProps) {
+  const uselocation = useLocation();
+  const onTableau = uselocation.pathname.startsWith("/tableaudebord/");
   const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
   const isHost = user_id === event_host_id;
   const [currentImage, setCurrentImage] = useState(image);
@@ -46,6 +48,7 @@ function CardEvents({
   const [currentLocation, setCurrentLocation] = useState(location);
   const [currentDate, setCurrentDate] = useState(date);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleEventUpdated = (updatedEvent: EventData) => {
     setCurrentImage(updatedEvent.event_picture);
@@ -53,6 +56,25 @@ function CardEvents({
     setCurrentDescription(updatedEvent.event_description);
     setCurrentLocation(updatedEvent.event_location);
     setCurrentDate(updatedEvent.event_date_start);
+  };
+  const handleDeleteReservation = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3310/api/reservations/delete/${event_id}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Erreur suppression");
+      }
+
+      setIsDeleteModalOpen(false);
+      console.log("Réservation supprimée");
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <>
@@ -90,6 +112,37 @@ function CardEvents({
           >
             <PencilLine size={16} />
           </button>
+        )}
+        {onTableau && (
+          <button
+            type="button"
+            className="CardEvents-Edit"
+            onClick={() => setIsDeleteModalOpen(true)}
+          >
+            <Trash2 size={16} />
+          </button>
+        )}
+        {isDeleteModalOpen && (
+          <div className="delete-modal-overlay">
+            <div className="delete-modal">
+              <h3>Supprimer la réservation</h3>
+
+              <p>Êtes-vous sûr de vouloir supprimer cette réservation ?</p>
+
+              <div className="delete-modal-actions">
+                <button
+                  type="button"
+                  onClick={() => setIsDeleteModalOpen(false)}
+                >
+                  Annuler
+                </button>
+
+                <button type="button" onClick={handleDeleteReservation}>
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
       <ModalEditEvent
