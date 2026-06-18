@@ -57,13 +57,14 @@
         justify-content: flex-end;
         padding: 2px 0 2px 0;
         div {
-          background-color: #fff8f5;
+          background-color: #ff7e5f;
           border: 1px solid #dec0b9;
           padding: 5px;
           border-radius: 12px 12px 0 12px;
           white-space: pre-wrap;
           word-break: break-word;
           max-width: 45%;
+          color: white;
         }
       }
     }

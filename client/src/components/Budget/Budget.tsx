@@ -77,6 +77,29 @@ function getUserBudget(array: BudgetByUser[], id_user: number) {
   return array.find((user) => user.user_id === id_user);
 }
 
+function returnDateString(dateString: string) {
+  const date = new Date(dateString);
+  const targetDay = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+  );
+
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  const diffDays = Math.round(
+    (today.getTime() - targetDay.getTime()) / (1000 * 60 * 60 * 24),
+  );
+
+  if (diffDays <= 0) return "aujourd’hui";
+  if (diffDays === 1) return "hier";
+  if (diffDays === 2) return "avant-hier";
+  if (diffDays <= 7) return `il y a ${diffDays} jours`;
+
+  return date.toLocaleDateString("fr-FR");
+}
+
 function Budget() {
   const { id } = useParams();
   const eventID = Number(id);
@@ -132,7 +155,26 @@ function Budget() {
   async function addBudget(e: React.FormEvent) {
     e.preventDefault();
 
-    await fetch(`${apiUrl}/api/budget/add`, {
+    if (!nameCreateForm.trim()) {
+      alert("❌ Erreur : Nom obligatoire");
+      return;
+    }
+
+    if (
+      priceCreateForm === undefined ||
+      Number.isNaN(priceCreateForm) ||
+      priceCreateForm === 0
+    ) {
+      alert("❌ Erreur : Prix invalide");
+      return;
+    }
+
+    if (priceCreateForm < 0) {
+      alert("❌ Erreur : Prix ne peux pas être négatif");
+      return;
+    }
+
+    const answer = await fetch(`${apiUrl}/api/budget/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -147,6 +189,15 @@ function Budget() {
 
     setNameCreateForm("");
     setPriceCreateForm(undefined);
+    setShowCreateForm(false);
+
+    const data = await answer.json();
+
+    alert(
+      answer.ok
+        ? "✅ Succès : Budget ajouter avec succès"
+        : `❌ Erreur : ${answer.status} - ${JSON.stringify(data)}`,
+    );
   }
 
   function openUpdateForm(budget: Budget) {
@@ -159,9 +210,36 @@ function Budget() {
   async function updateBudget(e: React.FormEvent) {
     e.preventDefault();
 
+    if (!nameUpdateForm.trim()) {
+      alert("❌ Erreur : Nom obligatoire");
+      return;
+    }
+
+    if (
+      priceUpdateForm === undefined ||
+      Number.isNaN(priceUpdateForm) ||
+      priceUpdateForm === 0
+    ) {
+      alert("❌ Erreur : Prix invalide");
+      return;
+    }
+
+    if (priceUpdateForm < 0) {
+      alert("❌ Erreur : Prix ne peux pas être négatif");
+      return;
+    }
+
     if (budgetUpdate === null) return;
 
-    await fetch(`${apiUrl}/api/budget/update`, {
+    if (
+      nameUpdateForm === budgetUpdate.budget_name &&
+      Number(priceUpdateForm) === Number(budgetUpdate.budget_price)
+    ) {
+      alert("⚠️ Aucune modification n’a été détectée");
+      return;
+    }
+
+    const answer = await fetch(`${apiUrl}/api/budget/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -177,6 +255,14 @@ function Budget() {
 
     setNameUpdateForm("");
     setPriceUpdateForm(undefined);
+
+    const data = await answer.json();
+
+    alert(
+      answer.ok
+        ? "✅ Succès : Budget mis à jour avec succès"
+        : `❌ Erreur : ${answer.status} - ${JSON.stringify(data)}`,
+    );
   }
 
   async function deleteBudget(e: React.FormEvent, id: number) {
@@ -204,25 +290,32 @@ function Budget() {
 
       {showCreateForm ? (
         /* -- Create Form -- */
-        <form className="createForm" onSubmit={(e) => addBudget(e)}>
-          {/* Name */}
-          <input
-            type="text"
-            placeholder="Le nom du budget"
-            onChange={(e) => setNameCreateForm(e.target.value)}
-            required
-          />
+        <div className="form">
+          <form className="createForm" onSubmit={(e) => addBudget(e)}>
+            <div className="mobileOnly">
+              <h5>Ajoute un budget</h5>
+              <X className="icons" onClick={() => setShowCreateForm(false)} />
+            </div>
 
-          {/* Name */}
-          <input
-            type="number"
-            placeholder="Le prix du budget"
-            onChange={(e) => setPriceCreateForm(Number(e.target.value))}
-            required
-          />
+            {/* Name */}
+            <input
+              type="text"
+              placeholder="Le nom du budget"
+              onChange={(e) => setNameCreateForm(e.target.value)}
+              required
+            />
 
-          <button type="submit">Ajout le budget</button>
-        </form>
+            {/* Name */}
+            <input
+              type="number"
+              placeholder="Le prix du budget"
+              onChange={(e) => setPriceCreateForm(Number(e.target.value))}
+              required
+            />
+
+            <button type="submit">Ajouter</button>
+          </form>
+        </div>
       ) : (
         ""
       )}
@@ -234,7 +327,10 @@ function Budget() {
           {userBalance === 0 && <span>comptes équilibrés</span>}
           <h2>{userBalance}€</h2>
           <small>
-            <History /> last update : yesterday
+            <History /> last update :{" "}
+            {returnDateString(
+              listBudget[listBudget.length - 1]?.budget_creation_date,
+            )}
           </small>
         </article>
 
@@ -256,7 +352,7 @@ function Budget() {
       <section className="expensesAndBalance">
         <div className="expenses">
           <div className="mobileExpenses">
-            <h5>Dépenses</h5> <button type="button"> voir plus</button>
+            <h5>Dépenses</h5>
           </div>
           <section>
             {listBudget.map((row) => {
@@ -278,14 +374,22 @@ function Budget() {
                       />
 
                       <Check
-                        className="positif"
+                        className={`icons positif ${nameUpdateForm === budgetUpdate.budget_name && Number(priceUpdateForm) === Number(budgetUpdate.budget_price) ? "disabled" : ""}`}
                         onClick={(e) => {
-                          updateBudget(e);
-                          setBudgetUpdate(null);
+                          if (
+                            !(
+                              nameUpdateForm === budgetUpdate.budget_name &&
+                              Number(priceUpdateForm) ===
+                                Number(budgetUpdate.budget_price)
+                            )
+                          ) {
+                            updateBudget(e);
+                            setBudgetUpdate(null);
+                          }
                         }}
                       />
                       <X
-                        className="negatif"
+                        className="icons negatif"
                         onClick={() => {
                           setBudgetUpdate(null);
                         }}
@@ -296,7 +400,9 @@ function Budget() {
                       <span>{row.budget_name}</span>
                       <span
                         className={
-                          row.budget_id_user !== userID ? "positif" : "negatif"
+                          row.budget_id_user !== userID
+                            ? "price positif"
+                            : "price negatif"
                         }
                       >
                         {row.budget_id_user !== userID
@@ -361,7 +467,11 @@ function Budget() {
         </div>
       </section>
 
-      <button type="button" className="addButton">
+      <button
+        type="button"
+        className="addButton"
+        onClick={() => setShowCreateForm(!showCreateForm)}
+      >
         <Plus size={20} />
       </button>
     </div>
