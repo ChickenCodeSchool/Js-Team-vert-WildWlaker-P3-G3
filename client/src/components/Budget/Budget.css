@@ -9,7 +9,7 @@
 
 .budget {
   background: var(--bg-color);
-  padding: 2rem 3rem;
+  /*padding: 2rem 3rem;*/
   gap: 2rem;
 
   .myBalance {
@@ -35,6 +35,11 @@
 
   .negatif {
     color: var(--font-red);
+  }
+
+  .disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   .expensesAndBalance {

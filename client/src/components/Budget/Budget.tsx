@@ -155,7 +155,26 @@ function Budget() {
   async function addBudget(e: React.FormEvent) {
     e.preventDefault();
 
-    await fetch(`${apiUrl}/api/budget/add`, {
+    if (!nameCreateForm.trim()) {
+      alert("❌ Erreur : Nom obligatoire");
+      return;
+    }
+
+    if (
+      priceCreateForm === undefined ||
+      Number.isNaN(priceCreateForm) ||
+      priceCreateForm === 0
+    ) {
+      alert("❌ Erreur : Prix invalide");
+      return;
+    }
+
+    if (priceCreateForm < 0) {
+      alert("❌ Erreur : Prix ne peux pas être négatif");
+      return;
+    }
+
+    const answer = await fetch(`${apiUrl}/api/budget/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -171,6 +190,14 @@ function Budget() {
     setNameCreateForm("");
     setPriceCreateForm(undefined);
     setShowCreateForm(false);
+
+    const data = await answer.json();
+
+    alert(
+      answer.ok
+        ? "✅ Succès : Budget ajouter avec succès"
+        : `❌ Erreur : ${answer.status} - ${JSON.stringify(data)}`,
+    );
   }
 
   function openUpdateForm(budget: Budget) {
@@ -183,9 +210,36 @@ function Budget() {
   async function updateBudget(e: React.FormEvent) {
     e.preventDefault();
 
+    if (!nameUpdateForm.trim()) {
+      alert("❌ Erreur : Nom obligatoire");
+      return;
+    }
+
+    if (
+      priceUpdateForm === undefined ||
+      Number.isNaN(priceUpdateForm) ||
+      priceUpdateForm === 0
+    ) {
+      alert("❌ Erreur : Prix invalide");
+      return;
+    }
+
+    if (priceUpdateForm < 0) {
+      alert("❌ Erreur : Prix ne peux pas être négatif");
+      return;
+    }
+
     if (budgetUpdate === null) return;
 
-    await fetch(`${apiUrl}/api/budget/update`, {
+    if (
+      nameUpdateForm === budgetUpdate.budget_name &&
+      Number(priceUpdateForm) === Number(budgetUpdate.budget_price)
+    ) {
+      alert("⚠️ Aucune modification n’a été détectée");
+      return;
+    }
+
+    const answer = await fetch(`${apiUrl}/api/budget/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -201,6 +255,14 @@ function Budget() {
 
     setNameUpdateForm("");
     setPriceUpdateForm(undefined);
+
+    const data = await answer.json();
+
+    alert(
+      answer.ok
+        ? "✅ Succès : Budget mis à jour avec succès"
+        : `❌ Erreur : ${answer.status} - ${JSON.stringify(data)}`,
+    );
   }
 
   async function deleteBudget(e: React.FormEvent, id: number) {
@@ -312,10 +374,18 @@ function Budget() {
                       />
 
                       <Check
-                        className="icons positif"
+                        className={`icons positif ${nameUpdateForm === budgetUpdate.budget_name && Number(priceUpdateForm) === Number(budgetUpdate.budget_price) ? "disabled" : ""}`}
                         onClick={(e) => {
-                          updateBudget(e);
-                          setBudgetUpdate(null);
+                          if (
+                            !(
+                              nameUpdateForm === budgetUpdate.budget_name &&
+                              Number(priceUpdateForm) ===
+                                Number(budgetUpdate.budget_price)
+                            )
+                          ) {
+                            updateBudget(e);
+                            setBudgetUpdate(null);
+                          }
                         }}
                       />
                       <X
