@@ -65,7 +65,7 @@ function Messagerie() {
       .then((res) => res.json())
       .then((data) => setReceptionMessagesUser(data));
   }
-
+  console.log(setReceptionMessagesUser);
   return (
     <div className="messagerie">
       <h1>{receptionMessagesUser[0]?.event_name}</h1>

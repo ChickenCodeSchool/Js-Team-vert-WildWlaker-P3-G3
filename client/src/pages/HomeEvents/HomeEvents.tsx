@@ -7,6 +7,7 @@ import CardEvents from "../../components/AddEvents/CardEvents";
 import Filter from "../../components/AddEvents/Filter";
 import ModalAddEvent from "../../components/AddEvents/ModalAddEvent";
 import NavBar from "../../components/NavBar/NavBar";
+import Profil from "../../components/Profil/Profil";
 
 import "./HomeEvents.css";
 
@@ -55,6 +56,7 @@ function HomeEvents() {
     <>
       <header className="HomeEvents-NavBar">
         <NavBar />
+        <Profil />
       </header>
       <div className="HomeEvents-Global">
         <div className="HomeEvents-Title">

@@ -138,7 +138,9 @@
       background: #dc2626;
       color: white;
     }
-
+    .deconnexion-none {
+      display: none;
+    }
     .fermer {
       background: transparent;
       color: #6b7280;

@@ -76,13 +76,13 @@ FROM user
         UNION ALL
 
         SELECT
-          MONTH(event_date) AS month_number,
-          DATE_FORMAT(event_date, '%b') AS month,
+          MONTH(event_creation_date) AS month_number,
+          DATE_FORMAT(event_creation_date, '%b') AS month,
           0 AS users,
           COUNT(event_id) AS events,
           0 AS reports
         FROM event
-        GROUP BY MONTH(event_date), DATE_FORMAT(event_date, '%b')
+        GROUP BY MONTH(event_creation_date), DATE_FORMAT(event_creation_date, '%b')
 
         UNION ALL
 
