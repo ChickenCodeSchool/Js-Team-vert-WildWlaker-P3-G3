@@ -5,9 +5,10 @@ import ReportEvidence from "../../components/ReportUser/ReportEvidence";
 import ReportType from "../../components/ReportUser/ReportType";
 import "./UserReport.css";
 import { useEffect, useState } from "react";
+import NavBar from "../../components/NavBar/NavBar";
+import Profil from "../../components/Profil/Profil";
 import ReportUserModal from "../../components/ReportUser/ReportUserModal";
 import type EventUserJoin from "../../types/eventUserJoining";
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 function UserReport() {
@@ -104,7 +105,8 @@ function UserReport() {
 
   return (
     <>
-      <nav className="userReport-Nav">composant/nav</nav>
+      <NavBar />
+      <Profil />
       <main className="userReport-Main">
         <header className="userReport-Header">
           <button
