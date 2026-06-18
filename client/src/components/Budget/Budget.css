@@ -335,6 +335,14 @@
         transition: opacity 0.2s ease, transform 0.1s ease;
         width: auto;
         margin-right: 5.9vh;
+
+        &:hover {
+          opacity: 0.9;
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
       }
     }
 

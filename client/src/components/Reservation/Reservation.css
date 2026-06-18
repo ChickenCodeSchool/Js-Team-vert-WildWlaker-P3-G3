@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Carter+One&family=Inter:ital,opsz,wght@0,14..32,800;1,14..32,800&family=Lexend:wght@100..900&family=Limelight&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Display:ital,wght@0,100..900;1,100..900&family=Oi&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playfair:ital,opsz,wght@1,5..1200,300..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Space+Grotesk:wght@300..700&family=Ultra&display=swap");
 .reservation {
   padding: 2rem 3rem 2rem 0;
+  width: 70.5vw;
   .reservation-title {
     display: flex;
     justify-content: space-between;
@@ -28,8 +29,12 @@
       transition: opacity 0.2s ease, transform 0.1s ease;
       width: auto;
 
-      button:hover {
-        transform: scale(0.95);
+      &:hover {
+        opacity: 0.9;
+      }
+
+      &:active {
+        transform: scale(0.98);
       }
     }
 
