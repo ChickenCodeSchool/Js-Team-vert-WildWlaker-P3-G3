@@ -54,7 +54,7 @@ function HomeEvents() {
 
   return (
     <>
-      <header>
+      <header className="HomeEvents-NavBar">
         <NavBar />
         <Profil />
       </header>

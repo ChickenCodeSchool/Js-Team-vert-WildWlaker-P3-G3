@@ -129,3 +129,20 @@
     }
   }
 }
+@media screen and (max-width: 428px) {
+  .ModalEditEvent-Global {
+    width: 23rem;
+    .ModalEditEvent-DateGlobal {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .ModalEditEvent-Footer {
+      .ModalEditEvent-ButtonCancel {
+        width: 9rem;
+      }
+      .ModalEditEvent-ButtonSubmit {
+        width: 9rem;
+      }
+    }
+  }
+}
