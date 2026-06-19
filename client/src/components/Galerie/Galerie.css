@@ -5,7 +5,7 @@
   box-sizing: border-box;
 
   h1 {
-    color: #b2553d;
+    color: var(--font-title);
     font-size: 1.4rem;
     font-weight: 700;
     margin: 0;
@@ -16,16 +16,16 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 3.5vh;
     gap: 1rem;
-    width: 100%;
+    width: 62.6vw;
   }
 
   .galerie-button {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.65rem 1.5rem;
+    padding: 0.65rem 2rem;
     border: none;
     border-radius: 999px;
     background: linear-gradient(90deg, #ff8a65 0%, #b2553d 100%);
@@ -277,10 +277,11 @@
 /* ➔ 💻 ORDINATEURS */
 @media (min-width: 1024px) {
   .galerie {
-    padding: 2rem 3rem;
+    padding: 3rem 3rem 2rem 0;
+    width: 70.5vw;
 
     h1 {
-      font-size: 1.5rem;
+      font-size: 2rem;
     }
 
     .galerie-grid {

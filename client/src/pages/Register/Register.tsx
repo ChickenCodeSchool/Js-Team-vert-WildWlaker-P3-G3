@@ -14,10 +14,8 @@ function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [submitted, _setSubmitted] = useState(false);
 
   const usernameValid = username.trim().length >= 3;
-
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const passwordRules = {
@@ -29,9 +27,7 @@ function Register() {
   };
 
   const passwordValid = Object.values(passwordRules).every(Boolean);
-
   const passwordsMatch = password === confirmPassword && confirmPassword !== "";
-
   const formValid =
     usernameValid &&
     emailValid &&
@@ -43,224 +39,185 @@ function Register() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       const response = await fetch("http://localhost:3310/api/users", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          email,
-          password,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, password }),
       });
 
       const data = await response.json();
-
       if (!response.ok) {
         alert(data.message);
         return;
       }
-
       alert(data.message || "Inscription réussie 🎉");
-
-      console.log("USER CREATED:", data);
-
       navigate("/connexion");
     } catch (error) {
-      console.error("ERROR:", error);
+      console.error(error);
       alert("Erreur serveur");
     }
   };
 
   return (
-    <>
-      <div className="register-page">
-        <div className="navbar-register">
-          <Link to="/" className="nav-register">
-            <img src={logo} alt="logo-wedoo" />
-            <h1>
-              WE<i>D</i>OO
-            </h1>
-          </Link>
+    <div className="register-page">
+      <div className="navbar-register">
+        <Link to="/" className="nav-register">
+          <img src={logo} alt="logo-wedoo" />
+          <h1>
+            WE<i>D</i>OO
+          </h1>
+        </Link>
+      </div>
+      <div className="register-section">
+        <div className="register-img-text">
+          <img src={connexionImg} alt="register-img" className="register-img" />
+          <div className="register-text">
+            <h2>Facilitez vos prochains événements.</h2>
+            <p className="register-parag">
+              Wedoo vous propose une expérience utilisateur simple et efficace.
+            </p>
+          </div>
         </div>
-        <div className="register-section">
-          <div className="register-img-text">
-            <img
-              src={connexionImg}
-              alt="register-img"
-              className="register-img"
+        <form className="register-content" onSubmit={handleSubmit}>
+          <div className="wel-para-title-register">
+            <h2>Bienvenue</h2>
+            <p>Inscrivez-vous à WEDOO.</p>
+          </div>
+          <div className="input-group">
+            <label htmlFor="username">Identifiant</label>
+            <input
+              type="text"
+              id="username"
+              placeholder="Entrez votre pseudo"
+              required
+              className="input-focus"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
-            <div className="register-text">
-              <h2>Facilitez vos prochains événements.</h2>
-              <p className="register-parag">
-                Wedoo vous propose une expérience utilisateur simple et
-                efficace.
+            {username && (
+              <p
+                className={`status-msg ${usernameValid ? "success" : "error"}`}
+              >
+                {usernameValid ? "✓ Pseudo valide" : "✗ Minimum 3 caractères"}
+              </p>
+            )}
+          </div>
+          <div className="input-group">
+            <label htmlFor="email">Adresse email</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="nom@wedoo.com"
+              required
+              className="input-focus"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            {email && (
+              <p className={`status-msg ${emailValid ? "success" : "error"}`}>
+                {emailValid ? "✓ Email valide" : "✗ Adresse email invalide"}
+              </p>
+            )}
+          </div>
+          <div className="input-group">
+            <label htmlFor="password">Mot de passe</label>
+            <div className="container-password-register">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                placeholder="Entrez votre mot de passe"
+                required
+                className="input-focus"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <img src={showPassword ? eye : hide} alt="Toggle view" />
+              </button>
+            </div>
+            <div>
+              <p
+                className={`status-msg ${passwordRules.length ? "success" : "error"}`}
+              >
+                Minimum 12 caractères
+              </p>
+              <p
+                className={`status-msg ${passwordRules.uppercase ? "success" : "error"}`}
+              >
+                Une majuscule
+              </p>
+              <p
+                className={`status-msg ${passwordRules.lowercase ? "success" : "error"}`}
+              >
+                Une minuscule
+              </p>
+              <p
+                className={`status-msg ${passwordRules.number ? "success" : "error"}`}
+              >
+                Un chiffre
+              </p>
+              <p
+                className={`status-msg ${passwordRules.special ? "success" : "error"}`}
+              >
+                Un caractère spécial
               </p>
             </div>
           </div>
-          <form className="register-content" onSubmit={handleSubmit}>
-            <div className="wel-para-title-register">
-              <h2 className="Welcome-title-register">Bienvenue</h2>
-              <p className="Welcome-para-register">Inscrivez-vous à WEDOO.</p>
-            </div>
-            <div className="id-input-label-register">
-              <label htmlFor="identifiant" className="id-register">
-                Identifiant
-              </label>
-              <br />
+          <div className="input-group">
+            <label htmlFor="confirmPassword">Confirmez le mot de passe</label>
+            <div className="container-password-register">
               <input
-                type="text"
-                placeholder="Entrez votre pseudo"
+                type={showConfirmPassword ? "text" : "password"}
+                id="confirmPassword"
+                placeholder="Confirmez votre mot de passe"
                 required
-                className={`input-focus id-input-register ${
-                  submitted && !usernameValid ? "input-error" : ""
-                }`}
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                className="input-focus"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              {username && (
-                <p className={usernameValid ? "success" : "error"}>
-                  {usernameValid ? "✓ Pseudo valide" : "✗ Minimum 3 caractères"}
-                </p>
-              )}
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                <img src={showConfirmPassword ? eye : hide} alt="Toggle view" />
+              </button>
             </div>
-            <div className="email-input-label-register">
-              <label htmlFor="email" className="email-register">
-                Adresse email
-              </label>
-              <br />
-              <input
-                type="email"
-                placeholder="nom@wedoo.com"
-                required
-                className={`input-focus email-input-register ${
-                  submitted && !emailValid ? "input-error" : ""
-                }`}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {email && (
-                <p className={emailValid ? "success" : "error"}>
-                  {emailValid ? "✓ Email valide" : "✗ Adresse email invalide"}
-                </p>
-              )}
-            </div>
-
-            <div className="password-input-label-register">
-              <label htmlFor="password" className="password-register">
-                Mots de Passe
-              </label>
-              <br />
-              <div className="container-password-register">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Entrez votre mots de passe"
-                  required
-                  className="input-focus password-input-register"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  <img
-                    src={showPassword ? eye : hide}
-                    alt="afficher/ne pas afficher"
-                    className="img-password-eye-register"
-                  />
-                </button>
-              </div>
-              <div>
-                <p className={passwordRules.length ? "success" : "error"}>
-                  Minimum 12 caractères
-                </p>
-
-                <p className={passwordRules.uppercase ? "success" : "error"}>
-                  Une majuscule
-                </p>
-
-                <p className={passwordRules.lowercase ? "success" : "error"}>
-                  Une minuscule
-                </p>
-
-                <p className={passwordRules.number ? "success" : "error"}>
-                  Un chiffre
-                </p>
-
-                <p className={passwordRules.special ? "success" : "error"}>
-                  Un caractère spécial
-                </p>
-              </div>
-            </div>
-            <div className="password-input-label-register">
-              <label htmlFor="password" className="password-register">
-                Confirmez le mots de passe
-              </label>
-              <br />
-              <div className="container-password-register">
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Confirmez votre mots de passe"
-                  required
-                  className="input-focus password-input-confor-register"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  <img
-                    src={showConfirmPassword ? eye : hide}
-                    alt="afficher/ne pas afficher"
-                    className="img-password-eye-register"
-                  />
-                </button>
-              </div>
-              {password !== confirmPassword && confirmPassword !== "" && (
-                <p className="error-register">
-                  ✗ Les mots de passe ne correspond pas
-                </p>
-              )}
-            </div>
-
-            <div className="checkbox-input-label-register">
-              <input
-                type="checkbox"
-                required
-                checked={acceptedTerms}
-                onChange={(e) => setAcceptedTerms(e.target.checked)}
-              />
-              <label htmlFor="remember" className="label-checkbox-register">
-                {" "}
-                J'accepte les{" "}
-                <span className="cgd-register">
-                  conditions générales d'utilisation{" "}
-                </span>
-                de WEDOO
-              </label>
-            </div>
-            <button
-              type="submit"
-              className="button-register-submit"
-              disabled={!formValid}
-            >
-              Valider
-            </button>
-            <h5 className="register-link-connection">
-              Déjà un compte ?{" "}
-              <Link to="/connexion" className="register-link">
-                Se connecter
-              </Link>
-            </h5>
-          </form>
-        </div>
+            {password !== confirmPassword && confirmPassword !== "" && (
+              <p className="status-msg error">
+                ✗ Les mots de passe ne correspondent pas
+              </p>
+            )}
+          </div>
+          <div className="checkbox-group">
+            <input
+              type="checkbox"
+              id="terms"
+              required
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+            />
+            <label htmlFor="terms">
+              J'accepte les <span>conditions générales d'utilisation</span> de
+              WEDOO
+            </label>
+          </div>
+          <button
+            type="submit"
+            className="button-register-submit"
+            disabled={!formValid}
+          >
+            Valider
+          </button>
+          <h5 className="register-link-connection">
+            Déjà un compte ? <Link to="/connexion">Se connecter</Link>
+          </h5>
+        </form>
       </div>
-    </>
+    </div>
   );
 }
 

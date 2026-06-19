@@ -1,25 +1,29 @@
 .messagerie {
-  font-family: "Be Vietnam Pro", sans-serif;
-  font-weight: 300;
-  font-style: normal;
-  height: 90vh;
-  width: 40vw;
-  background: var(--bg-composant-dash);
-  padding: 0 30px;
-  border-radius: 5px;
-  border: 1px solid var(--border-color);
   h1 {
     color: var(--font-brown);
-    padding-top: 15px;
+    padding: 3rem 3rem 0 0;
   }
 
   .messagerie-box {
+    font-family: "Be Vietnam Pro", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    height: 78vh;
+    width: 67.5vw;
+    background: var(--bg-composant-dash);
+    padding: 30px;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 83vh;
+    margin-top: 2.5vh;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
     .messagerie-box-messages {
-      height: 70vh;
+      flex: 1;
+      min-height: 0;
       overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: transparent transparent;
@@ -41,6 +45,9 @@
           border: 1px solid #dec0b9;
           padding: 5px;
           border-radius: 12px 12px 12px 0;
+          white-space: pre-wrap;
+          word-break: break-word;
+          max-width: 45%;
         }
       }
 
@@ -50,26 +57,31 @@
         justify-content: flex-end;
         padding: 2px 0 2px 0;
         div {
-          background-color: #fff8f5;
+          background-color: #ff7e5f;
           border: 1px solid #dec0b9;
           padding: 5px;
           border-radius: 12px 12px 0 12px;
+          white-space: pre-wrap;
+          word-break: break-word;
+          max-width: 45%;
+          color: white;
         }
       }
     }
 
     .massagerie-input {
+      flex-shrink: 0;
       width: 100%;
       display: flex;
-      flex-direction: row;
       align-items: center;
       gap: 5px;
-      height: 6%;
+      height: 48px;
       border: 1px solid #ff7e5f;
       border-radius: 21px;
+      margin-bottom: 10px;
       input {
         padding-left: 10px;
-        width: 90%;
+        width: 96%;
         border-style: none;
         background: none;
       }
@@ -100,11 +112,13 @@
 
     h1 {
       font-size: 28px;
-      margin: 0 0 20px;
+      margin: 0;
+      padding: 0 0 30px 0;
     }
 
     .messagerie-box {
-      height: calc(100vh - 90px);
+      height: calc(84vh - 75px);
+      width: calc(100vw - 32px);
 
       .messagerie-box-messages {
         height: calc(100% - 60px);
@@ -133,7 +147,7 @@
       .massagerie-input {
         height: 44px;
         margin-top: 12px;
-        margin-bottom: 7vh;
+        /* margin-bottom: 6vh; */
 
         input {
           width: 85%;

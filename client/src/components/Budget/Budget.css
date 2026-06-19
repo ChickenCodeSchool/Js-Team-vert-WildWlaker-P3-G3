@@ -9,7 +9,7 @@
 
 .budget {
   background: var(--bg-color);
-  /*padding: 2rem 3rem;*/
+  padding: 3rem 3rem 2rem 0;
   gap: 2rem;
 
   .myBalance {
@@ -17,7 +17,7 @@
       background: linear-gradient(135deg, #ff8a6a, #c24a2d);
       box-shadow: 0 12px 30px rgba(100 35 19 / 65%);
       border-radius: 22px;
-      padding: 24px 32px;
+      padding: 42px 32px;
       color: var(--bg-neutral);
 
       small {
@@ -84,7 +84,6 @@
   .budget {
     display: flex;
     flex-direction: column;
-    align-items: center;
 
     padding: 1rem;
 
@@ -303,41 +302,47 @@
 /* ---------- Desktop ---------- */
 @media screen and (min-width: 429px) {
   .budget {
-    width: 75vw;
+    width: 70.5vw;
     height: 90vh;
     display: flex;
     flex-direction: column;
 
     header {
-      width: 100%;
+      width: 65.8vw;
       display: flex;
       align-items: center;
       justify-content: space-between;
 
       h1 {
         color: var(--font-brown);
-        font-size: 3vw;
-        font-weight: 600;
+        /* font-size: 3vw;
+        font-weight: 600; */
       }
 
       button {
-        height: 40px;
-        border-radius: 50px;
-        background: var(--button-color);
-        border-style: none;
-        color: var(--bg-neutral);
-        font-family: "Be Vietnam Pro", sans-serif;
-        font-weight: 400;
-        font-style: normal;
-        padding: 10px;
-
         display: flex;
+        gap: 0.5rem;
         align-items: center;
-        gap: 5px;
+        padding: 0.65rem 1.6rem;
+        border: none;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #ff8a65 0%, #b2553d 100%);
+        color: white;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        transition: opacity 0.2s ease, transform 0.1s ease;
+        width: auto;
+        margin-right: 5.9vh;
 
-        margin-right: 5vw;
+        &:hover {
+          opacity: 0.9;
+        }
 
-        box-shadow: 0 4px 8px rgba(108, 39, 13, 0.776);
+        &:active {
+          transform: scale(0.98);
+        }
       }
     }
 
@@ -346,6 +351,7 @@
       gap: 15px;
       align-items: center;
       justify-content: center;
+      margin-bottom: 30px;
 
       .mobileOnly {
         display: none;
@@ -387,10 +393,10 @@
       gap: 3rem;
       font-size: 1.5rem;
       align-items: stretch;
-      margin-left: 3vw;
+      /* margin-left: 3vw; */
 
       .myBalanceBox {
-        height: 80%;
+        height: 100%;
         background: linear-gradient(135deg, #ff8a6a, #c24a2d);
         box-shadow: 0 12px 30px rgba(100 35 19 / 65%);
 
@@ -445,8 +451,8 @@
     .expensesAndBalance {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      margin-top: 2rem;
+      gap: 6rem;
+      margin-top: 5rem;
 
       align-self: start;
       margin-left: 3vw;

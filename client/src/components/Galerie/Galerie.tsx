@@ -202,7 +202,7 @@ function Galerie() {
           className="galerie-button"
           onClick={() => setIsModalOpen(true)}
         >
-          <ImagePlus size={18} />
+          <ImagePlus size={20} />
           Ajouter une photo
         </button>
       </div>

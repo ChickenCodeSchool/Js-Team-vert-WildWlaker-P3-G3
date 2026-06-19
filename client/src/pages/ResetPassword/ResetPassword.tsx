@@ -1,7 +1,6 @@
 import "./ResetPassword.css";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
-import { useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import connexionImg from "../../assets/images/Connexion-img.png";
 import eye from "../../assets/images/eye.png";
 import hide from "../../assets/images/hide.png";
@@ -22,9 +21,7 @@ function ResetPassword() {
   };
 
   const passwordValid = Object.values(passwordRules).every(Boolean);
-
   const passwordsMatch = password === confirmPassword && confirmPassword !== "";
-
   const formValid = passwordValid && passwordsMatch;
 
   const [searchParams] = useSearchParams();
@@ -37,7 +34,9 @@ function ResetPassword() {
 
     const res = await fetch("http://localhost:3310/api/auth/reset-password", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ token, password }),
     });
 
@@ -60,56 +59,60 @@ function ResetPassword() {
   return (
     <>
       <div className="navbar-resetpassword">
-        <Link to="/" className="nav-resetpassword">
+        <Link to="/">
           <img src={logo} alt="logo-wedoo" />
           <h1>
             WE<i>D</i>OO
           </h1>
         </Link>
       </div>
+
       <div className="resetpassword-section">
-        <div className="resetpassword-img-text">
+        <div className="resetpassword-image">
           <img
             src={connexionImg}
             alt="resetpassword-img"
             className="resetpassword-img"
           />
-          <div className="resetpassword-text">
+
+          <div className="text">
             <h2>Facilitez vos prochains événements.</h2>
-            <p className="resetpassword-parag">
+            <p>
               Wedoo vous propose une expérience utilisateur simple et efficace.
             </p>
           </div>
         </div>
+
         <form className="resetpassword-content" onSubmit={handleReset}>
-          <div className="resetpassword-para-title">
+          <div className="title">
             <h2>Changez votre mot de passe.</h2>
           </div>
-          <div className="password-input-label-resetpassword">
-            <label htmlFor="password" className="password-resetpassword">
-              Nouveau mot de passe
-            </label>
-            <br />
-            <div className="container-password-resetpassword">
+
+          <div className="field">
+            <label htmlFor="password">Nouveau mot de passe</label>
+
+            <div className="password-container">
               <input
+                id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Entrer votre nouveau mot de passe"
                 required
-                className="input-focus password-input-resetpassword"
+                className="input-focus"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 <img
                   src={showPassword ? eye : hide}
-                  alt="afficher/ne pas afficher"
-                  className="img-password-eye"
+                  alt="Afficher le mot de passe"
                 />
               </button>
             </div>
+
             <div>
               <p className={passwordRules.length ? "success" : "error"}>
                 Minimum 12 caractères
@@ -132,35 +135,37 @@ function ResetPassword() {
               </p>
             </div>
           </div>
-          <div className="password-input-label-resetpassword">
-            <label htmlFor="password" className="password-resetpassword">
-              Confirmez le mot de passe
-            </label>
-            <br />
-            <div className="container-password-resetpassword">
+
+          <div className="field">
+            <label htmlFor="confirmPassword">Confirmez le mot de passe</label>
+
+            <div className="password-container">
               <input
+                id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirmer votre mot de passe"
                 required
-                className="input-focus password-input-confor-resetpassword"
+                className="input-focus"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
+
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 <img
                   src={showConfirmPassword ? eye : hide}
-                  alt="afficher/ne pas afficher"
-                  className="img-password-eye"
+                  alt="Afficher le mot de passe"
                 />
               </button>
             </div>
+
             {password !== confirmPassword && confirmPassword !== "" && (
               <p className="error">✗ Le mot de passe ne correspond pas</p>
             )}
           </div>
+
           <button
             type="submit"
             className="button-resetpassword-submit"

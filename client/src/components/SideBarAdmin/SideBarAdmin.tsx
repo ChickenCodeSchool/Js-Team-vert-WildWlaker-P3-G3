@@ -23,7 +23,7 @@ function SideBarAdmin({ active, setActive }: SideBarProps) {
             </button>
           </li>
           <li className={active === "signalement" ? "active" : ""}>
-            <button type="button" onClick={() => setActive("messagerie")}>
+            <button type="button" onClick={() => setActive("signalement")}>
               <TriangleAlert size={20} className="signal" />
               <span>Signalement</span>
             </button>

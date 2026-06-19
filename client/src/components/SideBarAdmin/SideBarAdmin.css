@@ -4,12 +4,12 @@
     font-family: "Be Vietnam Pro", sans-serif;
     font-weight: 300;
     font-style: normal;
-    max-height: 100vh;
+    min-height: 95vh;
     display: flex;
     align-items: flex-start;
     width: 14vw;
     padding: 20px 0 0 0;
-
+    position: fixed;
     flex-direction: column;
     background-color: #feb47b5b;
     border-radius: 40px;

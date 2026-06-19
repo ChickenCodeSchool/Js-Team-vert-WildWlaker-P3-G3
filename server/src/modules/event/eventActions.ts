@@ -101,6 +101,23 @@ const browseImages: RequestHandler = (req, res, next) => {
   }
 };
 
+const read: RequestHandler = async (req, res, next) => {
+  try {
+    const eventId = Number(req.params.id);
+
+    const event = await eventRepository.read(eventId);
+
+    if (!event) {
+      res.sendStatus(404);
+      return;
+    }
+
+    res.json(event);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const edit: RequestHandler = async (req, res, next) => {
   const eventId = Number(req.params.id);
   const {
@@ -133,6 +150,7 @@ const edit: RequestHandler = async (req, res, next) => {
 
 export default {
   browse,
+  read,
   add,
   join,
   browseImages,
