@@ -69,7 +69,11 @@ function ResetPassword() {
 
       <div className="resetpassword-section">
         <div className="resetpassword-image">
-          <img src={connexionImg} alt="resetpassword-img" />
+          <img
+            src={connexionImg}
+            alt="resetpassword-img"
+            className="resetpassword-img"
+          />
 
           <div className="text">
             <h2>Facilitez vos prochains événements.</h2>

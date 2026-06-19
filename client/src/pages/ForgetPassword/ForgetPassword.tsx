@@ -78,20 +78,21 @@ function ForgetPassword() {
               réinitialisation.
             </p>
           </div>
-          <div className="email-input-label-forgetPassword">
+          <div className="input-group">
             <label htmlFor="id">Pseudo ou Email</label>
             <input
+              id="id"
               type="text"
               placeholder="Entrez votre pseudo ou email"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
-              className="input-focus email-input-forgetPassword"
+              className="input-focus"
             />
             {identifier && !identifierValid && (
               <p className="error">✗ Pseudo ou adresse email invalide</p>
             )}
+            {errorMessage && <p className="error">{errorMessage}</p>}
           </div>
-          {errorMessage && <p className="error">{errorMessage}</p>}
           <button
             type="submit"
             className="button-forgetPassword-submit"

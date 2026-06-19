@@ -79,7 +79,11 @@ function ChangePassword() {
 
       <section className="changepassword-section">
         <div className="image-side">
-          <img src={connexionImg} alt="Illustration connexion" />
+          <img
+            src={connexionImg}
+            alt="Illustration connexion"
+            className="changepassword-img"
+          />
 
           <div className="text-overlay">
             <h2>Facilitez vos prochains événements.</h2>
@@ -88,7 +92,6 @@ function ChangePassword() {
             </p>
           </div>
         </div>
-
         <form
           className="changepassword-content"
           onSubmit={handleChangePassword}
@@ -96,8 +99,7 @@ function ChangePassword() {
           <header>
             <h2>Changez votre mot de passe.</h2>
           </header>
-
-          <div className="field">
+          <div className="input-group">
             <label htmlFor="currentPassword">Ancien mot de passe</label>
 
             <div className="password-container">
@@ -107,9 +109,9 @@ function ChangePassword() {
                 placeholder="Entrer votre ancien mot de passe"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
+                className="input-focus"
                 required
               />
-
               <button
                 type="button"
                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
@@ -121,8 +123,7 @@ function ChangePassword() {
               </button>
             </div>
           </div>
-
-          <div className="field">
+          <div className="input-group">
             <label htmlFor="newPassword">Nouveau mot de passe</label>
 
             <div className="password-container">
@@ -132,6 +133,7 @@ function ChangePassword() {
                 placeholder="Entrer votre nouveau mot de passe"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="input-focus"
                 required
               />
 
@@ -168,10 +170,8 @@ function ChangePassword() {
               </p>
             </div>
           </div>
-
-          <div className="field">
+          <div className="input-group">
             <label htmlFor="confirmPassword">Confirmez le mot de passe</label>
-
             <div className="password-container">
               <input
                 id="confirmPassword"
@@ -179,9 +179,9 @@ function ChangePassword() {
                 placeholder="Confirmer votre mot de passe"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                className="input-focus"
                 required
               />
-
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}

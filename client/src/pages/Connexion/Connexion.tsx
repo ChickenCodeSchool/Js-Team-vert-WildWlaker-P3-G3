@@ -9,7 +9,7 @@ import logo from "../../assets/images/logo-wedoo.png";
 function Connexion() {
   const [showPassword, setShowPassword] = useState(false);
   const [identifier, setIdentifier] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [_submitted, setSubmitted] = useState(false);
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -86,28 +86,26 @@ function Connexion() {
             <h2>Bienvenue</h2>
             <p>Connectez-vous à votre tableau de bord.</p>
           </div>
-
-          <div className="email-input-label">
-            <label htmlFor="identifier">Pseudo ou Email</label>
+          <div className="input-group">
+            <div className="input-header">
+              <label htmlFor="identifier">Pseudo ou Email</label>
+            </div>
             <input
               id="identifier"
               type="text"
               placeholder="Entrez votre pseudo ou email"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
-              className={`input-focus email-input ${
-                submitted && !identifierValid ? "input-error" : ""
-              }`}
+              className="input-focus"
             />
           </div>
-
-          <div className="password-input-label">
-            <label htmlFor="password">Mot de passe</label>
-
-            <Link to="/forgetpassword" className="password-forget">
-              Mot de passe oublié ?
-            </Link>
-
+          <div className="input-group">
+            <div className="input-header">
+              <label htmlFor="password">Mot de passe</label>
+              <Link to="/forgetpassword" className="password-forget">
+                Mot de passe oublié ?
+              </Link>
+            </div>
             <div className="container-password">
               <input
                 id="password"
@@ -115,11 +113,8 @@ function Connexion() {
                 placeholder="Entrez votre mot de passe"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`input-focus password-input ${
-                  submitted && !passwordRules ? "input-error" : ""
-                }`}
+                className="input-focus password-input"
               />
-
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -142,11 +137,10 @@ function Connexion() {
           >
             Connexion
           </button>
-
           <h5 className="register-link-connection">
-            Pas encore inscrit ?
+            Pas encore inscrit ?{" "}
             <Link to="/register" className="register-link">
-              {""} Rejoins nous ici
+              Rejoins-nous ici
             </Link>
           </h5>
         </form>

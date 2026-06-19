@@ -1,273 +1,251 @@
-@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro&display=swap");
-
-body {
-  font-family: "Be Vietnam Pro", sans-serif;
-}
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700&display=swap");
 
 .input-focus:focus {
   outline: none;
-  border: 1px solid var(--border-color);
-  box-shadow: none;
-}
-
-.register-section {
-  display: flex;
-  justify-content: center;
-  margin: 5vh 20vw;
-  border-radius: 20px;
-  box-shadow: 0px 15px 50px rgba(0, 0, 0, 0.207);
-  max-width: 1100px;
-  background: white;
+  border: 1px solid #ff7e5f;
 }
 .navbar-register {
   width: 100%;
-  margin-top: 20px;
-  align-items: center;
+  margin-top: 25px; /* Aligné à 25px comme les autres pages */
   display: flex;
   justify-content: center;
-
+  align-items: center;
   img {
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
   }
-
   h1 {
-    font-size: 22px;
+    font-size: 20px;
+    margin: 0;
   }
   .nav-register {
     text-decoration: none;
-    font-size: 22px;
     color: #ff7e5f;
     display: flex;
     align-items: center;
   }
 }
-
-.register-img {
-  height: 100vh;
-  width: 30vw;
-  border-radius: 20px 0 0 20px;
-}
-
-.register-img-text {
-  position: relative;
-  display: inline-block;
-}
-
-.register-img-text img {
-  display: block;
-}
-
-.register-text {
-  position: absolute;
-  bottom: 0;
-  color: white;
-  margin: 6vh;
-  font-size: 20px;
-}
-
-.register-parag {
-  margin-top: 5px;
-  font-size: 10px;
-}
-
-.register-content {
+.register-section {
   display: flex;
-  flex-direction: column;
-  background-color: white;
-  margin: 0 3vh;
-  border-radius: 0 20px 20px 0;
-  max-height: 100vh;
-  overflow-y: auto;
-}
+  justify-content: center;
+  align-items: stretch;
+  width: 90%;
+  max-width: 900px;
+  margin: 4vh auto; /* Aligné à 4vh comme les autres pages */
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  background: white;
+  overflow: hidden;
+  .register-img-text {
+    position: relative;
+    flex: 1 1 50%;
+    min-width: 0;
 
-.title-register {
-  text-align: center;
-  margin: 2vw;
-}
+    .register-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .register-text {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 35px;
+      color: white;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+      h2 {
+        font-size: 24px;
+        margin: 0;
+        line-height: 1.3;
+      }
+    }
+    .register-parag {
+      margin-top: 10px;
+      font-size: 13px;
+      opacity: 0.9;
+    }
+  }
+  .register-content {
+    flex: 1 1 50%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 30px 40px;
+    background-color: white;
+    max-height: 110vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #ff7e5f rgba(0, 0, 0, 0.05);
+    .wel-para-title-register {
+      margin-bottom: 15px;
+      h2 {
+        font-size: 22px;
+        margin: 0;
+      }
+      p {
+        margin: 5px 0 0;
+        font-size: 13px;
+        color: #666;
+      }
+    }
+    .input-group {
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
 
-.wel-para-title-register {
-  margin: 2vh 2vw 0 2vw;
-}
+      label {
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
 
-.Welcome-title-register {
-  font-size: 40px;
-}
+      input {
+        width: 100%;
+        height: 50px;
+        box-sizing: border-box;
+        padding: 0 12px;
+        border-radius: 8px 8px 0px 0px;
+        background: rgba(226, 154, 154, 0.06);
+        border: 1px solid rgba(194, 118, 118, 0.2);
+        font-size: 13px;
+        &:focus {
+          outline: none;
+          border: 1px solid #ff7e5f;
+        }
+      }
+      .container-password-register {
+        position: relative;
+        width: 100%;
+        input {
+          padding-right: 40px;
+        }
+        button {
+          position: absolute;
+          top: 50%;
+          right: 12px;
+          transform: translateY(-50%);
+          background: transparent;
+          border: none;
+          padding: 0;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
 
-.Welcome-para-register {
-  font-size: 17px;
-}
+          img {
+            width: 18px;
+          }
+        }
+      }
+      .status-msg {
+        margin: 4px 0 0;
+        font-size: 11px;
 
-.id-input-label-register,
-.email-input-label-register,
-.password-input-label-register,
-.checkbox-input-label-register {
-  margin: 1vh 2vw;
-}
+        &.error {
+          color: red;
+        }
+        &.success {
+          color: green;
+        }
+      }
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin: 5px 0 15px;
 
-.id-register,
-.email-register,
-.password-register {
-  font-size: 12px;
-  font-weight: 700;
-}
+      input {
+        margin-right: 8px;
+        cursor: pointer;
+      }
 
-.id-input-register,
-.email-input-register,
-.password-input-register,
-.password-input-confor-register {
-  margin-top: 0.4vh;
-  width: 100%;
-  height: 50px;
-  box-sizing: border-box;
-  padding: 0 15px;
-  border-radius: 10px 10px 0 0;
-  background: var(--input-color);
-  border: 1px solid var(--border-color);
-}
+      label {
+        font-size: 12px;
+        color: #333;
 
-.password-input-register {
-  padding: 0 45px 0 15px;
-}
+        span {
+          color: #b44708;
+          font-weight: 700;
+        }
+      }
+    }
+    .button-register-submit {
+      padding: 11px;
+      border-radius: 20px;
+      border: none;
+      background: linear-gradient(90deg, #e98d66, #b44708);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.1s ease;
 
-.password-input-confor-register {
-  padding: 0 45px 0 15px;
-}
+      &:active {
+        transform: scale(0.98);
+      }
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #ccc;
+      }
+    }
+    .register-link-connection {
+      margin: 15px 0 0;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 400;
 
-.container-password-register {
-  position: relative;
-  width: 100%;
-}
+      a {
+        text-decoration: none;
+        color: #b44708;
+        font-weight: 700;
 
-::placeholder {
-  color: var(--font-placeholder);
-}
-
-.img-password-eye-register {
-  width: 20px;
-  position: absolute;
-  right: 20px;
-  top: 55%;
-  transform: translateY(-50%);
-  cursor: pointer;
-}
-.container-password-register button {
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-}
-
-.checkbox-input-register {
-  margin-right: 5px;
-}
-
-.label-checkbox-register {
-  font-size: 11px;
-}
-
-.button-register-submit {
-  margin: 1vh 2vw;
-  padding: 10px;
-  border-radius: 20px;
-  border: none;
-  background: linear-gradient(90deg, #e98d66, #b44708);
-  color: white;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.button-register-submit:active {
-  transform: scale(0.95);
-}
-
-.button-register-submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  background: var(--button-color-disable);
-  color: var(--font-button-color-disable);
-}
-
-.register-link {
-  text-decoration: none;
-  color: brown;
-}
-
-.register-link-connection {
-  margin-top: 2vh;
-  text-align: center;
-  margin-bottom: 50px;
-}
-
-.cgd-register {
-  color: brown;
-}
-
-.error-register {
-  color: red;
-  font-size: 12px;
-}
-
-.success {
-  color: green;
-  font-size: 12px;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 768px) {
   .register-section {
     flex-direction: column;
-    margin: 20px;
-  }
+    max-width: 450px;
+    margin: 15px auto;
 
-  .register-img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 20px 20px 0 0;
-  }
+    .register-img-text {
+      width: 100%;
+      height: 160px;
 
-  .register-content {
-    width: 100%;
-    margin: 0;
-    max-height: none;
-    overflow-y: visible;
-    border-radius: 0 0 20px 20px;
-  }
+      .register-text {
+        padding: 15px;
+        h2 {
+          font-size: 18px;
+        }
+      }
+      .register-img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 20px 20px 0 0;
+      }
+      .register-parag {
+        font-size: 11px;
+      }
+    }
+    .register-content {
+      width: 100%;
+      max-height: none;
+      overflow-y: visible;
+      box-sizing: border-box;
+      padding: 25px 20px;
 
-  .register-text {
-    margin: 20px;
-    font-size: 16px;
-    text-shadow: 2px 10px 5px rgba(0, 0, 0, 0.5);
-  }
-
-  .register-parag {
-    font-size: 12px;
-  }
-
-  .wel-para-title-register {
-    margin: 30px 20px 0;
-  }
-
-  .Welcome-title-register {
-    font-size: 28px;
-  }
-
-  .Welcome-para-register {
-    font-size: 14px;
-  }
-
-  .button-register-submit {
-    width: 90%;
-    margin: 15px 20px;
-  }
-
-  .img-password-eye-register {
-    right: 15px;
-  }
-  .id-input-label-register,
-  .email-input-label-register,
-  .password-input-label-register,
-  .checkbox-input-label-register {
-    margin: 1vh 5vw;
+      .button-register-submit {
+        width: 100%;
+      }
+    }
   }
 }
