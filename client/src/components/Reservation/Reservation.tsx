@@ -30,6 +30,8 @@ function Reservation() {
   const [reservationPicture, setReservationPicture] = useState<File | null>(
     null,
   );
+  const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
+
   console.log(activeModal);
   const [preview, setPreview] = useState("");
   useEffect(() => {
@@ -39,7 +41,16 @@ function Reservation() {
         setReservations(data);
       });
     [eventId];
-  });
+
+    const fetchTest = async () => {
+      const response = await fetch(
+        `http://localhost:3310/api/user-in-event/${eventId}/${userId}`,
+      );
+      const data = await response.json();
+      setUserInEvent(data.joined);
+    };
+    fetchTest();
+  }, [eventId, userId]);
   async function handleAddReservation() {
     const formData = new FormData();
 
@@ -85,6 +96,12 @@ function Reservation() {
       setReservationPicture(file);
       setPreview(URL.createObjectURL(file));
     }
+  }
+  if (userInEvent === null) {
+    return <p>Chargement...</p>;
+  }
+  if (userInEvent === false) {
+    return <p>Vous n'êtes pas inscrit à cet événement.</p>;
   }
   return (
     <>

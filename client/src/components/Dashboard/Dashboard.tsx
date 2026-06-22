@@ -33,10 +33,22 @@ function Dashboard() {
   const [userAndBudgetData, setUserAndBudgetData] = useState<UserAndBudget[]>(
     [],
   );
+  const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
   const { id } = useParams();
   const event = Number(id);
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
+
+  useEffect(() => {
+    const fetchTest = async () => {
+      const response = await fetch(
+        `http://localhost:3310/api/user-in-event/${event}/${userId}`,
+      );
+      const data = await response.json();
+      setUserInEvent(data.joined);
+    };
+    fetchTest();
+  }, [event, userId]);
 
   useEffect(() => {
     if (!userId) return;
@@ -74,6 +86,7 @@ function Dashboard() {
         setUserAndBudgetData(Array.isArray(data) ? data : []);
       });
   }, [event]);
+
   const totalReservations = new Set(
     eventData.map((item) => item.reservation_id).filter((id) => id !== null),
   ).size;
@@ -110,6 +123,12 @@ function Dashboard() {
     const reservationDate = new Date(date);
 
     return reservationDate < today ? "passe" : "a_venir";
+  }
+  if (userInEvent === null) {
+    return <p>Chargement...</p>;
+  }
+  if (userInEvent === false) {
+    return <p>Vous n'êtes pas inscrit à cet événement.</p>;
   }
   return (
     <div className="dashboard">

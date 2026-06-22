@@ -78,6 +78,10 @@ function getUserBudget(array: BudgetByUser[], id_user: number) {
 }
 
 function returnDateString(dateString: string) {
+  if (dateString === undefined) {
+    return "";
+  }
+
   const date = new Date(dateString);
   const targetDay = new Date(
     date.getFullYear(),
@@ -129,7 +133,13 @@ function Budget() {
     null,
   );
 
+  /* -- User in Event Confirmaton -- */
+
+  const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
+
   useEffect(() => {
+    fetchUserInEvent();
+
     fetchBudgetLists();
   }, []);
 
@@ -150,6 +160,16 @@ function Budget() {
     fetch(`${apiUrl}/api/budget/${eventID}`)
       .then((res) => res.json())
       .then((data: Budget[]) => setListBudget(data));
+  }
+
+  async function fetchUserInEvent() {
+    const response = await fetch(
+      `${apiUrl}/api/user-in-event/${eventID}/${userID}`,
+    );
+
+    const data = await response.json();
+
+    setUserInEvent(data.joined);
   }
 
   async function addBudget(e: React.FormEvent) {
@@ -273,6 +293,14 @@ function Budget() {
     });
 
     await fetchBudgetLists();
+  }
+
+  if (userInEvent === null) {
+    return <p>Chargement...</p>;
+  }
+
+  if (userInEvent === false) {
+    return <p>Vous n'êtes pas inscrit à cet événement.</p>;
   }
 
   return (

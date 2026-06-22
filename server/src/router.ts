@@ -107,6 +107,10 @@ router.post("/api/userreport-event", reportEventActions.add);
 
 // event user joining route
 router.get("/api/events/:eventId/users", eventUserJoiningActions.browse);
+router.get(
+  "/api/user-in-event/:event/:user",
+  eventUserJoiningActions.browseUserEvent,
+);
 
 // admin route
 router.get("/api/admin/reportUser", adminActions.readReportUser);

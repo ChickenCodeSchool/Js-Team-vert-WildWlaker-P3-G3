@@ -17,6 +17,7 @@ function Messagerie() {
   const [receptionMessagesUser, setReceptionMessagesUser] = useState<
     ReceptionMessagesUser[]
   >([]);
+  const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
 
   const { id } = useParams();
   const event = Number(id);
@@ -24,6 +25,7 @@ function Messagerie() {
   const userId = user?.id;
 
   useEffect(() => {
+    fetchUserEvent();
     fetchMessages();
   }, []);
 
@@ -33,6 +35,13 @@ function Messagerie() {
       .then((data) => setReceptionMessagesUser(data));
   }, [event]);
 
+  async function fetchUserEvent() {
+    const response = await fetch(
+      `http://localhost:3310/api/user-in-event/${event}/${userId}`,
+    );
+    const data = await response.json();
+    setUserInEvent(data.joined);
+  }
   async function handleSendMessage() {
     try {
       const response = await fetch(
@@ -65,7 +74,13 @@ function Messagerie() {
       .then((res) => res.json())
       .then((data) => setReceptionMessagesUser(data));
   }
-  console.log(setReceptionMessagesUser);
+  /*console.log(setReceptionMessagesUser);*/
+  if (userInEvent === null) {
+    return <p>Chargement...</p>;
+  }
+  if (userInEvent === false) {
+    return <p>Vous n'êtes pas inscrit à cet événement.</p>;
+  }
   return (
     <div className="messagerie">
       <h1>{receptionMessagesUser[0]?.event_name}</h1>

@@ -4,6 +4,7 @@ import Dashboard from "../../components/Dashboard/Dashboard.tsx";
 import Galerie from "../../components/Galerie/Galerie";
 import Messagerie from "../../components/Messagerie/Messagerie";
 import SideBar from "../../components/SideBar/SideBar";
+import NavBar from "../../components/NavBar/NavBar.tsx";
 
 import "./TableauDeBord.css";
 
@@ -16,6 +17,7 @@ function TableauDeBord() {
 
   return (
     <>
+      <NavBar />
       <Profil />
       <div className="dashboard-page">
         <SideBar active={active} setActive={setActive} />
