@@ -153,6 +153,7 @@ function Budget() {
     fetch(`${apiUrl}/api/budget/event/${eventID}`)
       .then((res) => res.json())
       .then((data: BudgetTotalEvent[]) => setBudgetEvent(data[0]));
+
     fetch(`${apiUrl}/api/budget/${eventID}/totalUsers`)
       .then((res) => res.json())
       .then((data: BudgetByUser[]) => setListUserBudget(data));

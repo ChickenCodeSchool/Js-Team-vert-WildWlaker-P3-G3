@@ -58,8 +58,6 @@ function Messagerie() {
         },
       );
 
-      console.log("Messagerie: réponse status", response.status);
-
       if (response.ok) {
         setMessagesUser("");
         fetchMessages();
@@ -74,7 +72,7 @@ function Messagerie() {
       .then((res) => res.json())
       .then((data) => setReceptionMessagesUser(data));
   }
-  /*console.log(setReceptionMessagesUser);*/
+
   if (userInEvent === null) {
     return <p>Chargement...</p>;
   }

@@ -22,7 +22,6 @@ function Reservation() {
 
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeModal, setActiveModal] = useState<string | null>(null);
   const [reservationName, setReservationName] = useState("");
   const [reservationDate, setReservationDate] = useState("");
   const [reservationLocation, setReservationLocation] = useState("");
@@ -32,7 +31,6 @@ function Reservation() {
   );
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
 
-  console.log(activeModal);
   const [preview, setPreview] = useState("");
   useEffect(() => {
     fetch(`http://localhost:3310/api/reservations/all/${eventId}`)
@@ -51,7 +49,9 @@ function Reservation() {
     };
     fetchTest();
   }, [eventId, userId]);
-  async function handleAddReservation() {
+  async function handleAddReservation(e: React.FormEvent) {
+    e.preventDefault();
+
     const formData = new FormData();
 
     formData.append("reservation_id_event", String(eventId));
@@ -117,11 +117,10 @@ function Reservation() {
               className="modal-overlay"
               onClick={() => {
                 setIsModalOpen(false);
-                setActiveModal(null);
               }}
               onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  setActiveModal(null);
+                if (e.key === "Enter") {
+                  handleAddReservation(e);
                 }
               }}
             >
@@ -129,8 +128,7 @@ function Reservation() {
                 className="modal"
                 onClick={(e) => e.stopPropagation()}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    setActiveModal(null);
+                  if (e.key === "Enter") {
                   }
                 }}
               >
@@ -183,7 +181,7 @@ function Reservation() {
                   <img src={preview} alt="preview" className="photo-preview" />
                 )}
 
-                <button type="button" onClick={handleAddReservation}>
+                <button type="button" onClick={(e) => handleAddReservation(e)}>
                   Enregistrer
                 </button>
               </div>

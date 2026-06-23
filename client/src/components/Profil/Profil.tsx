@@ -99,21 +99,15 @@ function Profil() {
     try {
       setErrorMessage("");
 
-      const response = await fetch(
-        `http://localhost:3310/api/users/${user_id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user_name,
-          }),
+      await fetch(`http://localhost:3310/api/users/${user_id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
-
-      const data = await response.json();
-      console.log(data);
+        body: JSON.stringify({
+          user_name,
+        }),
+      });
 
       setUserName("");
     } catch (error) {

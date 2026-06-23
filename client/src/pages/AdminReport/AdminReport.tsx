@@ -1,9 +1,7 @@
 import { useState } from "react";
 import NavBar from "../../components/NavBar/NavBar";
 import Profil from "../../components/Profil/Profil";
-import ReportAdminModal, {
-  type BanAction,
-} from "../../components/ReportAdmin/ReportAdminModal";
+import ReportAdminModal from "../../components/ReportAdmin/ReportAdminModal";
 import "./AdminReport.css";
 import {
   ArrowLeft,
@@ -16,8 +14,7 @@ import {
 function AdminReport() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const handleBanConfirm = (action: BanAction) => {
-    console.log("Bannissement confirmé :", action);
+  const handleBanConfirm = () => {
     setIsModalOpen(false);
   };
 

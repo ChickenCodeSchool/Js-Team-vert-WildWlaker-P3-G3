@@ -71,7 +71,6 @@ function CardEvents({
       }
 
       setIsDeleteModalOpen(false);
-      console.log("Réservation supprimée");
     } catch (error) {
       console.error(error);
     }

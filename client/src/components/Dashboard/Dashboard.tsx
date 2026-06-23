@@ -6,10 +6,10 @@ import TodoList from "../ToDoList/TodoList";
 
 type EventDashboard = {
   event_name: string;
-  euj_id_user: number | null;
-  reservation_id: number | null;
-  budget_price: string | number | null;
   event_description: string | null;
+  total_users: number | null;
+  total_reservations: number | null;
+  total_budgets: string | number | null;
 };
 type ReservationDashboard = {
   event_id: number | null;
@@ -19,20 +19,19 @@ type ReservationDashboard = {
   reservation_id: number;
 };
 type UserAndBudget = {
-  budget_price: string | number | null;
+  user_id: number;
+  user_username: string | null;
   user_name: string | null;
-  event_id: number;
+  total_price: number | null;
 };
 
 function Dashboard() {
-  const [eventData, setEventData] = useState<EventDashboard[]>([]);
+  const [eventData, setEventData] = useState<EventDashboard>();
   const [reservationData, setReservationData] = useState<
     ReservationDashboard[]
   >([]);
   const [userName, setUserName] = useState<string>("");
-  const [userAndBudgetData, setUserAndBudgetData] = useState<UserAndBudget[]>(
-    [],
-  );
+  const [userAndBudgetData, setUserAndBudgetData] = useState<UserAndBudget>();
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
   const { id } = useParams();
   const event = Number(id);
@@ -55,7 +54,6 @@ function Dashboard() {
     fetch(`http://localhost:3310/api/username/${userId}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data); // vérifie ce que tu reçois vraiment
         setUserName(data.username); // doit matcher ce que retourne l'API
       });
   }, [userId]);
@@ -64,7 +62,6 @@ function Dashboard() {
     fetch(`http://localhost:3310/api/reservations/${event}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("reservations:", data);
         setReservationData(Array.isArray(data) ? data : []);
       });
   }, [event]);
@@ -73,33 +70,17 @@ function Dashboard() {
     fetch(`http://localhost:3310/api/users/description/${event}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("eventData:", data);
-        setEventData(Array.isArray(data) ? data : []);
+        setEventData(data[0]);
       });
   }, [event]);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/users/${event}/userAndBudget`)
+    fetch(`http://localhost:3310/api/budget/user/${event}/${userId}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("userAndBudget:", data);
-        setUserAndBudgetData(Array.isArray(data) ? data : []);
+        setUserAndBudgetData(data);
       });
-  }, [event]);
-
-  const totalReservations = new Set(
-    eventData.map((item) => item.reservation_id).filter((id) => id !== null),
-  ).size;
-
-  const totalParticipants = new Set(
-    eventData.map((item) => item.euj_id_user).filter((id) => id !== null),
-  ).size;
-
-  const totalBudget = eventData.reduce((total, item) => {
-    return total + Number(item.budget_price ?? 0);
-  }, 0);
-
-  const eventName = eventData[0]?.event_name ?? "Nom de l'event";
+  }, [event, userId]);
 
   function getInitials(userName: string) {
     return userName
@@ -132,26 +113,26 @@ function Dashboard() {
   }
   return (
     <div className="dashboard">
-      <h1 className="event-name">{eventName}</h1>
+      <h1 className="event-name">{eventData?.event_name}</h1>
       <h1 className="user-name">Salut, {userName}</h1>
-      <p> {eventData[0]?.event_description}</p>
+      <p> {eventData?.event_description}</p>
 
       <div className="dashboard-stats">
         <div className="stat-1">
           <p>Total de participants</p>
-          <h2>{totalParticipants}</h2>
+          <h2>{eventData?.total_users}</h2>
         </div>
         <div className="stat-2">
           <p>Reservations</p>
-          <h2>{totalReservations}</h2>
+          <h2>{eventData?.total_reservations}</h2>
         </div>
         <div className="stat-3">
           <p>Budget total</p>
-          <h2>{totalBudget}€</h2>
+          <h2>{eventData?.total_budgets}€</h2>
         </div>
         <div className="stat-4">
           <p>Budget propre</p>
-          <h2>{userAndBudgetData[0]?.budget_price || 0}€</h2>
+          <h2>{userAndBudgetData?.total_price || 0} €</h2>
         </div>
       </div>
 

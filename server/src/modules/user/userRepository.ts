@@ -90,24 +90,24 @@ class UserRepository {
   async readUserDescriptionEvent(eventId: number) {
     const [rows] = await databaseClient.query(
       `
-      SELECT
+      SELECT 
         e.event_name,
-        euj.euj_id_user,
-        r.reservation_id,
-        b.budget_price,
-        e.event_description
+        e.event_description,
+        count(distinct euj.euj_id_user) AS total_users,
+        COUNT(distinct r.reservation_id) AS total_reservations,
+        COALESCE(SUM(distinct b.budget_price), 0) AS total_budgets
       FROM event AS e
-
       LEFT JOIN event_user_joining AS euj
-        ON e.event_id = euj.euj_id_event
-
+        ON euj.euj_id_event = e.event_id
       LEFT JOIN reservation AS r
-        ON e.event_id = r.reservation_id_event
-
+        ON r.reservation_id_event = e.event_id
       LEFT JOIN budget AS b
-        ON e.event_id = b.budget_id_event
-
+        ON b.budget_id_event = e.event_id
       WHERE e.event_id = ?
+      GROUP BY 
+        e.event_id, 
+        e.event_name, 
+        e.event_description;
       `,
       [eventId],
     );
