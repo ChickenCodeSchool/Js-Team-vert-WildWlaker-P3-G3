@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import NavBar from "../../components/NavBar/NavBar";
 import Profil from "../../components/Profil/Profil";
 import ReportAdminModal, {
   type BanAction,
 } from "../../components/ReportAdmin/ReportAdminModal";
+import type { ReportData } from "../../types/reportData";
 import "./AdminReport.css";
 import {
   ArrowLeft,
@@ -13,13 +15,62 @@ import {
   Trash2,
 } from "lucide-react";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function AdminReport() {
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const type = searchParams.get("type");
+
+  const [report, setReport] = useState<ReportData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    let endpoint = "";
+    if (type === "bug") endpoint = `${API_URL}/api/admin/reportBug/${id}`;
+    if (type === "event") endpoint = `${API_URL}/api/admin/reportEvent/${id}`;
+    if (type === "user") endpoint = `${API_URL}/api/admin/reportUser/${id}`;
+    if (!endpoint) return;
+
+    fetch(endpoint)
+      .then((res) => res.json())
+      .then((data: ReportData) => setReport(data));
+  }, [id, type]);
 
   const handleBanConfirm = (action: BanAction) => {
     console.log("Bannissement confirmé :", action);
     setIsModalOpen(false);
   };
+
+  const getDescription = () =>
+    report?.reported_bug_description ??
+    report?.reported_event_description ??
+    report?.reported_user_description ??
+    "—";
+
+  const getDate = () =>
+    report?.reported_bug_date ??
+    report?.reported_event_date ??
+    report?.reported_user_date ??
+    "—";
+
+  const getImage = () =>
+    report?.reported_bug_image ??
+    report?.reported_event_image ??
+    report?.reported_user_image ??
+    null;
+
+  const getUsername = () =>
+    type === "user" ? report?.author_username : report?.user_username;
+
+  const getMail = () =>
+    type === "user" ? report?.author_mail : report?.user_mail;
+
+  const getPicture = () =>
+    type === "user" ? report?.author_picture : report?.user_profile_picture;
+
+  if (!report) return <p>Chargement...</p>;
 
   return (
     <div className="adminReport-Layout">
@@ -32,14 +83,19 @@ function AdminReport() {
           <div className="adminReport-Leftside">
             <section className="adminReport-Title">
               <div className="adminReport-TitleText">
-                <p>
+                <button type="button" onClick={() => navigate(-1)}>
                   <ArrowLeft size={11} /> Retour aux signalements
-                </p>
-                <h1>Signalement #id du ticket à traiter</h1>
+                </button>
+                <h1>Signalement #{id}</h1>
               </div>
               <p>
                 <span aria-label="Statut">
-                  <CircleEllipsis size={10} /> en cours
+                  <CircleEllipsis size={10} />{" "}
+                  {(report.reported_bug_is_done ??
+                  report.reported_event_is_done ??
+                  report.reported_user_is_done)
+                    ? "traité"
+                    : "en cours"}
                 </span>
               </p>
             </section>
@@ -51,10 +107,8 @@ function AdminReport() {
                   <CalendarSync size={24} />
                 </div>
                 <div className="adminReport-WrapType-TypeText">
-                  <h3>Nom import</h3>
-                  <p>
-                    ici on importe la narute du signalement, event user ou bug
-                  </p>
+                  <h3>{type}</h3>
+                  <p>{getDescription()}</p>
                 </div>
               </div>
             </section>
@@ -65,7 +119,7 @@ function AdminReport() {
             >
               <h2 id="description">Description</h2>
               <div className="adminReport-WrapDetails">
-                <p>ici on importe la descritions du report en cours</p>
+                <p>{getDescription()}</p>
               </div>
             </section>
 
@@ -74,11 +128,19 @@ function AdminReport() {
               <div className="adminReport-WrapEvidence">
                 <ul>
                   <li>
-                    <img src="/img.jpg" alt=" preuves evidences" />
+                    {getImage() ? (
+                      <img
+                        src={`${API_URL}/uploads/${getImage()}`}
+                        alt="preuve jointe"
+                      />
+                    ) : (
+                      "Aucune pièce jointe"
+                    )}
                   </li>
                 </ul>
               </div>
             </section>
+
             <section
               aria-labelledby="historique"
               className="adminReport-History"
@@ -86,8 +148,8 @@ function AdminReport() {
               <h2 id="historique">Historique</h2>
               <ol>
                 <li>
-                  <h3> Signalement reçu</h3>
-                  <span>date et heure du signalement</span>
+                  <h3>Signalement reçu</h3>
+                  <span>{getDate()}</span>
                 </li>
               </ol>
             </section>
@@ -97,10 +159,13 @@ function AdminReport() {
             <section aria-labelledby="auteur" className="adminReport-User">
               <h2 id="auteur">Auteur du signalement</h2>
               <div className="adminReport-User-PP-Wrap">
-                <img src="img.ID du user" alt="profil pict user" />
+                <img
+                  src={`${API_URL}/uploads/${getPicture()}`}
+                  alt="profil pict user"
+                />
               </div>
-              <p>Pseudo du user</p>
-              <p>mail du User</p>
+              <p>{getUsername()}</p>
+              <p>{getMail()}</p>
             </section>
 
             <section aria-labelledby="actions" className="adminReport-Action">

@@ -125,6 +125,77 @@ FROM user
 `);
     return rows;
   }
+  async readReportBugById(id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `SELECT 
+      rb.*,
+      u.user_username,
+      u.user_mail,
+      u.user_profile_picture
+    FROM reported_bug AS rb
+    JOIN user AS u ON u.user_id = rb.reported_bug_by_id_user
+    WHERE rb.reported_bug_id = ?`,
+      [id],
+    );
+    return rows[0];
+  }
+
+  async readReportEventById(id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `SELECT 
+      re.*,
+      u.user_username,
+      u.user_mail,
+      u.user_profile_picture
+    FROM reported_event AS re
+    JOIN user AS u ON u.user_id = re.reported_event_by_id_user
+    WHERE re.reported_event_id = ?`,
+      [id],
+    );
+    return rows[0];
+  }
+
+  async readReportUserById(id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `SELECT 
+      ru.*,
+      author.user_username AS author_username,
+      author.user_mail AS author_mail,
+      author.user_profile_picture AS author_picture,
+      target.user_username AS target_username,
+      target.user_profile_picture AS target_picture
+    FROM reported_user AS ru
+    JOIN user AS author ON author.user_id = ru.reported_user_by_id_user
+    JOIN user AS target ON target.user_id = ru.reported_user_id_user
+    WHERE ru.reported_user_id = ?`,
+      [id],
+    );
+    return rows[0];
+  }
+
+  async markBugAsDone(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE reported_bug SET reported_bug_is_done = TRUE WHERE reported_bug_id = ?",
+      [id],
+    );
+    return result.affectedRows;
+  }
+
+  async markEventAsDone(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE reported_event SET reported_event_is_done = TRUE WHERE reported_event_id = ?",
+      [id],
+    );
+    return result.affectedRows;
+  }
+
+  async markUserAsDone(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE reported_user SET reported_user_is_done = TRUE WHERE reported_user_id = ?",
+      [id],
+    );
+    return result.affectedRows;
+  }
 }
 
 export default new AdminRepository();
