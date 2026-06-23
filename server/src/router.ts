@@ -46,6 +46,7 @@ router.put("/api/auth/change-password", userActions.changePassword);
 router.put("/api/users/:id", userActions.editUserName);
 router.put("/api/users/change-password", userActions.forgotPassword);
 router.get("/api/users/admin/:id", userActions.browseUserAdmin);
+router.get("/api/user/event/:id", userActions.readUserJoinEvent);
 
 // router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
 
