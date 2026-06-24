@@ -95,6 +95,7 @@ router.post("/api/gallery", upload.single("photo"), galleryActions.uploadPhoto);
 router.post("/api/gallery", galleryActions.add);
 router.delete("/api/gallery/:gallery_id/:userId", galleryActions.destroy);
 router.put("/api/gallery/:gallery_id/:userId", galleryActions.edit);
+
 // report user routes
 router.get("/api/userreport-user", reportUserActions.browse);
 router.post("/api/userreport-user", reportUserActions.add);
@@ -121,6 +122,16 @@ router.get("/api/admin/arrayUser", adminActions.readArrayUsers);
 router.get("/api/admin/arrayReport", adminActions.readArrayReport);
 router.get("/api/admin/events", adminActions.readAllEvents);
 router.get("/api/admin/users", adminActions.readAllUsers);
+
+// admin report route / details by ID
+router.get("/api/admin/reportBug/:id", adminActions.readReportBugById);
+router.get("/api/admin/reportEvent/:id", adminActions.readReportEventById);
+router.get("/api/admin/reportUser/:id", adminActions.readReportUserById);
+
+// admin report route / is done
+router.patch("/api/admin/reportBug/:id/done", adminActions.markBugAsDone);
+router.patch("/api/admin/reportEvent/:id/done", adminActions.markEventAsDone);
+router.patch("/api/admin/reportUser/:id/done", adminActions.markUserAsDone);
 
 // --> budget
 // > get

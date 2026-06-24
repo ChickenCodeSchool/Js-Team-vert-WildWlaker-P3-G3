@@ -9,6 +9,7 @@ const readAllUsers: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+
 const readAllEvents: RequestHandler = async (req, res, next) => {
   try {
     const allEvents = await adminRepository.readAllEvent();
@@ -17,6 +18,7 @@ const readAllEvents: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+
 const readArrayReport: RequestHandler = async (req, res, next) => {
   try {
     const arrayReport = await adminRepository.readArrayReport();
@@ -25,6 +27,7 @@ const readArrayReport: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+
 const readArrayUsers: RequestHandler = async (req, res, next) => {
   try {
     const arrayUsers = await adminRepository.readArrayUser();
@@ -33,42 +36,116 @@ const readArrayUsers: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+
 const readDashboardChart: RequestHandler = async (req, res, next) => {
   try {
     const chartData = await adminRepository.readDashboardChart();
-
     res.json(chartData);
   } catch (error) {
     next(error);
   }
 };
+
 const readReportEvent: RequestHandler = async (req, res, next) => {
   try {
     const chartData = await adminRepository.readReportEvent();
-
     res.json(chartData);
   } catch (error) {
     next(error);
   }
 };
+
 const readReportBug: RequestHandler = async (req, res, next) => {
   try {
     const chartData = await adminRepository.readReportBug();
-
     res.json(chartData);
   } catch (error) {
     next(error);
   }
 };
+
 const readReportUser: RequestHandler = async (req, res, next) => {
   try {
     const chartData = await adminRepository.readReportUser();
-
     res.json(chartData);
   } catch (error) {
     next(error);
   }
 };
+
+//ajouts pour signalements user via admin
+const readReportBugById: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const report = await adminRepository.readReportBugById(id);
+    if (!report) {
+      res.status(404).json({ message: "Signalement introuvable" });
+      return;
+    }
+    res.json(report);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const readReportEventById: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const report = await adminRepository.readReportEventById(id);
+    if (!report) {
+      res.status(404).json({ message: "Signalement introuvable" });
+      return;
+    }
+    res.json(report);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const readReportUserById: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const report = await adminRepository.readReportUserById(id);
+    if (!report) {
+      res.status(404).json({ message: "Signalement introuvable" });
+      return;
+    }
+    res.json(report);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const markBugAsDone: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    await adminRepository.markBugAsDone(id);
+    res.json({ message: "Signalement bug marqué comme traité" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const markEventAsDone: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    await adminRepository.markEventAsDone(id);
+    res.json({ message: "Signalement event marqué comme traité" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const markUserAsDone: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    await adminRepository.markUserAsDone(id);
+    res.json({ message: "Signalement user marqué comme traité" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   readAllUsers,
   readAllEvents,
@@ -78,4 +155,10 @@ export default {
   readReportBug,
   readReportEvent,
   readReportUser,
+  readReportBugById,
+  readReportEventById,
+  readReportUserById,
+  markBugAsDone,
+  markEventAsDone,
+  markUserAsDone,
 };
