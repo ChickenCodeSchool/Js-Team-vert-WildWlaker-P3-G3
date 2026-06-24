@@ -6,6 +6,7 @@ export type ReportBug = {
   reported_bug_image: string | null;
   reported_bug_is_done: 0 | 1;
   username: string;
+  email: string;
 };
 
 export type ReportUser = {
@@ -17,6 +18,7 @@ export type ReportUser = {
   reported_user_image: string | null;
   reported_user_is_done: 0 | 1;
   username: string;
+  email: string;
 };
 
 export type ReportEvent = {
@@ -28,12 +30,20 @@ export type ReportEvent = {
   reported_event_image: string | null;
   reported_event_is_done: 0 | 1;
   username: string;
+  email: string;
 };
 
 export type UnifiedReport = {
   id: number;
   type: "bug" | "user" | "event";
   username: string; // nécessite un JOIN côté backend
+  email: string;
   date: string;
   is_done: 0 | 1;
+};
+
+export type ReportPaginationProps = {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
 };

@@ -1,0 +1,7 @@
+.DashboardReport-global {
+  background: var(--bg-color);
+  .DashboardReport-Grid {
+    display: flex;
+    justify-content: space-around;
+  }
+}
