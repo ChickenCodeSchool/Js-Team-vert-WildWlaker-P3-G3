@@ -1,9 +1,9 @@
 import "./ForgetPassword.css";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import Swal from "sweetalert2";
 import connexionImg from "../../assets/images/Connexion-img.png";
 import logo from "../../assets/images/logo-wedoo.png";
-import Swal from "sweetalert2";
 
 function ForgetPassword() {
   const [identifier, setIdentifier] = useState("");

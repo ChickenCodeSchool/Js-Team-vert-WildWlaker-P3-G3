@@ -5,11 +5,11 @@ import ReportEvidence from "../../components/ReportUser/ReportEvidence";
 import ReportType from "../../components/ReportUser/ReportType";
 import "./UserReport.css";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import NavBar from "../../components/NavBar/NavBar";
 import Profil from "../../components/Profil/Profil";
 import ReportUserModal from "../../components/ReportUser/ReportUserModal";
 import type EventUserJoin from "../../types/eventUserJoining";
-import Swal from "sweetalert2";
 const API_URL = import.meta.env.VITE_API_URL;
 
 function UserReport() {

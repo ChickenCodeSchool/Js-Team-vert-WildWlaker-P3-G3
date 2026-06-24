@@ -1,11 +1,11 @@
 import "./ResetPassword.css";
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
+import Swal from "sweetalert2";
 import connexionImg from "../../assets/images/Connexion-img.png";
 import eye from "../../assets/images/eye.png";
 import hide from "../../assets/images/hide.png";
 import logo from "../../assets/images/logo-wedoo.png";
-import Swal from "sweetalert2";
 
 function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
