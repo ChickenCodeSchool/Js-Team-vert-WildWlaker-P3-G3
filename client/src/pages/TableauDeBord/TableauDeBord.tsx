@@ -6,12 +6,10 @@ import Messagerie from "../../components/Messagerie/Messagerie";
 import SideBar from "../../components/SideBar/SideBar";
 
 import "./TableauDeBord.css";
-// import Dashboard from "../components/Dashboard";
-// import Messagerie from "../components/Messagerie";
-// import Reservation from "../components/Reservation";
+
 import Budget from "../../components/Budget/Budget.tsx";
 import Profil from "../../components/Profil/Profil.tsx";
-// import Galerie from "../components/Galerie";
+import Reservation from "../../components/Reservation/Reservation.tsx";
 
 function TableauDeBord() {
   const [active, setActive] = useState("tableau");
@@ -24,7 +22,7 @@ function TableauDeBord() {
         <main className="content">
           {active === "tableau" && <Dashboard />}
           {active === "messagerie" && <Messagerie />}
-          {/* {active === "reservation" && <Reservation />*/}
+          {active === "reservation" && <Reservation />}
           {active === "budget" && <Budget />}
           {active === "galerie" && <Galerie />}
         </main>

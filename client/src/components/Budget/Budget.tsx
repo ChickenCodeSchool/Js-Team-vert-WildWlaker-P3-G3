@@ -77,6 +77,29 @@ function getUserBudget(array: BudgetByUser[], id_user: number) {
   return array.find((user) => user.user_id === id_user);
 }
 
+function returnDateString(dateString: string) {
+  const date = new Date(dateString);
+  const targetDay = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+  );
+
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  const diffDays = Math.round(
+    (today.getTime() - targetDay.getTime()) / (1000 * 60 * 60 * 24),
+  );
+
+  if (diffDays <= 0) return "aujourd’hui";
+  if (diffDays === 1) return "hier";
+  if (diffDays === 2) return "avant-hier";
+  if (diffDays <= 7) return `il y a ${diffDays} jours`;
+
+  return date.toLocaleDateString("fr-FR");
+}
+
 function Budget() {
   const { id } = useParams();
   const eventID = Number(id);
@@ -132,7 +155,26 @@ function Budget() {
   async function addBudget(e: React.FormEvent) {
     e.preventDefault();
 
-    await fetch(`${apiUrl}/api/budget/add`, {
+    if (!nameCreateForm.trim()) {
+      alert("❌ Erreur : Nom obligatoire");
+      return;
+    }
+
+    if (
+      priceCreateForm === undefined ||
+      Number.isNaN(priceCreateForm) ||
+      priceCreateForm === 0
+    ) {
+      alert("❌ Erreur : Prix invalide");
+      return;
+    }
+
+    if (priceCreateForm < 0) {
+      alert("❌ Erreur : Prix ne peux pas être négatif");
+      return;
+    }
+
+    const answer = await fetch(`${apiUrl}/api/budget/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -147,6 +189,15 @@ function Budget() {
 
     setNameCreateForm("");
     setPriceCreateForm(undefined);
+    setShowCreateForm(false);
+
+    const data = await answer.json();
+
+    alert(
+      answer.ok
+        ? "✅ Succès : Budget ajouter avec succès"
+        : `❌ Erreur : ${answer.status} - ${JSON.stringify(data)}`,
+    );
   }
 
   function openUpdateForm(budget: Budget) {
@@ -159,9 +210,36 @@ function Budget() {
   async function updateBudget(e: React.FormEvent) {
     e.preventDefault();
 
+    if (!nameUpdateForm.trim()) {
+      alert("❌ Erreur : Nom obligatoire");
+      return;
+    }
+
+    if (
+      priceUpdateForm === undefined ||
+      Number.isNaN(priceUpdateForm) ||
+      priceUpdateForm === 0
+    ) {
+      alert("❌ Erreur : Prix invalide");
+      return;
+    }
+
+    if (priceUpdateForm < 0) {
+      alert("❌ Erreur : Prix ne peux pas être négatif");
+      return;
+    }
+
     if (budgetUpdate === null) return;
 
-    await fetch(`${apiUrl}/api/budget/update`, {
+    if (
+      nameUpdateForm === budgetUpdate.budget_name &&
+      Number(priceUpdateForm) === Number(budgetUpdate.budget_price)
+    ) {
+      alert("⚠️ Aucune modification n’a été détectée");
+      return;
+    }
+
+    const answer = await fetch(`${apiUrl}/api/budget/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -177,6 +255,14 @@ function Budget() {
 
     setNameUpdateForm("");
     setPriceUpdateForm(undefined);
+
+    const data = await answer.json();
+
+    alert(
+      answer.ok
+        ? "✅ Succès : Budget mis à jour avec succès"
+        : `❌ Erreur : ${answer.status} - ${JSON.stringify(data)}`,
+    );
   }
 
   async function deleteBudget(e: React.FormEvent, id: number) {
@@ -191,179 +277,210 @@ function Budget() {
 
   return (
     <div className="budget">
-      <header>
-        <h1>{budgetEvent?.event_name}</h1>
-        <button
-          type="button"
-          onClick={() => setShowCreateForm(!showCreateForm)}
-        >
-          <FilePlusCorner size={20} />
-          <span> Ajouter une dépense</span>
-        </button>
-      </header>
+      <div className="budgetHeader">
+        <header>
+          <h1>{budgetEvent?.event_name}</h1>
+          <button
+            type="button"
+            onClick={() => setShowCreateForm(!showCreateForm)}
+          >
+            <FilePlusCorner size={20} />
+            <span> Ajouter une dépense</span>
+          </button>
+        </header>
+      </div>
+      <div className="budgetBody">
+        {showCreateForm ? (
+          /* -- Create Form -- */
+          <div className="form">
+            <form className="createForm" onSubmit={(e) => addBudget(e)}>
+              <div className="mobileOnly">
+                <h5>Ajoute un budget</h5>
+                <X className="icons" onClick={() => setShowCreateForm(false)} />
+              </div>
 
-      {showCreateForm ? (
-        /* -- Create Form -- */
-        <form className="createForm" onSubmit={(e) => addBudget(e)}>
-          {/* Name */}
-          <input
-            type="text"
-            placeholder="Le nom du budget"
-            onChange={(e) => setNameCreateForm(e.target.value)}
-            required
-          />
+              {/* Name */}
+              <input
+                type="text"
+                placeholder="Le nom du budget"
+                onChange={(e) => setNameCreateForm(e.target.value)}
+                required
+              />
 
-          {/* Name */}
-          <input
-            type="number"
-            placeholder="Le prix du budget"
-            onChange={(e) => setPriceCreateForm(Number(e.target.value))}
-            required
-          />
+              {/* Name */}
+              <input
+                type="number"
+                placeholder="Le prix du budget"
+                onChange={(e) => setPriceCreateForm(Number(e.target.value))}
+                required
+              />
 
-          <button type="submit">Ajout le budget</button>
-        </form>
-      ) : (
-        ""
-      )}
-
-      <section className="myBalance">
-        <article className="myBalanceBox">
-          {userBalance > 0 && <span>on te doit</span>}
-          {userBalance < 0 && <span>tu dois</span>}
-          {userBalance === 0 && <span>comptes équilibrés</span>}
-          <h2>{userBalance}€</h2>
-          <small>
-            <History /> last update : yesterday
-          </small>
-        </article>
-
-        <article className="total">
-          <div className="positif">
-            <ArrowDown size={20} className="lucid" /> <br />
-            <span> dépense globales </span>
-            <h3> {budgetEvent?.total_price} € </h3>
+              <button type="submit">Ajouter</button>
+            </form>
           </div>
+        ) : (
+          ""
+        )}
 
-          <div className="negatif">
-            <ArrowUp size={20} className="lucid" /> <br />
-            <span> mes dépenses</span>
-            <h3> {userBudget} € </h3>
-          </div>
-        </article>
-      </section>
+        <section className="myBalance">
+          <article className="myBalanceBox">
+            {userBalance > 0 && <span>on te doit</span>}
+            {userBalance < 0 && <span>tu dois</span>}
+            {userBalance === 0 && <span>comptes équilibrés</span>}
+            <h2>{userBalance}€</h2>
+            <small>
+              <History /> last update :{" "}
+              {returnDateString(
+                listBudget[listBudget.length - 1]?.budget_creation_date,
+              )}
+            </small>
+          </article>
 
-      <section className="expensesAndBalance">
-        <div className="expenses">
-          <div className="mobileExpenses">
-            <h5>Dépenses</h5> <button type="button"> voir plus</button>
-          </div>
-          <section>
-            {listBudget.map((row) => {
-              return (
-                <article key={row.budget_id}>
-                  {budgetUpdate?.budget_id === row.budget_id ? (
-                    <>
-                      <input
-                        type="text"
-                        value={nameUpdateForm}
-                        onChange={(e) => setNameUpdateForm(e.target.value)}
-                      />
-                      <input
-                        type="number"
-                        value={priceUpdateForm}
-                        onChange={(e) =>
-                          setPriceUpdateForm(Number(e.target.value))
-                        }
-                      />
+          <article className="total">
+            <div className="positif">
+              <ArrowDown size={20} className="lucid" /> <br />
+              <span> dépense globales </span>
+              <h3> {budgetEvent?.total_price} € </h3>
+            </div>
 
-                      <Check
-                        className="positif"
-                        onClick={(e) => {
-                          updateBudget(e);
-                          setBudgetUpdate(null);
-                        }}
-                      />
-                      <X
-                        className="negatif"
-                        onClick={() => {
-                          setBudgetUpdate(null);
-                        }}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <span>{row.budget_name}</span>
-                      <span
-                        className={
-                          row.budget_id_user !== userID ? "positif" : "negatif"
-                        }
-                      >
-                        {row.budget_id_user !== userID
-                          ? `+${row.budget_price}`
-                          : `-${row.budget_price}`}
-                        €
-                        <div
+            <div className="negatif">
+              <ArrowUp size={20} className="lucid" /> <br />
+              <span> mes dépenses</span>
+              <h3> {userBudget} € </h3>
+            </div>
+          </article>
+        </section>
+
+        <section className="expensesAndBalance">
+          <div className="expenses">
+            <div className="mobileExpenses">
+              <h5>Dépenses</h5>
+            </div>
+            <section>
+              {listBudget.map((row) => {
+                return (
+                  <article key={row.budget_id}>
+                    {budgetUpdate?.budget_id === row.budget_id ? (
+                      <>
+                        <input
+                          type="text"
+                          value={nameUpdateForm}
+                          onChange={(e) => setNameUpdateForm(e.target.value)}
+                        />
+                        <input
+                          type="number"
+                          value={priceUpdateForm}
+                          onChange={(e) =>
+                            setPriceUpdateForm(Number(e.target.value))
+                          }
+                        />
+
+                        <Check
+                          className={`icons positif ${nameUpdateForm === budgetUpdate.budget_name && Number(priceUpdateForm) === Number(budgetUpdate.budget_price) ? "disabled" : ""}`}
+                          onClick={(e) => {
+                            if (
+                              !(
+                                nameUpdateForm === budgetUpdate.budget_name &&
+                                Number(priceUpdateForm) ===
+                                  Number(budgetUpdate.budget_price)
+                              )
+                            ) {
+                              updateBudget(e);
+                              setBudgetUpdate(null);
+                            }
+                          }}
+                        />
+                        <X
+                          className="icons negatif"
+                          onClick={() => {
+                            setBudgetUpdate(null);
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <span>{row.budget_name}</span>
+                        <span
                           className={
-                            row.budget_id_user === userID ? "icons" : "Noicons"
+                            row.budget_id_user !== userID
+                              ? "price positif"
+                              : "price negatif"
                           }
                         >
-                          {deleteConfirmation === row.budget_id ? (
-                            <>
-                              <Check
-                                className="positif"
-                                onClick={(e) => deleteBudget(e, row.budget_id)}
-                              />
-                              <X
-                                className="negatif"
-                                onClick={() => setDeleteConfirmation(null)}
-                              />
-                            </>
-                          ) : (
-                            <>
-                              <Pen onClick={() => openUpdateForm(row)} />
-                              <Trash
-                                onClick={() =>
-                                  setDeleteConfirmation(row.budget_id)
-                                }
-                              />
-                            </>
-                          )}
-                        </div>
-                      </span>
-                    </>
-                  )}
-                </article>
-              );
-            })}
-          </section>
-        </div>
+                          {row.budget_id_user !== userID
+                            ? `+${row.budget_price}`
+                            : `-${row.budget_price}`}
+                          €
+                          <div
+                            className={
+                              row.budget_id_user === userID
+                                ? "icons"
+                                : "Noicons"
+                            }
+                          >
+                            {deleteConfirmation === row.budget_id ? (
+                              <>
+                                <Check
+                                  className="positif"
+                                  onClick={(e) =>
+                                    deleteBudget(e, row.budget_id)
+                                  }
+                                />
+                                <X
+                                  className="negatif"
+                                  onClick={() => setDeleteConfirmation(null)}
+                                />
+                              </>
+                            ) : (
+                              <>
+                                <Pen onClick={() => openUpdateForm(row)} />
+                                <Trash
+                                  onClick={() =>
+                                    setDeleteConfirmation(row.budget_id)
+                                  }
+                                />
+                              </>
+                            )}
+                          </div>
+                        </span>
+                      </>
+                    )}
+                  </article>
+                );
+              })}
+            </section>
+          </div>
 
-        <div className="balance">
-          <h5>Equilibres</h5>
-          <section>
-            {listBalance.map((row) => {
-              return (
-                <article key={row.user_id}>
-                  <span>{row.user_name}</span>
-                  <span
-                    className={row.total_price >= 0 ? "positif" : "negatif"}
-                  >
-                    {row.total_price >= 0
-                      ? `+${row.total_price}`
-                      : `${row.total_price}`}
-                    €
-                  </span>
-                </article>
-              );
-            })}
-          </section>
-        </div>
-      </section>
+          <div className="balance">
+            <h5>Equilibres</h5>
+            <section>
+              {listBalance.map((row) => {
+                return (
+                  <article key={row.user_id}>
+                    <span>{row.user_name}</span>
+                    <span
+                      className={row.total_price >= 0 ? "positif" : "negatif"}
+                    >
+                      {row.total_price >= 0
+                        ? `+${row.total_price}`
+                        : `${row.total_price}`}
+                      €
+                    </span>
+                  </article>
+                );
+              })}
+            </section>
+          </div>
+        </section>
 
-      <button type="button" className="addButton">
-        <Plus size={20} />
-      </button>
+        <button
+          type="button"
+          className="addButton"
+          onClick={() => setShowCreateForm(!showCreateForm)}
+        >
+          <Plus size={20} />
+        </button>
+      </div>
     </div>
   );
 }

@@ -5,14 +5,14 @@
   font-weight: 300;
   font-style: normal;
   height: 90vh;
-  width: 60vw;
+  width: 74vw;
   .user-name {
     font-weight: 400;
   }
   .event-name {
     color: var(--font-brown);
-    padding: 3vh 0;
-    font-size: 50px;
+    padding: 3rem 3rem 0 0;
+    /* font-size: 50px; */
   }
   p {
     color: var(--font-darkBrown);
@@ -100,7 +100,7 @@
   }
 
   .dashboard-components {
-    width: 100%;
+    width: 102%;
     height: 80%;
     display: grid;
     grid-template-columns: 2fr 1fr;

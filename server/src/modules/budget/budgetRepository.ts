@@ -40,7 +40,8 @@ class budgetRepository {
         b.budget_creation_date
     FROM budget AS b
     JOIN user AS u ON u.user_id = b.budget_id_user
-    WHERE b.budget_id_event = ?;`,
+    WHERE b.budget_id_event = ?
+    ORDER BY b.budget_creation_date ASC;`,
       [id],
     );
 
@@ -55,10 +56,14 @@ class budgetRepository {
         u.user_name, 
         COALESCE(SUM(b.budget_price), 0) AS total_price 
       FROM event_user_joining AS euj
-      JOIN user AS u ON u.user_id = euj.euj_id_user
-      LEFT JOIN budget AS b ON b.budget_id_user = euj.euj_id_user
+      JOIN user AS u 
+        ON u.user_id = euj.euj_id_user
+      LEFT JOIN budget AS b 
+        ON b.budget_id_user = euj.euj_id_user
+        AND b.budget_id_event = euj.euj_id_event
       WHERE euj.euj_id_event = ?
-      GROUP BY u.user_id, u.user_username, u.user_name`,
+      GROUP BY 
+        u.user_id, u.user_username, u.user_name`,
       [id],
     );
     return rows as BudgetByUser[];

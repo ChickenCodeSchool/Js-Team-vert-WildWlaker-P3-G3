@@ -1,5 +1,15 @@
 import mysql from "../../../database/client";
 
+type Reservation = {
+  reservation_id_event: number;
+  reservation_id_user: number;
+  reservation_name: string;
+  reservation_date: string;
+  reservation_location: string;
+  reservation_description: string;
+  reservation_picture: string | null;
+};
+
 class reservationRepository {
   async readReservationDescriptionEvent(eventId: number) {
     const [rows] = await mysql.query(
@@ -24,6 +34,56 @@ WHERE e.event_id = ?;
     );
 
     return rows;
+  }
+  async readAllReservation(eventId: number) {
+    const [rows] = await mysql.query(
+      `
+      SELECT * FROM reservation
+
+      WHERE reservation_id_event = ?;
+      `,
+      [eventId],
+    );
+
+    return rows;
+  }
+  async addReservation(reservation: Reservation) {
+    const [results] = await mysql.query(
+      `
+    INSERT INTO reservation (
+      reservation_id_event,
+      reservation_id_user,
+      reservation_name,
+      reservation_date,
+      reservation_location,
+      reservation_description,
+      reservation_picture
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    `,
+      [
+        reservation.reservation_id_event,
+        reservation.reservation_id_user,
+        reservation.reservation_name,
+        reservation.reservation_date,
+        reservation.reservation_location,
+        reservation.reservation_description,
+        reservation.reservation_picture,
+      ],
+    );
+
+    return results;
+  }
+  async deleteReservation(reservationId: number) {
+    const [result] = await mysql.query(
+      `
+    DELETE FROM reservation
+    WHERE reservation_id = ?
+    `,
+      [reservationId],
+    );
+
+    return result;
   }
 }
 

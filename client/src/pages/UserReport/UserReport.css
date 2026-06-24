@@ -1,3 +1,10 @@
+.userReport-HeaderNav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 48px;
+}
+
 .userReport-Main {
   display: flex;
   flex-direction: column;

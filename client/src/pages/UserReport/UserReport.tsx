@@ -5,9 +5,10 @@ import ReportEvidence from "../../components/ReportUser/ReportEvidence";
 import ReportType from "../../components/ReportUser/ReportType";
 import "./UserReport.css";
 import { useEffect, useState } from "react";
+import NavBar from "../../components/NavBar/NavBar";
+import Profil from "../../components/Profil/Profil";
 import ReportUserModal from "../../components/ReportUser/ReportUserModal";
 import type EventUserJoin from "../../types/eventUserJoining";
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 function UserReport() {
@@ -104,9 +105,12 @@ function UserReport() {
 
   return (
     <>
-      <nav className="userReport-Nav">composant/nav</nav>
+      <header className="userReport-HeaderNav">
+        <NavBar />
+        <Profil />
+      </header>
       <main className="userReport-Main">
-        <header className="userReport-Header">
+        <div className="userReport-Header">
           <button
             type="button"
             className="userReport-Back"
@@ -122,7 +126,7 @@ function UserReport() {
               l'excellence de Wedoo en nous faisant part de vos observations.
             </p>
           </div>
-        </header>
+        </div>
         <form className="userReport-Form" onSubmit={handleSubmit}>
           <ReportType
             reportType={repType}

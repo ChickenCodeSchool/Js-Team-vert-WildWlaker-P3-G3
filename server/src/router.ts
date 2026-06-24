@@ -55,6 +55,16 @@ router.post("/api/messages/:id", messageActions.addMessage);
 
 // reservation routes
 router.get("/api/reservations/:id", reservationActions.browse);
+router.get("/api/reservations/all/:id", reservationActions.readAllReservation);
+router.post(
+  "/api/reservations",
+  upload.single("reservation_picture"),
+  reservationActions.addReservation,
+);
+router.delete(
+  "/api/reservations/delete/:id",
+  reservationActions.deleteReservation,
+);
 
 // item routes
 router.get("/api/items", itemActions.browse);
@@ -66,6 +76,7 @@ router.post("/api/items", itemActions.add);
 // router.get("/api/users/:id/events", userActions.getUserEvents);
 router.get("/api/events", eventActions.browse);
 router.get("/api/events/images", eventActions.browseImages);
+router.get("/api/events/:id", eventActions.read);
 router.post("/api/events/join", eventActions.join);
 router.post("/api/events", eventActions.add);
 router.put("/api/events/:id/", upload.single("picture"), eventActions.edit);
