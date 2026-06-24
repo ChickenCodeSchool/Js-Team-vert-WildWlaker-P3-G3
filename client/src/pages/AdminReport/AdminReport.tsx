@@ -93,7 +93,7 @@ function AdminReport() {
             <section className="adminReport-Title">
               <div className="adminReport-TitleText">
                 <button type="button" onClick={() => navigate(-1)}>
-                  <ArrowLeft size={11} /> Retour aux signalements
+                  <ArrowLeft size={18} /> Retour aux signalements
                 </button>
                 <h1>Signalement #{id}</h1>
               </div>

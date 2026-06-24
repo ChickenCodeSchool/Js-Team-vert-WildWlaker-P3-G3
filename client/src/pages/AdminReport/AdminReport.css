@@ -52,11 +52,23 @@
           .adminReport-TitleText {
             display: flex;
             flex-direction: column;
-          }
 
-          p {
-            text-transform: uppercase;
-            font-size: 0.8rem;
+            button {
+              display: inline-flex;
+              align-items: center;
+              gap: 4px;
+              background: none;
+              border: none;
+              padding: 0;
+              font-size: 0.8rem;
+              color: var(--font-grey);
+              cursor: pointer;
+              text-transform: uppercase;
+
+              &:hover {
+                color: var(--font-black);
+              }
+            }
           }
 
           h1 {
