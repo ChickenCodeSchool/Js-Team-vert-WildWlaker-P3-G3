@@ -218,19 +218,6 @@ function SideBar({ active, setActive }: SideBarProps) {
               whileTap={{ scale: 0.98 }}
               to={`/events/${event}/report`}
               className="link"
-              style={{
-                fontFamily: "Be Vietnam Pro, sans-serif",
-                fontWeight: 400,
-                fontSize: "13.333px",
-                color: "black",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-              }}
             >
               <TriangleAlert size={20} />
               <span>Signaler</span>
@@ -268,7 +255,7 @@ function SideBar({ active, setActive }: SideBarProps) {
                         </button>
 
                         <button type="button" onClick={handleDeleteEvent}>
-                          Supprimer
+                          <Link to="/homeevents">Supprimer</Link>
                         </button>
                       </div>
                     </div>
@@ -303,7 +290,7 @@ function SideBar({ active, setActive }: SideBarProps) {
                         </button>
 
                         <button type="button" onClick={handleDeleteUserJoining}>
-                          Quitter
+                          <Link to="/homeevents">Quitter</Link>
                         </button>
                       </div>
                     </div>

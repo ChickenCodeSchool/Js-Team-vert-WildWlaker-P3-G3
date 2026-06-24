@@ -93,35 +93,46 @@ class EventRepository {
     );
   }
   async deleteEvent(eventId: number) {
+    await databaseClient.query("DELETE FROM budget WHERE budget_id_event = ?", [
+      eventId,
+    ]);
+
+    await databaseClient.query(
+      "DELETE FROM event_user_joining WHERE euj_id_event = ?",
+      [eventId],
+    );
+
+    await databaseClient.query(
+      "DELETE FROM reservation WHERE reservation_id_event = ?",
+      [eventId],
+    );
+
+    await databaseClient.query(
+      "DELETE FROM reported_event WHERE reported_event_id_event = ?",
+      [eventId],
+    );
+
+    await databaseClient.query(
+      "DELETE FROM gallery WHERE gallery_id_event = ?",
+      [eventId],
+    );
+
+    await databaseClient.query(
+      "DELETE FROM message WHERE message_id_event = ?",
+      [eventId],
+    );
+
+    await databaseClient.query("DELETE FROM todo WHERE todo_id_event = ?", [
+      eventId,
+    ]);
+
+    await databaseClient.query(
+      "DELETE FROM event_user_ban WHERE eub_id_event = ?",
+      [eventId],
+    );
+
     const [result] = await databaseClient.query(
-      `
-        DELETE FROM budget
-      WHERE budget_id_event = ?;
-
-      DELETE FROM event_user_joining
-      WHERE euj_id_event = ?;
-
-      DELETE FROM reservation
-      WHERE reservation_id_event = ?;
-
-      DELETE FROM reported_event
-      WHERE reported_event_id_event = ?;
-
-      DELETE FROM gallery
-      WHERE gallery_id_event = ?;
-
-      DELETE FROM message
-      WHERE message_id_event = ?;
-
-      DELETE FROM todo 
-      WHERE todo_id_event = ?;
-
-      DELETE FROM event_user_ban
-      WHERE eub_id_event = ?;
-
-      DELETE FROM event
-      WHERE event_id = ?;
-    `,
+      "DELETE FROM event WHERE event_id = ?",
       [eventId],
     );
 
