@@ -153,7 +153,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
 
         <div className="CreateForm-Field">
           <label className="CreateForm-Label" htmlFor="location">
-            Lieux
+            Lieu
           </label>
           <input
             id="location"
