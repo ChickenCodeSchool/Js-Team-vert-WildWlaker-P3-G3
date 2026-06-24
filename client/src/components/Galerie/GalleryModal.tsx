@@ -4,7 +4,7 @@ import { useState } from "react";
 
 type GalleryModalProps = {
   onClose: () => void;
-  onAddPhoto: (imageUrl: string, insertId: number) => void;
+  onAddPhoto: (imageUrl: string, insertId: number, description: string) => void;
   eventId: number;
   userId: number;
 };
@@ -71,9 +71,8 @@ function GalleryModal({
       }
 
       const data = await response.json();
-
-      onAddPhoto(data.photoUrl, data.insertId);
-      onClose();
+onAddPhoto(data.photoUrl, data.insertId, description);
+onClose();
     } catch (error) {
       console.error("Erreur de connexion :", error);
       setError("Impossible de joindre le serveur. Vérifiez votre connexion.");

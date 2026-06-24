@@ -276,3 +276,23 @@ CREATE TABLE `event_user_joining` (
     FOREIGN KEY (`euj_id_user`)
     REFERENCES `user` (`user_id`))
 ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `gallery_like`
+-- -----------------------------------------------------
+CREATE TABLE `gallery_like` (
+  `like_id_gallery` INT NOT NULL,
+  `like_id_user` INT NOT NULL,
+
+  PRIMARY KEY (`like_id_gallery`, `like_id_user`),
+
+  CONSTRAINT `fk_like_gallery`
+    FOREIGN KEY (`like_id_gallery`)
+    REFERENCES `gallery` (`gallery_id`)
+    ON DELETE CASCADE,
+
+  CONSTRAINT `fk_like_user`
+    FOREIGN KEY (`like_id_user`)
+    REFERENCES `user` (`user_id`)
+    ON DELETE CASCADE
+) ENGINE = InnoDB;
