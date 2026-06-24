@@ -80,22 +80,6 @@ body {
     }
   }
 
-  .budget-success-popup {
-    border-radius: 24px !important;
-
-    .swal2-title {
-      color: var(--font-green);
-    }
-  }
-
-  .budget-error-popup {
-    border-radius: 24px !important;
-
-    .swal2-title {
-      color: var(--font-red);
-    }
-  }
-
   .budget-toast {
     border-radius: 16px !important;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12) !important;

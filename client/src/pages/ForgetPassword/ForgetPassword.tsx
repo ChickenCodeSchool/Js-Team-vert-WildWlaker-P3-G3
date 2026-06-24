@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import connexionImg from "../../assets/images/Connexion-img.png";
 import logo from "../../assets/images/logo-wedoo.png";
+import Swal from "sweetalert2";
 
 function ForgetPassword() {
   const [identifier, setIdentifier] = useState("");
@@ -37,7 +38,16 @@ function ForgetPassword() {
         return;
       }
 
-      alert("Un email de réinitialisation a été envoyé.");
+      Swal.fire({
+        icon: "success",
+        title: "Email envoyé",
+        text: "Vérifie ta boîte mail pour réinitialiser ton mot de passe.",
+        showConfirmButton: false,
+        timer: 2500,
+        background: "#ffffff",
+        color: "#333",
+        iconColor: "#e98d66",
+      });
 
       navigate("/connexion");
     } catch {

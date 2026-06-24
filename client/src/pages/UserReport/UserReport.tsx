@@ -9,6 +9,7 @@ import NavBar from "../../components/NavBar/NavBar";
 import Profil from "../../components/Profil/Profil";
 import ReportUserModal from "../../components/ReportUser/ReportUserModal";
 import type EventUserJoin from "../../types/eventUserJoining";
+import Swal from "sweetalert2";
 const API_URL = import.meta.env.VITE_API_URL;
 
 function UserReport() {
@@ -37,11 +38,30 @@ function UserReport() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+
+      customClass: {
+        popup: "toast",
+      },
+    });
+
     const userJson = localStorage.getItem("user");
     const user = userJson ? JSON.parse(userJson) : null;
 
     if (!repType || !repDetail || repEvidence.length === 0) {
-      alert("Veuillez remplir les champs pour envoyer votre demande.");
+      toast.fire({
+        icon: "error",
+        text: "Veuillez remplir les champs pour envoyer votre demande.",
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
       return;
     }
 
@@ -92,9 +112,14 @@ function UserReport() {
         break;
       }
     }
-    alert(
-      "Votre signalement a bien été pris en compte, merci pour votre retour! !\nL'équipe Wedoo.",
-    );
+    toast.fire({
+      icon: "error",
+      text: "Votre signalement a bien été pris en compte, merci pour votre retour! !\nL'équipe Wedoo.",
+
+      customClass: {
+        popup: "toast-error-popup",
+      },
+    });
     navigate(`/events/${eventId}`);
   };
 

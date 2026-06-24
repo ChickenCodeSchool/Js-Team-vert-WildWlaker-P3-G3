@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import CardEvents from "../AddEvents/CardEvents";
 import "./Reservation.css";
+import "./../../App.css";
 import { CalendarPlus } from "lucide-react";
+import Swal from "sweetalert2";
 type Reservation = {
   reservation_id: number;
   reservation_id_event: number;
@@ -49,6 +51,7 @@ function Reservation() {
     };
     fetchTest();
   }, [eventId, userId]);
+
   async function handleAddReservation(e: React.FormEvent) {
     e.preventDefault();
 
@@ -72,8 +75,27 @@ function Reservation() {
 
     const data = await response.json();
 
+    const toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+
+      customClass: {
+        popup: "toast",
+      },
+    });
+
     if (!response.ok) {
-      alert(data.message);
+      toast.fire({
+        icon: "error",
+        text: `Marche pas : ${data.message}`,
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
       return;
     }
 
@@ -85,7 +107,14 @@ function Reservation() {
     setPreview("");
 
     setIsModalOpen(false);
-    alert("Réservation ajoutée");
+    toast.fire({
+      icon: "success",
+      text: "Réservation ajoutée",
+
+      customClass: {
+        popup: "toast-error-popup",
+      },
+    });
   }
   function handleReservationPictureChange(
     e: React.ChangeEvent<HTMLInputElement>,
@@ -138,12 +167,14 @@ function Reservation() {
                   type="text"
                   placeholder="Nom"
                   value={reservationName}
+                  required
                   onChange={(e) => setReservationName(e.target.value)}
                 />
 
                 <input
                   type="date"
                   value={reservationDate}
+                  required
                   onChange={(e) => setReservationDate(e.target.value)}
                 />
 
@@ -151,12 +182,14 @@ function Reservation() {
                   type="text"
                   placeholder="Lieu"
                   value={reservationLocation}
+                  required
                   onChange={(e) => setReservationLocation(e.target.value)}
                 />
 
                 <textarea
                   placeholder="Description"
                   value={reservationDescription}
+                  required
                   onChange={(e) => setReservationDescription(e.target.value)}
                 />
 
@@ -174,6 +207,7 @@ function Reservation() {
                   id="photo-upload"
                   type="file"
                   accept="image/*"
+                  required
                   onChange={handleReservationPictureChange}
                   className="hidden-input"
                 />

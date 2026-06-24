@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { useLocation, useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 function Profil() {
   const navigate = useNavigate();
@@ -53,13 +54,39 @@ function Profil() {
   }
 
   async function handleUploadPhoto() {
+    const toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+
+      customClass: {
+        popup: "toast",
+      },
+    });
+
     if (!photo) {
-      alert("Choisis une image");
+      toast.fire({
+        icon: "warning",
+        text: "Choisis une image",
+
+        customClass: {
+          popup: "toast-warning-popup",
+        },
+      });
       return;
     }
 
     if (!userId) {
-      alert("Utilisateur introuvable");
+      toast.fire({
+        icon: "error",
+        text: "Utilisateur introuvable",
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
       return;
     }
 
@@ -77,7 +104,14 @@ function Profil() {
     const data = await response.json();
 
     if (!response.ok) {
-      alert(data.message);
+      toast.fire({
+        icon: "error",
+        text: data.message,
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
       return;
     }
 

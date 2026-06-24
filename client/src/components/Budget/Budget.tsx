@@ -172,7 +172,7 @@ function Budget() {
       timerProgressBar: true,
 
       customClass: {
-        popup: "budget-toast",
+        popup: "toast",
       },
     });
 
@@ -182,7 +182,7 @@ function Budget() {
         text: "Nom obligatoire",
 
         customClass: {
-          popup: "budget-error-popup",
+          popup: "toast-error-popup",
         },
       });
       return;
@@ -198,7 +198,7 @@ function Budget() {
         text: "Prix invalide",
 
         customClass: {
-          popup: "budget-error-popup",
+          popup: "toast-error-popup",
         },
       });
       return;
@@ -210,7 +210,7 @@ function Budget() {
         text: "Prix ne peux pas être négatif",
 
         customClass: {
-          popup: "budget-error-popup",
+          popup: "toast-error-popup",
         },
       });
       return;
@@ -241,7 +241,7 @@ function Budget() {
           title: "Dépense ajoutée",
 
           customClass: {
-            popup: "budget-success-popup",
+            popup: "toast-success-popup",
           },
         })
       : addAlert.fire({
@@ -250,7 +250,7 @@ function Budget() {
           text: JSON.stringify(data),
 
           customClass: {
-            popup: "budget-error-popup",
+            popup: "toast-error-popup",
           },
         });
   }
@@ -260,7 +260,7 @@ function Budget() {
       title: "Modifier la dépense",
 
       customClass: {
-        popup: "budget-edit-popup",
+        popup: "toast-edit-popup",
         confirmButton: "budget-confirm",
         cancelButton: "budget-cancel",
       },
@@ -342,7 +342,7 @@ function Budget() {
         showConfirmButton: false,
 
         customClass: {
-          popup: "budget-success-popup",
+          popup: "toast-success-popup",
         },
       });
     } else {
@@ -352,7 +352,7 @@ function Budget() {
         text: "Impossible de modifier la dépense",
 
         customClass: {
-          popup: "budget-error-popup",
+          popup: "toast-error-popup",
         },
       });
     }
@@ -393,7 +393,7 @@ function Budget() {
         title: "Dépense supprimée",
 
         customClass: {
-          popup: "budget-success-popup",
+          popup: "toast-success-popup",
         },
       });
     }

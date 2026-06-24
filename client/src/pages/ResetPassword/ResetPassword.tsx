@@ -5,6 +5,7 @@ import connexionImg from "../../assets/images/Connexion-img.png";
 import eye from "../../assets/images/eye.png";
 import hide from "../../assets/images/hide.png";
 import logo from "../../assets/images/logo-wedoo.png";
+import Swal from "sweetalert2";
 
 function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
@@ -42,14 +43,38 @@ function ResetPassword() {
 
     const data = await res.json();
 
+    const toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+
+      customClass: {
+        popup: "toast",
+      },
+    });
+
     if (!res.ok) {
-      alert(data.message);
+      toast.fire({
+        icon: "error",
+        text: data.message,
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
       return;
     }
 
-    alert(
-      "Mot de passe changé avec succès. Vous allez être redirigé vers la connexion.",
-    );
+    toast.fire({
+      icon: "success",
+      text: "Mot de passe changé avec succès. Vous allez être redirigé vers la connexion.",
+
+      customClass: {
+        popup: "toast-error-popup",
+      },
+    });
 
     setTimeout(() => {
       navigate("/connexion");
