@@ -95,7 +95,7 @@ function AdminReport() {
                 <button type="button" onClick={() => navigate(-1)}>
                   <ArrowLeft size={18} /> Retour aux signalements
                 </button>
-                <h1>Signalement #{id}</h1>
+                <h1>Signalement #{id} - Détails</h1>
               </div>
               <p>
                 <span aria-label="Statut">
