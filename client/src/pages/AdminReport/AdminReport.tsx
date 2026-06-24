@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import NavBar from "../../components/NavBar/NavBar";
 import Profil from "../../components/Profil/Profil";
 import ReportAdminModal, {
@@ -18,10 +18,8 @@ import {
 const API_URL = import.meta.env.VITE_API_URL;
 
 function AdminReport() {
-  const { id } = useParams();
-  const [searchParams] = useSearchParams();
+  const { id, type } = useParams();
   const navigate = useNavigate();
-  const type = searchParams.get("type");
 
   const [report, setReport] = useState<ReportData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -49,11 +47,22 @@ function AdminReport() {
     report?.reported_user_description ??
     "—";
 
-  const getDate = () =>
-    report?.reported_bug_date ??
-    report?.reported_event_date ??
-    report?.reported_user_date ??
-    "—";
+  const getDate = () => {
+    const raw =
+      report?.reported_bug_date ??
+      report?.reported_event_date ??
+      report?.reported_user_date;
+
+    if (!raw) return "—";
+
+    return new Date(raw).toLocaleDateString("fr-FR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
   const getImage = () =>
     report?.reported_bug_image ??
