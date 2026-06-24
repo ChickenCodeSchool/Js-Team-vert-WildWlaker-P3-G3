@@ -9,6 +9,7 @@ import { RouterProvider, createBrowserRouter } from "react-router";
 import Admin from "../src/pages/Admin/Admin";
 // Import the main app component
 import App from "./App";
+import DashboardReport from "./components/DashboardReport/DashboardReport";
 import AdminReport from "./pages/AdminReport/AdminReport";
 import ChangePassword from "./pages/ChangePassword/ChangePassword";
 import Connexion from "./pages/Connexion/Connexion";
@@ -74,7 +75,11 @@ const router = createBrowserRouter([
     element: <ChangePassword />,
   },
   {
-    path: "/admin/report",
+    path: "/dashboardreport",
+    element: <DashboardReport />,
+  },
+  {
+    path: "/admin/report/:type/:id",
     element: <AdminReport />,
   },
   // {
