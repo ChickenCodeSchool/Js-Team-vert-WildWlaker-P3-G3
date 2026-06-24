@@ -1,9 +1,9 @@
 import "./Messagerie.css";
+import { motion } from "framer-motion";
 import { ContactRound, Send } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import Profil from "../../assets/images/img-card-retraite.png";
-
 type ReceptionMessagesUser = {
   message_id: number;
   message_text: string;
@@ -28,7 +28,7 @@ function Messagerie() {
   const event = Number(id);
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
-
+  const messagesRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     fetchMessages();
   }, []);
@@ -46,6 +46,9 @@ function Messagerie() {
   }, [event]);
 
   async function handleSendMessage() {
+    if (!messagesUser.trim()) {
+      return;
+    }
     try {
       const response = await fetch(
         `http://localhost:3310/api/messages/${event}`,
@@ -91,34 +94,89 @@ function Messagerie() {
       minute: "2-digit",
     });
   }
-  console.log(setReceptionMessagesUser);
+  const formatMessageDay = (date: string): string => {
+    const messageDate = new Date(date);
+    const today = new Date();
+    const yesterday = new Date();
+
+    yesterday.setDate(today.getDate() - 1);
+
+    if (messageDate.toDateString() === today.toDateString()) {
+      return "Aujourd’hui";
+    }
+
+    if (messageDate.toDateString() === yesterday.toDateString()) {
+      return "Hier";
+    }
+
+    return messageDate.toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+
   return (
-    <div className="messagerie">
+    <motion.div
+      className="messagerie"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+    >
       <h1>{receptionMessagesUser[0]?.event_name}</h1>
+
       <section className="global-messagerie">
-        <div className="messagerie-box">
-          <div className="messagerie-box-messages">
-            {receptionMessagesUser.map((reception) => (
-              <div
-                key={reception.message_id}
-                className={
-                  reception.user_id === userId
-                    ? "messagerie-box-messages-user"
-                    : "messagerie-box-messages-friends"
-                }
-              >
-                {reception.user_id !== userId && (
-                  <img src={Profil} alt="profil_ami" />
-                )}
-                <section>
-                  <p className="message-text">{reception.message_text}</p>
-                  <p className="hour-text">
-                    {formatHour(reception.message_date)}
-                  </p>
-                </section>
-              </div>
-            ))}
+        <motion.div
+          className="messagerie-box"
+          initial={{ x: -40, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          <div ref={messagesRef} className="messagerie-box-messages">
+            {receptionMessagesUser.map((reception, index) => {
+              const previousMessage = receptionMessagesUser[index - 1];
+
+              const currentDay = formatMessageDay(reception.message_date);
+              const previousDay = previousMessage
+                ? formatMessageDay(previousMessage.message_date)
+                : null;
+
+              const isNewDay = currentDay !== previousDay;
+
+              return (
+                <motion.div
+                  key={reception.message_id}
+                  initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.25, delay: index * 0.03 }}
+                >
+                  {isNewDay && (
+                    <div className="message-date-separator">{currentDay}</div>
+                  )}
+
+                  <div
+                    className={
+                      reception.user_id === userId
+                        ? "messagerie-box-messages-user"
+                        : "messagerie-box-messages-friends"
+                    }
+                  >
+                    {reception.user_id !== userId && (
+                      <img src={Profil} alt="profil_ami" />
+                    )}
+
+                    <section>
+                      <p className="message-text">{reception.message_text}</p>
+                      <p className="hour-text">
+                        {formatHour(reception.message_date)}
+                      </p>
+                    </section>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
+
           <div className="massagerie-input">
             <input
               type="text"
@@ -126,19 +184,37 @@ function Messagerie() {
               onChange={(e) => setMessagesUser(e.target.value)}
               placeholder="Écrire un message..."
             />
-            <button type="button" onClick={handleSendMessage}>
+
+            <button
+              type="button"
+              onClick={handleSendMessage}
+              disabled={!messagesUser.trim()}
+            >
               <Send size={20} className="send" />
             </button>
           </div>
-        </div>
-        <section className="messagerie-contact">
+        </motion.div>
+
+        <motion.section
+          className="messagerie-contact"
+          initial={{ x: 40, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+        >
           <h3>
             <ContactRound size={20} />
             Contacts présents
           </h3>
+
           <hr className="hr-h3" />
-          {usersByEvent.map((event) => (
-            <div key={event.user_username}>
+
+          {usersByEvent.map((event, index) => (
+            <motion.div
+              key={event.user_username}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.06 }}
+            >
               <img
                 src={`http://localhost:3310${event.user_profile_picture}`}
                 alt="photo-profil"
@@ -150,11 +226,11 @@ function Messagerie() {
                 </p>
                 <hr />
               </div>
-            </div>
+            </motion.div>
           ))}
-        </section>
+        </motion.section>
       </section>
-    </div>
+    </motion.div>
   );
 }
 

@@ -11,5 +11,13 @@ class eventUserJoiningRepository {
 
     return rows as EventUserJoin[];
   }
+  async deleteAll(euj_id_user: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "DELETE FROM event_user_joining WHERE euj_id_user = ?",
+      [euj_id_user],
+    );
+
+    return rows as EventUserJoin[];
+  }
 }
 export default new eventUserJoiningRepository();

@@ -28,7 +28,16 @@
         overflow-y: auto;
         scrollbar-width: thin;
         scrollbar-color: transparent transparent;
-
+        .message-date-separator {
+          width: fit-content;
+          margin: 1rem auto;
+          padding: 0.35rem 0.8rem;
+          border-radius: 999px;
+          background-color: var(--bg-composant-dash);
+          color: var(--font-darkBrown);
+          font-size: 0.8rem;
+          font-weight: 500;
+        }
         .messagerie-box-messages-friends {
           display: flex;
           flex-direction: row;
@@ -41,6 +50,9 @@
             border-radius: 50%;
           }
           section {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
             .message-text {
               background-color: #fff8f5;
               border: 1px solid #dec0b9;
@@ -48,6 +60,7 @@
               border-radius: 12px 12px 12px 0;
               white-space: pre-wrap;
               word-break: break-word;
+              font-size: 15px;
             }
             .hour-text {
               font-size: 10px;
@@ -64,6 +77,9 @@
           justify-content: flex-end;
           padding: 2px 0 2px 0;
           section {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
             .message-text {
               background-color: #ff7e5f;
               border: 1px solid #dec0b9;
@@ -71,7 +87,7 @@
               border-radius: 12px 12px 0 12px;
               white-space: pre-wrap;
               word-break: break-word;
-
+              font-size: 15px;
               color: white;
             }
             .hour-text {
@@ -114,6 +130,9 @@
           .send {
             color: white;
           }
+        }
+        button:disabled {
+          display: none;
         }
       }
     }
@@ -159,6 +178,7 @@
         align-items: flex-start;
         .membre-date {
           font-size: 10px;
+          color: var(--font-darkBrown);
         }
       }
       hr {

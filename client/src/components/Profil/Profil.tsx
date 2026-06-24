@@ -1,4 +1,5 @@
 import "./Profil.css";
+import { AnimatePresence, motion } from "framer-motion";
 import { Pencil } from "lucide-react";
 import { LockKeyhole } from "lucide-react";
 import { Camera } from "lucide-react";
@@ -132,138 +133,168 @@ function Profil() {
           alt="photo-profil"
         />
       </button>
-      {isMainModalOpen && (
-        <div
-          className="modal-overlay"
-          onClick={() => {
-            setIsMainModalOpen(false);
-            setActiveModal(null);
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
+      <AnimatePresence>
+        {isMainModalOpen && (
+          <motion.div
+            className="modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => {
+              setIsMainModalOpen(false);
               setActiveModal(null);
-            }
-          }}
-        >
-          <div
-            className="modal"
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                setActiveModal(null);
-              }
             }}
           >
-            <h2>Parametre du profil</h2>
-            <img
-              src={`http://localhost:3310${profilePicture}`}
-              alt="photo-profil"
-            />
-            <button
-              type="button"
-              onClick={() => setActiveModal("Changer le pseudo")}
+            <motion.div
+              className="modal"
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 30 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              onClick={(e) => e.stopPropagation()}
             >
-              <Pencil size={15} />
-              Changer le pseudo
-            </button>
+              <h2>Parametre du profil</h2>
 
-            {activeModal === "Changer le pseudo" && (
-              <div className="change-pseudo">
-                <input
-                  ref={fileInputRef}
-                  type="text"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  placeholder="Changer le nom"
-                />
-                {errorMessage && (
-                  <p className="error-message">{errorMessage}</p>
-                )}
-                <button
-                  type="button"
-                  onClick={() => updateUserName(userName, userId)}
-                >
-                  Valider
-                </button>
-              </div>
-            )}
+              <img
+                src={`http://localhost:3310${profilePicture}`}
+                alt="photo-profil"
+              />
 
-            <button type="button" onClick={() => navigate("/changepassword")}>
-              <LockKeyhole size={15} />
-              Changer le mot de passe
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveModal("Changer la photo de profil")}
-            >
-              <Camera size={15} />
-              Changer la photo de profil
-            </button>
-
-            {activeModal === "Changer la photo de profil" && (
-              <div className="sub-modal">
-                <label htmlFor="photo-upload" className="custom-upload">
-                  Choisir une image
-                </label>
-
-                <input
-                  id="photo-upload"
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoChange}
-                  className="hidden-input"
-                />
-                {preview && (
-                  <img src={preview} alt="preview" className="photo-preview" />
-                )}
-                <button type="button" onClick={handleUploadPhoto}>
-                  Enregistrer la photo
-                </button>
-              </div>
-            )}
-
-            {isAdmin && (
               <button
                 type="button"
-                onClick={() => navigate(isAdminPage ? "/homeevents" : "/admin")}
+                onClick={() => setActiveModal("Changer le pseudo")}
               >
-                {isAdminPage ? (
-                  <>
-                    <User size={15} />
-                    Profil User
-                  </>
-                ) : (
-                  <>
-                    <ShieldUser size={15} />
-                    Profil Admin
-                  </>
-                )}
+                <Pencil size={15} />
+                Changer le pseudo
               </button>
-            )}
-            <button
-              className={
-                noneDeconnexion ? "deconnexion-none" : "deconnexion-event"
-              }
-              type="button"
-              onClick={() => navigate("/homeevents")}
-            >
-              <LogOut size={15} />
-              Déconnexion de l'évenement
-            </button>
-            <button
-              className="fermer"
-              type="button"
-              onClick={() => {
-                setIsMainModalOpen(false);
-                setActiveModal(null);
-              }}
-            >
-              Fermer
-            </button>
-          </div>
-        </div>
-      )}
+
+              <AnimatePresence>
+                {activeModal === "Changer le pseudo" && (
+                  <motion.div
+                    className="change-pseudo"
+                    initial={{ opacity: 0, height: 0, y: -10 }}
+                    animate={{ opacity: 1, height: "auto", y: 0 }}
+                    exit={{ opacity: 0, height: 0, y: -10 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <input
+                      ref={fileInputRef}
+                      type="text"
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
+                      placeholder="Changer le nom"
+                    />
+
+                    {errorMessage && (
+                      <p className="error-message">{errorMessage}</p>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => updateUserName(userName, userId)}
+                    >
+                      Valider
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <button type="button" onClick={() => navigate("/changepassword")}>
+                <LockKeyhole size={15} />
+                Changer le mot de passe
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveModal("Changer la photo de profil")}
+              >
+                <Camera size={15} />
+                Changer la photo de profil
+              </button>
+
+              <AnimatePresence>
+                {activeModal === "Changer la photo de profil" && (
+                  <motion.div
+                    className="sub-modal"
+                    initial={{ opacity: 0, height: 0, y: -10 }}
+                    animate={{ opacity: 1, height: "auto", y: 0 }}
+                    exit={{ opacity: 0, height: 0, y: -10 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <label htmlFor="photo-upload" className="custom-upload">
+                      Choisir une image
+                    </label>
+
+                    <input
+                      id="photo-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoChange}
+                      className="hidden-input"
+                    />
+
+                    {preview && (
+                      <img
+                        src={preview}
+                        alt="preview"
+                        className="photo-preview"
+                      />
+                    )}
+
+                    <button type="button" onClick={handleUploadPhoto}>
+                      Enregistrer la photo
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {isAdmin && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    navigate(isAdminPage ? "/homeevents" : "/admin")
+                  }
+                >
+                  {isAdminPage ? (
+                    <>
+                      <User size={15} />
+                      Profil User
+                    </>
+                  ) : (
+                    <>
+                      <ShieldUser size={15} />
+                      Profil Admin
+                    </>
+                  )}
+                </button>
+              )}
+
+              <button
+                className={
+                  noneDeconnexion ? "deconnexion-none" : "deconnexion-event"
+                }
+                type="button"
+                onClick={() => navigate("/homeevents")}
+              >
+                <LogOut size={15} />
+                Déconnexion de l'évenement
+              </button>
+
+              <button
+                className="fermer"
+                type="button"
+                onClick={() => {
+                  setIsMainModalOpen(false);
+                  setActiveModal(null);
+                }}
+              >
+                Fermer
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

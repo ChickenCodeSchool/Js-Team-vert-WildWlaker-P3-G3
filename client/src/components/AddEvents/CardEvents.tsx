@@ -39,13 +39,10 @@ function CardEvents({
   location,
 }: CardEventsProps) {
   const uselocation = useLocation();
-  const isHomeEvents = uselocation.pathname === "/homeevents";
   const onTableau = uselocation.pathname.startsWith("/tableaudebord/");
   const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
   const isHost = user_id === event_host_id;
   const [currentImage, setCurrentImage] = useState(image);
-  const [currentTitle, setCurrentTitle] = useState(title);
-  const [currentDescription, setCurrentDescription] = useState(description);
   const [currentLocation, setCurrentLocation] = useState(location);
   const [currentDate, setCurrentDate] = useState(date);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,8 +50,6 @@ function CardEvents({
 
   const handleEventUpdated = (updatedEvent: EventData) => {
     setCurrentImage(updatedEvent.event_picture);
-    setCurrentTitle(updatedEvent.event_name);
-    setCurrentDescription(updatedEvent.event_description);
     setCurrentLocation(updatedEvent.event_location);
     setCurrentDate(updatedEvent.event_date_start);
   };
@@ -77,14 +72,10 @@ function CardEvents({
       console.error(error);
     }
   };
-
   return (
     <>
       <div className="CardEvents-Wrapper">
-        <Link
-          to={isHomeEvents ? `/tableaudebord/${event_id}` : "#"}
-          className="CardEvents-Global"
-        >
+        <Link to={`/tableaudebord/${event_id}`} className="CardEvents-Global">
           <div className="CardEvents-ImageDate">
             <img
               className="CardEvents-Image"
@@ -101,8 +92,8 @@ function CardEvents({
             </span>
           </div>
           <div className="CardEvents-Container">
-            <h3 className="CardEvents-Title">{currentTitle}</h3>
-            <p className="CardEvents-Description">{currentDescription}</p>
+            <h3 className="CardEvents-Title">{title}</h3>
+            <p className="CardEvents-Description">{description}</p>
             <span className="CardEvents-Location">
               <MapPin size={14} /> {currentLocation}
             </span>
@@ -156,10 +147,10 @@ function CardEvents({
         event={{
           event_id,
           event_host_id,
-          event_name: currentTitle,
+          event_name: title,
           event_date_start: currentDate,
           event_date_end: currentDate,
-          event_description: currentDescription,
+          event_description: description,
           event_location: currentLocation,
           event_picture: currentImage,
           event_link_key: "",
