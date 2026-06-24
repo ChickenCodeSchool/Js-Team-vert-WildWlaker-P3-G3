@@ -60,6 +60,14 @@ body {
   --font-pending-state: #93000a;
 
   --color-chat: #ff7e5f;
+
+  /* admin icon color */
+  --icon-color-user: #a53b22;
+  --icon-bg-user: rgba(165, 59, 34, 0.1);
+  --icon-color-event: #366286;
+  --icon-bg-event: rgba(54, 98, 134, 0.1);
+  --icon-color-bug: #34c759;
+  --icon-bg-bug: rgba(52, 199, 89, 0.1);
 }
 
 * {
