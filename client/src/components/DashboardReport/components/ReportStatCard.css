@@ -1,0 +1,42 @@
+.ReportStatCard-Global {
+  display: flex;
+  flex-direction: column;
+  width: 15rem;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background: var(--bg-composant-dash);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  .ReportStatCard-Label {
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+  .ReportStatCard-Count {
+    margin: 0;
+    font-size: 1.75rem;
+  }
+  .Icon-Users svg {
+    stroke: var(--icon-color-user);
+    background: var(--icon-bg-user);
+    width: 2rem;
+    height: 2rem;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+  }
+  .Icon-Events svg {
+    stroke: var(--icon-color-event);
+    background: var(--icon-bg-event);
+    width: 2rem;
+    height: 2rem;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+  }
+  .Icon-Bugs svg {
+    stroke: var(--icon-color-bug);
+    background: var(--icon-bg-bug);
+    width: 2rem;
+    height: 2rem;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+  }
+}

@@ -1,0 +1,42 @@
+.ReportTable {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    text-align: left;
+    font-size: 0.8rem;
+    color: #6b7280;
+    padding: 0.75rem;
+  }
+
+  td {
+    padding: 0.75rem;
+    border-top: 1px solid #f0f0f0;
+  }
+}
+
+.ReportTable-User {
+  display: flex;
+  flex-direction: column;
+
+  .ReportTable-Email {
+    font-size: 0.8rem;
+    color: #6b7280;
+  }
+}
+
+.ReportTable-Status {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+
+  &.ongoing {
+    background: #fde2e1;
+    color: #c0392b;
+  }
+
+  &.finished {
+    background: #d8f3dc;
+    color: #1b7a3d;
+  }
+}
