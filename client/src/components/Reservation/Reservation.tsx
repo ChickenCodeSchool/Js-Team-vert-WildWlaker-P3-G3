@@ -21,10 +21,8 @@ function Reservation() {
   const eventId = Number(id);
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
-
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeModal, setActiveModal] = useState<string | null>(null);
   const [reservationName, setReservationName] = useState("");
   const [reservationDate, setReservationDate] = useState("");
   const [reservationLocation, setReservationLocation] = useState("");
@@ -32,7 +30,6 @@ function Reservation() {
   const [reservationPicture, setReservationPicture] = useState<File | null>(
     null,
   );
-  console.log(activeModal);
   const [preview, setPreview] = useState("");
   useEffect(() => {
     fetch(`http://localhost:3310/api/reservations/all/${eventId}`)
@@ -43,6 +40,15 @@ function Reservation() {
     [eventId];
   });
   async function handleAddReservation() {
+    if (
+      !reservationName ||
+      !reservationDate ||
+      !reservationLocation ||
+      !reservationDescription
+    ) {
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append("reservation_id_event", String(eventId));
@@ -126,7 +132,6 @@ function Reservation() {
               exit={{ opacity: 0 }}
               onClick={() => {
                 setIsModalOpen(false);
-                setActiveModal(null);
               }}
             >
               <motion.div

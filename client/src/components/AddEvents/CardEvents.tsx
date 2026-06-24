@@ -42,6 +42,8 @@ function CardEvents({
   const onTableau = uselocation.pathname.startsWith("/tableaudebord/");
   const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
   const isHost = user_id === event_host_id;
+  const [currentTitle, setCurrentTitle] = useState(title);
+  const [currentDescription, setCurrentDescription] = useState(description);
   const [currentImage, setCurrentImage] = useState(image);
   const [currentLocation, setCurrentLocation] = useState(location);
   const [currentDate, setCurrentDate] = useState(date);
@@ -49,6 +51,8 @@ function CardEvents({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleEventUpdated = (updatedEvent: EventData) => {
+    setCurrentTitle(updatedEvent.event_name);
+    setCurrentDescription(updatedEvent.event_description);
     setCurrentImage(updatedEvent.event_picture);
     setCurrentLocation(updatedEvent.event_location);
     setCurrentDate(updatedEvent.event_date_start);
@@ -92,8 +96,8 @@ function CardEvents({
             </span>
           </div>
           <div className="CardEvents-Container">
-            <h3 className="CardEvents-Title">{title}</h3>
-            <p className="CardEvents-Description">{description}</p>
+            <h3 className="CardEvents-Title">{currentTitle}</h3>
+            <p className="CardEvents-Description">{currentDescription}</p>
             <span className="CardEvents-Location">
               <MapPin size={14} /> {currentLocation}
             </span>
@@ -147,10 +151,10 @@ function CardEvents({
         event={{
           event_id,
           event_host_id,
-          event_name: title,
+          event_name: currentTitle,
           event_date_start: currentDate,
           event_date_end: currentDate,
-          event_description: description,
+          event_description: currentDescription,
           event_location: currentLocation,
           event_picture: currentImage,
           event_link_key: "",
