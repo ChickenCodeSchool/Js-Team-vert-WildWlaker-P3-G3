@@ -1,4 +1,13 @@
 import "./Dashboard.css";
+import { motion } from "framer-motion";
+import {
+  Book,
+  CalendarClock,
+  Hand,
+  HandCoins,
+  PiggyBank,
+  UsersRound,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import GalerieDashboard from "../GalerieDashboard/GalerieDashboard";
@@ -111,36 +120,111 @@ function Dashboard() {
 
     return reservationDate < today ? "passe" : "a_venir";
   }
+  const MotionHand = motion(Hand);
   return (
-    <div className="dashboard">
-      <h1 className="event-name">{eventName}</h1>
-      <h1 className="user-name">Salut, {userName}</h1>
-      <p> {eventData[0]?.event_description}</p>
+    <motion.div
+      className="dashboard"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.h1
+        className="event-name"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.4 }}
+      >
+        {eventName}
+      </motion.h1>
+
+      <motion.h1
+        className="user-name"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+      >
+        Salut, {userName}
+        <MotionHand
+          size={20}
+          animate={{ rotate: [0, 25, -25, 25, -25, 25, -25, 25, -25, 0] }}
+          transition={{
+            duration: 1.5,
+            repeat: Number.POSITIVE_INFINITY,
+            repeatDelay: 0.5,
+          }}
+        />
+      </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+      >
+        {eventData[0]?.event_description}
+      </motion.p>
 
       <div className="dashboard-stats">
-        <div className="stat-1">
-          <p>Total de participants</p>
-          <h2>{totalParticipants}</h2>
-        </div>
-        <div className="stat-2">
-          <p>Reservations</p>
-          <h2>{totalReservations}</h2>
-        </div>
-        <div className="stat-3">
-          <p>Budget total</p>
-          <h2>{totalBudget}€</h2>
-        </div>
-        <div className="stat-4">
-          <p>Budget propre</p>
-          <h2>{userAndBudgetData[0]?.budget_price || 0}€</h2>
-        </div>
+        {[
+          {
+            icon: <UsersRound size={20} />,
+            title: "Total de participants",
+            value: totalParticipants,
+            className: "stat-1",
+          },
+          {
+            icon: <Book size={20} />,
+            title: "Reservations",
+            value: totalReservations,
+            className: "stat-2",
+          },
+          {
+            icon: <HandCoins size={20} />,
+            title: "Budget total",
+            value: `${totalBudget}€`,
+            className: "stat-3",
+          },
+          {
+            icon: <PiggyBank size={20} />,
+            title: "Budget propre",
+            value: `${userAndBudgetData[0]?.budget_price || 0}€`,
+            className: "stat-4",
+          },
+        ].map((stat, index) => (
+          <motion.div
+            key={stat.title}
+            className={stat.className}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.2,
+              delay: index * 0,
+            }}
+            whileHover={{
+              y: -5,
+              scale: 1.02,
+            }}
+          >
+            <p>
+              {stat.icon}
+              {stat.title}
+            </p>
+            <h2>{stat.value}</h2>
+          </motion.div>
+        ))}
       </div>
 
       <div className="dashboard-components">
-        <div className="component-recent-reservations">
+        <motion.div
+          className="component-recent-reservations"
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
           <div className="component-header">
-            <h3>Réservations récentes</h3>
-
+            <h3>
+              <CalendarClock size={20} />
+              Réservations récentes
+            </h3>
             <button type="button">Voir tout</button>
           </div>
 
@@ -151,9 +235,19 @@ function Dashboard() {
               <h4>Date</h4>
               <h4 className="statut">Statut</h4>
             </div>
+
             <div className="scroll">
-              {reservationData.map((reservation) => (
-                <div className="row" key={`${reservation.reservation_id}`}>
+              {reservationData.map((reservation, index) => (
+                <motion.div
+                  className="row"
+                  key={reservation.reservation_id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.25,
+                    delay: 0.45 + index * 0.05,
+                  }}
+                >
                   <div className="name">
                     <p className="initials">
                       {getInitials(reservation.user_name)}
@@ -173,16 +267,29 @@ function Dashboard() {
                   >
                     {getReservationStatus(reservation.reservation_date)}
                   </p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <TodoList eventId={event} todo_id_user={userId} />
-        <GalerieDashboard />
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          <TodoList eventId={event} todo_id_user={userId} />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
+          <GalerieDashboard />
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

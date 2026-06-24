@@ -197,7 +197,7 @@ function ModalEditEvent({
 
         <div className="ModalEditEvent-Field">
           <label className="ModalEditEvent-Label" htmlFor="event_location">
-            LIEU
+            Lieu
           </label>
           <input
             id="event_location"
@@ -214,7 +214,7 @@ function ModalEditEvent({
             className="ModalEditEvent-Label"
             htmlFor="ModalEditEvent-Preview"
           >
-            IMAGE
+            Image
           </label>
           <div className="ModalEditEvent-ImageGlobal">
             <img

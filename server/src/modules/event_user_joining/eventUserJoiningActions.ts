@@ -12,5 +12,14 @@ const browse: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const deleteAll: RequestHandler = async (req, res, next) => {
+  try {
+    const UserId = Number(req.params.id);
+    const euj = await eventUserJoiningRepository.deleteAll(UserId);
 
-export default { browse };
+    res.json(euj);
+  } catch (err) {
+    next(err);
+  }
+};
+export default { browse, deleteAll };

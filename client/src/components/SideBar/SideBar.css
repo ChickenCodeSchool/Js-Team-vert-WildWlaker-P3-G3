@@ -74,12 +74,17 @@
         display: flex;
         align-items: center;
         height: 50px;
-        button {
-          border-style: none;
-          background: none;
+        .link {
+          font-family: Be Vietnam Pro, sans-serif;
+          font-weight: 400;
+          font-size: 13.333px;
+          color: black;
+          text-decoration: none;
           display: flex;
           align-items: center;
           gap: 10px;
+          background: none;
+          border: none;
           cursor: pointer;
         }
       }
@@ -95,6 +100,92 @@
           align-items: center;
           gap: 10px;
           cursor: pointer;
+        }
+        .delete-modal-overlay {
+          position: fixed;
+          inset: 0;
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          background: rgba(15, 23, 42, 0.65);
+          backdrop-filter: blur(4px);
+
+          z-index: 9999;
+
+          .delete-modal {
+            width: 90%;
+            max-width: 420px;
+
+            padding: 2rem;
+
+            background: white;
+            border-radius: 24px;
+
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 20px
+              rgba(0, 0, 0, 0.08);
+
+            animation: modalAppear 0.25s ease;
+
+            h3 {
+              margin-bottom: 1rem;
+
+              font-size: 1.3rem;
+              font-weight: 700;
+
+              color: #111827;
+            }
+
+            p {
+              margin-bottom: 2rem;
+
+              line-height: 1.5;
+
+              color: #6b7280;
+            }
+
+            .delete-modal-actions {
+              display: flex;
+              justify-content: space-around;
+              gap: 12px;
+
+              button {
+                border: none;
+                border-radius: 12px;
+
+                padding: 0.8rem 1.4rem;
+
+                font-weight: 600;
+                cursor: pointer;
+
+                transition: 0.2s ease;
+                a {
+                  text-decoration: none;
+                  color: white;
+                }
+              }
+
+              button:first-child {
+                background: #f3f4f6;
+                color: #374151;
+
+                &:hover {
+                  background: #e5e7eb;
+                }
+              }
+
+              button:last-child {
+                background: var(--button-color);
+                color: white;
+
+                &:hover {
+                  background: #dc2626;
+                  transform: translateY(-2px);
+                }
+              }
+            }
+          }
         }
       }
     }
