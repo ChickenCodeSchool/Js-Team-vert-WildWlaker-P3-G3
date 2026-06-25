@@ -13,6 +13,9 @@
   .todolist-title {
     font-weight: 400;
     color: var(--font-darkBrown);
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
   .todolist-text {
     display: flex;

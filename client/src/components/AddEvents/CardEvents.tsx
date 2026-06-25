@@ -39,21 +39,22 @@ function CardEvents({
   location,
 }: CardEventsProps) {
   const uselocation = useLocation();
+  const isHomeEvents = uselocation.pathname === "/homeevents";
   const onTableau = uselocation.pathname.startsWith("/tableaudebord/");
   const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
   const isHost = user_id === event_host_id;
-  const [currentImage, setCurrentImage] = useState(image);
   const [currentTitle, setCurrentTitle] = useState(title);
   const [currentDescription, setCurrentDescription] = useState(description);
+  const [currentImage, setCurrentImage] = useState(image);
   const [currentLocation, setCurrentLocation] = useState(location);
   const [currentDate, setCurrentDate] = useState(date);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleEventUpdated = (updatedEvent: EventData) => {
-    setCurrentImage(updatedEvent.event_picture);
     setCurrentTitle(updatedEvent.event_name);
     setCurrentDescription(updatedEvent.event_description);
+    setCurrentImage(updatedEvent.event_picture);
     setCurrentLocation(updatedEvent.event_location);
     setCurrentDate(updatedEvent.event_date_start);
   };
@@ -71,7 +72,6 @@ function CardEvents({
       }
 
       setIsDeleteModalOpen(false);
-      console.log("Réservation supprimée");
     } catch (error) {
       console.error(error);
     }
@@ -79,7 +79,10 @@ function CardEvents({
   return (
     <>
       <div className="CardEvents-Wrapper">
-        <Link to={`/tableaudebord/${event_id}`} className="CardEvents-Global">
+        <Link
+          to={isHomeEvents ? `/tableaudebord/${event_id}` : "#"}
+          className="CardEvents-Global"
+        >
           <div className="CardEvents-ImageDate">
             <img
               className="CardEvents-Image"
