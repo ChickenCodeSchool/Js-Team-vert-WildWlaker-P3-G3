@@ -222,7 +222,11 @@
       margin: 0;
       padding: 0;
       gap: 15px;
-
+      .sidebar-signal {
+        a {
+          color: black;
+        }
+      }
       li {
         width: auto;
         height: auto;

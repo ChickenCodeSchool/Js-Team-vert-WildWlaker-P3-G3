@@ -76,6 +76,7 @@ router.post("/api/items", itemActions.add);
 // EventActions routes
 // router.get("/api/users/:id/events", userActions.getUserEvents);
 router.get("/api/events", eventActions.browse);
+router.get("/api/events/name/:id", eventActions.readEventName);
 router.get("/api/events/images", eventActions.browseImages);
 router.get("/api/events/:id", eventActions.read);
 router.post("/api/events/join", eventActions.join);

@@ -5,6 +5,7 @@ import "./Reservation.css";
 import { AnimatePresence, motion } from "framer-motion";
 import { CalendarPlus } from "lucide-react";
 import Swal from "sweetalert2";
+
 type Reservation = {
   reservation_id: number;
   reservation_id_event: number;
@@ -14,6 +15,7 @@ type Reservation = {
   reservation_location: string;
   reservation_description: string;
   reservation_picture: string;
+  event_name: string;
 };
 
 function Reservation() {
@@ -31,8 +33,9 @@ function Reservation() {
     null,
   );
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
-
   const [preview, setPreview] = useState("");
+  const [eventName, setEventName] = useState<Reservation>();
+
   useEffect(() => {
     fetch(`http://localhost:3310/api/reservations/all/${eventId}`)
       .then((res) => res.json())
@@ -50,6 +53,15 @@ function Reservation() {
     };
     fetchTest();
   }, [eventId, userId]);
+
+  useEffect(() => {
+    fetch(`http://localhost:3310/api/events/name/${eventId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setEventName(data);
+      });
+  }, [eventId]);
+
   async function handleAddReservation(e: React.FormEvent) {
     e.preventDefault();
 
@@ -169,7 +181,7 @@ function Reservation() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.4 }}
         >
-          Mes Réservations
+          {eventName?.event_name}
         </motion.h1>
 
         <motion.button
@@ -271,27 +283,27 @@ function Reservation() {
         </AnimatePresence>
       </div>
 
-      <motion.div
+      {/* <motion.div
         className="reservation-card-global"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.2 }}
-      >
-        {reservations.map((event) => (
-          <div key={event.reservation_id}>
-            <CardEvents
-              event_id={event.reservation_id}
-              event_host_id={null}
-              image={`http://localhost:3310${event.reservation_picture}`}
-              imageAlt={event.reservation_name}
-              date={event.reservation_date}
-              title={event.reservation_name}
-              description={event.reservation_description}
-              location={event.reservation_location}
-            />
-          </div>
-        ))}
-      </motion.div>
+      > */}
+      {reservations.map((event) => (
+        <div className="card-reservation" key={event.reservation_id}>
+          <CardEvents
+            event_id={event.reservation_id}
+            event_host_id={null}
+            image={`http://localhost:3310${event.reservation_picture}`}
+            imageAlt={event.reservation_name}
+            date={event.reservation_date}
+            title={event.reservation_name}
+            description={event.reservation_description}
+            location={event.reservation_location}
+          />
+        </div>
+      ))}
+      {/* </motion.div> */}
     </motion.div>
   );
 }
