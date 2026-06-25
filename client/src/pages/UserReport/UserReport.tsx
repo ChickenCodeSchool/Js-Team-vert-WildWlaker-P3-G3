@@ -28,7 +28,8 @@ function UserReport() {
       .then((response) => response.json())
       .then((data: EventUserJoin[]) => {
         setEuj(data);
-      });
+      })
+      .catch((error) => console.error(error));
   }, [eventId]);
 
   const handleGoBack = () => {
@@ -44,7 +45,6 @@ function UserReport() {
       showConfirmButton: false,
       timer: 2500,
       timerProgressBar: true,
-
       customClass: {
         popup: "toast",
       },
@@ -57,7 +57,6 @@ function UserReport() {
       toast.fire({
         icon: "error",
         text: "Veuillez remplir les champs pour envoyer votre demande.",
-
         customClass: {
           popup: "toast-error-popup",
         },
@@ -65,63 +64,87 @@ function UserReport() {
       return;
     }
 
-    //On utilise un switch ici pcq une ternaire gère que 2 cas (vrai ou faux), un switch en gère plusieurs sans que ça devienne illisible et trop verbeux.
+    try {
+      let response: Response;
 
-    switch (repType) {
-      case "utilisateur": {
-        const formData = new FormData();
-        formData.append("reported_user_description", repDetail);
-        formData.append("reported_user_id_user", reportedUserId.toString());
-        formData.append("reported_user_by_id_user", user?.id?.toString() ?? "");
-        for (const file of repEvidence) {
-          formData.append("reported_user_image", file);
+      // On utilise un switch ici car une ternaire ne gère que 2 cas (vrai/faux),
+      // un switch en gère plusieurs sans devenir illisible ni trop verbeux.
+      switch (repType) {
+        case "utilisateur": {
+          const formData = new FormData();
+          formData.append("reported_user_description", repDetail);
+          formData.append("reported_user_id_user", reportedUserId.toString());
+          formData.append(
+            "reported_user_by_id_user",
+            user?.id?.toString() ?? "",
+          );
+          for (const file of repEvidence) {
+            formData.append("reported_user_image", file);
+          }
+          response = await fetch(`${API_URL}/api/userreport-user`, {
+            method: "POST",
+            body: formData,
+          });
+          break;
         }
-        await fetch(`${API_URL}/api/userreport-user`, {
-          method: "POST",
-          body: formData,
-        });
-        break;
-      }
-      case "evenement": {
-        const formData = new FormData();
-        formData.append("reported_event_description", repDetail);
-        formData.append(
-          "reported_event_by_id_user",
-          user?.id?.toString() ?? "",
-        );
-        for (const file of repEvidence) {
-          formData.append("reported_event_image", file);
+        case "evenement": {
+          const formData = new FormData();
+          formData.append("reported_event_description", repDetail);
+          formData.append(
+            "reported_event_by_id_user",
+            user?.id?.toString() ?? "",
+          );
+          for (const file of repEvidence) {
+            formData.append("reported_event_image", file);
+          }
+          response = await fetch(`${API_URL}/api/userreport-event`, {
+            method: "POST",
+            body: formData,
+          });
+          break;
         }
-        await fetch(`${API_URL}/api/userreport-event`, {
-          method: "POST",
-          body: formData,
-        });
-        break;
-      }
-      case "bug": {
-        const formData = new FormData();
-        formData.append("reported_bug_description", repDetail);
-        formData.append("reported_bug_by_id_user", user?.id?.toString() ?? "");
-        for (const file of repEvidence) {
-          formData.append("reported_bug_image", file);
+        case "bug": {
+          const formData = new FormData();
+          formData.append("reported_bug_description", repDetail);
+          formData.append(
+            "reported_bug_by_id_user",
+            user?.id?.toString() ?? "",
+          );
+          for (const file of repEvidence) {
+            formData.append("reported_bug_image", file);
+          }
+          response = await fetch(`${API_URL}/api/userreport-bug`, {
+            method: "POST",
+            body: formData,
+          });
+          break;
         }
-        await fetch(`${API_URL}/api/userreport-bug`, {
-          method: "POST",
-          body: formData,
-        });
-        break;
+        default:
+          return;
       }
+
+      if (!response.ok) {
+        throw new Error(`Erreur serveur : ${response.status}`);
+      }
+
+      toast.fire({
+        icon: "success",
+        text: "Votre signalement a bien été pris en compte, merci pour votre retour !\nL'équipe Wedoo.",
+        customClass: {
+          popup: "toast-success-popup",
+        },
+      });
+      navigate(`/tableaudebord/${eventId}`);
+    } catch (error) {
+      console.error(error);
+      toast.fire({
+        icon: "error",
+        text: "Une erreur est survenue, votre signalement n'a pas pu être envoyé.",
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
     }
-
-    toast.fire({
-      icon: "error",
-      text: "Votre signalement a bien été pris en compte, merci pour votre retour!\nL'équipe Wedoo.",
-
-      customClass: {
-        popup: "toast-error-popup",
-      },
-    });
-    navigate(`/tableaudebord/${eventId}`);
   };
 
   const handleCancel = () => {
