@@ -1,7 +1,17 @@
 .DashboardReport-global {
   background: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   .DashboardReport-Grid {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     justify-content: space-around;
+    gap: 2rem;
+  }
+  .DashboardReport-TableSection {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
   }
 }

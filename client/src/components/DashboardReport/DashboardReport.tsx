@@ -97,16 +97,16 @@ function DashboardReport() {
       <main className="DashboardReport-global">
         <section className="DashboardReport-Grid">
           <ReportStatCard
-            icon={<Users />}
-            label="Signalements d'utilisateurs"
-            count={reportUser.length}
-            iconClassName="Icon-Users"
-          />
-          <ReportStatCard
             icon={<Calendar />}
             label="Signalements d'événements"
             count={reportEvent.length}
             iconClassName="Icon-Events"
+          />
+          <ReportStatCard
+            icon={<Users />}
+            label="Signalements d'utilisateurs"
+            count={reportUser.length}
+            iconClassName="Icon-Users"
           />
           <ReportStatCard
             icon={<Bug />}
