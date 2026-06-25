@@ -1,15 +1,145 @@
 .messagerie {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-weight: 300;
+  font-style: normal;
   h1 {
     color: var(--font-brown);
     padding: 3rem 3rem 0 0;
   }
+  .global-messagerie {
+    display: flex;
+    flex-direction: row;
+    gap: 2vw;
+    .messagerie-box {
+      height: 78vh;
+      width: 48.5vw;
+      background: var(--bg-composant-dash);
+      padding: 30px;
+      border-radius: 5px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      margin-top: 2.5vh;
+      flex: 1;
+      min-height: 0;
+      .messagerie-box-messages {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+        .message-date-separator {
+          width: fit-content;
+          margin: 1rem auto;
+          padding: 0.35rem 0.8rem;
+          border-radius: 999px;
+          background-color: var(--bg-composant-dash);
+          color: var(--font-darkBrown);
+          font-size: 0.8rem;
+          font-weight: 500;
+        }
+        .messagerie-box-messages-friends {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          gap: 5px;
+          padding: 2px 0 2px 0;
+          img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+          }
+          section {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            .message-text {
+              background-color: #fff8f5;
+              border: 1px solid #dec0b9;
+              padding: 5px;
+              border-radius: 12px 12px 12px 0;
+              white-space: pre-wrap;
+              word-break: break-word;
+              font-size: 15px;
+            }
+            .hour-text {
+              font-size: 10px;
+              display: flex;
+              flex-direction: row;
+              justify-content: flex-start;
+            }
+          }
+        }
 
-  .messagerie-box {
-    font-family: "Be Vietnam Pro", sans-serif;
-    font-weight: 300;
-    font-style: normal;
+        .messagerie-box-messages-user {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-end;
+          padding: 2px 0 2px 0;
+          section {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            .message-text {
+              background-color: #ff7e5f;
+              border: 1px solid #dec0b9;
+              padding: 5px;
+              border-radius: 12px 12px 0 12px;
+              white-space: pre-wrap;
+              word-break: break-word;
+              font-size: 15px;
+              color: white;
+            }
+            .hour-text {
+              font-size: 10px;
+              display: flex;
+              flex-direction: row;
+              justify-content: flex-end;
+            }
+          }
+        }
+      }
+
+      .massagerie-input {
+        flex-shrink: 0;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        height: 48px;
+        border: 1px solid #ff7e5f;
+        border-radius: 21px;
+        margin-bottom: 10px;
+        input {
+          padding-left: 10px;
+          width: 94%;
+          border-style: none;
+          background: none;
+        }
+        input:focus-visible {
+          outline: none;
+        }
+        button {
+          border-radius: 21px;
+          border-style: none;
+          background-color: #ff7e5f;
+          height: 30px;
+          width: 30px;
+          padding: 5px 2px 0 0;
+          cursor: pointer;
+          .send {
+            color: white;
+          }
+        }
+        button:disabled {
+          display: none;
+        }
+      }
+    }
+  }
+  .messagerie-contact {
     height: 78vh;
-    width: 67.5vw;
+    width: 20vw;
     background: var(--bg-composant-dash);
     padding: 30px;
     border-radius: 5px;
@@ -17,88 +147,45 @@
     display: flex;
     flex-direction: column;
     margin-top: 2.5vh;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
-    .messagerie-box-messages {
-      flex: 1;
-      min-height: 0;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: transparent transparent;
-
-      .messagerie-box-messages-friends {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        gap: 5px;
-        padding: 2px 0 2px 0;
-        img {
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-        }
-
-        div {
-          background-color: #fff8f5;
-          border: 1px solid #dec0b9;
-          padding: 5px;
-          border-radius: 12px 12px 12px 0;
-          white-space: pre-wrap;
-          word-break: break-word;
-          max-width: 45%;
-        }
-      }
-
-      .messagerie-box-messages-user {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-        padding: 2px 0 2px 0;
-        div {
-          background-color: #ff7e5f;
-          border: 1px solid #dec0b9;
-          padding: 5px;
-          border-radius: 12px 12px 0 12px;
-          white-space: pre-wrap;
-          word-break: break-word;
-          max-width: 45%;
-          color: white;
-        }
-      }
-    }
-
-    .massagerie-input {
-      flex-shrink: 0;
-      width: 100%;
+    color: var(--font-brown);
+    gap: 25px;
+    h3 {
+      font-weight: 500;
       display: flex;
       align-items: center;
-      gap: 5px;
-      height: 48px;
-      border: 1px solid #ff7e5f;
-      border-radius: 21px;
-      margin-bottom: 10px;
-      input {
-        padding-left: 10px;
-        width: 96%;
-        border-style: none;
-        background: none;
+      gap: 10px;
+    }
+    .hr-h3 {
+      border: none;
+      width: 16.5vw;
+      height: 1px;
+      background-color: var(--border-color);
+    }
+    div {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      img {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
       }
-      input:focus-visible {
-        outline: none;
-      }
-      button {
-        border-radius: 21px;
-        border-style: none;
-        background-color: #ff7e5f;
-        height: 30px;
-        width: 30px;
-        padding: 5px 2px 0 0;
-        cursor: pointer;
-        .send {
-          color: white;
+      div {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        align-items: flex-start;
+        .membre-date {
+          font-size: 10px;
+          color: var(--font-darkBrown);
         }
+      }
+      hr {
+        border: none;
+        width: 8vw;
+        height: 1px;
+        background-color: var(--border-color);
       }
     }
   }

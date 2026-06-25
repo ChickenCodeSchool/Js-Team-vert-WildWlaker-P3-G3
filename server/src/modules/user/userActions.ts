@@ -369,6 +369,22 @@ const browseUserAdmin: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const readUserJoinEvent: RequestHandler = async (req, res, next) => {
+  try {
+    const eventId = Number(req.params.id);
+
+    const userName = await userRepository.readUserJoinEvent(eventId);
+
+    if (!userName) {
+      res.sendStatus(404);
+      return;
+    }
+
+    res.json(userName);
+  } catch (err) {
+    next(err);
+  }
+};
 export default {
   readUserDescriptionEvent,
   browseInscription,
@@ -384,4 +400,5 @@ export default {
   editUserName,
   browseUserAdmin,
   readUserName,
+  readUserJoinEvent,
 };

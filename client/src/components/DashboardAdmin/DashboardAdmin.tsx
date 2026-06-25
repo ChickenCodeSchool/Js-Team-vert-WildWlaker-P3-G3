@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import "./DashboardAdmin.css";
-import { Calendar, TriangleAlert, Users } from "lucide-react";
+import { motion } from "framer-motion";
+import {
+  Calendar,
+  ChartNoAxesCombined,
+  Flag,
+  TriangleAlert,
+  User,
+  Users,
+} from "lucide-react";
 import {
   CartesianGrid,
   Legend,
@@ -120,43 +128,81 @@ function DashboardAdmin() {
   }
 
   return (
-    <main className="admin-dashboard">
-      <section className="stats-grid">
-        <article className="stat-card">
-          <Calendar />
-          <p>Total des evenements</p>
-          <h2>{totalIdsEvents}</h2>
-        </article>
+    <motion.main
+      className="admin-dashboard"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <motion.section
+        className="stats-grid"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: {
+            transition: {
+              staggerChildren: 0.12,
+            },
+          },
+        }}
+      >
+        {[
+          {
+            icon: <Calendar />,
+            label: "Total des evenements",
+            value: totalIdsEvents,
+          },
+          {
+            icon: <Users />,
+            label: "Total des utilisateurs",
+            value: totalIdsUsers,
+          },
+          {
+            icon: <TriangleAlert />,
+            label: "Rapports actifs",
+            value: totalReports,
+          },
+        ].map((stat) => (
+          <motion.article
+            className="stat-card"
+            key={stat.label}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            whileHover={{ y: -6, scale: 1.02 }}
+            transition={{ duration: 0.25 }}
+          >
+            {stat.icon}
+            <p>{stat.label}</p>
+            <h2>{stat.value}</h2>
+          </motion.article>
+        ))}
+      </motion.section>
 
-        <article className="stat-card">
-          <Users />
-          <p>Total des utilisateurs</p>
-          <h2>{totalIdsUsers}</h2>
-        </article>
-
-        <article className="stat-card">
-          <TriangleAlert />
-          <p>Rapports actifs</p>
-          <h2>{totalReports}</h2>
-        </article>
-      </section>
-
-      <section className="chart-card">
+      <motion.section
+        className="chart-card"
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25, duration: 0.4 }}
+      >
         <div className="chart-header">
           <div>
-            <h2>Activité de la plateforme</h2>
+            <h2>
+              <ChartNoAxesCombined size={20} />
+              Activité de la plateforme
+            </h2>
             <p>Évolution mensuelle des utilisateurs, événements et reports</p>
           </div>
         </div>
+
         <div className="chart-container">
           <ResponsiveContainer width="100%" height={320}>
             <LineChart data={graphic}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
-
               <XAxis dataKey="month" axisLine={false} tickLine={false} />
-
               <YAxis axisLine={false} tickLine={false} />
-
               <Tooltip />
               <Legend />
 
@@ -186,12 +232,24 @@ function DashboardAdmin() {
             </LineChart>
           </ResponsiveContainer>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="bottom-grid">
-        <article className="reports-card">
+      <motion.section
+        className="bottom-grid"
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.4 }}
+      >
+        <motion.article
+          className="reports-card"
+          whileHover={{ y: -4 }}
+          transition={{ duration: 0.2 }}
+        >
           <div className="card-title">
-            <h2>Rapports récents</h2>
+            <h2>
+              <Flag size={20} />
+              Rapports récents
+            </h2>
           </div>
 
           <div className="tableau-rapport">
@@ -201,27 +259,47 @@ function DashboardAdmin() {
               <h3>Description</h3>
               <h3>Date</h3>
             </div>
+
             <div className="contenu-tableau-rapport">
               {arrayReport.map((report) => (
-                <div key={`${report.user_name}-${report.report_date}`}>
+                <motion.div
+                  key={`${report.user_name}-${report.report_date}`}
+                  initial={{ opacity: 0, x: -15 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.25 }}
+                >
                   <p>{report.user_name}</p>
                   <p>{report.report_type}</p>
                   <p>{report.description}</p>
                   <p>{formatDate(report.report_date)}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
-        </article>
+        </motion.article>
 
-        <article className="users-card">
+        <motion.article
+          className="users-card"
+          whileHover={{ y: -4 }}
+          transition={{ duration: 0.2 }}
+        >
           <div className="card-title">
-            <h2>Nouveaux utilisateurs</h2>
+            <h2>
+              <User size={20} />
+              Nouveaux utilisateurs
+            </h2>
           </div>
 
           <div className="users-list">
             {arrayUser.map((user) => (
-              <div className="user-row" key={user.user_id}>
+              <motion.div
+                className="user-row"
+                key={user.user_id}
+                initial={{ opacity: 0, x: 15 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.25 }}
+                whileHover={{ x: 6 }}
+              >
                 <img
                   src={`http://localhost:3310${user.user_profile_picture}`}
                   alt={user.user_name}
@@ -234,12 +312,12 @@ function DashboardAdmin() {
                     {formatDate(user.user_joining_date)}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </article>
-      </section>
-    </main>
+        </motion.article>
+      </motion.section>
+    </motion.main>
   );
 }
 export default DashboardAdmin;

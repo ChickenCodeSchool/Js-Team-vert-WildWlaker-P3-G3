@@ -147,7 +147,28 @@ const edit: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const deleteEvent: RequestHandler = async (req, res, next) => {
+  try {
+    const eventId = Number(req.params.id);
 
+    await eventRepository.deleteEvent(eventId);
+
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+};
+const readEventHostId: RequestHandler = async (req, res, next) => {
+  try {
+    const eventId = Number(req.params.id);
+
+    const rows = await eventRepository.readEventHostId(eventId);
+
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    next(error);
+  }
+};
 export default {
   browse,
   read,
@@ -155,4 +176,6 @@ export default {
   join,
   browseImages,
   edit,
+  deleteEvent,
+  readEventHostId,
 };

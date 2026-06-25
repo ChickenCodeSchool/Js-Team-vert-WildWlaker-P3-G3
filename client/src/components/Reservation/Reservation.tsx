@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import CardEvents from "../AddEvents/CardEvents";
 import "./Reservation.css";
-import "./../../App.css";
+import { AnimatePresence, motion } from "framer-motion";
 import { CalendarPlus } from "lucide-react";
 import Swal from "sweetalert2";
 type Reservation = {
@@ -21,7 +21,6 @@ function Reservation() {
   const eventId = Number(id);
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
-
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reservationName, setReservationName] = useState("");
@@ -51,9 +50,46 @@ function Reservation() {
     };
     fetchTest();
   }, [eventId, userId]);
-
   async function handleAddReservation(e: React.FormEvent) {
     e.preventDefault();
+
+    const toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+
+      customClass: {
+        popup: "toast",
+      },
+    });
+
+    if (
+      !reservationName ||
+      !reservationDate ||
+      !reservationLocation ||
+      !reservationDescription ||
+      !reservationPicture
+    ) {
+      const missingFields = [
+        !reservationName && "le titre",
+        !reservationDate && "la date",
+        !reservationLocation && "la localisation",
+        !reservationDescription && "une description",
+        !reservationPicture && "une image",
+      ].filter(Boolean);
+
+      toast.fire({
+        icon: "error",
+        text: `Il vous manque : ${missingFields.join(", ")}`,
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
+      return;
+    }
 
     const formData = new FormData();
 
@@ -74,18 +110,6 @@ function Reservation() {
     });
 
     const data = await response.json();
-
-    const toast = Swal.mixin({
-      toast: true,
-      position: "top",
-      showConfirmButton: false,
-      timer: 2500,
-      timerProgressBar: true,
-
-      customClass: {
-        popup: "toast",
-      },
-    });
 
     if (!response.ok) {
       toast.fire({
@@ -133,17 +157,41 @@ function Reservation() {
     return <p>Vous n'êtes pas inscrit à cet événement.</p>;
   }
   return (
-    <>
-      <div className="reservation">
-        <div className="reservation-title">
-          <h1>Mes Réservations</h1>
-          <button type="button" onClick={() => setIsModalOpen(true)}>
-            <CalendarPlus size={20} />
-            <p>Ajouter une réservation</p>
-          </button>
+    <motion.div
+      className="reservation"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+    >
+      <div className="reservation-title">
+        <motion.h1
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.4 }}
+        >
+          Mes Réservations
+        </motion.h1>
+
+        <motion.button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <CalendarPlus size={20} />
+          <p>Ajouter une réservation</p>
+        </motion.button>
+
+        <AnimatePresence>
           {isModalOpen && (
-            <div
+            <motion.div
               className="modal-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               onClick={() => {
                 setIsModalOpen(false);
               }}
@@ -153,8 +201,12 @@ function Reservation() {
                 }
               }}
             >
-              <div
+              <motion.div
                 className="modal"
+                initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 40, scale: 0.95 }}
+                transition={{ duration: 0.25 }}
                 onClick={(e) => e.stopPropagation()}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -167,14 +219,12 @@ function Reservation() {
                   type="text"
                   placeholder="Nom"
                   value={reservationName}
-                  required
                   onChange={(e) => setReservationName(e.target.value)}
                 />
 
                 <input
                   type="date"
                   value={reservationDate}
-                  required
                   onChange={(e) => setReservationDate(e.target.value)}
                 />
 
@@ -182,23 +232,15 @@ function Reservation() {
                   type="text"
                   placeholder="Lieu"
                   value={reservationLocation}
-                  required
                   onChange={(e) => setReservationLocation(e.target.value)}
                 />
 
                 <textarea
                   placeholder="Description"
                   value={reservationDescription}
-                  required
                   onChange={(e) => setReservationDescription(e.target.value)}
                 />
 
-                {/* <input
-                  type="text"
-                  placeholder="URL image"
-                  value={reservationPicture}
-                  onChange={(e) => setReservationPicture(e.target.value)}
-                /> */}
                 <label htmlFor="photo-upload" className="custom-upload">
                   Choisir une image
                 </label>
@@ -207,25 +249,37 @@ function Reservation() {
                   id="photo-upload"
                   type="file"
                   accept="image/*"
-                  required
                   onChange={handleReservationPictureChange}
                   className="hidden-input"
                 />
+
                 {preview && (
                   <img src={preview} alt="preview" className="photo-preview" />
                 )}
 
-                <button type="button" onClick={(e) => handleAddReservation(e)}>
+                <motion.button
+                  type="button"
+                  onClick={handleAddReservation}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   Enregistrer
-                </button>
-              </div>
-            </div>
+                </motion.button>
+              </motion.div>
+            </motion.div>
           )}
-        </div>
-        <div className="reservation-card-global">
-          {reservations.map((event) => (
+        </AnimatePresence>
+      </div>
+
+      <motion.div
+        className="reservation-card-global"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+      >
+        {reservations.map((event) => (
+          <div key={event.reservation_id}>
             <CardEvents
-              key={event.reservation_id}
               event_id={event.reservation_id}
               event_host_id={null}
               image={`http://localhost:3310${event.reservation_picture}`}
@@ -235,10 +289,10 @@ function Reservation() {
               description={event.reservation_description}
               location={event.reservation_location}
             />
-          ))}
-        </div>
-      </div>
-    </>
+          </div>
+        ))}
+      </motion.div>
+    </motion.div>
   );
 }
 export default Reservation;

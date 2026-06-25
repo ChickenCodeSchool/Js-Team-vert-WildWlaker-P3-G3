@@ -206,6 +206,19 @@ class UserRepository {
 
     return rows[0];
   }
+  async readUserJoinEvent(eventId: number) {
+    const [rows] = await databaseClient.query(
+      `
+      SELECT user_username, user_profile_picture, user_joining_date FROM user
+      JOIN event_user_joining
+      ON user_id = euj_id_user
+      WHERE euj_id_event = ?;
+      `,
+      [eventId],
+    );
+
+    return rows;
+  }
 }
 
 export default new UserRepository();
