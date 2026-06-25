@@ -10,7 +10,6 @@
 body {
   .budget {
     background: var(--bg-color);
-    padding: 3rem 3rem 2rem 0;
     gap: 2rem;
 
     .myBalance {
@@ -163,12 +162,13 @@ body {
     display: flex;
     flex-direction: column;
 
+    margin-top: 7vh;
     padding: 1rem;
 
     header {
       display: flex;
       width: 100%;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
 
       h1 {
@@ -389,10 +389,11 @@ body {
 /* ---------- Desktop ---------- */
 @media screen and (min-width: 429px) {
   .budget {
-    width: 70.5vw;
-    height: 90vh;
     display: flex;
     flex-direction: column;
+    padding: 3rem 3rem 2rem 0;
+    width: 70.5vw;
+    height: 90vh;
 
     header {
       width: 65.8vw;
