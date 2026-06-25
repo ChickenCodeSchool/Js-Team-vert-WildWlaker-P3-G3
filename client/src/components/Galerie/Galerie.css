@@ -82,7 +82,6 @@
 
 /* PHOTO MEDIA STYLES */
 
-
 .photo-button {
   width: 100%;
   height: 100%;
@@ -102,7 +101,6 @@
 }
 
 /* PHOTO HOVER CAPTION / DESCRIPTION */
-
 
 .photo-description {
   position: absolute;
@@ -126,7 +124,6 @@
 }
 
 /* UTILITY ACTION BUTTONS (EDIT, DELETE) */
-
 
 .photo-actions {
   position: absolute;
@@ -186,7 +183,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #999999; 
+  color: #999999;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -198,13 +195,13 @@
 /* Hover effect: turns WHITE on a dark background */
 .like-button:hover {
   color: #ffffff !important;
-  background-color: #333333; 
+  background-color: #333333;
 }
 
 /* Active status: turns VIBRANT RED when liked */
 .like-button.is-liked {
-  color: #dc2626 !important; 
-  background-color: transparent !important; 
+  color: #dc2626 !important;
+  background-color: transparent !important;
 }
 
 .like-button.is-liked .heart-icon {
@@ -220,7 +217,7 @@
   font-size: 0.9rem;
   font-weight: 600;
   color: #555555;
-  user-select: none; 
+  user-select: none;
 }
 
 /* POPUPS & RESPONSIVE MODALS  */
@@ -311,7 +308,6 @@
     }
   }
 }
-
 
 /* MEDIA QUERIES (RESPONSIVE BREAKPOINTS) */
 

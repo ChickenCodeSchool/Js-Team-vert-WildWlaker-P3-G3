@@ -71,8 +71,8 @@ function GalleryModal({
       }
 
       const data = await response.json();
-onAddPhoto(data.photoUrl, data.insertId, description);
-onClose();
+      onAddPhoto(data.photoUrl, data.insertId, description);
+      onClose();
     } catch (error) {
       console.error("Erreur de connexion :", error);
       setError("Impossible de joindre le serveur. Vérifiez votre connexion.");

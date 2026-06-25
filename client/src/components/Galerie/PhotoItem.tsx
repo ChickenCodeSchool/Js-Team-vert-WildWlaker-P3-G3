@@ -21,10 +21,21 @@ type PhotoItemProps = {
   onDelete: (id: number) => void;
 };
 
-export function PhotoItem({ photo, isLiked, onPreview, onLike, onEdit, onDelete }: PhotoItemProps) {
+export function PhotoItem({
+  photo,
+  isLiked,
+  onPreview,
+  onLike,
+  onEdit,
+  onDelete,
+}: PhotoItemProps) {
   return (
     <article className="galerie-item">
-      <button type="button" className="photo-button" onClick={() => onPreview(photo.gallery_link)}>
+      <button
+        type="button"
+        className="photo-button"
+        onClick={() => onPreview(photo.gallery_link)}
+      >
         <img
           src={photo.gallery_link}
           alt={photo.gallery_description ?? "Photo de la galerie"}

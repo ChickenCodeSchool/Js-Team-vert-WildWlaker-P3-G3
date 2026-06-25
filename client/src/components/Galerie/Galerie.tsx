@@ -48,7 +48,6 @@ function Galerie() {
     return link.startsWith("http") ? link : `${API_URL}${link}`;
   };
 
-
   useEffect(() => {
     if (!id || currentUser.id === 0) return;
     fetch(`${API_URL}/api/gallery/${id}/likes/${currentUser.id}`)
@@ -56,7 +55,6 @@ function Galerie() {
       .then((data) => setLikedPhotos(data))
       .catch((err) => console.error("Erreur likes:", err));
   }, [id, currentUser.id]);
-
 
   useEffect(() => {
     const controller = new AbortController();
@@ -69,14 +67,18 @@ function Galerie() {
       setIsLoading(true);
       setError(null);
       try {
-        const galRes = await fetch(`${API_URL}/api/gallery/${id}`, { signal: controller.signal });
+        const galRes = await fetch(`${API_URL}/api/gallery/${id}`, {
+          signal: controller.signal,
+        });
         if (galRes.ok) {
           setPhotos(await galRes.json());
         } else {
           setError("Impossible de charger la galerie.");
         }
 
-        const evRes = await fetch(`${API_URL}/api/events/${id}`, { signal: controller.signal });
+        const evRes = await fetch(`${API_URL}/api/events/${id}`, {
+          signal: controller.signal,
+        });
         if (evRes.ok) {
           setEventName((await evRes.json()).event_name || "Mon Événement");
         }
@@ -93,7 +95,6 @@ function Galerie() {
     return () => controller.abort();
   }, [id]);
 
-
   const toggleLike = async (photoId: number) => {
     const isAlreadyLiked = likedPhotos.includes(photoId);
     try {
@@ -101,17 +102,27 @@ function Galerie() {
       const response = await fetch(url, {
         method: isAlreadyLiked ? "DELETE" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: isAlreadyLiked ? undefined : JSON.stringify({ user_id: currentUser.id }),
+        body: isAlreadyLiked
+          ? undefined
+          : JSON.stringify({ user_id: currentUser.id }),
       });
 
       if (response.ok) {
         setLikedPhotos((prev) =>
-          isAlreadyLiked ? prev.filter((fid) => fid !== photoId) : [...prev, photoId],
+          isAlreadyLiked
+            ? prev.filter((fid) => fid !== photoId)
+            : [...prev, photoId],
         );
         setPhotos((prev) =>
           prev.map((p) =>
             p.gallery_id === photoId
-              ? { ...p, like_count: Math.max(0, p.like_count + (isAlreadyLiked ? -1 : 1)) }
+              ? {
+                  ...p,
+                  like_count: Math.max(
+                    0,
+                    p.like_count + (isAlreadyLiked ? -1 : 1),
+                  ),
+                }
               : p,
           ),
         );
@@ -121,7 +132,11 @@ function Galerie() {
     }
   };
 
-  const handleAddPhoto = (imageUrl: string, insertId: number, textDescription: string) => {
+  const handleAddPhoto = (
+    imageUrl: string,
+    insertId: number,
+    textDescription: string,
+  ) => {
     setPhotos((prev) => [
       {
         gallery_id: insertId,
@@ -138,13 +153,15 @@ function Galerie() {
     setIsModalOpen(false);
   };
 
-
   const confirmDeletePhoto = async () => {
     if (photoToDelete === null) return;
     try {
-      const res = await fetch(`${API_URL}/api/gallery/${photoToDelete}/${currentUser.id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${API_URL}/api/gallery/${photoToDelete}/${currentUser.id}`,
+        {
+          method: "DELETE",
+        },
+      );
       if (res.ok) {
         setPhotos((prev) => prev.filter((p) => p.gallery_id !== photoToDelete));
       }
@@ -158,11 +175,14 @@ function Galerie() {
   const handleUpdateDescription = async () => {
     if (!photoToEdit) return;
     try {
-      const res = await fetch(`${API_URL}/api/gallery/${photoToEdit.gallery_id}/${currentUser.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ gallery_description: newDescription }),
-      });
+      const res = await fetch(
+        `${API_URL}/api/gallery/${photoToEdit.gallery_id}/${currentUser.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ gallery_description: newDescription }),
+        },
+      );
       if (res.ok) {
         setPhotos((prev) =>
           prev.map((p) =>
@@ -182,7 +202,11 @@ function Galerie() {
     <section className="galerie">
       <div className="galerie-header">
         <h1>{eventName}</h1>
-        <button type="button" className="galerie-button" onClick={() => setIsModalOpen(true)}>
+        <button
+          type="button"
+          className="galerie-button"
+          onClick={() => setIsModalOpen(true)}
+        >
           <ImagePlus size={20} /> Ajouter une photo
         </button>
       </div>
@@ -190,7 +214,11 @@ function Galerie() {
       {error && (
         <div className="error-banner" role="alert">
           <span>{error}</span>
-          <button type="button" className="error-dismiss" onClick={() => setError(null)}>
+          <button
+            type="button"
+            className="error-dismiss"
+            onClick={() => setError(null)}
+          >
             <X size={16} />
           </button>
         </div>
@@ -213,7 +241,10 @@ function Galerie() {
           {photos.map((photo) => (
             <PhotoItem
               key={photo.gallery_id}
-              photo={{ ...photo, gallery_link: formatImageUrl(photo.gallery_link) }}
+              photo={{
+                ...photo,
+                gallery_link: formatImageUrl(photo.gallery_link),
+              }}
               isLiked={likedPhotos.includes(photo.gallery_id)}
               onPreview={(url) => setSelectedPhoto(url)}
               onLike={toggleLike}
@@ -266,7 +297,11 @@ function Galerie() {
               <button type="button" onClick={() => setPhotoToDelete(null)}>
                 Annuler
               </button>
-              <button type="button" className="delete-confirm" onClick={confirmDeletePhoto}>
+              <button
+                type="button"
+                className="delete-confirm"
+                onClick={confirmDeletePhoto}
+              >
                 Supprimer
               </button>
             </div>
@@ -276,7 +311,11 @@ function Galerie() {
 
       {selectedPhoto && (
         <div className="image-modal-overlay">
-          <button type="button" className="overlay-close" onClick={() => setSelectedPhoto(null)}>
+          <button
+            type="button"
+            className="overlay-close"
+            onClick={() => setSelectedPhoto(null)}
+          >
             <X size={32} />
           </button>
           <img src={selectedPhoto} alt="Aperçu" className="image-modal" />

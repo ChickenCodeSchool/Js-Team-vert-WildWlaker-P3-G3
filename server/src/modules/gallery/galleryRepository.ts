@@ -13,8 +13,8 @@ type Gallery = {
 
 class GalleryRepository {
   async readAll(gallery_id_event: number) {
-  const [rows] = await databaseClient.query<Rows>(
-    `
+    const [rows] = await databaseClient.query<Rows>(
+      `
     SELECT g.*, COUNT(gl.like_id_user) AS like_count 
     FROM gallery g
     LEFT JOIN gallery_like gl ON g.gallery_id = gl.like_id_gallery
@@ -22,11 +22,11 @@ class GalleryRepository {
     GROUP BY g.gallery_id
     ORDER BY g.gallery_creation_date DESC
     `,
-    [gallery_id_event],
-  );
+      [gallery_id_event],
+    );
 
-  return rows;
-}
+    return rows;
+  }
   async read(gallery_id: number) {
     const [rows] = await databaseClient.query<Rows>(
       "SELECT * FROM gallery WHERE gallery_id = ?",
