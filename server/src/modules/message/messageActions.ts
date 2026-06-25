@@ -6,18 +6,11 @@ const addMessage: RequestHandler = async (req, res, next) => {
     const eventId = Number(req.params.id);
     const { userId, messagesUser } = req.body;
 
-    console.log("messageActions.addMessage reçu", {
-      eventId,
-      body: req.body,
-    });
-
     const result = await messageRepository.sendMessage(
       eventId,
       userId,
       messagesUser,
     );
-
-    console.log("messageActions.addMessage result", result);
 
     res.status(201).json(result);
   } catch (error) {

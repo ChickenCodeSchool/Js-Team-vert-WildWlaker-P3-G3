@@ -100,8 +100,6 @@ function DashboardAdmin() {
     fetch("http://localhost:3310/api/admin/dashboard-chart")
       .then((res) => res.json())
       .then((data) => {
-        console.log("GRAPHIC DATA =", data);
-
         if (Array.isArray(data)) {
           setGraphic(data);
         } else if (Array.isArray(data.result)) {

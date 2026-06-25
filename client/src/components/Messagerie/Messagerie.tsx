@@ -22,6 +22,7 @@ function Messagerie() {
   const [receptionMessagesUser, setReceptionMessagesUser] = useState<
     ReceptionMessagesUser[]
   >([]);
+  const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
   const [usersByEvent, setUsersByEvent] = useState<UserByEvent[]>([]);
 
   const { id } = useParams();
@@ -30,6 +31,7 @@ function Messagerie() {
   const userId = user?.id;
   const messagesRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
+    fetchUserEvent();
     fetchMessages();
   }, []);
 
@@ -39,6 +41,13 @@ function Messagerie() {
       .then((data) => setReceptionMessagesUser(data));
   }, [event]);
 
+  async function fetchUserEvent() {
+    const response = await fetch(
+      `http://localhost:3310/api/user-in-event/${event}/${userId}`,
+    );
+    const data = await response.json();
+    setUserInEvent(data.joined);
+  }
   useEffect(() => {
     fetch(`http://localhost:3310/api/user/event/${event}`)
       .then((res) => res.json())
@@ -64,8 +73,6 @@ function Messagerie() {
         },
       );
 
-      console.log("Messagerie: réponse status", response.status);
-
       if (response.ok) {
         setMessagesUser("");
         fetchMessages();
@@ -80,6 +87,7 @@ function Messagerie() {
       .then((res) => res.json())
       .then((data) => setReceptionMessagesUser(data));
   }
+
   function formatMonthYear(dateString: string): string {
     const date = new Date(dateString);
 
@@ -115,6 +123,13 @@ function Messagerie() {
       year: "numeric",
     });
   };
+
+  if (userInEvent === null) {
+    return <p>Chargement...</p>;
+  }
+  if (userInEvent === false) {
+    return <p>Vous n'êtes pas inscrit à cet événement.</p>;
+  }
 
   return (
     <motion.div

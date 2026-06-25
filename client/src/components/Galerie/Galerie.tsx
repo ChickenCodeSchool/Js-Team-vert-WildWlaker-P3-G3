@@ -50,7 +50,18 @@ function Galerie() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
+
   useEffect(() => {
+    const fetchTest = async () => {
+      const response = await fetch(
+        `${API_URL}/api/user-in-event/${id}/${currentUser.id}`,
+      );
+      const data = await response.json();
+      setUserInEvent(data.joined);
+    };
+    fetchTest();
+
     const controller = new AbortController();
 
     const loadGalleryAndEvent = async () => {
@@ -104,7 +115,7 @@ function Galerie() {
     loadGalleryAndEvent();
 
     return () => controller.abort();
-  }, [id]);
+  }, [id, currentUser]);
 
   const handleAddPhoto = (imageUrl: string, insertId: number) => {
     setPhotos((currentPhotos) => [
@@ -191,6 +202,14 @@ function Galerie() {
   };
 
   const dismissError = () => setError(null);
+
+  if (userInEvent === null) {
+    return <p>Chargement...</p>;
+  }
+
+  if (userInEvent === false) {
+    return <p>Vous n'êtes pas inscrit à cet événement.</p>;
+  }
 
   return (
     <section className="galerie">

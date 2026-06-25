@@ -1,6 +1,7 @@
 import "./Register.css";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import Swal from "sweetalert2";
 import connexionImg from "../../assets/images/Connexion-img.png";
 import eye from "../../assets/images/eye.png";
 import hide from "../../assets/images/hide.png";
@@ -39,6 +40,19 @@ function Register() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+
+      customClass: {
+        popup: "toast",
+      },
+    });
+
     try {
       const response = await fetch("http://localhost:3310/api/users", {
         method: "POST",
@@ -48,14 +62,39 @@ function Register() {
 
       const data = await response.json();
       if (!response.ok) {
-        alert(data.message);
+        toast.fire({
+          icon: "error",
+          text: data.message,
+
+          customClass: {
+            popup: "toast-error-popup",
+          },
+        });
+
         return;
       }
-      alert(data.message || "Inscription réussie 🎉");
+
+      toast.fire({
+        icon: "success",
+        text: data.message || "Inscription réussie 🎉",
+
+        customClass: {
+          popup: "toast-success-popup",
+        },
+      });
+
       navigate("/connexion");
     } catch (error) {
       console.error(error);
-      alert("Erreur serveur");
+
+      toast.fire({
+        icon: "error",
+        text: "Erreur serveur",
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
     }
   };
 

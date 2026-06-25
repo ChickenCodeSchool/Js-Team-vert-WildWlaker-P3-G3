@@ -4,7 +4,7 @@ import CardEvents from "../AddEvents/CardEvents";
 import "./Reservation.css";
 import { AnimatePresence, motion } from "framer-motion";
 import { CalendarPlus } from "lucide-react";
-
+import Swal from "sweetalert2";
 type Reservation = {
   reservation_id: number;
   reservation_id_event: number;
@@ -30,6 +30,8 @@ function Reservation() {
   const [reservationPicture, setReservationPicture] = useState<File | null>(
     null,
   );
+  const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
+
   const [preview, setPreview] = useState("");
   useEffect(() => {
     fetch(`http://localhost:3310/api/reservations/all/${eventId}`)
@@ -38,14 +40,54 @@ function Reservation() {
         setReservations(data);
       });
     [eventId];
-  });
-  async function handleAddReservation() {
+
+    const fetchTest = async () => {
+      const response = await fetch(
+        `http://localhost:3310/api/user-in-event/${eventId}/${userId}`,
+      );
+      const data = await response.json();
+      setUserInEvent(data.joined);
+    };
+    fetchTest();
+  }, [eventId, userId]);
+  async function handleAddReservation(e: React.FormEvent) {
+    e.preventDefault();
+
+    const toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+
+      customClass: {
+        popup: "toast",
+      },
+    });
+
     if (
       !reservationName ||
       !reservationDate ||
       !reservationLocation ||
-      !reservationDescription
+      !reservationDescription ||
+      !reservationPicture
     ) {
+      const missingFields = [
+        !reservationName && "le titre",
+        !reservationDate && "la date",
+        !reservationLocation && "la localisation",
+        !reservationDescription && "une description",
+        !reservationPicture && "une image",
+      ].filter(Boolean);
+
+      toast.fire({
+        icon: "error",
+        text: `Il vous manque : ${missingFields.join(", ")}`,
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
       return;
     }
 
@@ -70,7 +112,14 @@ function Reservation() {
     const data = await response.json();
 
     if (!response.ok) {
-      alert(data.message);
+      toast.fire({
+        icon: "error",
+        text: `Marche pas : ${data.message}`,
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
       return;
     }
 
@@ -82,7 +131,14 @@ function Reservation() {
     setPreview("");
 
     setIsModalOpen(false);
-    alert("Réservation ajoutée");
+    toast.fire({
+      icon: "success",
+      text: "Réservation ajoutée",
+
+      customClass: {
+        popup: "toast-error-popup",
+      },
+    });
   }
   function handleReservationPictureChange(
     e: React.ChangeEvent<HTMLInputElement>,
@@ -93,6 +149,12 @@ function Reservation() {
       setReservationPicture(file);
       setPreview(URL.createObjectURL(file));
     }
+  }
+  if (userInEvent === null) {
+    return <p>Chargement...</p>;
+  }
+  if (userInEvent === false) {
+    return <p>Vous n'êtes pas inscrit à cet événement.</p>;
   }
   return (
     <motion.div
@@ -133,6 +195,11 @@ function Reservation() {
               onClick={() => {
                 setIsModalOpen(false);
               }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleAddReservation(e);
+                }
+              }}
             >
               <motion.div
                 className="modal"
@@ -141,6 +208,10 @@ function Reservation() {
                 exit={{ opacity: 0, y: 40, scale: 0.95 }}
                 transition={{ duration: 0.25 }}
                 onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                  }
+                }}
               >
                 <h2>Nouvelle réservation</h2>
 
