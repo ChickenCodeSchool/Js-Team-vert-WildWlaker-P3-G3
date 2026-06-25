@@ -46,6 +46,7 @@ router.put("/api/auth/change-password", userActions.changePassword);
 router.put("/api/users/:id", userActions.editUserName);
 router.put("/api/users/change-password", userActions.forgotPassword);
 router.get("/api/users/admin/:id", userActions.browseUserAdmin);
+router.get("/api/user/event/:id", userActions.readUserJoinEvent);
 
 // router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
 
@@ -80,6 +81,8 @@ router.get("/api/events/:id", eventActions.read);
 router.post("/api/events/join", eventActions.join);
 router.post("/api/events", eventActions.add);
 router.put("/api/events/:id/", upload.single("picture"), eventActions.edit);
+router.delete("/api/event/delete/:id", eventActions.deleteEvent);
+router.get("/api/event/host/:id", eventActions.readEventHostId);
 
 // todoActions routes
 router.get("/api/todo/:eventId", todoActions.browse);
@@ -95,6 +98,7 @@ router.post("/api/gallery", upload.single("photo"), galleryActions.uploadPhoto);
 router.post("/api/gallery", galleryActions.add);
 router.delete("/api/gallery/:gallery_id/:userId", galleryActions.destroy);
 router.put("/api/gallery/:gallery_id/:userId", galleryActions.edit);
+
 // report user routes
 router.get("/api/userreport-user", reportUserActions.browse);
 router.post("/api/userreport-user", reportUserActions.add);
@@ -107,6 +111,7 @@ router.post("/api/userreport-event", reportEventActions.add);
 
 // event user joining route
 router.get("/api/events/:eventId/users", eventUserJoiningActions.browse);
+router.delete("/api/euj/delete/:id", eventUserJoiningActions.deleteAll);
 
 // admin route
 router.get("/api/admin/reportUser", adminActions.readReportUser);
@@ -117,6 +122,16 @@ router.get("/api/admin/arrayUser", adminActions.readArrayUsers);
 router.get("/api/admin/arrayReport", adminActions.readArrayReport);
 router.get("/api/admin/events", adminActions.readAllEvents);
 router.get("/api/admin/users", adminActions.readAllUsers);
+
+// admin report route / details by ID
+router.get("/api/admin/reportBug/:id", adminActions.readReportBugById);
+router.get("/api/admin/reportEvent/:id", adminActions.readReportEventById);
+router.get("/api/admin/reportUser/:id", adminActions.readReportUserById);
+
+// admin report route / is done
+router.patch("/api/admin/reportBug/:id/done", adminActions.markBugAsDone);
+router.patch("/api/admin/reportEvent/:id/done", adminActions.markEventAsDone);
+router.patch("/api/admin/reportUser/:id/done", adminActions.markUserAsDone);
 
 // --> budget
 // > get

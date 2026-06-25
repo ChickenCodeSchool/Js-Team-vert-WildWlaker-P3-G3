@@ -8,11 +8,14 @@
   width: 74vw;
   .user-name {
     font-weight: 400;
+    padding: 0 1vw 1vh 0;
+    .lucide.lucide-hand {
+      width: 2vw;
+    }
   }
   .event-name {
     color: var(--font-brown);
-    padding: 3rem 3rem 0 0;
-    /* font-size: 50px; */
+    padding: 3rem 3rem 1rem 0;
   }
   p {
     color: var(--font-darkBrown);
@@ -28,17 +31,22 @@
       background: var(--bg-composant-dash);
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      padding-left: 10px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       height: 13vh;
       gap: 17px;
+      align-items: center;
+      padding-bottom: 2vh;
       h2 {
         font-weight: 400;
       }
       p {
         color: var(--font-darkBrown);
+        display: flex;
+        gap: 5px;
+        font-size: 20px;
+        align-items: center;
       }
     }
 
@@ -47,17 +55,22 @@
       background: var(--bg-composant-dash);
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      padding-left: 10px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       height: 13vh;
       gap: 17px;
+      align-items: center;
+      padding-bottom: 2vh;
       h2 {
         font-weight: 400;
       }
       p {
         color: var(--font-darkBrown);
+        display: flex;
+        gap: 5px;
+        font-size: 20px;
+        align-items: center;
       }
     }
 
@@ -66,17 +79,22 @@
       background: var(--bg-composant-dash);
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      padding-left: 10px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       height: 13vh;
       gap: 17px;
+      align-items: center;
+      padding-bottom: 2vh;
       h2 {
         font-weight: 400;
       }
       p {
         color: var(--font-darkBrown);
+        display: flex;
+        gap: 5px;
+        font-size: 20px;
+        align-items: center;
       }
     }
     .stat-4 {
@@ -84,17 +102,22 @@
       background: var(--bg-composant-dash);
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      padding-left: 10px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       height: 13vh;
       gap: 17px;
+      align-items: center;
+      padding-bottom: 2vh;
       h2 {
         font-weight: 400;
       }
       p {
         color: var(--font-darkBrown);
+        display: flex;
+        gap: 5px;
+        font-size: 20px;
+        align-items: center;
       }
     }
   }
@@ -124,6 +147,9 @@
         padding: 0 1vw;
         h3 {
           font-weight: 400;
+          display: flex;
+          align-items: center;
+          gap: 10px;
         }
 
         button {

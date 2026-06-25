@@ -1,4 +1,4 @@
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { ListCheck, Pencil, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import "./TodoList.css";
 
@@ -118,7 +118,10 @@ function TodoList(props: { eventId: number; todo_id_user: number }) {
 
   return (
     <div className="todolist-global">
-      <h3 className="todolist-title">To-do list</h3>
+      <h3 className="todolist-title">
+        <ListCheck size={20} />
+        To-do list
+      </h3>
       <div className="todolist-text">
         <input
           type="text"

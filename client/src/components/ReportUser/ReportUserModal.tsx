@@ -1,5 +1,5 @@
 import { CircleX } from "lucide-react";
-import type EventUserJoin from "../../types/eventUserJoining";
+import type { EventUserJoin } from "../../types/eventUserJoining";
 import "./ReportUserModal.css";
 import { useEffect, useRef } from "react";
 

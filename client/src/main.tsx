@@ -79,7 +79,7 @@ const router = createBrowserRouter([
     element: <DashboardReport />,
   },
   {
-    path: "/admin/report",
+    path: "/admin/report/:type/:id",
     element: <AdminReport />,
   },
   // {
