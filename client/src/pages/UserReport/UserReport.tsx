@@ -93,14 +93,13 @@ function UserReport() {
       }
     }
     alert(
-      "Votre signalement a bien été pris en compte, merci pour votre retour! !\nL'équipe Wedoo.",
+      "Votre signalement a bien été pris en compte, merci pour votre retour!\nL'équipe Wedoo.",
     );
-    navigate(`/events/${eventId}`);
+    navigate(`/tableaudebord/${eventId}`);
   };
 
   const handleCancel = () => {
-    navigate(`/events/${eventId}`);
-    //chemin à confirmer avec l'équipe il est tard je suis pas sur de moi c'est event ou dashbord faire vérif avec futur composant dans router. mashallah.
+    navigate(`/tableaudebord/${eventId}`);
   };
 
   return (
