@@ -13,10 +13,12 @@ const browse: RequestHandler = async (req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
+    const files = req.files as Express.Multer.File[] | undefined;
+    const imagePaths = files?.map((file) => file.filename) ?? [];
+
     const newReportEvent = {
       reported_event_id_event: req.body.reported_event_id_event,
       reported_event_description: req.body.reported_event_description,
-      reported_event_image: req.body.reported_event_image,
       reported_event_by_id_user: req.body.reported_event_by_id_user,
     };
 
@@ -32,7 +34,10 @@ const add: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const insertId = await reportEventRepository.create(newReportEvent);
+    const insertId = await reportEventRepository.create(
+      newReportEvent,
+      imagePaths,
+    );
 
     res.status(201).json({ insertId });
   } catch (err) {

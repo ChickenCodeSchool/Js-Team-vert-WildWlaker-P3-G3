@@ -13,9 +13,11 @@ const browse: RequestHandler = async (req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
+    const files = req.files as Express.Multer.File[] | undefined;
+    const imagePaths = files?.map((file) => file.filename) ?? [];
+
     const newReportBug = {
       reported_bug_description: req.body.reported_bug_description,
-      reported_bug_image: req.body.reported_bug_image,
       reported_bug_by_id_user: req.body.reported_bug_by_id_user,
     };
 
@@ -31,7 +33,7 @@ const add: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const insertId = await reportBugRepository.create(newReportBug);
+    const insertId = await reportBugRepository.create(newReportBug, imagePaths);
 
     res.status(201).json({ insertId });
   } catch (err) {
