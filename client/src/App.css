@@ -77,4 +77,32 @@ body {
 }
 body {
   background: var(--bg-color);
+
+  .toast-success-popup {
+    border-radius: 24px !important;
+
+    .swal2-title {
+      color: var(--font-green);
+    }
+  }
+
+  .toast-warning-popup {
+    border-radius: 24px !important;
+
+    .swal2-title {
+      color: var(--font-red);
+    }
+  }
+
+  .toast-error-popup {
+    border-radius: 24px !important;
+
+    .swal2-title {
+      color: var(--font-red);
+    }
+  }
+
+  .swal2-container {
+    z-index: 99999 !important;
+  }
 }

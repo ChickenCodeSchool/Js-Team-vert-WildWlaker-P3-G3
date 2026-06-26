@@ -15,10 +15,10 @@ import TodoList from "../ToDoList/TodoList";
 
 type EventDashboard = {
   event_name: string;
-  euj_id_user: number | null;
-  reservation_id: number | null;
-  budget_price: string | number | null;
   event_description: string | null;
+  total_users: number | null;
+  total_reservations: number | null;
+  total_budgets: string | number | null;
 };
 type ReservationDashboard = {
   event_id: number | null;
@@ -28,31 +28,41 @@ type ReservationDashboard = {
   reservation_id: number;
 };
 type UserAndBudget = {
-  budget_price: string | number | null;
+  user_id: number;
+  user_username: string | null;
   user_name: string | null;
-  event_id: number;
+  total_price: number | null;
 };
 
 function Dashboard() {
-  const [eventData, setEventData] = useState<EventDashboard[]>([]);
+  const [eventData, setEventData] = useState<EventDashboard>();
   const [reservationData, setReservationData] = useState<
     ReservationDashboard[]
   >([]);
   const [userName, setUserName] = useState<string>("");
-  const [userAndBudgetData, setUserAndBudgetData] = useState<UserAndBudget[]>(
-    [],
-  );
+  const [userAndBudgetData, setUserAndBudgetData] = useState<UserAndBudget>();
+  const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
   const { id } = useParams();
   const event = Number(id);
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
 
   useEffect(() => {
+    const fetchTest = async () => {
+      const response = await fetch(
+        `http://localhost:3310/api/user-in-event/${event}/${userId}`,
+      );
+      const data = await response.json();
+      setUserInEvent(data.joined);
+    };
+    fetchTest();
+  }, [event, userId]);
+
+  useEffect(() => {
     if (!userId) return;
     fetch(`http://localhost:3310/api/username/${userId}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data); // vérifie ce que tu reçois vraiment
         setUserName(data.username); // doit matcher ce que retourne l'API
       });
   }, [userId]);
@@ -61,7 +71,6 @@ function Dashboard() {
     fetch(`http://localhost:3310/api/reservations/${event}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("reservations:", data);
         setReservationData(Array.isArray(data) ? data : []);
       });
   }, [event]);
@@ -70,32 +79,17 @@ function Dashboard() {
     fetch(`http://localhost:3310/api/users/description/${event}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("eventData:", data);
-        setEventData(Array.isArray(data) ? data : []);
+        setEventData(data[0]);
       });
   }, [event]);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/users/${event}/userAndBudget`)
+    fetch(`http://localhost:3310/api/budget/user/${event}/${userId}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("userAndBudget:", data);
-        setUserAndBudgetData(Array.isArray(data) ? data : []);
+        setUserAndBudgetData(data);
       });
-  }, [event]);
-  const totalReservations = new Set(
-    eventData.map((item) => item.reservation_id).filter((id) => id !== null),
-  ).size;
-
-  const totalParticipants = new Set(
-    eventData.map((item) => item.euj_id_user).filter((id) => id !== null),
-  ).size;
-
-  const totalBudget = eventData.reduce((total, item) => {
-    return total + Number(item.budget_price ?? 0);
-  }, 0);
-
-  const eventName = eventData[0]?.event_name ?? "Nom de l'event";
+  }, [event, userId]);
 
   function getInitials(userName: string) {
     return userName
@@ -120,7 +114,15 @@ function Dashboard() {
 
     return reservationDate < today ? "passe" : "a_venir";
   }
+
+  if (userInEvent === null) {
+    return <p>Chargement...</p>;
+  }
+  if (userInEvent === false) {
+    return <p>Vous n'êtes pas inscrit à cet événement.</p>;
+  }
   const MotionHand = motion(Hand);
+
   return (
     <motion.div
       className="dashboard"
@@ -134,7 +136,7 @@ function Dashboard() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4 }}
       >
-        {eventName}
+        {eventData?.event_name}
       </motion.h1>
 
       <motion.h1
@@ -160,7 +162,7 @@ function Dashboard() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
-        {eventData[0]?.event_description}
+        {eventData?.event_description}
       </motion.p>
 
       <div className="dashboard-stats">
@@ -168,25 +170,25 @@ function Dashboard() {
           {
             icon: <UsersRound size={20} />,
             title: "Total de participants",
-            value: totalParticipants,
+            value: eventData?.total_users,
             className: "stat-1",
           },
           {
             icon: <Book size={20} />,
             title: "Reservations",
-            value: totalReservations,
+            value: eventData?.total_reservations,
             className: "stat-2",
           },
           {
             icon: <HandCoins size={20} />,
             title: "Budget total",
-            value: `${totalBudget}€`,
+            value: `${eventData?.total_budgets}€`,
             className: "stat-3",
           },
           {
             icon: <PiggyBank size={20} />,
             title: "Budget propre",
-            value: `${userAndBudgetData[0]?.budget_price || 0}€`,
+            value: `${userAndBudgetData?.total_price || 0}€`,
             className: "stat-4",
           },
         ].map((stat, index) => (

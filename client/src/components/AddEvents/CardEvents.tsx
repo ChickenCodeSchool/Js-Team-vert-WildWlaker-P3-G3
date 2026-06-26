@@ -39,6 +39,7 @@ function CardEvents({
   location,
 }: CardEventsProps) {
   const uselocation = useLocation();
+  const isHomeEvents = uselocation.pathname === "/homeevents";
   const onTableau = uselocation.pathname.startsWith("/tableaudebord/");
   const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
   const isHost = user_id === event_host_id;
@@ -71,7 +72,6 @@ function CardEvents({
       }
 
       setIsDeleteModalOpen(false);
-      console.log("Réservation supprimée");
     } catch (error) {
       console.error(error);
     }
@@ -79,7 +79,10 @@ function CardEvents({
   return (
     <>
       <div className="CardEvents-Wrapper">
-        <Link to={`/tableaudebord/${event_id}`} className="CardEvents-Global">
+        <Link
+          to={isHomeEvents ? `/tableaudebord/${event_id}` : "#"}
+          className="CardEvents-Global"
+        >
           <div className="CardEvents-ImageDate">
             <img
               className="CardEvents-Image"

@@ -76,6 +76,7 @@ router.post("/api/items", itemActions.add);
 // EventActions routes
 // router.get("/api/users/:id/events", userActions.getUserEvents);
 router.get("/api/events", eventActions.browse);
+router.get("/api/events/name/:id", eventActions.readEventName);
 router.get("/api/events/images", eventActions.browseImages);
 router.get("/api/events/:id", eventActions.read);
 router.post("/api/events/join", eventActions.join);
@@ -111,6 +112,10 @@ router.post("/api/userreport-event", reportEventActions.add);
 
 // event user joining route
 router.get("/api/events/:eventId/users", eventUserJoiningActions.browse);
+router.get(
+  "/api/user-in-event/:event/:user",
+  eventUserJoiningActions.browseUserEvent,
+);
 router.delete("/api/euj/delete/:id", eventUserJoiningActions.deleteAll);
 
 // admin route

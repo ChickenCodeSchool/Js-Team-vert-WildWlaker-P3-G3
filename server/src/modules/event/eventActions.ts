@@ -169,6 +169,22 @@ const readEventHostId: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const readEventName: RequestHandler = async (req, res, next) => {
+  try {
+    const eventId = Number(req.params.id);
+
+    if (Number.isNaN(eventId)) {
+      res.status(400).json({ message: "eventId invalide" });
+      return;
+    }
+
+    const event = await eventRepository.readEventName(eventId);
+
+    res.json(event[0]);
+  } catch (error) {
+    next(error);
+  }
+};
 export default {
   browse,
   read,
@@ -178,4 +194,5 @@ export default {
   edit,
   deleteEvent,
   readEventHostId,
+  readEventName,
 };

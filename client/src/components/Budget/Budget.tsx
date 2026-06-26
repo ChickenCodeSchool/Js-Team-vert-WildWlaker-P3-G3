@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import Swal from "sweetalert2";
 import "./Budget.css";
 
 import {
   ArrowDown,
   ArrowUp,
-  Check,
   FilePlusCorner,
   History,
   Pen,
@@ -78,6 +78,10 @@ function getUserBudget(array: BudgetByUser[], id_user: number) {
 }
 
 function returnDateString(dateString: string) {
+  if (dateString === undefined) {
+    return "";
+  }
+
   const date = new Date(dateString);
   const targetDay = new Date(
     date.getFullYear(),
@@ -117,19 +121,13 @@ function Budget() {
   const [nameCreateForm, setNameCreateForm] = useState<string>("");
   const [priceCreateForm, setPriceCreateForm] = useState<number>();
 
-  /* -- Update form -- */
+  /* -- User in Event Confirmaton -- */
 
-  const [budgetUpdate, setBudgetUpdate] = useState<Budget | null>(null);
-  const [nameUpdateForm, setNameUpdateForm] = useState<string>("");
-  const [priceUpdateForm, setPriceUpdateForm] = useState<number>();
-
-  /* -- Delete Confirmaton -- */
-
-  const [deleteConfirmation, setDeleteConfirmation] = useState<number | null>(
-    null,
-  );
+  const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
 
   useEffect(() => {
+    fetchUserInEvent();
+
     fetchBudgetLists();
   }, []);
 
@@ -143,6 +141,7 @@ function Budget() {
     fetch(`${apiUrl}/api/budget/event/${eventID}`)
       .then((res) => res.json())
       .then((data: BudgetTotalEvent[]) => setBudgetEvent(data[0]));
+
     fetch(`${apiUrl}/api/budget/${eventID}/totalUsers`)
       .then((res) => res.json())
       .then((data: BudgetByUser[]) => setListUserBudget(data));
@@ -152,11 +151,40 @@ function Budget() {
       .then((data: Budget[]) => setListBudget(data));
   }
 
+  async function fetchUserInEvent() {
+    const response = await fetch(
+      `${apiUrl}/api/user-in-event/${eventID}/${userID}`,
+    );
+
+    const data = await response.json();
+
+    setUserInEvent(data.joined);
+  }
+
   async function addBudget(e: React.FormEvent) {
     e.preventDefault();
 
+    const addAlert = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+
+      customClass: {
+        popup: "toast",
+      },
+    });
+
     if (!nameCreateForm.trim()) {
-      alert("❌ Erreur : Nom obligatoire");
+      addAlert.fire({
+        icon: "error",
+        text: "Nom obligatoire",
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
       return;
     }
 
@@ -165,12 +193,26 @@ function Budget() {
       Number.isNaN(priceCreateForm) ||
       priceCreateForm === 0
     ) {
-      alert("❌ Erreur : Prix invalide");
+      addAlert.fire({
+        icon: "error",
+        text: "Prix invalide",
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
       return;
     }
 
     if (priceCreateForm < 0) {
-      alert("❌ Erreur : Prix ne peux pas être négatif");
+      addAlert.fire({
+        icon: "error",
+        text: "Prix ne peux pas être négatif",
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
       return;
     }
 
@@ -193,51 +235,90 @@ function Budget() {
 
     const data = await answer.json();
 
-    alert(
-      answer.ok
-        ? "✅ Succès : Budget ajouter avec succès"
-        : `❌ Erreur : ${answer.status} - ${JSON.stringify(data)}`,
-    );
+    answer.ok
+      ? addAlert.fire({
+          icon: "success",
+          title: "Dépense ajoutée",
+
+          customClass: {
+            popup: "toast-success-popup",
+          },
+        })
+      : addAlert.fire({
+          icon: "error",
+          title: answer.status,
+          text: JSON.stringify(data),
+
+          customClass: {
+            popup: "toast-error-popup",
+          },
+        });
   }
 
-  function openUpdateForm(budget: Budget) {
-    setBudgetUpdate(budget);
+  async function openUpdateModal(budget: Budget) {
+    const { value: formValues } = await Swal.fire({
+      title: "Modifier la dépense",
 
-    setNameUpdateForm(budget.budget_name);
-    setPriceUpdateForm(budget.budget_price);
-  }
+      customClass: {
+        popup: "toast-edit-popup",
+        confirmButton: "budget-confirm",
+        cancelButton: "budget-cancel",
+      },
 
-  async function updateBudget(e: React.FormEvent) {
-    e.preventDefault();
+      html: `
+      <input
+        id="swal-budget-name"
+        class="swal2-input"
+        placeholder="Nom"
+        value="${budget.budget_name}"
+      />
 
-    if (!nameUpdateForm.trim()) {
-      alert("❌ Erreur : Nom obligatoire");
-      return;
-    }
+      <input
+        id="swal-budget-price"
+        class="swal2-input"
+        type="number"
+        placeholder="Prix"
+        value="${budget.budget_price}"
+      />
+    `,
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonText: "Enregistrer",
+      cancelButtonText: "Annuler",
 
-    if (
-      priceUpdateForm === undefined ||
-      Number.isNaN(priceUpdateForm) ||
-      priceUpdateForm === 0
-    ) {
-      alert("❌ Erreur : Prix invalide");
-      return;
-    }
+      preConfirm: () => {
+        const name = (
+          document.getElementById("swal-budget-name") as HTMLInputElement
+        ).value;
 
-    if (priceUpdateForm < 0) {
-      alert("❌ Erreur : Prix ne peux pas être négatif");
-      return;
-    }
+        const price = Number(
+          (document.getElementById("swal-budget-price") as HTMLInputElement)
+            .value,
+        );
 
-    if (budgetUpdate === null) return;
+        if (!name.trim()) {
+          Swal.showValidationMessage("Nom obligatoire");
+          return;
+        }
 
-    if (
-      nameUpdateForm === budgetUpdate.budget_name &&
-      Number(priceUpdateForm) === Number(budgetUpdate.budget_price)
-    ) {
-      alert("⚠️ Aucune modification n’a été détectée");
-      return;
-    }
+        if (!price || price <= 0) {
+          Swal.showValidationMessage("Prix invalide");
+          return;
+        }
+
+        if (
+          name === budget.budget_name &&
+          price === Number(budget.budget_price)
+        ) {
+          Swal.showValidationMessage("Aucune modification n’a été détectée");
+          return;
+        }
+
+        return { name, price };
+      },
+    });
+
+    if (!formValues) return;
 
     const answer = await fetch(`${apiUrl}/api/budget/update`, {
       method: "PUT",
@@ -245,24 +326,77 @@ function Budget() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id_budget: budgetUpdate.budget_id,
-        name: nameUpdateForm,
-        price: priceUpdateForm,
+        id_budget: budget.budget_id,
+        name: formValues.name,
+        price: formValues.price,
       }),
     });
 
-    await fetchBudgetLists();
+    if (answer.ok) {
+      await fetchBudgetLists();
 
-    setNameUpdateForm("");
-    setPriceUpdateForm(undefined);
+      Swal.fire({
+        icon: "success",
+        title: "Dépense modifiée",
+        timer: 1500,
+        showConfirmButton: false,
 
-    const data = await answer.json();
+        customClass: {
+          popup: "toast-success-popup",
+        },
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Erreur",
+        text: "Impossible de modifier la dépense",
 
-    alert(
-      answer.ok
-        ? "✅ Succès : Budget mis à jour avec succès"
-        : `❌ Erreur : ${answer.status} - ${JSON.stringify(data)}`,
-    );
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
+    }
+  }
+
+  async function confirmDelete(e: React.FormEvent, id: number) {
+    e.preventDefault();
+
+    const deleteAlert = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+    });
+
+    const result = await Swal.fire({
+      title: "Supprimer cette dépense ?",
+      text: "Cette action est irréversible",
+      icon: "error",
+
+      showCancelButton: true,
+      confirmButtonText: "Supprimer",
+      cancelButtonText: "Annuler",
+
+      customClass: {
+        popup: "budget-delete-popup",
+        confirmButton: "budget-delete-confirm",
+        cancelButton: "budget-delete-cancel",
+      },
+    });
+
+    if (result.isConfirmed) {
+      await deleteBudget(e, id);
+
+      deleteAlert.fire({
+        icon: "success",
+        title: "Dépense supprimée",
+
+        customClass: {
+          popup: "toast-success-popup",
+        },
+      });
+    }
   }
 
   async function deleteBudget(e: React.FormEvent, id: number) {
@@ -273,6 +407,14 @@ function Budget() {
     });
 
     await fetchBudgetLists();
+  }
+
+  if (userInEvent === null) {
+    return <p>Chargement...</p>;
+  }
+
+  if (userInEvent === false) {
+    return <p>Vous n'êtes pas inscrit à cet événement.</p>;
   }
 
   return (
@@ -360,91 +502,29 @@ function Budget() {
               {listBudget.map((row) => {
                 return (
                   <article key={row.budget_id}>
-                    {budgetUpdate?.budget_id === row.budget_id ? (
-                      <>
-                        <input
-                          type="text"
-                          value={nameUpdateForm}
-                          onChange={(e) => setNameUpdateForm(e.target.value)}
+                    <span>{row.budget_name}</span>
+                    <span
+                      className={
+                        row.budget_id_user !== userID
+                          ? "price positif"
+                          : "price negatif"
+                      }
+                    >
+                      {row.budget_id_user !== userID
+                        ? `+${row.budget_price}`
+                        : `-${row.budget_price}`}
+                      €
+                      <div
+                        className={
+                          row.budget_id_user === userID ? "icons" : "Noicons"
+                        }
+                      >
+                        <Pen onClick={() => openUpdateModal(row)} />
+                        <Trash
+                          onClick={(e) => confirmDelete(e, row.budget_id)}
                         />
-                        <input
-                          type="number"
-                          value={priceUpdateForm}
-                          onChange={(e) =>
-                            setPriceUpdateForm(Number(e.target.value))
-                          }
-                        />
-
-                        <Check
-                          className={`icons positif ${nameUpdateForm === budgetUpdate.budget_name && Number(priceUpdateForm) === Number(budgetUpdate.budget_price) ? "disabled" : ""}`}
-                          onClick={(e) => {
-                            if (
-                              !(
-                                nameUpdateForm === budgetUpdate.budget_name &&
-                                Number(priceUpdateForm) ===
-                                  Number(budgetUpdate.budget_price)
-                              )
-                            ) {
-                              updateBudget(e);
-                              setBudgetUpdate(null);
-                            }
-                          }}
-                        />
-                        <X
-                          className="icons negatif"
-                          onClick={() => {
-                            setBudgetUpdate(null);
-                          }}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <span>{row.budget_name}</span>
-                        <span
-                          className={
-                            row.budget_id_user !== userID
-                              ? "price positif"
-                              : "price negatif"
-                          }
-                        >
-                          {row.budget_id_user !== userID
-                            ? `+${row.budget_price}`
-                            : `-${row.budget_price}`}
-                          €
-                          <div
-                            className={
-                              row.budget_id_user === userID
-                                ? "icons"
-                                : "Noicons"
-                            }
-                          >
-                            {deleteConfirmation === row.budget_id ? (
-                              <>
-                                <Check
-                                  className="positif"
-                                  onClick={(e) =>
-                                    deleteBudget(e, row.budget_id)
-                                  }
-                                />
-                                <X
-                                  className="negatif"
-                                  onClick={() => setDeleteConfirmation(null)}
-                                />
-                              </>
-                            ) : (
-                              <>
-                                <Pen onClick={() => openUpdateForm(row)} />
-                                <Trash
-                                  onClick={() =>
-                                    setDeleteConfirmation(row.budget_id)
-                                  }
-                                />
-                              </>
-                            )}
-                          </div>
-                        </span>
-                      </>
-                    )}
+                      </div>
+                    </span>
                   </article>
                 );
               })}

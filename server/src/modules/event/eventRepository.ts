@@ -145,6 +145,13 @@ class EventRepository {
     );
     return rows;
   }
+  async readEventName(eventId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT event_name FROM event WHERE event_id=?;",
+      [eventId],
+    );
+    return rows;
+  }
 }
 
 export default new EventRepository();

@@ -2,12 +2,6 @@ import mysql from "../../../database/client";
 
 class MessageRepository {
   async sendMessage(eventId: number, userId: number, messageText: string) {
-    console.log("messageRepository.sendMessage", {
-      eventId,
-      userId,
-      messageText,
-    });
-
     const [result] = await mysql.query(
       `INSERT INTO message (
   message_id_event,
@@ -18,7 +12,6 @@ VALUES (?, ?, ?)`,
       [eventId, userId, messageText],
     );
 
-    console.log("messageRepository.sendMessage result", result);
     return result;
   }
   async getMessagesByEventId(eventId: number) {
