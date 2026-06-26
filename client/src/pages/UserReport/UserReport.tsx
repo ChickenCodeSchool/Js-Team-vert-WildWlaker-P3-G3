@@ -96,6 +96,7 @@ function UserReport() {
         }
         case "evenement": {
           const formData = new FormData();
+          formData.append("reported_event_id_event", eventId ?? "");
           formData.append("reported_event_description", repDetail);
           formData.append("reported_event_by_id_user", user.id.toString());
           for (const file of repEvidence) {
