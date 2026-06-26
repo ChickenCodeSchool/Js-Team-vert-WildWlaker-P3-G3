@@ -47,3 +47,6 @@ export type ReportPaginationProps = {
   totalPages: number;
   onPageChange: (page: number) => void;
 };
+
+export type SortColumn = "user" | "type" | "date" | "status";
+export type SortDirection = "asc" | "desc";

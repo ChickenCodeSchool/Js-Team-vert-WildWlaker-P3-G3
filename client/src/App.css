@@ -61,13 +61,26 @@ body {
 
   --color-chat: #ff7e5f;
 
-  /* admin icon color */
-  --icon-color-user: #a53b22;
-  --icon-bg-user: rgba(165, 59, 34, 0.1);
-  --icon-color-event: #366286;
-  --icon-bg-event: rgba(54, 98, 134, 0.1);
-  --icon-color-bug: #34c759;
-  --icon-bg-bug: rgba(52, 199, 89, 0.1);
+  /* admin report card */
+  --bg-admin-report-card: white;
+  --icon-color-user: #366286;
+  --icon-bg-user: #dee9f3;
+  --icon-color-event: #1b7a3d;
+  --icon-bg-event: #d8f3dc;
+  --icon-color-bug: #a53b22;
+  --icon-bg-bug: #f3e0dc;
+
+  /* admin report table*/
+  --bg-table: white;
+  --bg-state-ongoing: #fde2e1;
+  --bg-state-finished: #d8f3dc;
+  --border-inline: #f0f0f0;
+  --color-label: #6b7280;
+  --color-mail: #6b7280;
+  --color-state-ongoing: #c0392b;
+  --color-state-finished: #1b7a3d;
+  --icon-eye-button-color: #a53b22;
+  --icon-eye-button-color-hover: #ff7e5f;
 }
 
 * {
