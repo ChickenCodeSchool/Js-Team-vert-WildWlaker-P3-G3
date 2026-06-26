@@ -1,18 +1,18 @@
 .ReportTable-Global {
   width: 100%;
-  background: white;
+  background: var(--bg-table);
   border: 1px solid var(--border-color);
   border-radius: 1rem;
   th {
     text-align: center;
     font-size: 0.8rem;
-    color: #6b7280;
+    color: var(--color-label);
     padding: 0.75rem;
   }
   td {
     text-align: center;
     padding: 0.75rem;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid var(--border-inline);
   }
   .ReportTable-SortButton {
     border: none;
@@ -21,7 +21,7 @@
     align-items: center;
     gap: 0.25rem;
     font-size: 0.8rem;
-    color: #6b7280;
+    color: var(--color-label);
     font-weight: 700;
   }
   .ReportTable-UserColumn {
@@ -30,10 +30,9 @@
   .ReportTable-User {
     display: flex;
     flex-direction: column;
-
     .ReportTable-Email {
       font-size: 0.8rem;
-      color: #6b7280;
+      color: var(--color-mail);
     }
   }
   .ReportTable-Status {
@@ -42,13 +41,13 @@
     font-size: 0.8rem;
 
     &.ongoing {
-      background: #fde2e1;
-      color: #c0392b;
+      background: var(--bg-state-ongoing);
+      color: var(--color-state-ongoing);
     }
 
     &.finished {
-      background: #d8f3dc;
-      color: #1b7a3d;
+      background: var(--bg-state-finished);
+      color: var(--color-state-finished);
     }
   }
   .ReportTable-ButtonEye {
@@ -73,7 +72,7 @@
     }
     tr {
       display: block;
-      background: white;
+      background: var(--bg-table);
       border: 1px solid var(--border-color);
       border-radius: 1rem;
       margin-bottom: 1rem;
@@ -88,10 +87,10 @@
     td:not(.ReportTable-UserColumn):not(.ReportTable-Action)::before {
       content: attr(data-label);
       margin-right: auto;
-      color: #6b7280;
+      color: var(--color-label);
     }
     td:not(:last-child) {
-      border-bottom: 1px solid #f0f0f0;
+      border-bottom: 1px solid var(--border-inline);
     }
     .ReportTable-UserColumn {
       justify-content: flex-start;
