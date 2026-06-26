@@ -191,7 +191,7 @@
   }
 }
 @media screen and (max-width: 428px) {
-  .messagerie {
+  /* .messagerie {
     width: 100%;
     height: 100vh;
     margin-top: 0;
@@ -234,7 +234,7 @@
       .massagerie-input {
         height: 44px;
         margin-top: 12px;
-        /* margin-bottom: 6vh; */
+        
 
         input {
           width: 85%;
@@ -244,6 +244,67 @@
         button {
           width: 36px;
           height: 36px;
+        }
+      }
+    }
+  } */
+  .messagerie {
+    padding: 10vh 1rem 0 1rem;
+    height: 90vh;
+    h1 {
+      padding: 1.5rem 0 1rem 0;
+    }
+
+    .global-messagerie {
+      flex-direction: column-reverse;
+      gap: 1rem;
+      height: 67vh;
+
+      .messagerie-box {
+        width: 100%;
+        height: 80vh;
+        padding: 0 15px 15px 15px;
+        margin-top: 0;
+
+        .messagerie-box-messages {
+          .messagerie-box-messages-friends,
+          .messagerie-box-messages-user {
+            section {
+              .message-text {
+                max-width: 70vw;
+                font-size: 14px;
+              }
+            }
+          }
+        }
+
+        .massagerie-input {
+          height: 44px;
+          margin-bottom: 0;
+
+          input {
+            width: 85%;
+          }
+        }
+      }
+    }
+
+    .messagerie-contact {
+      width: 100%;
+      height: auto;
+      padding: 15px;
+      margin-top: 0;
+      gap: 15px;
+
+      .hr-h3 {
+        width: 100%;
+      }
+
+      div {
+        gap: 15px;
+
+        hr {
+          width: 100%;
         }
       }
     }
