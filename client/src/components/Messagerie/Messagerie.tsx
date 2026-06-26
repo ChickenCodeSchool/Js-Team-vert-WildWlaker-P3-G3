@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ContactRound, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
+import { socket } from "../../socket/socket";
 import Profil from "../../assets/images/img-card-retraite.png";
 type ReceptionMessagesUser = {
   message_id: number;
@@ -34,7 +35,25 @@ function Messagerie() {
     fetchUserEvent();
     fetchMessages();
   }, []);
+  socket.on("new-message", () => {
+    fetchMessages();
+    fetchUserEvent();
+  });
+  useEffect(() => {
+    if (!event || !userId) return;
 
+    fetch(`/api/messages/notification/${event}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+      }),
+    }).catch((error) => {
+      console.error("Erreur lecture messages :", error);
+    });
+  }, [event, userId]);
   useEffect(() => {
     fetch(`http://localhost:3310/api/messages/${event}`)
       .then((res) => res.json())
@@ -54,6 +73,38 @@ function Messagerie() {
       .then((data) => setUsersByEvent(data));
   }, [event]);
 
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("✅ Connecté :", socket.id);
+    });
+
+    socket.on("disconnect", (reason) => {
+      console.log("❌ Déconnecté :", reason);
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("connect_error");
+    };
+  }, []);
+  useEffect(() => {
+    if (!event) return;
+
+    socket.emit("join-event", event);
+
+    socket.on("new-message", (newMessage: ReceptionMessagesUser) => {
+      setReceptionMessagesUser((previousMessages) => [
+        ...previousMessages,
+        newMessage,
+      ]);
+    });
+
+    return () => {
+      socket.emit("leave-event", event);
+      socket.off("new-message");
+    };
+  }, [event]);
   async function handleSendMessage() {
     if (!messagesUser.trim()) {
       return;
@@ -75,7 +126,6 @@ function Messagerie() {
 
       if (response.ok) {
         setMessagesUser("");
-        fetchMessages();
       }
     } catch (error) {
       console.error("Messagerie: erreur envoi message", error);

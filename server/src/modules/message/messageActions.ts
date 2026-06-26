@@ -1,5 +1,6 @@
 import type { RequestHandler } from "express";
 import messageRepository from "./messageRepository";
+import { getIo } from "../../socket";
 
 const addMessage: RequestHandler = async (req, res, next) => {
   try {
@@ -11,6 +12,10 @@ const addMessage: RequestHandler = async (req, res, next) => {
       userId,
       messagesUser,
     );
+
+    const io = getIo();
+    console.log("Emission socket vers :", `event-${eventId}`);
+    io.to(`event-${eventId}`).emit("new-message", result);
 
     res.status(201).json(result);
   } catch (error) {
@@ -29,7 +34,24 @@ const browseMessagesByEventId: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const notificationMessage: RequestHandler = async (req, res, next) => {
+  try {
+    const eventId = Number(req.params.id);
+    const { userId } = req.body;
+
+    await messageRepository.notificationMessage(eventId, userId);
+
+    const message = await messageRepository.getMessagesByEventId(eventId);
+
+    res.status(201).json(message);
+  } catch (error) {
+    console.error("messageActions.addMessage erreur", error);
+    next(error);
+  }
+};
+
 export default {
   addMessage,
   browseMessagesByEventId,
+  notificationMessage,
 };

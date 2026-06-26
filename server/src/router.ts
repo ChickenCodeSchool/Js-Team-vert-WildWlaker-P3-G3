@@ -53,6 +53,10 @@ router.get("/api/user/event/:id", userActions.readUserJoinEvent);
 // message routes
 router.get("/api/messages/:id", messageActions.browseMessagesByEventId);
 router.post("/api/messages/:id", messageActions.addMessage);
+router.post(
+  "/api/messages/notification/:id",
+  messageActions.notificationMessage,
+);
 
 // reservation routes
 router.get("/api/reservations/:id", reservationActions.browse);

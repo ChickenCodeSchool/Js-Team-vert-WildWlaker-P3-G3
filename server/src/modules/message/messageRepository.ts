@@ -4,11 +4,11 @@ class MessageRepository {
   async sendMessage(eventId: number, userId: number, messageText: string) {
     const [result] = await mysql.query(
       `INSERT INTO message (
-  message_id_event,
-  message_id_user,
-  message_text
-)
-VALUES (?, ?, ?)`,
+      message_id_event,
+      message_id_user,
+      message_text
+      )
+      VALUES (?, ?, ?)`,
       [eventId, userId, messageText],
     );
 
@@ -39,6 +39,25 @@ ORDER BY m.message_date ASC;`,
     );
 
     return rows;
+  }
+  async notificationMessage(eventId: number, userId: number) {
+    const [result] = await mysql.query(
+      `INSERT INTO message_read (message_id, user_id)
+      SELECT
+      m.message_id,
+      ?
+      FROM message m
+      LEFT JOIN message_read mr
+      ON mr.message_id = m.message_id
+      AND mr.user_id = ?
+      WHERE
+      m.message_event_id = ?
+      AND m.message_user_id <> ?
+      AND mr.message_id IS NULL;`,
+      [eventId, userId],
+    );
+
+    return result;
   }
 }
 export default new MessageRepository();
