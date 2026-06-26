@@ -174,7 +174,7 @@ function ModalEditEvent({
                 name="event_date_end"
                 value={form.event_date_end}
                 onChange={handleChange}
-                min={today}
+                min={form.event_date_start || today}
               />
             </div>
           </div>

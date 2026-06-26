@@ -68,6 +68,8 @@ body {
   --icon-bg-event: rgba(54, 98, 134, 0.1);
   --icon-color-bug: #34c759;
   --icon-bg-bug: rgba(52, 199, 89, 0.1);
+  --icon-eye-button-color: #a53b22;
+  --icon-eye-button-color-hover: #ff7e5f;
 }
 
 * {

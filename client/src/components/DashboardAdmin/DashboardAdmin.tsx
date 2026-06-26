@@ -173,7 +173,7 @@ function DashboardAdmin() {
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0 },
             }}
-            whileHover={{ y: -6, scale: 1.02 }}
+            whileHover={{ y: -6 }}
             transition={{ duration: 0.25 }}
           >
             {stat.icon}

@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 25rem;
-  gap: 0.10rem;
+  gap: 0.1rem;
   padding: 1.5rem;
   background: white;
   border: 1px solid var(--border-color);
@@ -42,5 +42,35 @@
     height: 2.25rem;
     padding: 0.25rem;
     border-radius: 0.5rem;
+  }
+}
+@media (max-width: 768px) {
+  .ReportStatCard-Global {
+    padding: 0.75rem;
+    width: 98%;
+    .Icon-Users svg {
+      stroke: transparent;
+      background: var(--icon-color-user);
+      width: 1rem;
+      height: 1rem;
+      border-radius: 0.25rem;
+    }
+    .Icon-Events svg {
+      stroke: transparent;
+      background: var(--icon-color-event);
+      width: 1rem;
+      height: 1rem;
+      border-radius: 0.25rem;
+    }
+    .Icon-Bugs svg {
+      stroke: transparent;
+      background: var(--icon-color-bug);
+      width: 1rem;
+      height: 1rem;
+      border-radius: 0.25rem;
+    }
+    .ReportStatCard-Count {
+      font-size: 1.75rem;
+    }
   }
 }

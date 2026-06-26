@@ -14,4 +14,14 @@
     flex-direction: column;
     gap: 2rem;
   }
+  @media (max-width: 768px) {
+    .DashboardReport-Grid {
+      grid-template-columns: 1fr;
+      margin-left: 0.5rem;
+    }
+    .DashboardReport-TableSection {
+      align-items: center;
+      margin-bottom: 5rem;
+    }
+  }
 }
