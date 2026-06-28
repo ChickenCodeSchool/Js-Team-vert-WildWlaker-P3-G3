@@ -1,6 +1,5 @@
 import { Heart, Pencil, Trash2 } from "lucide-react";
 
-// On utilise exactement les mêmes propriétés que dans Galerie.tsx
 type Gallery = {
   gallery_id: number;
   gallery_id_event: number;
@@ -56,7 +55,11 @@ export function PhotoItem({
             onClick={() => onLike(photo.gallery_id)}
             aria-label={isLiked ? "Retirer des favoris" : "Ajouter aux favoris"}
           >
-            <Heart size={18} className="heart-icon" />
+            <Heart
+              size={18}
+              className="heart-icon"
+              fill={isLiked ? "currentColor" : "none"}
+            />
           </button>
           <span className="like-counter">{photo.like_count ?? 0}</span>
         </div>

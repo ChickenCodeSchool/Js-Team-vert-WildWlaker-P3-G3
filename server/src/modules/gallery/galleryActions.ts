@@ -122,10 +122,57 @@ const edit: RequestHandler = async (req, res, next) => {
   }
 };
 
+const getLikedPhotos: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const userId = Number(req.params.userId);
+
+    const likedRows = (await galleryRepository.getLikesByEventAndUser(
+      id,
+      userId,
+    )) as { like_id_gallery: number }[];
+
+    const likedPhotoIds = likedRows.map((row) => row.like_id_gallery);
+
+    res.json(likedPhotoIds);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const addLike: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const { user_id } = req.body;
+
+    const newLike = await galleryRepository.insertLike(id, Number(user_id));
+
+    res.status(201).json(newLike);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const removeLike: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const userId = Number(req.params.userId);
+
+    await galleryRepository.deleteLike(id, userId);
+
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   browse,
   add,
   destroy,
   uploadPhoto,
   edit,
+  getLikedPhotos,
+  addLike,
+  removeLike,
 };
