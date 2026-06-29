@@ -154,7 +154,21 @@ FROM user
     WHERE rb.reported_bug_id = ?`,
       [id],
     );
-    return rows[0];
+
+    const report = rows[0];
+    if (!report) return undefined;
+
+    const [images] = await databaseClient.query<Rows>(
+      `SELECT reported_bug_image_path
+     FROM reported_bug_image
+     WHERE reported_bug_id = ?`,
+      [id],
+    );
+
+    return {
+      ...report,
+      images: images.map((img) => img.reported_bug_image_path),
+    };
   }
 
   async readReportEventById(id: number) {
@@ -169,7 +183,21 @@ FROM user
     WHERE re.reported_event_id = ?`,
       [id],
     );
-    return rows[0];
+
+    const report = rows[0];
+    if (!report) return undefined;
+
+    const [images] = await databaseClient.query<Rows>(
+      `SELECT reported_event_image_path
+     FROM reported_event_image
+     WHERE reported_event_id = ?`,
+      [id],
+    );
+
+    return {
+      ...report,
+      images: images.map((img) => img.reported_event_image_path),
+    };
   }
 
   async readReportUserById(id: number) {
@@ -187,7 +215,21 @@ FROM user
     WHERE ru.reported_user_id = ?`,
       [id],
     );
-    return rows[0];
+
+    const report = rows[0];
+    if (!report) return undefined;
+
+    const [images] = await databaseClient.query<Rows>(
+      `SELECT reported_user_image_path
+     FROM reported_user_image
+     WHERE reported_user_id = ?`,
+      [id],
+    );
+
+    return {
+      ...report,
+      images: images.map((img) => img.reported_user_image_path),
+    };
   }
 
   async markBugAsDone(id: number) {

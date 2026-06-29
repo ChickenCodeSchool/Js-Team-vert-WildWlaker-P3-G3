@@ -113,7 +113,7 @@ function AdminReport() {
                 </div>
                 <div className="adminReport-WrapType-TypeText">
                   <h3>{type}</h3>
-                  <p>{getDescription()}</p>
+                  {/* <p>{getDescription()}</p> */}
                 </div>
               </div>
             </section>
@@ -166,10 +166,7 @@ function AdminReport() {
             <section aria-labelledby="auteur" className="adminReport-User">
               <h2 id="auteur">Auteur du signalement</h2>
               <div className="adminReport-User-PP-Wrap">
-                <img
-                  src={`${API_URL}/uploads/${getPicture()}`}
-                  alt="profil pict user"
-                />
+                <img src={`${API_URL}${getPicture()}`} alt="profil pict user" />
               </div>
               <p>{getUsername()}</p>
               <p>{getMail()}</p>
