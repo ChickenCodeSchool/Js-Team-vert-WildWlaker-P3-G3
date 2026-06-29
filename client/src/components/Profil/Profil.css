@@ -43,6 +43,7 @@
     align-items: center;
     gap: 12px;
     animation: modalPop 0.25s ease;
+
     img {
       width: 90px;
       height: 90px;
@@ -50,6 +51,7 @@
       object-fit: cover;
       border: 3px solid white;
     }
+
     h2 {
       margin: 0 0 10px;
       font-size: 22px;
@@ -69,12 +71,12 @@
       gap: 8px;
       font-size: 14px;
       transition: 0.2s ease;
-    }
 
-    button:hover {
-      background: #111827;
-      color: white;
-      transform: translateY(-2px);
+      &:hover {
+        background: #111827;
+        color: white;
+        transform: translateY(-2px);
+      }
     }
 
     .change-pseudo,
@@ -95,10 +97,10 @@
       border: 1px solid #ddd;
       padding: 0 10px;
       outline: none;
-    }
 
-    input:focus {
-      border-color: orangered;
+      &:focus {
+        border-color: orangered;
+      }
     }
 
     .custom-upload {
@@ -132,23 +134,31 @@
     .deconnexion-event {
       background: #fee2e2;
       color: #dc2626;
+
+      &:hover {
+        background: #dc2626;
+        color: white;
+      }
     }
 
-    .deconnexion-event:hover {
-      background: #dc2626;
-      color: white;
+    .deconnexion-profil {
+      background: #fee2e2;
+      color: #dc2626;
+
+      &:hover {
+        background: #dc2626;
+        color: white;
+      }
     }
-    .deconnexion-none {
-      display: none;
-    }
+
     .fermer {
       background: transparent;
       color: #6b7280;
-    }
 
-    .fermer:hover {
-      background: #e5e7eb;
-      color: black;
+      &:hover {
+        background: #e5e7eb;
+        color: black;
+      }
     }
   }
 }
@@ -158,7 +168,6 @@
     opacity: 0;
     transform: translateY(-15px) scale(0.96);
   }
-
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -188,10 +197,10 @@
       max-height: 82vh;
       overflow-y: auto;
       scrollbar-width: none;
-    }
 
-    .modal::-webkit-scrollbar {
-      display: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
   }
 }

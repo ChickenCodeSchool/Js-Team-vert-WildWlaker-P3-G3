@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 function Profil() {
   const navigate = useNavigate();
   const location = useLocation();
-  const noneDeconnexion = location.pathname.startsWith("/homeevents");
+  const isOnEventPage = location.pathname.startsWith("/homeevents");
   const [userName, setUserName] = useState("");
   const [isMainModalOpen, setIsMainModalOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<string | null>(null);
@@ -47,7 +47,6 @@ function Profil() {
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-
     if (file) {
       setPhoto(file);
       setPreview(URL.createObjectURL(file));
@@ -61,20 +60,14 @@ function Profil() {
       showConfirmButton: false,
       timer: 2500,
       timerProgressBar: true,
-
-      customClass: {
-        popup: "toast",
-      },
+      customClass: { popup: "toast" },
     });
 
     if (!photo) {
       toast.fire({
         icon: "warning",
         text: "Choisis une image",
-
-        customClass: {
-          popup: "toast-warning-popup",
-        },
+        customClass: { popup: "toast-warning-popup" },
       });
       return;
     }
@@ -83,10 +76,7 @@ function Profil() {
       toast.fire({
         icon: "error",
         text: "Utilisateur introuvable",
-
-        customClass: {
-          popup: "toast-error-popup",
-        },
+        customClass: { popup: "toast-error-popup" },
       });
       return;
     }
@@ -108,10 +98,7 @@ function Profil() {
       toast.fire({
         icon: "error",
         text: data.message,
-
-        customClass: {
-          popup: "toast-error-popup",
-        },
+        customClass: { popup: "toast-error-popup" },
       });
       return;
     }
@@ -133,22 +120,26 @@ function Profil() {
 
     try {
       setErrorMessage("");
-
       await fetch(`http://localhost:3310/api/users/${user_id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_name,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_name }),
       });
-
       setUserName("");
     } catch (error) {
       console.error(error);
     }
   }
+
+  function handleDeconnexion() {
+    if (isOnEventPage) {
+      localStorage.removeItem("user");
+      navigate("/connexion");
+    } else {
+      navigate("/homeevents");
+    }
+  }
+
   return (
     <div className="profil">
       <button
@@ -161,6 +152,7 @@ function Profil() {
           alt="photo-profil"
         />
       </button>
+
       <AnimatePresence>
         {isMainModalOpen && (
           <motion.div
@@ -215,11 +207,9 @@ function Profil() {
                       onChange={(e) => setUserName(e.target.value)}
                       placeholder="Changer le nom"
                     />
-
                     {errorMessage && (
                       <p className="error-message">{errorMessage}</p>
                     )}
-
                     <button
                       type="button"
                       onClick={() => updateUserName(userName, userId)}
@@ -255,7 +245,6 @@ function Profil() {
                     <label htmlFor="photo-upload" className="custom-upload">
                       Choisir une image
                     </label>
-
                     <input
                       id="photo-upload"
                       type="file"
@@ -263,7 +252,6 @@ function Profil() {
                       onChange={handlePhotoChange}
                       className="hidden-input"
                     />
-
                     {preview && (
                       <img
                         src={preview}
@@ -271,7 +259,6 @@ function Profil() {
                         className="photo-preview"
                       />
                     )}
-
                     <button type="button" onClick={handleUploadPhoto}>
                       Enregistrer la photo
                     </button>
@@ -302,13 +289,15 @@ function Profil() {
 
               <button
                 className={
-                  noneDeconnexion ? "deconnexion-none" : "deconnexion-event"
+                  isOnEventPage ? "deconnexion-profil" : "deconnexion-event"
                 }
                 type="button"
-                onClick={() => navigate("/homeevents")}
+                onClick={handleDeconnexion}
               >
                 <LogOut size={15} />
-                Déconnexion de l'évenement
+                {isOnEventPage
+                  ? "Se déconnecter"
+                  : "Déconnexion de l'événement"}
               </button>
 
               <button
@@ -328,4 +317,5 @@ function Profil() {
     </div>
   );
 }
+
 export default Profil;
