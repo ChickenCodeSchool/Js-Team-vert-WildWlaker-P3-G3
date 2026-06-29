@@ -64,11 +64,7 @@ function AdminReport() {
     });
   };
 
-  const getImage = () =>
-    report?.reported_bug_image ??
-    report?.reported_event_image ??
-    report?.reported_user_image ??
-    null;
+  const getImages = (): string[] => report?.images ?? [];
 
   const getUsername = () =>
     type === "user" ? report?.author_username : report?.user_username;
@@ -117,7 +113,7 @@ function AdminReport() {
                 </div>
                 <div className="adminReport-WrapType-TypeText">
                   <h3>{type}</h3>
-                  <p>{getDescription()}</p>
+                  {/* <p>{getDescription()}</p> */}
                 </div>
               </div>
             </section>
@@ -135,18 +131,20 @@ function AdminReport() {
             <section aria-labelledby="pieces" className="adminReport-Evidence">
               <h2 id="pieces">Pièces jointes</h2>
               <div className="adminReport-WrapEvidence">
-                <ul>
-                  <li>
-                    {getImage() ? (
-                      <img
-                        src={`${API_URL}/uploads/${getImage()}`}
-                        alt="preuve jointe"
-                      />
-                    ) : (
-                      "Aucune pièce jointe"
-                    )}
-                  </li>
-                </ul>
+                {getImages().length > 0 ? (
+                  <ul>
+                    {getImages().map((image) => (
+                      <li key={image}>
+                        <img
+                          src={`${API_URL}/uploads/${image}`}
+                          alt="preuve jointe"
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>Aucune pièce jointe</p>
+                )}
               </div>
             </section>
 
@@ -168,10 +166,7 @@ function AdminReport() {
             <section aria-labelledby="auteur" className="adminReport-User">
               <h2 id="auteur">Auteur du signalement</h2>
               <div className="adminReport-User-PP-Wrap">
-                <img
-                  src={`${API_URL}/uploads/${getPicture()}`}
-                  alt="profil pict user"
-                />
+                <img src={`${API_URL}${getPicture()}`} alt="profil pict user" />
               </div>
               <p>{getUsername()}</p>
               <p>{getMail()}</p>
