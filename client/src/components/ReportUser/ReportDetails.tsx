@@ -17,6 +17,9 @@ function ReportDetails({ reportDetail, setReportDetail }: ReportDetailProps) {
           onChange={(e) => setReportDetail(e.target.value)}
           maxLength={255}
         />
+        <span className="reportDetails-counter">
+          {reportDetail.length} / 255
+        </span>
       </label>
     </fieldset>
   );
