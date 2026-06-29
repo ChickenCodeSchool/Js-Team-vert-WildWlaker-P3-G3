@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS wedoo;
 -- -----------------------------------------------------
 -- Schema Wedoo
 -- -----------------------------------------------------
@@ -15,6 +16,8 @@ CREATE TABLE `user` (
   `user_password` VARCHAR(100) NOT NULL,
   `user_profile_picture` VARCHAR(255) NOT NULL,
   `user_joining_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reset_token` VARCHAR(255) NULL,
+  `reset_expires` BIGINT NULL,
 
   `user_is_admin` TINYINT(1) NOT NULL DEFAULT 0,
   `user_is_ban` TINYINT(1) NOT NULL DEFAULT 0,
@@ -33,8 +36,9 @@ CREATE TABLE `event` (
   `event_id` INT NOT NULL AUTO_INCREMENT,
   `event_host_id` INT NOT NULL,
   `event_name` VARCHAR(45) NOT NULL,
-  `event_date` DATE NOT NULL,
-  `event_descprition` VARCHAR(255) NOT NULL,
+  `event_date_start` DATE NOT NULL,
+  `event_date_end` DATE NOT NULL,
+  `event_description` VARCHAR(255) NOT NULL,
   `event_location` VARCHAR(100) NOT NULL,
   `event_creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `event_picture` VARCHAR(255) NOT NULL,
@@ -60,7 +64,6 @@ CREATE TABLE `reported_event` (
   `reported_event_by_id_user` INT NOT NULL,
   `reported_event_description` VARCHAR(255) NOT NULL,
   `reported_event_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `reported_event_image` VARCHAR(255) NULL,
 
   `reported_event_is_done` TINYINT(1) NOT NULL DEFAULT 0,
 
@@ -75,6 +78,21 @@ CREATE TABLE `reported_event` (
     REFERENCES `user` (`user_id`))
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `reported_event_image`
+-- -----------------------------------------------------
+CREATE TABLE `reported_event_image` (
+  `reported_event_image_id` INT NOT NULL AUTO_INCREMENT,
+  `reported_event_image_path` VARCHAR(255) NOT NULL,
+  `reported_event_id` INT NOT NULL,
+
+  PRIMARY KEY (`reported_event_image_id`),
+
+  CONSTRAINT `fk_reported_event_image_event`
+    FOREIGN KEY (`reported_event_id`)
+    REFERENCES `reported_event` (`reported_event_id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `reported_bug`
@@ -84,7 +102,6 @@ CREATE TABLE `reported_bug` (
   `reported_bug_by_id_user` INT NOT NULL,
   `reported_bug_description` VARCHAR(255) NOT NULL,
   `reported_bug_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `reported_bug_image` VARCHAR(255) NULL,
 
   `reported_bug_is_done` TINYINT(1) NOT NULL DEFAULT 0,
 
@@ -95,6 +112,21 @@ CREATE TABLE `reported_bug` (
     REFERENCES `user` (`user_id`))
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `reported_bug_image`
+-- -----------------------------------------------------
+CREATE TABLE `reported_bug_image` (
+  `reported_bug_image_id` INT NOT NULL AUTO_INCREMENT,
+  `reported_bug_image_path` VARCHAR(255) NOT NULL,
+  `reported_bug_id` INT NOT NULL,
+
+  PRIMARY KEY (`reported_bug_image_id`),
+
+  CONSTRAINT `fk_reported_bug_image_bug`
+    FOREIGN KEY (`reported_bug_id`)
+    REFERENCES `reported_bug` (`reported_bug_id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `reported_user`
@@ -105,7 +137,6 @@ CREATE TABLE `reported_user` (
   `reported_user_by_id_user` INT NOT NULL,
   `reported_user_description` VARCHAR(255) NOT NULL,
   `reported_user_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `reported_user_image` VARCHAR(255) NULL,
 
   `reported_user_is_done` TINYINT(1) NOT NULL DEFAULT 0,
 
@@ -120,6 +151,21 @@ CREATE TABLE `reported_user` (
     REFERENCES `user` (`user_id`))
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `reported_user_image`
+-- -----------------------------------------------------
+CREATE TABLE `reported_user_image` (
+  `reported_user_image_id` INT NOT NULL AUTO_INCREMENT,
+  `reported_user_image_path` VARCHAR(255) NOT NULL,
+  `reported_user_id` INT NOT NULL,
+
+  PRIMARY KEY (`reported_user_image_id`),
+
+  CONSTRAINT `fk_reported_user_image_user`
+    FOREIGN KEY (`reported_user_id`)
+    REFERENCES `reported_user` (`reported_user_id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `message`
@@ -276,3 +322,22 @@ CREATE TABLE `event_user_joining` (
     FOREIGN KEY (`euj_id_user`)
     REFERENCES `user` (`user_id`))
 ENGINE = InnoDB;
+-- -----------------------------------------------------
+-- Table `gallery_like`
+-- -----------------------------------------------------
+CREATE TABLE `gallery_like` (
+  `like_id_gallery` INT NOT NULL,
+  `like_id_user` INT NOT NULL,
+
+  PRIMARY KEY (`like_id_gallery`, `like_id_user`),
+
+  CONSTRAINT `fk_like_gallery`
+    FOREIGN KEY (`like_id_gallery`)
+    REFERENCES `gallery` (`gallery_id`)
+    ON DELETE CASCADE,
+
+  CONSTRAINT `fk_like_user`
+    FOREIGN KEY (`like_id_user`)
+    REFERENCES `user` (`user_id`)
+    ON DELETE CASCADE
+) ENGINE = InnoDB;

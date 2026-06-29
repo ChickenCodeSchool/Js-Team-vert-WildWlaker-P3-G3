@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import Swal from "sweetalert2";
@@ -420,7 +421,11 @@ function Budget() {
   return (
     <div className="budget">
       <div className="budgetHeader">
-        <header>
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           <h1>{budgetEvent?.event_name}</h1>
           <button
             type="button"
@@ -429,7 +434,7 @@ function Budget() {
             <FilePlusCorner size={20} />
             <span> Ajouter une dépense</span>
           </button>
-        </header>
+        </motion.header>
       </div>
       <div className="budgetBody">
         {showCreateForm ? (
@@ -464,7 +469,12 @@ function Budget() {
           ""
         )}
 
-        <section className="myBalance">
+        <motion.section
+          className="myBalance"
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
           <article className="myBalanceBox">
             {userBalance > 0 && <span>on te doit</span>}
             {userBalance < 0 && <span>tu dois</span>}
@@ -488,12 +498,17 @@ function Budget() {
             <div className="negatif">
               <ArrowUp size={20} className="lucid" /> <br />
               <span> mes dépenses</span>
-              <h3> {userBudget} € </h3>
+              <h3>{userBudget} €</h3>
             </div>
           </article>
-        </section>
+        </motion.section>
 
-        <section className="expensesAndBalance">
+        <motion.section
+          className="expensesAndBalance"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
           <div className="expenses">
             <div className="mobileExpenses">
               <h5>Dépenses</h5>
@@ -551,7 +566,7 @@ function Budget() {
               })}
             </section>
           </div>
-        </section>
+        </motion.section>
 
         <button
           type="button"

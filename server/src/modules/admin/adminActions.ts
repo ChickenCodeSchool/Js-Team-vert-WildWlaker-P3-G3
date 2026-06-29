@@ -48,8 +48,9 @@ const readDashboardChart: RequestHandler = async (req, res, next) => {
 
 const readReportEvent: RequestHandler = async (req, res, next) => {
   try {
-    const chartData = await adminRepository.readReportEvent();
-    res.json(chartData);
+    // const chartData = await adminRepository.readReportEvent();
+    const reportEvent = await adminRepository.readReportEvent();
+    res.json(reportEvent);
   } catch (error) {
     next(error);
   }
@@ -57,8 +58,9 @@ const readReportEvent: RequestHandler = async (req, res, next) => {
 
 const readReportBug: RequestHandler = async (req, res, next) => {
   try {
-    const chartData = await adminRepository.readReportBug();
-    res.json(chartData);
+    // const chartData = await adminRepository.readReportBug();
+    const reportBug = await adminRepository.readReportBug();
+    res.json(reportBug);
   } catch (error) {
     next(error);
   }
@@ -66,8 +68,9 @@ const readReportBug: RequestHandler = async (req, res, next) => {
 
 const readReportUser: RequestHandler = async (req, res, next) => {
   try {
-    const chartData = await adminRepository.readReportUser();
-    res.json(chartData);
+    // const chartData = await adminRepository.readReportUser();
+    const reportUser = await adminRepository.readReportUser();
+    res.json(reportUser);
   } catch (error) {
     next(error);
   }

@@ -13,12 +13,15 @@ const browse: RequestHandler = async (req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
+    const files = req.files as Express.Multer.File[] | undefined;
+    const imagePaths = files?.map((file) => file.filename) ?? [];
+
     const newReportUser = {
       reported_user_id_user: req.body.reported_user_id_user,
       reported_user_description: req.body.reported_user_description,
-      reported_user_image: req.body.reported_user_image,
       reported_user_by_id_user: req.body.reported_user_by_id_user,
     };
+
     const alreadyExists = await reportUserRepository.exists(
       newReportUser.reported_user_by_id_user,
       newReportUser.reported_user_id_user,
@@ -30,7 +33,11 @@ const add: RequestHandler = async (req, res, next) => {
         .json({ message: "Vous avez déjà signalé cet utilisateur récemment." });
       return;
     }
-    const insertId = await reportUserRepository.create(newReportUser);
+
+    const insertId = await reportUserRepository.create(
+      newReportUser,
+      imagePaths,
+    );
 
     res.status(201).json({ insertId });
   } catch (err) {
