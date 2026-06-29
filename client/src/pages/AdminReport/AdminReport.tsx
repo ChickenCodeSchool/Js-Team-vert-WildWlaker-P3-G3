@@ -64,11 +64,7 @@ function AdminReport() {
     });
   };
 
-  const getImage = () =>
-    report?.reported_bug_image ??
-    report?.reported_event_image ??
-    report?.reported_user_image ??
-    null;
+  const getImages = (): string[] => report?.images ?? [];
 
   const getUsername = () =>
     type === "user" ? report?.author_username : report?.user_username;
@@ -135,18 +131,20 @@ function AdminReport() {
             <section aria-labelledby="pieces" className="adminReport-Evidence">
               <h2 id="pieces">Pièces jointes</h2>
               <div className="adminReport-WrapEvidence">
-                <ul>
-                  <li>
-                    {getImage() ? (
-                      <img
-                        src={`${API_URL}/uploads/${getImage()}`}
-                        alt="preuve jointe"
-                      />
-                    ) : (
-                      "Aucune pièce jointe"
-                    )}
-                  </li>
-                </ul>
+                {getImages().length > 0 ? (
+                  <ul>
+                    {getImages().map((image) => (
+                      <li key={image}>
+                        <img
+                          src={`${API_URL}/uploads/${image}`}
+                          alt="preuve jointe"
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>Aucune pièce jointe</p>
+                )}
               </div>
             </section>
 

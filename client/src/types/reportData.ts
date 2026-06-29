@@ -7,9 +7,7 @@ export type ReportData = {
   reported_event_date?: string;
   reported_user_date?: string;
 
-  reported_bug_image?: string;
-  reported_event_image?: string;
-  reported_user_image?: string;
+  images?: string[];
 
   reported_bug_is_done?: number;
   reported_event_is_done?: number;
