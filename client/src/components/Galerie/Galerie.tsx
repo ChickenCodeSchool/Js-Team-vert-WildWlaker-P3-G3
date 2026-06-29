@@ -30,7 +30,10 @@ const getUserFromStorage = (): User => {
 function Galerie() {
   const segments = window.location.pathname.split("/");
   const id = segments[segments.indexOf("galerie") - 1] || segments[2];
+
+  // Utilisation directe de l'ID pour éviter les boucles infinies sur l'objet currentUser
   const currentUser = getUserFromStorage();
+  const currentUserId = currentUser.id;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [photoToDelete, setPhotoToDelete] = useState<number | null>(null);
@@ -49,19 +52,20 @@ function Galerie() {
   };
 
   useEffect(() => {
-    if (!id || currentUser.id === 0) return;
-    fetch(`${API_URL}/api/gallery/${id}/likes/${currentUser.id}`)
+    if (!id || currentUserId === 0) return;
+    fetch(`${API_URL}/api/gallery/${id}/likes/${currentUserId}`)
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => setLikedPhotos(data))
       .catch((err) => console.error("Erreur likes:", err));
-  }, [id, currentUser.id]);
+  }, [id, currentUserId]);
 
   useEffect(() => {
-    const controller = new AbortController();
     if (!id) {
       setIsLoading(false);
       return;
     }
+
+    const controller = new AbortController();
 
     const loadData = async () => {
       setIsLoading(true);
@@ -98,13 +102,13 @@ function Galerie() {
   const toggleLike = async (photoId: number) => {
     const isAlreadyLiked = likedPhotos.includes(photoId);
     try {
-      const url = `${API_URL}/api/gallery/${photoId}/like${isAlreadyLiked ? `/${currentUser.id}` : ""}`;
+      const url = `${API_URL}/api/gallery/${photoId}/like${isAlreadyLiked ? `/${currentUserId}` : ""}`;
       const response = await fetch(url, {
         method: isAlreadyLiked ? "DELETE" : "POST",
         headers: { "Content-Type": "application/json" },
         body: isAlreadyLiked
           ? undefined
-          : JSON.stringify({ user_id: currentUser.id }),
+          : JSON.stringify({ user_id: currentUserId }),
       });
 
       if (response.ok) {
@@ -141,7 +145,7 @@ function Galerie() {
       {
         gallery_id: insertId,
         gallery_id_event: Number(id),
-        gallery_id_user: currentUser.id,
+        gallery_id_user: currentUserId,
         gallery_link: imageUrl,
         gallery_description: textDescription || "Ajout galerie",
         gallery_creation_date: new Date().toISOString(),
@@ -157,7 +161,7 @@ function Galerie() {
     if (photoToDelete === null) return;
     try {
       const res = await fetch(
-        `${API_URL}/api/gallery/${photoToDelete}/${currentUser.id}`,
+        `${API_URL}/api/gallery/${photoToDelete}/${currentUserId}`,
         {
           method: "DELETE",
         },
@@ -176,7 +180,7 @@ function Galerie() {
     if (!photoToEdit) return;
     try {
       const res = await fetch(
-        `${API_URL}/api/gallery/${photoToEdit.gallery_id}/${currentUser.id}`,
+        `${API_URL}/api/gallery/${photoToEdit.gallery_id}/${currentUserId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -263,7 +267,7 @@ function Galerie() {
           onClose={() => setIsModalOpen(false)}
           onAddPhoto={handleAddPhoto}
           eventId={Number(id)}
-          userId={currentUser.id}
+          userId={currentUserId}
         />
       )}
 

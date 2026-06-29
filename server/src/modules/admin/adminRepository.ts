@@ -108,21 +108,38 @@ FROM user
     return rows;
   }
   async readReportUser() {
-    const [rows] =
-      await databaseClient.query(`SELECT  reported_user_id FROM reported_user;
-`);
+    const [rows] = await databaseClient.query(
+      `SELECT
+      ru.*, 
+      u.user_username AS username, 
+      u.user_mail AS email 
+      FROM reported_user AS ru 
+      JOIN user AS u ON u.user_id = ru.reported_user_by_id_user 
+      ORDER BY ru.reported_user_date DESC`,
+    );
     return rows;
   }
   async readReportBug() {
-    const [rows] =
-      await databaseClient.query(`SELECT reported_bug_id  FROM reported_bug;
-`);
+    const [rows] = await databaseClient.query(
+      `SELECT
+      rb.*, u.user_username AS username,
+      u.user_mail AS email
+    FROM reported_bug AS rb
+    JOIN user AS u ON u.user_id = rb.reported_bug_by_id_user
+    ORDER BY rb.reported_bug_date DESC`,
+    );
     return rows;
   }
   async readReportEvent() {
-    const [rows] =
-      await databaseClient.query(`SELECT  reported_event_id FROM reported_event;
-`);
+    const [rows] = await databaseClient.query(
+      `SELECT
+      re.*,
+      u.user_username AS username,
+      u.user_mail AS email
+    FROM reported_event AS re
+    JOIN user AS u ON u.user_id = re.reported_event_by_id_user
+    ORDER BY re.reported_event_date DESC`,
+    );
     return rows;
   }
   async readReportBugById(id: number) {

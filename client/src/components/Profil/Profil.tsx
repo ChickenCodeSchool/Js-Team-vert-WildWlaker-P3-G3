@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { useLocation, useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 function Profil() {
   const navigate = useNavigate();
@@ -54,13 +55,39 @@ function Profil() {
   }
 
   async function handleUploadPhoto() {
+    const toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+
+      customClass: {
+        popup: "toast",
+      },
+    });
+
     if (!photo) {
-      alert("Choisis une image");
+      toast.fire({
+        icon: "warning",
+        text: "Choisis une image",
+
+        customClass: {
+          popup: "toast-warning-popup",
+        },
+      });
       return;
     }
 
     if (!userId) {
-      alert("Utilisateur introuvable");
+      toast.fire({
+        icon: "error",
+        text: "Utilisateur introuvable",
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
       return;
     }
 
@@ -78,7 +105,14 @@ function Profil() {
     const data = await response.json();
 
     if (!response.ok) {
-      alert(data.message);
+      toast.fire({
+        icon: "error",
+        text: data.message,
+
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
       return;
     }
 
@@ -100,21 +134,15 @@ function Profil() {
     try {
       setErrorMessage("");
 
-      const response = await fetch(
-        `http://localhost:3310/api/users/${user_id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user_name,
-          }),
+      await fetch(`http://localhost:3310/api/users/${user_id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
-
-      const data = await response.json();
-      console.log(data);
+        body: JSON.stringify({
+          user_name,
+        }),
+      });
 
       setUserName("");
     } catch (error) {
