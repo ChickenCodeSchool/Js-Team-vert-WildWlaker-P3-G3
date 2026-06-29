@@ -36,5 +36,13 @@ fieldset {
         border-color: var(--icon-color);
       }
     }
+
+    .reportDetails-counter {
+      display: block;
+      text-align: right;
+      font-size: 0.55rem;
+      color: var(--font-grey);
+      margin-top: 3px;
+    }
   }
 }
