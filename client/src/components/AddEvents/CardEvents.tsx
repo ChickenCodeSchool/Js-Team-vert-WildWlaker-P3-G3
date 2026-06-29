@@ -33,7 +33,8 @@ function CardEvents({
   event_host_id,
   image,
   imageAlt,
-  date,
+  dateStart,
+  dateEnd,
   title,
   description,
   location,
@@ -47,7 +48,8 @@ function CardEvents({
   const [currentDescription, setCurrentDescription] = useState(description);
   const [currentImage, setCurrentImage] = useState(image);
   const [currentLocation, setCurrentLocation] = useState(location);
-  const [currentDate, setCurrentDate] = useState(date);
+  const [currentDateStart, setCurrentDateStart] = useState(dateStart);
+  const [currentDateEnd, setCurrentDateEnd] = useState(dateEnd);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -56,7 +58,8 @@ function CardEvents({
     setCurrentDescription(updatedEvent.event_description);
     setCurrentImage(updatedEvent.event_picture);
     setCurrentLocation(updatedEvent.event_location);
-    setCurrentDate(updatedEvent.event_date_start);
+    setCurrentDateStart(updatedEvent.event_date_start);
+    setCurrentDateEnd(updatedEvent.event_date_end);
   };
   const handleDeleteReservation = async () => {
     try {
@@ -91,10 +94,10 @@ function CardEvents({
             />
             <span className="CardEvents-Date">
               <span className="CardEvents-Date-Day">
-                {formatDay(currentDate)}
+                {formatDay(currentDateStart)}
               </span>
               <span className="CardEvents-Date-Month">
-                {formatMonth(currentDate)}
+                {formatMonth(currentDateStart)}
               </span>
             </span>
           </div>
@@ -155,8 +158,8 @@ function CardEvents({
           event_id,
           event_host_id,
           event_name: currentTitle,
-          event_date_start: currentDate,
-          event_date_end: currentDate,
+          event_date_start: currentDateStart,
+          event_date_end: currentDateEnd,
           event_description: currentDescription,
           event_location: currentLocation,
           event_picture: currentImage,
