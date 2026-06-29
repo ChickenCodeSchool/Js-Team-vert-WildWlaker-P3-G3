@@ -10,6 +10,7 @@
 body {
   .budget {
     background: var(--bg-color);
+    cursor: default;
     gap: 2rem;
 
     .myBalance {
@@ -56,23 +57,19 @@ body {
 
           article {
             background: var(--bg-neutral);
-            padding: 20px;
+            padding: 15px;
+            margin-left: 10px;
             border-bottom-color: var(--bg-neutral);
             font-weight: bold;
 
             display: flex;
             justify-content: space-between;
-          }
 
-          :first-child {
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-          }
+            transition: transform .2s;
 
-          :last-child {
-            border-bottom-left-radius: 15px;
-            border-bottom-right-radius: 15px;
-            border-bottom-color: var(--beige-color);
+            &:hover {
+              transform: translateX(5px);
+            }
           }
         }
       }
@@ -190,7 +187,6 @@ body {
       align-items: center;
 
       background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(3px);
 
       z-index: 999;
 
@@ -234,11 +230,10 @@ body {
           border: 2px solid var(--beige-color);
           border-radius: 10px;
           outline: none;
-          transition: 0.2s;
+          transition: border-color 0.2s;
 
           &:focus {
             border-color: var(--font-brown);
-            box-shadow: 0 0 5px rgba(185, 68, 36, 0.3);
           }
         }
 
@@ -420,12 +415,13 @@ body {
         font-weight: 700;
         font-size: 0.9rem;
         letter-spacing: 0.5px;
-        transition: opacity 0.2s ease, transform 0.1s ease;
+        transition: opacity 0.2s ease, transform 0.25s ease;
         width: auto;
         margin-right: 5.9vh;
 
         &:hover {
           opacity: 0.9;
+          transform: scale(1.05);
         }
 
         &:active {
@@ -466,9 +462,11 @@ body {
         color: white;
         cursor: pointer;
         font-weight: bold;
+        transition: background .25s, transform .25s;
 
         &:hover {
           background: var(--font-brown);
+          transform: scale(1.05);
         }
       }
     }
@@ -487,6 +485,11 @@ body {
         height: 100%;
         background: linear-gradient(135deg, #ff8a6a, #c24a2d);
         box-shadow: 0 12px 30px rgba(100 35 19 / 65%);
+        transition: .25s;
+
+        &:hover {
+          transform: translateY(-4px);
+        }
 
         h2 {
           font-size: 5vw;
@@ -508,6 +511,11 @@ body {
         div {
           border-radius: 10px;
           padding: 10px;
+          transition: .25s;
+
+          &:hover {
+            transform: translateY(-4px);
+          }
         }
 
         .positif {

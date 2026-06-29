@@ -16,17 +16,40 @@ class reportBugRepository {
       RepBug,
       "reported_bug_id" | "reported_bug_date" | "reported_bug_is_done"
     >,
+    imagePaths: string[],
   ) {
-    const [result] = await databaseClient.query<Result>(
-      "insert into reported_bug (reported_bug_description,reported_bug_image,reported_bug_by_id_user) values (?, ?, ?)",
-      [
-        reported_bug.reported_bug_description,
-        reported_bug.reported_bug_image,
-        reported_bug.reported_bug_by_id_user,
-      ],
-    );
-    return result.insertId;
+    const connection = await databaseClient.getConnection();
+
+    try {
+      await connection.beginTransaction();
+
+      const [result] = await connection.query<Result>(
+        "insert into reported_bug (reported_bug_description, reported_bug_by_id_user) values (?, ?)",
+        [
+          reported_bug.reported_bug_description,
+          reported_bug.reported_bug_by_id_user,
+        ],
+      );
+
+      const reportId = result.insertId;
+
+      for (const path of imagePaths) {
+        await connection.query(
+          "insert into reported_bug_image (reported_bug_image_path, reported_bug_id) values (?, ?)",
+          [path, reportId],
+        );
+      }
+
+      await connection.commit();
+      return reportId;
+    } catch (err) {
+      await connection.rollback();
+      throw err;
+    } finally {
+      connection.release();
+    }
   }
+
   async exists(reported_bug_by_id_user: number) {
     const [rows] = await databaseClient.query<Rows>(
       "SELECT * FROM reported_bug WHERE reported_bug_by_id_user = ? AND reported_bug_date > NOW() - INTERVAL 24 HOUR",

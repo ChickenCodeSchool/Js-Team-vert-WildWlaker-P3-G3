@@ -102,13 +102,25 @@ router.put("/api/gallery/:gallery_id/:userId", galleryActions.edit);
 
 // report user routes
 router.get("/api/userreport-user", reportUserActions.browse);
-router.post("/api/userreport-user", reportUserActions.add);
+router.post(
+  "/api/userreport-user",
+  upload.array("reported_user_image"),
+  reportUserActions.add,
+);
 
 router.get("/api/userreport-bug", reportBugActions.browse);
-router.post("/api/userreport-bug", reportBugActions.add);
+router.post(
+  "/api/userreport-bug",
+  upload.array("reported_bug_image"),
+  reportBugActions.add,
+);
 
 router.get("/api/userreport-event", reportEventActions.browse);
-router.post("/api/userreport-event", reportEventActions.add);
+router.post(
+  "/api/userreport-event",
+  upload.array("reported_event_image"),
+  reportEventActions.add,
+);
 
 // event user joining route
 router.get("/api/events/:eventId/users", eventUserJoiningActions.browse);
