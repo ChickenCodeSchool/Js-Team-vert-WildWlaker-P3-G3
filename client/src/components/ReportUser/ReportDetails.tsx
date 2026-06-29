@@ -15,6 +15,7 @@ function ReportDetails({ reportDetail, setReportDetail }: ReportDetailProps) {
           placeholder="Décrivez la situation avec autant de détails que possible..."
           value={reportDetail}
           onChange={(e) => setReportDetail(e.target.value)}
+          maxLength={255}
         />
       </label>
     </fieldset>
