@@ -6,10 +6,10 @@ import "dotenv/config";
 // is not required when starting the application
 import "../database/checkConnection";
 
-// Import the Express application from ./app
-import app from "./app";
 import http from "node:http";
 import { Server } from "socket.io";
+// Import the Express application from ./app
+import app from "./app";
 import { initSocket } from "./socket";
 
 const server = http.createServer(app);

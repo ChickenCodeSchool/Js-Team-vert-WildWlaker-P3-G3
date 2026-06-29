@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import messageRepository from "./messageRepository";
 import { getIo } from "../../socket";
+import messageRepository from "./messageRepository";
 
 const addMessage: RequestHandler = async (req, res, next) => {
   try {

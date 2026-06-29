@@ -308,7 +308,7 @@ function Profil() {
                 onClick={() => navigate("/homeevents")}
               >
                 <LogOut size={15} />
-                Déconnexion de l'évenement
+                Retour a l'accueil
               </button>
 
               <button

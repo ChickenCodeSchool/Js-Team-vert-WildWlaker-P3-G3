@@ -3,8 +3,8 @@ import { motion } from "framer-motion";
 import { ContactRound, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { socket } from "../../socket/socket";
 import Profil from "../../assets/images/img-card-retraite.png";
+import { socket } from "../../socket/socket";
 type ReceptionMessagesUser = {
   message_id: number;
   message_text: string;
