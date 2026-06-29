@@ -1,42 +1,106 @@
-.ReportTable {
+.ReportTable-Global {
   width: 100%;
-  border-collapse: collapse;
-
+  background: var(--bg-table);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
   th {
-    text-align: left;
+    text-align: center;
     font-size: 0.8rem;
-    color: #6b7280;
+    color: var(--color-label);
     padding: 0.75rem;
   }
-
   td {
+    text-align: center;
     padding: 0.75rem;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid var(--border-inline);
   }
-}
-
-.ReportTable-User {
-  display: flex;
-  flex-direction: column;
-
-  .ReportTable-Email {
+  .ReportTable-SortButton {
+    border: none;
+    background: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
     font-size: 0.8rem;
-    color: #6b7280;
+    color: var(--color-label);
+    font-weight: 700;
+  }
+  .ReportTable-UserColumn {
+    text-align: left;
+  }
+  .ReportTable-User {
+    display: flex;
+    flex-direction: column;
+    .ReportTable-Email {
+      font-size: 0.8rem;
+      color: var(--color-mail);
+    }
+  }
+  .ReportTable-Status {
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+
+    &.ongoing {
+      background: var(--bg-state-ongoing);
+      color: var(--color-state-ongoing);
+    }
+
+    &.finished {
+      background: var(--bg-state-finished);
+      color: var(--color-state-finished);
+    }
+  }
+  .ReportTable-ButtonEye {
+    border: none;
+    background: none;
+    color: var(--icon-eye-button-color);
+    transition: transform linear 0.2s;
+  }
+  .ReportTable-ButtonEye:hover {
+    transform: scale(1.2);
+    color: var(--icon-eye-button-color-hover);
   }
 }
-
-.ReportTable-Status {
-  padding: 0.25rem 0.6rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-
-  &.ongoing {
-    background: #fde2e1;
-    color: #c0392b;
-  }
-
-  &.finished {
-    background: #d8f3dc;
-    color: #1b7a3d;
+@media (max-width: 768px) {
+  .ReportTable-Global {
+    border: none;
+    thead {
+      display: none;
+    }
+    tbody {
+      margin-bottom: 10rem;
+    }
+    tr {
+      display: block;
+      background: var(--bg-table);
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+      padding: 0.5rem 1rem;
+    }
+    td {
+      display: flex;
+      align-items: center;
+      border-top: none;
+      padding: 0.7rem 0;
+    }
+    td:not(.ReportTable-UserColumn):not(.ReportTable-Action)::before {
+      content: attr(data-label);
+      margin-right: auto;
+      color: var(--color-label);
+    }
+    td:not(:last-child) {
+      border-bottom: 1px solid var(--border-inline);
+    }
+    .ReportTable-UserColumn {
+      justify-content: flex-start;
+    }
+    .ReportTable-Action {
+      justify-content: center;
+      .ReportTable-ButtonEye svg {
+        width: 1.75rem;
+        height: 1.75rem;
+      }
+    }
   }
 }

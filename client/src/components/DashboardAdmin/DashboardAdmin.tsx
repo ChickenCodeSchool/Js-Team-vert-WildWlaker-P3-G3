@@ -100,8 +100,6 @@ function DashboardAdmin() {
     fetch("http://localhost:3310/api/admin/dashboard-chart")
       .then((res) => res.json())
       .then((data) => {
-        console.log("GRAPHIC DATA =", data);
-
         if (Array.isArray(data)) {
           setGraphic(data);
         } else if (Array.isArray(data.result)) {
@@ -173,7 +171,7 @@ function DashboardAdmin() {
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0 },
             }}
-            whileHover={{ y: -6, scale: 1.02 }}
+            whileHover={{ y: -6 }}
             transition={{ duration: 0.25 }}
           >
             {stat.icon}

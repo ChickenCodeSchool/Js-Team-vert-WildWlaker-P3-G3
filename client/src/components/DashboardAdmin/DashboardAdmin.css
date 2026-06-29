@@ -227,9 +227,9 @@
       .lucide.lucide-users,
       .lucide.lucide-calendar,
       .lucide.lucide-triangle-alert {
-        padding: 8px;
-        width: 18px;
-        height: 18px;
+        padding: 4px;
+        width: 35px;
+        height: 35px;
       }
 
       p {
@@ -291,15 +291,18 @@
           display: none;
         }
 
-        .titre-tableau-rapport,
+        .titre-tableau-rapport {
+          min-width: 310px;
+        }
         .contenu-tableau-rapport div {
-          min-width: 350px;
+          gap: 5px;
+          min-width: 310px;
         }
 
         .titre-tableau-rapport h3,
         .contenu-tableau-rapport div p {
           width: 25%;
-          padding-left: 10px;
+          padding-left: 0;
           font-size: 12px;
         }
       }

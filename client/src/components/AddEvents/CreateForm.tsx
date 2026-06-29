@@ -126,7 +126,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
                 name="dateEnd"
                 value={form.dateEnd}
                 onChange={handleChange}
-                min={today}
+                min={form.dateStart || today}
               />
             </div>
           </div>

@@ -7,15 +7,6 @@ function Filter({ activeFilter, onFilterChange }: FilterProps) {
       <div className="Filter-ButtonGlobal">
         <button
           type="button"
-          className={`Filter-Button ${activeFilter === "all" ? "Filter-Button--active" : ""}`}
-          onClick={() => onFilterChange("all")}
-        >
-          Tous
-        </button>
-      </div>
-      <div className="Filter-ButtonGlobal">
-        <button
-          type="button"
           className={`Filter-Button ${activeFilter === "ongoing" ? "Filter-Button--active" : ""}`}
           onClick={() => onFilterChange("ongoing")}
         >
@@ -29,6 +20,15 @@ function Filter({ activeFilter, onFilterChange }: FilterProps) {
           onClick={() => onFilterChange("finished")}
         >
           Terminés
+        </button>
+      </div>
+      <div className="Filter-ButtonGlobal">
+        <button
+          type="button"
+          className={`Filter-Button ${activeFilter === "all" ? "Filter-Button--active" : ""}`}
+          onClick={() => onFilterChange("all")}
+        >
+          Tous
         </button>
       </div>
     </div>

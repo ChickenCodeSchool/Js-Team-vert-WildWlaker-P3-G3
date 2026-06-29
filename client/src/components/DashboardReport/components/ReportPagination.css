@@ -1,11 +1,9 @@
-.ReportPagination {
+.ReportPagination-Global {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  margin-top: 1rem;
-
-  button {
+  .ReportPagination-Button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,14 +12,13 @@
     border-radius: 6px;
     padding: 0.4rem;
     cursor: pointer;
-
-    &:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
+  }
+  .ReportPagination-Button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 
-  span {
+  .ReportPagination-Page {
     font-size: 0.875rem;
     color: #6b7280;
   }
