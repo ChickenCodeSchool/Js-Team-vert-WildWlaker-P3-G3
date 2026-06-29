@@ -10,20 +10,22 @@ function ReportPagination({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="ReportPagination">
+    <div className="ReportPagination-Global">
       <button
         type="button"
+        className="ReportPagination-Button"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
         aria-label="Page précédente"
       >
         <ChevronLeft size={18} />
       </button>
-      <span>
+      <span className="ReportPagination-Page">
         Page {currentPage} / {totalPages}
       </span>
       <button
         type="button"
+        className="ReportPagination-Button"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
         aria-label="Page suivante"

@@ -10,7 +10,7 @@
   .HomeEvents-FilterAdd {
     display: flex;
     justify-content: space-between;
-    padding: 2rem 2rem 4rem 2rem;
+    padding: 2rem 2rem 4rem 0;
   }
   .HomeEvents-CardGlobal {
     display: grid;
