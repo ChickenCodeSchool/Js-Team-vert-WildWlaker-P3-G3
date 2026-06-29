@@ -15,15 +15,17 @@ class GalleryRepository {
   async readAll(gallery_id_event: number) {
     const [rows] = await databaseClient.query<Rows>(
       `
-      SELECT * FROM gallery 
-      WHERE gallery_id_event = ?
-      ORDER BY gallery_creation_date DESC
+      SELECT g.*, COUNT(gl.like_id_user) AS like_count 
+      FROM gallery g
+      LEFT JOIN gallery_like gl ON g.gallery_id = gl.like_id_gallery
+      WHERE g.gallery_id_event = ?
+      GROUP BY g.gallery_id
+      ORDER BY g.gallery_creation_date DESC
       `,
-
       [gallery_id_event],
     );
 
-    return rows as Gallery[];
+    return rows;
   }
 
   async read(gallery_id: number) {
@@ -90,6 +92,43 @@ class GalleryRepository {
       isHost,
       isParticipant: isParticipant || isHost,
     };
+  }
+
+  async checkIfUserLiked(galleryId: number, userId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT * FROM gallery_like WHERE like_id_gallery = ? AND like_id_user = ?",
+      [galleryId, userId],
+    );
+    return rows.length > 0;
+  }
+
+  async insertLike(galleryId: number, userId: number) {
+    const [result] = await databaseClient.query<Result>(
+      "INSERT INTO gallery_like (like_id_gallery, like_id_user) VALUES (?, ?)",
+      [galleryId, userId],
+    );
+    return result.insertId;
+  }
+
+  async deleteLike(galleryId: number, userId: number) {
+    const [result] = await databaseClient.query<Result>(
+      "DELETE FROM gallery_like WHERE like_id_gallery = ? AND like_id_user = ?",
+      [galleryId, userId],
+    );
+    return result.affectedRows;
+  }
+
+  async getLikesByEventAndUser(eventId: number, userId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `
+      SELECT gl.like_id_gallery 
+      FROM gallery_like gl
+      JOIN gallery g ON gl.like_id_gallery = g.gallery_id
+      WHERE g.gallery_id_event = ? AND gl.like_id_user = ?
+      `,
+      [eventId, userId],
+    );
+    return rows;
   }
 }
 
