@@ -442,7 +442,7 @@ function Budget() {
           <div className="form">
             <form className="createForm" onSubmit={(e) => addBudget(e)}>
               <div className="mobileOnly">
-                <h5>Ajoute un budget</h5>
+                <h5>Ajoute une dépense</h5>
                 <X className="icons" onClick={() => setShowCreateForm(false)} />
               </div>
 
