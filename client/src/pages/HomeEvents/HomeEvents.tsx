@@ -77,7 +77,8 @@ function HomeEvents() {
               event_host_id={event.event_host_id}
               image={event.event_picture}
               imageAlt={event.event_name}
-              date={event.event_date_start}
+              dateStart={event.event_date_start}
+              dateEnd={event.event_date_end}
               title={event.event_name}
               description={event.event_description}
               location={event.event_location}

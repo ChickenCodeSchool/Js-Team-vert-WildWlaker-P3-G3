@@ -3,7 +3,7 @@ import type { EventData, ModalEditEventProps } from "../../types/Events";
 import "./ModalEditEvent.css";
 
 const formatDate = (date: string): string => {
-  return new Date(date).toISOString().split("T")[0];
+  return date.split("T")[0];
 };
 
 function ModalEditEvent({
@@ -12,6 +12,9 @@ function ModalEditEvent({
   event,
   onEventUpdated,
 }: ModalEditEventProps) {
+  console.log("date start reçue:", event.event_date_start);
+  console.log("date end reçue:", event.event_date_end);
+
   const dialogRef = useRef<HTMLDialogElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -193,6 +196,9 @@ function ModalEditEvent({
             rows={4}
             maxLength={255}
           />
+          <span className="ModalEditEvent-Counter">
+            {form.event_description.length}/255
+          </span>
         </div>
 
         <div className="ModalEditEvent-Field">
