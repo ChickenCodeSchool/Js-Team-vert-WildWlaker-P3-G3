@@ -18,7 +18,7 @@ body {
         background: linear-gradient(135deg, #ff8a6a, #c24a2d);
         box-shadow: 0 12px 30px rgba(100 35 19 / 65%);
         border-radius: 22px;
-        padding: 42px 32px;
+        padding: 35px 32px;
         color: var(--bg-neutral);
 
         small {
@@ -387,11 +387,11 @@ body {
     display: flex;
     flex-direction: column;
     padding: 3rem 3rem 2rem 0;
-    width: 70.5vw;
-    height: 90vh;
+    width: 75vw;
+    height: auto;
 
     header {
-      width: 65.8vw;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -472,19 +472,18 @@ body {
     }
 
     .myBalance {
-      /*width: 90%;*/
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: 2.3fr 1fr;
       grid-template-rows: 100%;
-      gap: 3rem;
+      gap: 2rem;
       font-size: 1.5rem;
       align-items: stretch;
-      /* margin-left: 3vw; */
+
+      margin-top: 2rem;
 
       .myBalanceBox {
-        height: 100%;
-        background: linear-gradient(135deg, #ff8a6a, #c24a2d);
-        box-shadow: 0 12px 30px rgba(100 35 19 / 65%);
+        max-height: 18rem;
+        width: 95%;
         transition: .25s;
 
         &:hover {
@@ -500,7 +499,7 @@ body {
       .total {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 2.5rem;
         font-size: 1.2rem;
 
         h3 {
@@ -509,8 +508,9 @@ body {
         }
 
         div {
+          height: 10rem;
           border-radius: 10px;
-          padding: 10px;
+          padding: 20px;
           transition: .25s;
 
           &:hover {
@@ -547,8 +547,8 @@ body {
     .expensesAndBalance {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6rem;
-      margin-top: 5rem;
+      gap: 3rem;
+      margin-top: 3rem;
 
       align-self: start;
       margin-left: 3vw;
@@ -565,7 +565,7 @@ body {
         }
 
         section {
-          height: 25vh;
+          height: 30vh;
           overflow-y: auto;
 
           input {
