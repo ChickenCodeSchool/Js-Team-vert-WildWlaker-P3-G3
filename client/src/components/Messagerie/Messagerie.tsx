@@ -1,10 +1,13 @@
 import "./Messagerie.css";
+import EmojiPicker from "emoji-picker-react";
+import type { EmojiClickData } from "emoji-picker-react";
 import { motion } from "framer-motion";
 import { ContactRound, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import Profil from "../../assets/images/img-card-retraite.png";
 import { socket } from "../../socket/socket";
+
 type ReceptionMessagesUser = {
   message_id: number;
   message_text: string;
@@ -25,24 +28,31 @@ function Messagerie() {
   >([]);
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
   const [usersByEvent, setUsersByEvent] = useState<UserByEvent[]>([]);
+  const [showPicker, setShowPicker] = useState(false);
 
   const { id } = useParams();
   const event = Number(id);
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
-  const messagesRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const messagesElement = messagesRef.current;
+    const messagesCount = receptionMessagesUser.length;
+    if (!messagesElement || messagesCount === 0) return;
+    messagesElement.scrollTop = messagesElement.scrollHeight;
+  }, [receptionMessagesUser]);
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    setMessagesUser((prev) => prev + emojiData.emoji);
+  };
 
   useEffect(() => {
     fetchUserEvent();
     fetchMessages();
   }, []);
-  socket.on("new-message", () => {
-    fetchMessages();
-    fetchUserEvent();
-  });
+
   useEffect(() => {
     if (!event || !userId) return;
-
     fetch(`http://localhost:3310/api/messages/notification/${event}`, {
       method: "POST",
       headers: {
@@ -256,8 +266,17 @@ function Messagerie() {
               onKeyDown={handleKeyDown}
               placeholder="Écrire un message..."
             />
+            <button type="button" onClick={() => setShowPicker(!showPicker)}>
+              😊
+            </button>
 
+            {showPicker && (
+              <div className="emoji-picker">
+                <EmojiPicker onEmojiClick={handleEmojiClick} />
+              </div>
+            )}
             <button
+              className="send-button"
               type="button"
               onClick={handleSendMessage}
               disabled={!messagesUser.trim()}
