@@ -37,6 +37,8 @@ function AdminReport() {
       .then((data: ReportData) => setReport(data));
   }, [id, type]);
 
+  const capitalize = (str = "") => str.charAt(0).toUpperCase() + str.slice(1);
+
   const handleBanConfirm = async (action: BanAction) => {
     const toast = Swal.mixin({
       toast: true,
@@ -72,6 +74,10 @@ function AdminReport() {
       if (!response.ok) {
         throw new Error(`Erreur serveur : ${response.status}`);
       }
+
+      await fetch(`${API_URL}/api/admin/report${capitalize(type)}/${id}/done`, {
+        method: "PATCH",
+      });
 
       setIsModalOpen(false);
 
