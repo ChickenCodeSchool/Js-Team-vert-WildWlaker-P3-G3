@@ -81,6 +81,16 @@ function UserReport() {
       // un switch en gère plusieurs sans devenir illisible ni trop verbeux.
       switch (repType) {
         case "utilisateur": {
+          if (!reportedUserId) {
+            toast.fire({
+              icon: "error",
+              text: "Veuillez sélectionner l'utilisateur à signaler.",
+              customClass: {
+                popup: "toast-error-popup",
+              },
+            });
+            return;
+          }
           const formData = new FormData();
           formData.append("reported_user_description", repDetail);
           formData.append("reported_user_id_user", reportedUserId.toString());
@@ -126,6 +136,17 @@ function UserReport() {
       }
 
       if (!response.ok) {
+        if (response.status === 409) {
+          const data = await response.json();
+          toast.fire({
+            icon: "warning",
+            text: data.message,
+            customClass: {
+              popup: "toast-error-popup",
+            },
+          });
+          return;
+        }
         throw new Error(`Erreur serveur : ${response.status}`);
       }
 

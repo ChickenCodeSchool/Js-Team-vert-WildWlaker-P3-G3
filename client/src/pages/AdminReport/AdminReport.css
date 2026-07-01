@@ -205,12 +205,12 @@
           border: 1.5px solid var(--border-color);
           border-radius: 16px;
           min-height: 400px;
-          gap: 10px;
+          gap: 20px;
           padding: 24px;
 
           .adminReport-User-PP-Wrap {
-            width: 64px;
-            height: 64px;
+            width: 160px;
+            height: 160px;
 
             img {
               width: 100%;
@@ -221,6 +221,7 @@
           }
 
           p {
+            padding-top: 10px;
             font-size: 0.85rem;
             text-align: center;
           }

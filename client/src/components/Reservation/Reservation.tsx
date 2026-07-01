@@ -296,7 +296,8 @@ function Reservation() {
             event_host_id={null}
             image={`http://localhost:3310${event.reservation_picture}`}
             imageAlt={event.reservation_name}
-            date={event.reservation_date}
+            dateStart={event.reservation_date}
+            dateEnd={event.reservation_date}
             title={event.reservation_name}
             description={event.reservation_description}
             location={event.reservation_location}

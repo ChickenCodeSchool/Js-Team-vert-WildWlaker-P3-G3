@@ -154,22 +154,52 @@ FROM user
     WHERE rb.reported_bug_id = ?`,
       [id],
     );
-    return rows[0];
+
+    const report = rows[0];
+    if (!report) return undefined;
+
+    const [images] = await databaseClient.query<Rows>(
+      `SELECT reported_bug_image_path
+     FROM reported_bug_image
+     WHERE reported_bug_id = ?`,
+      [id],
+    );
+
+    return {
+      ...report,
+      images: images.map((img) => img.reported_bug_image_path),
+    };
   }
 
   async readReportEventById(id: number) {
     const [rows] = await databaseClient.query<Rows>(
       `SELECT 
       re.*,
+      e.event_host_id,
       u.user_username,
       u.user_mail,
       u.user_profile_picture
     FROM reported_event AS re
     JOIN user AS u ON u.user_id = re.reported_event_by_id_user
+    JOIN event AS e ON e.event_id = re.reported_event_id_event
     WHERE re.reported_event_id = ?`,
       [id],
     );
-    return rows[0];
+
+    const report = rows[0];
+    if (!report) return undefined;
+
+    const [images] = await databaseClient.query<Rows>(
+      `SELECT reported_event_image_path
+     FROM reported_event_image
+     WHERE reported_event_id = ?`,
+      [id],
+    );
+
+    return {
+      ...report,
+      images: images.map((img) => img.reported_event_image_path),
+    };
   }
 
   async readReportUserById(id: number) {
@@ -187,7 +217,21 @@ FROM user
     WHERE ru.reported_user_id = ?`,
       [id],
     );
-    return rows[0];
+
+    const report = rows[0];
+    if (!report) return undefined;
+
+    const [images] = await databaseClient.query<Rows>(
+      `SELECT reported_user_image_path
+     FROM reported_user_image
+     WHERE reported_user_id = ?`,
+      [id],
+    );
+
+    return {
+      ...report,
+      images: images.map((img) => img.reported_user_image_path),
+    };
   }
 
   async markBugAsDone(id: number) {
@@ -209,6 +253,22 @@ FROM user
   async markUserAsDone(id: number) {
     const [result] = await databaseClient.query<Result>(
       "UPDATE reported_user SET reported_user_is_done = TRUE WHERE reported_user_id = ?",
+      [id],
+    );
+    return result.affectedRows;
+  }
+
+  async banUser(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE user SET user_is_ban = TRUE WHERE user_id = ?",
+      [id],
+    );
+    return result.affectedRows;
+  }
+
+  async banEvent(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE event SET event_is_ban = TRUE WHERE event_id = ?",
       [id],
     );
     return result.affectedRows;

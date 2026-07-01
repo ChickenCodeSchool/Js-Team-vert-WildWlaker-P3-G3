@@ -15,7 +15,8 @@ export interface CardEventsProps {
   event_host_id: number | null;
   image: string;
   imageAlt: string;
-  date: string;
+  dateStart: string;
+  dateEnd: string;
   title: string;
   description: string;
   location: string;

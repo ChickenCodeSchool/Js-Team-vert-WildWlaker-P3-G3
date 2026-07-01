@@ -210,7 +210,7 @@ function DashboardAdmin() {
                 type="monotone"
                 dataKey="users"
                 name="Utilisateurs"
-                stroke="#ff7e5f"
+                stroke="#5297cf"
                 strokeWidth={3}
               />
 
@@ -218,7 +218,7 @@ function DashboardAdmin() {
                 type="monotone"
                 dataKey="events"
                 name="Événements"
-                stroke="#3b82f6"
+                stroke="#059669"
                 strokeWidth={3}
               />
 
@@ -226,7 +226,7 @@ function DashboardAdmin() {
                 type="monotone"
                 dataKey="reports"
                 name="Reports"
-                stroke="#ef4444"
+                stroke="#e11d48"
                 strokeWidth={3}
               />
             </LineChart>
