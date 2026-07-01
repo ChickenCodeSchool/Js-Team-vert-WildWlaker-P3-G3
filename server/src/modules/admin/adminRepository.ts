@@ -255,6 +255,22 @@ FROM user
     );
     return result.affectedRows;
   }
+
+  async banUser(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE user SET user_is_ban = TRUE WHERE user_id = ?",
+      [id],
+    );
+    return result.affectedRows;
+  }
+
+  async banEvent(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE event SET event_is_ban = TRUE WHERE event_id = ?",
+      [id],
+    );
+    return result.affectedRows;
+  }
 }
 
 export default new AdminRepository();
