@@ -1,0 +1,68 @@
+.EventEmpty-Global {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 93%;
+  min-height: 60vh;
+  .EventEmpty-TextGlobal {
+    transform: translateY(-6rem);
+    font-size: 2rem;
+    font-weight: 500;
+    .EventEmpty-Text-Clic {
+      color: var(--font-title);
+    }
+  }
+  .EventEmpty-Arrow {
+    width: 22rem;
+    height: auto;
+    color: var(--color-arrow);
+    transform: translateY(-8rem);
+    .EventEmpty-Path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawPath 1.8s ease forwards;
+    }
+    .EventEmpty-Head {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawPath 3s ease forwards;
+      animation-delay: 1.5s;
+    }
+  }
+}
+@keyframes drawPath {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes showArrow {
+  to {
+    opacity: 1;
+  }
+}
+@media screen and (max-width: 428px) {
+  .EventEmpty-Global {
+    width: 100%;
+    .EventEmpty-TextGlobal {
+      font-size: 1rem;
+      transform: translateY(-3);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .EventEmpty-Arrow {
+      display: none;
+    }
+  }
+}
