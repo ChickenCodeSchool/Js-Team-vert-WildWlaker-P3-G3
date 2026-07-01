@@ -7,9 +7,7 @@ export type ReportData = {
   reported_event_date?: string;
   reported_user_date?: string;
 
-  reported_bug_image?: string;
-  reported_event_image?: string;
-  reported_user_image?: string;
+  images?: string[];
 
   reported_bug_is_done?: number;
   reported_event_is_done?: number;
@@ -24,4 +22,11 @@ export type ReportData = {
   author_picture?: string;
   target_username?: string;
   target_picture?: string;
+
+  reported_event_id_event?: number;
+  reported_bug_by_id_user?: number;
+  reported_event_by_id_user?: number;
+  reported_user_by_id_user?: number;
+  reported_user_id_user?: number;
+  event_host_id?: number;
 };

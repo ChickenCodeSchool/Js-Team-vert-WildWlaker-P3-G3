@@ -442,22 +442,22 @@ function Budget() {
           <div className="form">
             <form className="createForm" onSubmit={(e) => addBudget(e)}>
               <div className="mobileOnly">
-                <h5>Ajoute un budget</h5>
+                <h5>Ajoute une dépense</h5>
                 <X className="icons" onClick={() => setShowCreateForm(false)} />
               </div>
 
               {/* Name */}
               <input
                 type="text"
-                placeholder="Le nom du budget"
+                placeholder="Le nom de la dépense"
                 onChange={(e) => setNameCreateForm(e.target.value)}
                 required
               />
 
-              {/* Name */}
+              {/* Price */}
               <input
                 type="number"
-                placeholder="Le prix du budget"
+                placeholder="Le prix de la dépense"
                 onChange={(e) => setPriceCreateForm(Number(e.target.value))}
                 required
               />
@@ -512,6 +512,13 @@ function Budget() {
           <div className="expenses">
             <div className="mobileExpenses">
               <h5>Dépenses</h5>
+              <button
+                type="button"
+                className="addButton"
+                onClick={() => setShowCreateForm(!showCreateForm)}
+              >
+                <Plus size={20} />
+              </button>
             </div>
             <section>
               {listBudget.map((row) => {
@@ -567,14 +574,6 @@ function Budget() {
             </section>
           </div>
         </motion.section>
-
-        <button
-          type="button"
-          className="addButton"
-          onClick={() => setShowCreateForm(!showCreateForm)}
-        >
-          <Plus size={20} />
-        </button>
       </div>
     </div>
   );

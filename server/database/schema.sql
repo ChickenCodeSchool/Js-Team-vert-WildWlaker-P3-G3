@@ -44,6 +44,7 @@ CREATE TABLE `event` (
   `event_picture` VARCHAR(255) NOT NULL,
 
   `event_link_key` VARCHAR(6) NOT NULL, -- const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+  `event_is_ban` TINYINT(1) NOT NULL DEFAULT 0,
 
   PRIMARY KEY (`event_id`),
 

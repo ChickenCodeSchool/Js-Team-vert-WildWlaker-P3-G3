@@ -108,6 +108,11 @@ router.post("/api/gallery", galleryActions.add);
 router.delete("/api/gallery/:gallery_id/:userId", galleryActions.destroy);
 router.put("/api/gallery/:gallery_id/:userId", galleryActions.edit);
 
+// gallery likes
+router.get("/api/gallery/:id/likes/:userId", galleryActions.getLikedPhotos);
+router.post("/api/gallery/:id/like", galleryActions.addLike);
+router.delete("/api/gallery/:id/like/:userId", galleryActions.removeLike);
+
 // report user routes
 router.get("/api/userreport-user", reportUserActions.browse);
 router.post(
@@ -157,6 +162,10 @@ router.get("/api/admin/reportUser/:id", adminActions.readReportUserById);
 router.patch("/api/admin/reportBug/:id/done", adminActions.markBugAsDone);
 router.patch("/api/admin/reportEvent/:id/done", adminActions.markEventAsDone);
 router.patch("/api/admin/reportUser/:id/done", adminActions.markUserAsDone);
+
+// admin ban routes
+router.patch("/api/admin/ban-user/:id", adminActions.banUser);
+router.patch("/api/admin/ban-event/:id", adminActions.banEvent);
 
 // --> budget
 // > get

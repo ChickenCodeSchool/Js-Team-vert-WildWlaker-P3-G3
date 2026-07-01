@@ -6,11 +6,17 @@ export type BanAction = "event" | "user";
 
 interface ReportAdminModalProps {
   open: boolean;
+  type?: string;
   onClose: () => void;
   onConfirm: (action: BanAction) => void;
 }
 
-function ReportAdminModal({ open, onClose, onConfirm }: ReportAdminModalProps) {
+function ReportAdminModal({
+  open,
+  type,
+  onClose,
+  onConfirm,
+}: ReportAdminModalProps) {
   const [selected, setSelected] = useState<BanAction | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -75,9 +81,15 @@ function ReportAdminModal({ open, onClose, onConfirm }: ReportAdminModalProps) {
             <UserX size={20} />
           </span>
           <span className="banModal-OptionText">
-            <span className="banModal-OptionTitle">Bannir l'utilisateur</span>
+            <span className="banModal-OptionTitle">
+              {type === "event"
+                ? "Bannir l'organisateur"
+                : "Bannir l'utilisateur"}
+            </span>
             <span className="banModal-OptionDesc">
-              Suspendre le compte de l'auteur de façon permanente.
+              {type === "event"
+                ? "Suspendre le compte de l'organisateur de façon permanente."
+                : "Suspendre le compte de l'utilisateur signalé de façon permanente."}
             </span>
           </span>
         </button>

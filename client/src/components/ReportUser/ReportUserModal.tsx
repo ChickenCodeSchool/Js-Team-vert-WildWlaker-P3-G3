@@ -20,6 +20,13 @@ function ReportUserModal({
     dialogRef.current?.showModal();
   }, []);
 
+  const userJson = localStorage.getItem("user");
+  const currentUser = userJson ? JSON.parse(userJson) : null;
+
+  const otherUsers = euj.filter(
+    (activeUser) => activeUser.euj_id_user !== currentUser?.id,
+  );
+
   return (
     <dialog className="reportUserModal" ref={dialogRef}>
       <header className="reportUserModal-header">
@@ -34,7 +41,7 @@ function ReportUserModal({
         </button>
       </header>
       <ul className="reportUserModal-list">
-        {euj.map((activeUser) => (
+        {otherUsers.map((activeUser) => (
           <li key={activeUser.euj_id_user} className="reportUserModal-item">
             <div className="reportUserModal-userInfo">
               <img

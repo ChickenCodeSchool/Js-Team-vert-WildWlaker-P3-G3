@@ -25,7 +25,13 @@ class UserRepository {
       `INSERT INTO user
       (user_name, user_username, user_mail, user_password, user_profile_picture)
       VALUES (?, ?, ?, ?, ?)`,
-      [user.username, user.username, user.email, user.password, "default.png"],
+      [
+        user.username,
+        user.username,
+        user.email,
+        user.password,
+        "/assets/images/default-pp.png",
+      ],
     );
 
     return result.insertId;

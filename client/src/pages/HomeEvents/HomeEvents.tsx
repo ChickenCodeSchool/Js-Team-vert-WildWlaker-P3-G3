@@ -10,6 +10,7 @@ import NavBar from "../../components/NavBar/NavBar";
 import Profil from "../../components/Profil/Profil";
 
 import "./HomeEvents.css";
+import EventEmpty from "../../components/AddEvents/EventEmpty";
 
 function HomeEvents() {
   const [events, setEvents] = useState<EventData[]>([]);
@@ -70,19 +71,24 @@ function HomeEvents() {
           <ButtonAddEvent onClick={() => setIsModalOpen(true)} />
         </div>
         <div className="HomeEvents-CardGlobal">
-          {filteredEvents.map((event) => (
-            <CardEvents
-              key={event.event_id}
-              event_id={event.event_id}
-              event_host_id={event.event_host_id}
-              image={event.event_picture}
-              imageAlt={event.event_name}
-              date={event.event_date_start}
-              title={event.event_name}
-              description={event.event_description}
-              location={event.event_location}
-            />
-          ))}
+          {filteredEvents.length === 0 ? (
+            <EventEmpty />
+          ) : (
+            filteredEvents.map((event) => (
+              <CardEvents
+                key={event.event_id}
+                event_id={event.event_id}
+                event_host_id={event.event_host_id}
+                image={event.event_picture}
+                imageAlt={event.event_name}
+                dateStart={event.event_date_start}
+                dateEnd={event.event_date_end}
+                title={event.event_name}
+                description={event.event_description}
+                location={event.event_location}
+              />
+            ))
+          )}
         </div>
         <ModalAddEvent
           isOpen={isModalOpen}
