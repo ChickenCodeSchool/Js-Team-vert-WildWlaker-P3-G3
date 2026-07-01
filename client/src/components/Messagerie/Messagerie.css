@@ -119,13 +119,26 @@
         input:focus-visible {
           outline: none;
         }
+
+        .emoji-picker {
+          position: absolute;
+          bottom: 18vh;
+          left: 57vw;
+          z-index: 1000;
+        }
         button {
+          border-style: none;
+          font-size: 20px;
+          background: none;
+        }
+        .send-button {
           border-radius: 21px;
           border-style: none;
           background-color: #ff7e5f;
           height: 30px;
           width: 30px;
           padding: 5px 2px 0 0;
+          margin-right: 10px;
           cursor: pointer;
           .send {
             color: white;

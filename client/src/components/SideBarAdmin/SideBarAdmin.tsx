@@ -1,11 +1,14 @@
 import "./SideBarAdmin.css";
 import { LayoutDashboard, TriangleAlert } from "lucide-react";
-interface SideBarProps {
-  active: string;
-  setActive: (value: string) => void;
-}
+type SideBarAdminProps = {
+  activeComponent: "tableau" | "signalement";
+  handleChangeComponent: (componentName: "tableau" | "signalement") => void;
+};
 import Logo from "../../assets/images/logo-wedoo.png";
-function SideBarAdmin({ active, setActive }: SideBarProps) {
+function SideBarAdmin({
+  activeComponent,
+  handleChangeComponent,
+}: SideBarAdminProps) {
   return (
     <>
       <nav className="sidebar-admin">
@@ -16,14 +19,20 @@ function SideBarAdmin({ active, setActive }: SideBarProps) {
           </h2>
         </div>
         <ul className="sidebar-menu">
-          <li className={active === "tableau" ? "active" : ""}>
-            <button type="button" onClick={() => setActive("tableau")}>
+          <li className={activeComponent === "tableau" ? "active" : ""}>
+            <button
+              type="button"
+              onClick={() => handleChangeComponent("tableau")}
+            >
               <LayoutDashboard size={20} className="layout" />
               <span>Tableau de bord</span>
             </button>
           </li>
-          <li className={active === "signalement" ? "active" : ""}>
-            <button type="button" onClick={() => setActive("signalement")}>
+          <li className={activeComponent === "signalement" ? "active" : ""}>
+            <button
+              type="button"
+              onClick={() => handleChangeComponent("signalement")}
+            >
               <TriangleAlert size={20} className="signal" />
               <span>Signalement</span>
             </button>

@@ -342,3 +342,21 @@ CREATE TABLE `gallery_like` (
     REFERENCES `user` (`user_id`)
     ON DELETE CASCADE
 ) ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `message_read`
+-- -----------------------------------------------------
+CREATE TABLE message_read (
+    message_read_id INT AUTO_INCREMENT PRIMARY KEY,
+    message_read_message_id INT NOT NULL,
+    message_read_user_id INT NOT NULL,
+    message_read_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (message_read_message_id)
+        REFERENCES message(message_id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (message_read_user_id)
+        REFERENCES user(user_id)
+        ON DELETE CASCADE
+);ENGINE = InnoDB;
