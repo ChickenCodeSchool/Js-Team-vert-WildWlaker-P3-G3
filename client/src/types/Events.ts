@@ -20,6 +20,7 @@ export interface CardEventsProps {
   title: string;
   description: string;
   location: string;
+  onEventDeleted?: (deletedId: number) => void;
 }
 
 export interface ButtonAddEventProps {

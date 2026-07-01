@@ -38,6 +38,7 @@ function CardEvents({
   title,
   description,
   location,
+  onEventDeleted,
 }: CardEventsProps) {
   const uselocation = useLocation();
   const isHomeEvents = uselocation.pathname === "/homeevents";
@@ -52,6 +53,7 @@ function CardEvents({
   const [currentDateEnd, setCurrentDateEnd] = useState(dateEnd);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleteEventModalOpen, setIsDeleteEventModalOpen] = useState(false);
 
   const handleEventUpdated = (updatedEvent: EventData) => {
     setCurrentTitle(updatedEvent.event_name);
@@ -75,6 +77,20 @@ function CardEvents({
       }
 
       setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleDeleteEvent = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3310/api/event/delete/${event_id}`,
+        { method: "DELETE" },
+      );
+      if (!response.ok) throw new Error("Erreur suppression");
+
+      setIsDeleteEventModalOpen(false);
+      onEventDeleted?.(event_id);
     } catch (error) {
       console.error(error);
     }
@@ -119,10 +135,38 @@ function CardEvents({
             <PencilLine size={16} />
           </button>
         )}
+        {isHost && (
+          <button
+            type="button"
+            className="CardEvents-Deleted"
+            onClick={() => setIsDeleteEventModalOpen(true)}
+          >
+            <Trash2 size={16} />
+          </button>
+        )}
+        {isDeleteEventModalOpen && (
+          <div className="delete-modal-overlay">
+            <div className="delete-modal">
+              <h3>Supprimer l'événement</h3>
+              <p>Êtes-vous sûr de vouloir supprimer cet événement ?</p>
+              <div className="delete-modal-actions">
+                <button
+                  type="button"
+                  onClick={() => setIsDeleteEventModalOpen(false)}
+                >
+                  Annuler
+                </button>
+                <button type="button" onClick={handleDeleteEvent}>
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         {onTableau && (
           <button
             type="button"
-            className="CardEvents-Edit"
+            className="CardEvents-Deleted"
             onClick={() => setIsDeleteModalOpen(true)}
           >
             <Trash2 size={16} />

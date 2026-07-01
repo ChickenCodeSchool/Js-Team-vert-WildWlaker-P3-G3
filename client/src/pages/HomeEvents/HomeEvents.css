@@ -14,7 +14,7 @@
   }
   .HomeEvents-CardGlobal {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 16rem);
+    grid-template-columns: repeat(5, 16rem);
     align-items: stretch;
     gap: 3rem;
   }
@@ -28,6 +28,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    .HomeEvents-CardGlobal {
+      grid-template-columns: 1fr;
+    }
     .HomeEvents-FilterAdd {
       display: flex;
       flex-direction: column-reverse;

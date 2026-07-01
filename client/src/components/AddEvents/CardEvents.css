@@ -81,7 +81,7 @@
     position: absolute;
     padding: 0.5rem;
     bottom: 0.5rem;
-    right: 0.5rem;
+    right: 3rem;
     z-index: 1;
     border-radius: 0.5rem;
     border: none;
@@ -89,6 +89,21 @@
     transition: opacity linear 0.2s;
   }
   .CardEvents-Edit:hover {
+    border: 1px;
+    opacity: 1;
+  }
+  .CardEvents-Deleted {
+    position: absolute;
+    padding: 0.5rem;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    z-index: 1;
+    border-radius: 0.5rem;
+    border: none;
+    opacity: 0.5;
+    transition: opacity linear 0.2s;
+  }
+  .CardEvents-Deleted:hover {
     border: 1px;
     opacity: 1;
   }
