@@ -52,6 +52,9 @@ function HomeEvents() {
   const handleEventCreated = (newEvent: EventData) => {
     setEvents((prev) => [...prev, newEvent]);
   };
+  const handleEventDeleted = (deletedId: number) => {
+    setEvents((prev) => prev.filter((ev) => ev.event_id !== deletedId));
+  };
 
   return (
     <>
@@ -86,6 +89,7 @@ function HomeEvents() {
                 title={event.event_name}
                 description={event.event_description}
                 location={event.event_location}
+                onEventDeleted={handleEventDeleted}
               />
             ))
           )}
