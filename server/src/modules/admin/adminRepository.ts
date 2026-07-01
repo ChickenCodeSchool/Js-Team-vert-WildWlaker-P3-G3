@@ -175,11 +175,13 @@ FROM user
     const [rows] = await databaseClient.query<Rows>(
       `SELECT 
       re.*,
+      e.event_host_id,
       u.user_username,
       u.user_mail,
       u.user_profile_picture
     FROM reported_event AS re
     JOIN user AS u ON u.user_id = re.reported_event_by_id_user
+    JOIN event AS e ON e.event_id = re.reported_event_id_event
     WHERE re.reported_event_id = ?`,
       [id],
     );
@@ -251,6 +253,22 @@ FROM user
   async markUserAsDone(id: number) {
     const [result] = await databaseClient.query<Result>(
       "UPDATE reported_user SET reported_user_is_done = TRUE WHERE reported_user_id = ?",
+      [id],
+    );
+    return result.affectedRows;
+  }
+
+  async banUser(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE user SET user_is_ban = TRUE WHERE user_id = ?",
+      [id],
+    );
+    return result.affectedRows;
+  }
+
+  async banEvent(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE event SET event_is_ban = TRUE WHERE event_id = ?",
       [id],
     );
     return result.affectedRows;

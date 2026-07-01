@@ -14,6 +14,7 @@ import {
   Gavel,
   Trash2,
 } from "lucide-react";
+import Swal from "sweetalert2";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -36,11 +37,72 @@ function AdminReport() {
       .then((data: ReportData) => setReport(data));
   }, [id, type]);
 
-  const handleBanConfirm = (action: BanAction) => {
-    console.log("Bannissement confirmé :", action);
-    setIsModalOpen(false);
-  };
+  const capitalize = (str = "") => str.charAt(0).toUpperCase() + str.slice(1);
 
+  const handleBanConfirm = async (action: BanAction) => {
+    const toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+      customClass: {
+        popup: "toast",
+      },
+    });
+
+    try {
+      let response: Response;
+
+      if (action === "user") {
+        const targetId =
+          type === "user"
+            ? report?.reported_user_id_user
+            : report?.event_host_id;
+
+        response = await fetch(`${API_URL}/api/admin/ban-user/${targetId}`, {
+          method: "PATCH",
+        });
+      } else {
+        const eventId = report?.reported_event_id_event;
+
+        response = await fetch(`${API_URL}/api/admin/ban-event/${eventId}`, {
+          method: "PATCH",
+        });
+      }
+
+      if (!response.ok) {
+        throw new Error(`Erreur serveur : ${response.status}`);
+      }
+
+      await fetch(`${API_URL}/api/admin/report${capitalize(type)}/${id}/done`, {
+        method: "PATCH",
+      });
+
+      setIsModalOpen(false);
+
+      toast.fire({
+        icon: "success",
+        text:
+          action === "user"
+            ? "L'utilisateur a bien été banni."
+            : "L'événement a bien été banni.",
+        customClass: {
+          popup: "toast-success-popup",
+        },
+        didClose: () => navigate(-1),
+      });
+    } catch (error) {
+      console.error(error);
+      toast.fire({
+        icon: "error",
+        text: "Une erreur est survenue, l'action n'a pas pu être effectuée.",
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
+    }
+  };
   const getDescription = () =>
     report?.reported_bug_description ??
     report?.reported_event_description ??
@@ -174,10 +236,12 @@ function AdminReport() {
 
             <section aria-labelledby="actions" className="adminReport-Action">
               <h2 id="actions">Actions</h2>
-              <button type="button" onClick={() => setIsModalOpen(true)}>
-                <Gavel size={16} />
-                Bannir
-              </button>
+              {type !== "bug" && (
+                <button type="button" onClick={() => setIsModalOpen(true)}>
+                  <Gavel size={16} />
+                  Bannir
+                </button>
+              )}
               <button type="button">
                 <Trash2 size={16} />
                 Rejeter
@@ -188,6 +252,7 @@ function AdminReport() {
       </main>
       <ReportAdminModal
         open={isModalOpen}
+        type={type}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleBanConfirm}
       />

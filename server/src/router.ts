@@ -155,6 +155,10 @@ router.patch("/api/admin/reportBug/:id/done", adminActions.markBugAsDone);
 router.patch("/api/admin/reportEvent/:id/done", adminActions.markEventAsDone);
 router.patch("/api/admin/reportUser/:id/done", adminActions.markUserAsDone);
 
+// admin ban routes
+router.patch("/api/admin/ban-user/:id", adminActions.banUser);
+router.patch("/api/admin/ban-event/:id", adminActions.banEvent);
+
 // --> budget
 // > get
 router.get("/api/budget/:id", budgetActions.browse);
