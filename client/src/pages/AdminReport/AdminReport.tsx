@@ -230,10 +230,12 @@ function AdminReport() {
 
             <section aria-labelledby="actions" className="adminReport-Action">
               <h2 id="actions">Actions</h2>
-              <button type="button" onClick={() => setIsModalOpen(true)}>
-                <Gavel size={16} />
-                Bannir
-              </button>
+              {type !== "bug" && (
+                <button type="button" onClick={() => setIsModalOpen(true)}>
+                  <Gavel size={16} />
+                  Bannir
+                </button>
+              )}
               <button type="button">
                 <Trash2 size={16} />
                 Rejeter
@@ -244,6 +246,7 @@ function AdminReport() {
       </main>
       <ReportAdminModal
         open={isModalOpen}
+        type={type}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleBanConfirm}
       />
