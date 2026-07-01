@@ -31,6 +31,7 @@ function Messagerie() {
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
   const messagesRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     fetchUserEvent();
     fetchMessages();
@@ -42,7 +43,7 @@ function Messagerie() {
   useEffect(() => {
     if (!event || !userId) return;
 
-    fetch(`/api/messages/notification/${event}`, {
+    fetch(`http://localhost:3310/api/messages/notification/${event}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -54,6 +55,7 @@ function Messagerie() {
       console.error("Erreur lecture messages :", error);
     });
   }, [event, userId]);
+
   useEffect(() => {
     fetch(`http://localhost:3310/api/messages/${event}`)
       .then((res) => res.json())
@@ -180,7 +182,11 @@ function Messagerie() {
   if (userInEvent === false) {
     return <p>Vous n'êtes pas inscrit à cet événement.</p>;
   }
-
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
+  };
   return (
     <motion.div
       className="messagerie"
@@ -247,6 +253,7 @@ function Messagerie() {
               type="text"
               value={messagesUser}
               onChange={(e) => setMessagesUser(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="Écrire un message..."
             />
 

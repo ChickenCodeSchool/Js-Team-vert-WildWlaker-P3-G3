@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import CardEvents from "../AddEvents/CardEvents";
 import "./Reservation.css";
@@ -36,13 +36,16 @@ function Reservation() {
   const [preview, setPreview] = useState("");
   const [eventName, setEventName] = useState<Reservation>();
 
+  const fetchReservations = useCallback(async () => {
+    const res = await fetch(
+      `http://localhost:3310/api/reservations/all/${eventId}`,
+    );
+    const data = await res.json();
+    setReservations(data);
+  }, [eventId]);
+
   useEffect(() => {
-    fetch(`http://localhost:3310/api/reservations/all/${eventId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setReservations(data);
-      });
-    [eventId];
+    fetchReservations();
 
     const fetchTest = async () => {
       const response = await fetch(
@@ -51,8 +54,9 @@ function Reservation() {
       const data = await response.json();
       setUserInEvent(data.joined);
     };
+
     fetchTest();
-  }, [eventId, userId]);
+  }, [eventId, userId, fetchReservations]);
 
   useEffect(() => {
     fetch(`http://localhost:3310/api/events/name/${eventId}`)
@@ -120,7 +124,7 @@ function Reservation() {
       method: "POST",
       body: formData,
     });
-
+    await fetchReservations();
     const data = await response.json();
 
     if (!response.ok) {
@@ -283,27 +287,27 @@ function Reservation() {
         </AnimatePresence>
       </div>
 
-      {/* <motion.div
+      <motion.div
         className="reservation-card-global"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.2 }}
-      > */}
-      {reservations.map((event) => (
-        <div className="card-reservation" key={event.reservation_id}>
-          <CardEvents
-            event_id={event.reservation_id}
-            event_host_id={null}
-            image={`http://localhost:3310${event.reservation_picture}`}
-            imageAlt={event.reservation_name}
-            date={event.reservation_date}
-            title={event.reservation_name}
-            description={event.reservation_description}
-            location={event.reservation_location}
-          />
-        </div>
-      ))}
-      {/* </motion.div> */}
+      >
+        {reservations.map((event) => (
+          <div className="card-reservation" key={event.reservation_id}>
+            <CardEvents
+              event_id={event.reservation_id}
+              event_host_id={null}
+              image={`http://localhost:3310${event.reservation_picture}`}
+              imageAlt={event.reservation_name}
+              date={event.reservation_date}
+              title={event.reservation_name}
+              description={event.reservation_description}
+              location={event.reservation_location}
+            />
+          </div>
+        ))}
+      </motion.div>
     </motion.div>
   );
 }

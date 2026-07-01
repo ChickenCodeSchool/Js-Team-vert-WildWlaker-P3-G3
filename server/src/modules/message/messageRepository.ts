@@ -1,4 +1,9 @@
+import type { RowDataPacket } from "mysql2";
 import mysql from "../../../database/client";
+
+type UnreadCountRow = RowDataPacket & {
+  count: number;
+};
 
 class MessageRepository {
   async sendMessage(eventId: number, userId: number, messageText: string) {
@@ -42,22 +47,37 @@ ORDER BY m.message_date ASC;`,
   }
   async notificationMessage(eventId: number, userId: number) {
     const [result] = await mysql.query(
-      `INSERT INTO message_read (message_id, user_id)
+      `INSERT INTO message_read (message_read_message_id, message_read_user_id)
       SELECT
       m.message_id,
       ?
       FROM message m
       LEFT JOIN message_read mr
-      ON mr.message_id = m.message_id
-      AND mr.user_id = ?
+      ON mr.message_read_message_id = m.message_id
+      AND mr.message_read_user_id = ?
       WHERE
-      m.message_event_id = ?
-      AND m.message_user_id <> ?
-      AND mr.message_id IS NULL;`,
-      [eventId, userId],
+      m.message_id_event = ?
+      AND m.message_id_user <> ?
+      AND mr.message_read_message_id IS NULL;`,
+      [userId, userId, eventId, userId],
     );
 
     return result;
+  }
+  async getUnreadMessages(eventId: number, userId: number) {
+    const [rows] = await mysql.query<UnreadCountRow[]>(
+      `SELECT COUNT(*) AS count
+    FROM message m
+    LEFT JOIN message_read mr
+      ON mr.message_read_message_id = m.message_id
+      AND mr.message_read_user_id = ?
+    WHERE m.message_id_event = ?
+      AND m.message_id_user <> ?
+      AND mr.message_read_message_id IS NULL;`,
+      [userId, eventId, userId],
+    );
+
+    return rows[0].count;
   }
 }
 export default new MessageRepository();

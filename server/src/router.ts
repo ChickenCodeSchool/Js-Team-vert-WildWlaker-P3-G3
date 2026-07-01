@@ -57,6 +57,10 @@ router.post(
   "/api/messages/notification/:id",
   messageActions.notificationMessage,
 );
+router.get(
+  "/api/messages/unread/:eventId/:userId",
+  messageActions.getUnreadMessages,
+);
 
 // reservation routes
 router.get("/api/reservations/:id", reservationActions.browse);

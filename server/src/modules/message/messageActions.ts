@@ -49,9 +49,21 @@ const notificationMessage: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const getUnreadMessages: RequestHandler = async (req, res, next) => {
+  try {
+    const eventId = Number(req.params.eventId);
+    const userId = Number(req.params.userId);
 
+    const count = await messageRepository.getUnreadMessages(eventId, userId);
+
+    res.status(200).json({ count });
+  } catch (error) {
+    next(error);
+  }
+};
 export default {
   addMessage,
   browseMessagesByEventId,
   notificationMessage,
+  getUnreadMessages,
 };

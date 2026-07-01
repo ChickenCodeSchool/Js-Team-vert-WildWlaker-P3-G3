@@ -91,8 +91,9 @@ class UserRepository {
     const [rows] = await databaseClient.query(
       `
       SELECT 
-        e.event_name,
-        e.event_description,
+      e.event_name,
+      e.event_description,
+      e.event_link_key,
         count(distinct euj.euj_id_user) AS total_users,
         COUNT(distinct r.reservation_id) AS total_reservations,
         COALESCE(SUM(distinct b.budget_price), 0) AS total_budgets
@@ -107,7 +108,8 @@ class UserRepository {
       GROUP BY 
         e.event_id, 
         e.event_name, 
-        e.event_description;
+        e.event_description,
+        e.event_link_key;
       `,
       [eventId],
     );
