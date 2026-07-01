@@ -12,7 +12,7 @@ function SideBarAdmin({ active, setActive }: SideBarProps) {
         <div className="logo-sidebar-container">
           <img src={Logo} alt="logo-wedoo" className="logo-sidebar-image" />
           <h2 className="logo-sidebar-h2">
-            WE<i>D</i>OO
+            WE<i>D</i>OO <span className="logo-admin-text"> Admin</span>
           </h2>
         </div>
         <ul className="sidebar-menu">

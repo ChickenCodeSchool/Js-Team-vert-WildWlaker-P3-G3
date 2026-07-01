@@ -7,7 +7,7 @@ function NavBar() {
     location.pathname.startsWith("/homeevents") ||
     location.pathname.startsWith("/events/") ||
     location.pathname.startsWith("/admin/report");
-  const isAdmin = location.pathname.startsWith("/admin/report");
+  const isAdmin = location.pathname.startsWith("/admin");
 
   return (
     <>
