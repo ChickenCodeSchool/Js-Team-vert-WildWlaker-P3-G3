@@ -170,7 +170,7 @@ body {
 
       h1 {
         color: var(--font-brown);
-        font-size: 6vw;
+        font-size: 33px;
       }
 
       button {
@@ -359,14 +359,11 @@ body {
     }
 
     .addButton {
-      position: fixed;
-      right: 20px;
-      bottom: 90px;
+      width: 30px;
+      height: auto;
+      margin-right: 10px;
 
-      width: 56px;
-      height: 56px;
-
-      border-radius: 16px;
+      border-radius: 10px;
       border: none;
 
       display: flex;
@@ -430,43 +427,95 @@ body {
       }
     }
 
-    .createForm {
+    .form {
+      position: fixed;
+      inset: 0;
+
       display: flex;
-      gap: 15px;
-      align-items: center;
       justify-content: center;
-      margin-bottom: 30px;
+      align-items: center;
 
-      .mobileOnly {
-        display: none;
-      }
+      background: rgba(0, 0, 0, 0.4);
 
-      input {
-        padding: 12px;
-        border: 2px solid var(--beige-color);
-        border-radius: 10px;
-        outline: none;
-        transition: 0.2s;
+      z-index: 999;
 
-        &:focus {
-          border-color: var(--font-brown);
-          box-shadow: 0 0 5px rgba(185, 68, 36, 0.3);
+      .createForm {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+
+        width: 100%;
+        max-width: 25vw;
+
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        animation: pop 0.2s ease-out;
+
+        .mobileOnly {
+          display: flex;
+          justify-content: space-between;
+          justify-self: center;
+
+          width: 100%;
+
+          color: var(--font-brown);
+
+          h5 {
+            font-size: 1.5rem;
+            font-weight: 700;
+          }
+
+          .icons {
+            width: 20px;
+            height: auto;
+          }
+        }
+
+        input {
+          padding: 12px;
+          border: 2px solid var(--beige-color);
+          border-radius: 10px;
+          margin-left: 10px;
+          margin-right: 10px;
+          outline: none;
+          transition: border-color 0.2s, box-shadow 0.2s;
+
+          &:focus {
+            border-color: var(--font-brown);
+            box-shadow: 0 0 5px rgba(185, 68, 36, 0.3);
+          }
+        }
+
+        button {
+          padding: 12px 20px;
+          border: none;
+          border-radius: 10px;
+          background: var(--color-chat);
+          color: white;
+          cursor: pointer;
+          font-weight: bold;
+          margin-left: 50px;
+          margin-right: 50px;
+          transition: background .25s, transform .25s;
+
+          &:hover {
+            background: var(--font-brown);
+            transform: scale(1.03);
+          }
         }
       }
 
-      button {
-        padding: 12px 20px;
-        border: none;
-        border-radius: 10px;
-        background: var(--color-chat);
-        color: white;
-        cursor: pointer;
-        font-weight: bold;
-        transition: background .25s, transform .25s;
-
-        &:hover {
-          background: var(--font-brown);
-          transform: scale(1.05);
+      @keyframes pop {
+        from {
+          transform: scale(0.95);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
         }
       }
     }

@@ -33,25 +33,38 @@ const itemVariants = {
     x: 0,
   },
 };
-interface SideBarProps {
-  active: string;
-  setActive: (value: string) => void;
-}
+type SideBarProps = {
+  activeComponent:
+    | "tableau"
+    | "messagerie"
+    | "reservation"
+    | "budget"
+    | "galerie";
+  handleChangeComponent: (
+    componentName:
+      | "tableau"
+      | "messagerie"
+      | "reservation"
+      | "budget"
+      | "galerie",
+  ) => void;
+};
 type Host = {
   event_user_joining: number;
 };
-function SideBar({ active, setActive }: SideBarProps) {
+function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
   const { id } = useParams();
-  const event = Number(id);
+  const eventId = Number(id);
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
   const MotionLink = motion(Link);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [isHost, setIsHost] = useState<Host>();
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/event/host/${event}`)
+    fetch(`http://localhost:3310/api/event/host/${eventId}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Erreur récupération host");
@@ -65,14 +78,14 @@ function SideBar({ active, setActive }: SideBarProps) {
       .catch((error) => {
         console.error(error);
       });
-  }, [event]);
+  }, [eventId]);
 
   const host = userId === isHost;
 
   const handleDeleteEvent = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3310/api/event/delete/${event}`,
+        `http://localhost:3310/api/event/delete/${eventId}`,
         {
           method: "DELETE",
         },
@@ -104,6 +117,13 @@ function SideBar({ active, setActive }: SideBarProps) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    fetch(`http://localhost:3310/api/messages/unread/${eventId}/${userId}`)
+      .then((res) => res.json())
+      .then((data) => setUnreadCount(data.count))
+      .catch((error) => console.error(error));
+  }, [eventId, userId]);
   return (
     <>
       <motion.nav
@@ -132,11 +152,11 @@ function SideBar({ active, setActive }: SideBarProps) {
         >
           <motion.li
             variants={itemVariants}
-            className={active === "tableau" ? "active" : ""}
+            className={activeComponent === "tableau" ? "active" : ""}
           >
             <motion.button
               type="button"
-              onClick={() => setActive("tableau")}
+              onClick={() => handleChangeComponent("tableau")}
               whileHover={{ x: 6, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -147,26 +167,32 @@ function SideBar({ active, setActive }: SideBarProps) {
 
           <motion.li
             variants={itemVariants}
-            className={active === "messagerie" ? "active" : ""}
+            className={activeComponent === "messagerie" ? "active" : ""}
           >
             <motion.button
               type="button"
-              onClick={() => setActive("messagerie")}
+              onClick={() => {
+                handleChangeComponent("messagerie");
+                setUnreadCount(0);
+              }}
               whileHover={{ x: 6, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               <MessageCircle size={20} className="message" />
               <span>Messagerie</span>
+              {unreadCount > 0 && (
+                <span className="notification-badge">{unreadCount}</span>
+              )}
             </motion.button>
           </motion.li>
 
           <motion.li
             variants={itemVariants}
-            className={active === "reservation" ? "active" : ""}
+            className={activeComponent === "reservation" ? "active" : ""}
           >
             <motion.button
               type="button"
-              onClick={() => setActive("reservation")}
+              onClick={() => handleChangeComponent("reservation")}
               whileHover={{ x: 6, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -177,11 +203,11 @@ function SideBar({ active, setActive }: SideBarProps) {
 
           <motion.li
             variants={itemVariants}
-            className={active === "budget" ? "active" : ""}
+            className={activeComponent === "budget" ? "active" : ""}
           >
             <motion.button
               type="button"
-              onClick={() => setActive("budget")}
+              onClick={() => handleChangeComponent("budget")}
               whileHover={{ x: 6, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -192,11 +218,11 @@ function SideBar({ active, setActive }: SideBarProps) {
 
           <motion.li
             variants={itemVariants}
-            className={active === "galerie" ? "active" : ""}
+            className={activeComponent === "galerie" ? "active" : ""}
           >
             <motion.button
               type="button"
-              onClick={() => setActive("galerie")}
+              onClick={() => handleChangeComponent("galerie")}
               whileHover={{ x: 6, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -216,7 +242,7 @@ function SideBar({ active, setActive }: SideBarProps) {
             <MotionLink
               whileHover={{ x: 6, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              to={`/events/${event}/report`}
+              to={`/events/${eventId}/report`}
               className="link"
             >
               <TriangleAlert size={20} />

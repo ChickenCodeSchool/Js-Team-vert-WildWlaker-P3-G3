@@ -36,6 +36,7 @@ body {
   --font-input: #8b716b;
   --font-placeholder: rgba(139, 113, 107, 0.6);
   --font-title: #a53b22;
+  --color-arrow: #a53b22;
 
   --font-black: #1f1b18;
   --font-neutral: #ffffff;
@@ -81,8 +82,10 @@ body {
   --color-state-finished: #1b7a3d;
   --icon-eye-button-color: #a53b22;
   --icon-eye-button-color-hover: #ff7e5f;
-}
 
+  /* signal notif */
+  --signal: #ff3b30;
+}
 * {
   font-family: "Be Vietnam Pro", sans-serif;
 }

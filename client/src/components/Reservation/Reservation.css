@@ -4,6 +4,7 @@
   width: 70.5vw;
   .reservation-title {
     display: flex;
+
     justify-content: space-between;
     align-items: center;
     width: 63vw;
@@ -57,7 +58,10 @@
         flex-direction: column;
         gap: 14px;
         box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
-
+        button {
+          display: flex;
+          justify-content: center;
+        }
         h2 {
           margin: 0 0 8px;
           text-align: center;

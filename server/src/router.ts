@@ -53,6 +53,14 @@ router.get("/api/user/event/:id", userActions.readUserJoinEvent);
 // message routes
 router.get("/api/messages/:id", messageActions.browseMessagesByEventId);
 router.post("/api/messages/:id", messageActions.addMessage);
+router.post(
+  "/api/messages/notification/:id",
+  messageActions.notificationMessage,
+);
+router.get(
+  "/api/messages/unread/:eventId/:userId",
+  messageActions.getUnreadMessages,
+);
 
 // reservation routes
 router.get("/api/reservations/:id", reservationActions.browse);
@@ -154,6 +162,10 @@ router.get("/api/admin/reportUser/:id", adminActions.readReportUserById);
 router.patch("/api/admin/reportBug/:id/done", adminActions.markBugAsDone);
 router.patch("/api/admin/reportEvent/:id/done", adminActions.markEventAsDone);
 router.patch("/api/admin/reportUser/:id/done", adminActions.markUserAsDone);
+
+// admin ban routes
+router.patch("/api/admin/ban-user/:id", adminActions.banUser);
+router.patch("/api/admin/ban-event/:id", adminActions.banEvent);
 
 // --> budget
 // > get
