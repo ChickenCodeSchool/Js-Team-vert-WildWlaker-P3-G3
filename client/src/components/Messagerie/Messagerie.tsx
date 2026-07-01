@@ -1,9 +1,13 @@
 import "./Messagerie.css";
+import EmojiPicker from "emoji-picker-react";
+import type { EmojiClickData } from "emoji-picker-react";
 import { motion } from "framer-motion";
 import { ContactRound, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import Profil from "../../assets/images/img-card-retraite.png";
+import { socket } from "../../socket/socket";
+
 type ReceptionMessagesUser = {
   message_id: number;
   message_text: string;
@@ -24,16 +28,43 @@ function Messagerie() {
   >([]);
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
   const [usersByEvent, setUsersByEvent] = useState<UserByEvent[]>([]);
+  const [showPicker, setShowPicker] = useState(false);
 
   const { id } = useParams();
   const event = Number(id);
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
-  const messagesRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const messagesElement = messagesRef.current;
+    const messagesCount = receptionMessagesUser.length;
+    if (!messagesElement || messagesCount === 0) return;
+    messagesElement.scrollTop = messagesElement.scrollHeight;
+  }, [receptionMessagesUser]);
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    setMessagesUser((prev) => prev + emojiData.emoji);
+  };
+
   useEffect(() => {
     fetchUserEvent();
     fetchMessages();
   }, []);
+
+  useEffect(() => {
+    if (!event || !userId) return;
+    fetch(`http://localhost:3310/api/messages/notification/${event}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+      }),
+    }).catch((error) => {
+      console.error("Erreur lecture messages :", error);
+    });
+  }, [event, userId]);
 
   useEffect(() => {
     fetch(`http://localhost:3310/api/messages/${event}`)
@@ -54,6 +85,38 @@ function Messagerie() {
       .then((data) => setUsersByEvent(data));
   }, [event]);
 
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("✅ Connecté :", socket.id);
+    });
+
+    socket.on("disconnect", (reason) => {
+      console.log("❌ Déconnecté :", reason);
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("connect_error");
+    };
+  }, []);
+  useEffect(() => {
+    if (!event) return;
+
+    socket.emit("join-event", event);
+
+    socket.on("new-message", (newMessage: ReceptionMessagesUser) => {
+      setReceptionMessagesUser((previousMessages) => [
+        ...previousMessages,
+        newMessage,
+      ]);
+    });
+
+    return () => {
+      socket.emit("leave-event", event);
+      socket.off("new-message");
+    };
+  }, [event]);
   async function handleSendMessage() {
     if (!messagesUser.trim()) {
       return;
@@ -75,7 +138,6 @@ function Messagerie() {
 
       if (response.ok) {
         setMessagesUser("");
-        fetchMessages();
       }
     } catch (error) {
       console.error("Messagerie: erreur envoi message", error);
@@ -130,7 +192,11 @@ function Messagerie() {
   if (userInEvent === false) {
     return <p>Vous n'êtes pas inscrit à cet événement.</p>;
   }
-
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
+  };
   return (
     <motion.div
       className="messagerie"
@@ -197,10 +263,20 @@ function Messagerie() {
               type="text"
               value={messagesUser}
               onChange={(e) => setMessagesUser(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="Écrire un message..."
             />
+            <button type="button" onClick={() => setShowPicker(!showPicker)}>
+              😊
+            </button>
 
+            {showPicker && (
+              <div className="emoji-picker">
+                <EmojiPicker onEmojiClick={handleEmojiClick} />
+              </div>
+            )}
             <button
+              className="send-button"
               type="button"
               onClick={handleSendMessage}
               disabled={!messagesUser.trim()}

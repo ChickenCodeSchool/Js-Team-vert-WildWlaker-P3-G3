@@ -11,14 +11,34 @@
     width: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     padding: 10px;
-    img {
-      height: 40px;
-      width: 40px;
+    section {
+      display: flex;
+      flex-direction: row;
+      img {
+        height: 40px;
+        width: 40px;
+      }
+      h1 {
+        margin: 0;
+        color: #ff7e5f;
+      }
     }
-    h1 {
-      margin: 0;
-      color: #ff7e5f;
+    button {
+      height: 40px;
+      width: 8vw;
+      border-radius: 50px;
+      background: linear-gradient(to left, #ff7e5f, #a53b22);
+      border-style: none;
+      color: white;
+      font-family: "Be Vietnam Pro", sans-serif;
+      font-weight: 300;
+      font-style: normal;
+      cursor: pointer;
+    }
+    button:hover {
+      background: var(--font-title);
     }
   }
   .text-presentation {

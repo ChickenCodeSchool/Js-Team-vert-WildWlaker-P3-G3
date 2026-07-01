@@ -190,3 +190,8 @@
 .CardEvents-Global:hover {
   transform: scale(1.025);
 }
+@media screen and (max-width: 428px) {
+  .CardEvents-Wrapper {
+    height: 90%;
+  }
+}

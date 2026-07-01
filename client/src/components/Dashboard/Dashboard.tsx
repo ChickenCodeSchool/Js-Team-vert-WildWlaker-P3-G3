@@ -14,6 +14,7 @@ import GalerieDashboard from "../GalerieDashboard/GalerieDashboard";
 import TodoList from "../ToDoList/TodoList";
 
 type EventDashboard = {
+  event_link_key: string;
   event_name: string;
   event_description: string | null;
   total_users: number | null;
@@ -136,7 +137,7 @@ function Dashboard() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4 }}
       >
-        {eventData?.event_name}
+        {eventData?.event_name} : {eventData?.event_link_key}
       </motion.h1>
 
       <motion.h1

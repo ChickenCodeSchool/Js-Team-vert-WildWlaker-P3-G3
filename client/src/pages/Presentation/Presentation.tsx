@@ -15,10 +15,27 @@ function Presentation() {
   return (
     <div className="presentation-content">
       <div className="navbar-presentation">
-        <img src={logo} alt="logo-wedoo" />
-        <h1 className="title-presentation">
-          WE<i>D</i>OO
-        </h1>
+        <section>
+          <img src={logo} alt="logo-wedoo" />
+          <h1 className="title-presentation">
+            WE<i>D</i>OO
+          </h1>
+        </section>
+        <button
+          type="button"
+          onClick={() => {
+            const user = JSON.parse(localStorage.getItem("user") || "null");
+
+            if (!user?.id) {
+              navigate("/connexion");
+              return;
+            }
+
+            navigate("/homeevents");
+          }}
+        >
+          Se connecter
+        </button>
       </div>
       <div className="text-presentation">
         <h1 className="h1-organisez">Organisez</h1>
