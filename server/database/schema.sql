@@ -44,6 +44,7 @@ CREATE TABLE `event` (
   `event_picture` VARCHAR(255) NOT NULL,
 
   `event_link_key` VARCHAR(6) NOT NULL, -- const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+  `event_is_ban` TINYINT(1) NOT NULL DEFAULT 0,
 
   PRIMARY KEY (`event_id`),
 
@@ -341,3 +342,21 @@ CREATE TABLE `gallery_like` (
     REFERENCES `user` (`user_id`)
     ON DELETE CASCADE
 ) ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `message_read`
+-- -----------------------------------------------------
+CREATE TABLE message_read (
+    message_read_id INT AUTO_INCREMENT PRIMARY KEY,
+    message_read_message_id INT NOT NULL,
+    message_read_user_id INT NOT NULL,
+    message_read_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (message_read_message_id)
+        REFERENCES message(message_id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (message_read_user_id)
+        REFERENCES user(user_id)
+        ON DELETE CASCADE
+);ENGINE = InnoDB;

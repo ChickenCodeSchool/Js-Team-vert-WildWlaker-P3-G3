@@ -25,7 +25,13 @@ class UserRepository {
       `INSERT INTO user
       (user_name, user_username, user_mail, user_password, user_profile_picture)
       VALUES (?, ?, ?, ?, ?)`,
-      [user.username, user.username, user.email, user.password, "default.png"],
+      [
+        user.username,
+        user.username,
+        user.email,
+        user.password,
+        "/assets/images/default-pp.png",
+      ],
     );
 
     return result.insertId;
@@ -91,8 +97,9 @@ class UserRepository {
     const [rows] = await databaseClient.query(
       `
       SELECT 
-        e.event_name,
-        e.event_description,
+      e.event_name,
+      e.event_description,
+      e.event_link_key,
         count(distinct euj.euj_id_user) AS total_users,
         COUNT(distinct r.reservation_id) AS total_reservations,
         COALESCE(SUM(distinct b.budget_price), 0) AS total_budgets
@@ -107,7 +114,8 @@ class UserRepository {
       GROUP BY 
         e.event_id, 
         e.event_name, 
-        e.event_description;
+        e.event_description,
+        e.event_link_key;
       `,
       [eventId],
     );

@@ -6,7 +6,6 @@
 // import Presentation from "./pages/Presentation/Presentation";
 import "./App.css";
 import Presentation from "./pages/Presentation/Presentation";
-// import Presentation from "./pages/Presentation/Presentation";
 
 function App() {
   return (

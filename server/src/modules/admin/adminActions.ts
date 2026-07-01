@@ -149,6 +149,34 @@ const markUserAsDone: RequestHandler = async (req, res, next) => {
   }
 };
 
+const banUser: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const affected = await adminRepository.banUser(id);
+    if (!affected) {
+      res.status(404).json({ message: "Utilisateur introuvable" });
+      return;
+    }
+    res.json({ message: "Utilisateur banni" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const banEvent: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const affected = await adminRepository.banEvent(id);
+    if (!affected) {
+      res.status(404).json({ message: "Événement introuvable" });
+      return;
+    }
+    res.json({ message: "Événement banni" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   readAllUsers,
   readAllEvents,
@@ -164,4 +192,6 @@ export default {
   markBugAsDone,
   markEventAsDone,
   markUserAsDone,
+  banUser,
+  banEvent,
 };
