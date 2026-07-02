@@ -84,18 +84,25 @@ function GalleryModal({
       <div className="modal">
         <h2>Ajouter une photo</h2>
 
-        <input
-          type="file"
-          accept=".jpg,.jpeg,.png,.webp"
-          onChange={handleFileChange}
-        />
+        <label className="file-label">
+          <span>{selectedFile ? selectedFile.name : "Choisir un fichier"}</span>
+
+          <input
+            className="file-input"
+            type="file"
+            accept=".jpg,.jpeg,.png,.webp"
+            onChange={handleFileChange}
+          />
+        </label>
+
+        <p className="file-help">JPG, PNG, WEBP - Max. 5 Mo</p>
 
         <input
+          className="description-input"
           type="text"
-          placeholder="Ajouter une description (optionnel)..."
+          placeholder="Ajouter une description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          style={{ marginTop: "0.5rem", width: "100%", padding: "0.4rem" }}
         />
 
         {error && (
