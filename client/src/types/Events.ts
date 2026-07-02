@@ -21,7 +21,7 @@ export interface CardEventsProps {
   description: string;
   location: string;
   onEventDeleted?: (deletedId: number) => void;
-  reservation_id_user?: number | null; 
+  reservation_id_user?: number | null;
   onEditReservation?: (reservationId: number) => void;
   onReservationDeleted?: (deletedId: number) => void;
 }

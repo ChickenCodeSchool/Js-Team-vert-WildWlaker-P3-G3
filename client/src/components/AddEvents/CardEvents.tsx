@@ -41,7 +41,7 @@ function CardEvents({
   onEventDeleted,
   reservation_id_user,
   onEditReservation,
-  onReservationDeleted, 
+  onReservationDeleted,
 }: CardEventsProps) {
   const uselocation = useLocation();
   const isHomeEvents = uselocation.pathname === "/homeevents";
@@ -168,16 +168,16 @@ function CardEvents({
           </div>
         )}
         {onEditReservation &&
-  reservation_id_user != null &&
-  user_id === reservation_id_user && (
-    <button
-      type="button"
-      className="CardEvents-Edit"
-      onClick={() => onEditReservation?.(event_id)}
-    >
-      <PencilLine size={16} />
-    </button>
-  )}
+          reservation_id_user != null &&
+          user_id === reservation_id_user && (
+            <button
+              type="button"
+              className="CardEvents-Edit"
+              onClick={() => onEditReservation?.(event_id)}
+            >
+              <PencilLine size={16} />
+            </button>
+          )}
         {onTableau && (
           <button
             type="button"
