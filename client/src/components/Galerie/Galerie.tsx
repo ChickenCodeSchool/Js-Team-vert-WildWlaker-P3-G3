@@ -236,7 +236,43 @@ function Galerie() {
 
       {!isLoading && photos.length === 0 && (
         <div className="galerie-empty">
-          <p>Aucune photo. Ajoutez-en une !</p>
+          <div className="galerie-empty-text">
+            <p className="galerie-empty-title">
+              Aucune photo dans cet événement.
+            </p>
+
+            <p className="galerie-empty-subtitle">
+              Partagez vos meilleurs souvenirs en ajoutant la première photo.
+            </p>
+          </div>
+
+          <svg
+            className="galerie-empty-arrow"
+            viewBox="0 0 600 500"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              className="galerie-empty-path"
+              d="
+        M0 330
+        C20 300, 220 330, 290 300
+        C340 270, 340 200, 270 205
+        C220 210, 220 290, 290 290
+        C370 300, 450 270, 500 90
+      "
+              stroke="currentColor"
+              strokeLinecap="round"
+            />
+            <path
+              className="galerie-empty-head"
+              d="M470 120 L500 85 L525 130"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
       )}
 
