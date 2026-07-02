@@ -1,4 +1,4 @@
-import type { RowDataPacket } from "mysql2";
+import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import mysql from "../../../database/client";
 
 type UnreadCountRow = RowDataPacket & {
@@ -7,17 +7,34 @@ type UnreadCountRow = RowDataPacket & {
 
 class MessageRepository {
   async sendMessage(eventId: number, userId: number, messageText: string) {
-    const [result] = await mysql.query(
+    const [result] = await mysql.query<ResultSetHeader>(
       `INSERT INTO message (
       message_id_event,
       message_id_user,
       message_text
-      )
-      VALUES (?, ?, ?)`,
+    )
+    VALUES (?, ?, ?)`,
       [eventId, userId, messageText],
     );
 
-    return result;
+    const [rows] = await mysql.query<RowDataPacket[]>(
+      `SELECT
+      m.message_id,
+      m.message_text,
+      m.message_date,
+      u.user_name,
+      u.user_id,
+      e.event_name
+    FROM message m
+    JOIN user u
+      ON u.user_id = m.message_id_user
+    JOIN event e
+      ON e.event_id = m.message_id_event
+    WHERE m.message_id = ?`,
+      [result.insertId],
+    );
+
+    return rows[0];
   }
   async getMessagesByEventId(eventId: number) {
     const [rows] = await mysql.query(

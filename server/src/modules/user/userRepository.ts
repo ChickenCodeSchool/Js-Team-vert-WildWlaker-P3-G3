@@ -80,7 +80,7 @@ class UserRepository {
   }
   async readUserName(id: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT user_name FROM user WHERE user_id = ?",
+      "SELECT user_username FROM user WHERE user_id = ?",
       [id],
     );
     const user = rows[0] as UserRow;
@@ -90,7 +90,7 @@ class UserRepository {
     }
 
     return {
-      username: user.user_name,
+      username: user.user_username,
     };
   }
   async readUserDescriptionEvent(eventId: number) {
@@ -196,12 +196,13 @@ class UserRepository {
     await databaseClient.query(
       `
     UPDATE user
-    SET user_name = ?
+    SET user_username = ?
     WHERE user_id = ?
     `,
       [userName, userId],
     );
   }
+
   async readUserAdmin(userId: number) {
     const [rows] = await databaseClient.query<Rows>(
       `
