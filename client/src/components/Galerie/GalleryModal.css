@@ -63,6 +63,54 @@
 /* Form Elements */
 
 .modal {
+  .file-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 160px;
+    height: 40px;
+
+    margin-bottom: 0.5rem;
+    padding: 0 1rem;
+
+    border: 1px dashed #ff8a65;
+    border-radius: 999px;
+
+    background: #fff8f5;
+    color: #ff8a65;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    box-shadow: 0.2s ease;
+
+    &:hover {
+      background: #fff3ee;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgb(255 138 101 / 15%);
+    }
+
+    &:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 6px rgb(255 138 101 / 10%);
+    }
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .file-help {
+    margin-bottom: 1rem;
+
+    color: #888;
+    font-size: 0.75rem;
+  }
+
   .modal-input {
     width: 100%;
     margin: 0.5rem 0 1rem;
@@ -76,6 +124,33 @@
 
     &:focus {
       border-color: #ff8a65;
+      outline: none;
+    }
+  }
+
+  .description-input {
+    width: 100%;
+    height: 44px;
+
+    margin-top: 0.75rem;
+    padding: 0 1rem;
+
+    box-sizing: border-box;
+
+    border: 1px solid #ff8a65;
+    border-radius: 10px;
+
+    background: white;
+    color: #333;
+
+    font-size: 0.9rem;
+
+    &::placeholder {
+      color: #999;
+    }
+
+    &:focus {
+      border-color: #b2553d;
       outline: none;
     }
   }
@@ -142,7 +217,7 @@
       }
 
       &:last-child {
-        background-color: #ff8a65;
+        background: linear-gradient(90deg, #ff9b73, #ff8a65, #d86b47);
         color: #fff;
 
         &:hover {

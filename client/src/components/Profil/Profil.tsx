@@ -185,7 +185,11 @@ function Profil() {
 
               <button
                 type="button"
-                onClick={() => setActiveModal("Changer le pseudo")}
+                onClick={() =>
+                  setActiveModal((prev) =>
+                    prev === "Changer le pseudo" ? null : "Changer le pseudo",
+                  )
+                }
               >
                 <Pencil size={15} />
                 Changer le pseudo
@@ -227,7 +231,13 @@ function Profil() {
 
               <button
                 type="button"
-                onClick={() => setActiveModal("Changer la photo de profil")}
+                onClick={() =>
+                  setActiveModal((prev) =>
+                    prev === "Changer la photo de profil"
+                      ? null
+                      : "Changer la photo de profil",
+                  )
+                }
               >
                 <Camera size={15} />
                 Changer la photo de profil
