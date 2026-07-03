@@ -35,6 +35,9 @@ function Reservation() {
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
   const [preview, setPreview] = useState("");
   const [eventName, setEventName] = useState<Reservation>();
+  const [editingReservationId, setEditingReservationId] = useState<
+    number | null
+  >(null);
 
   const fetchReservations = useCallback(async () => {
     const res = await fetch(
@@ -66,40 +69,49 @@ function Reservation() {
       });
   }, [eventId]);
 
-  async function handleAddReservation(e: React.FormEvent) {
+  const toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: true,
+
+    customClass: {
+      popup: "toast",
+    },
+  });
+
+  function openEditModal(reservationId: number) {
+    const resa = reservations.find((r) => r.reservation_id === reservationId);
+    if (!resa) return;
+
+    setReservationName(resa.reservation_name);
+    setReservationDate(resa.reservation_date.split("T")[0]);
+    setReservationLocation(resa.reservation_location);
+    setReservationDescription(resa.reservation_description);
+    setReservationPicture(null);
+    setPreview(`http://localhost:3310${resa.reservation_picture}`);
+    setEditingReservationId(reservationId);
+    setIsModalOpen(true);
+  }
+
+  async function handleSubmitReservation(e: React.FormEvent) {
     e.preventDefault();
 
-    const toast = Swal.mixin({
-      toast: true,
-      position: "top",
-      showConfirmButton: false,
-      timer: 2500,
-      timerProgressBar: true,
+    const isEditing = editingReservationId !== null;
 
-      customClass: {
-        popup: "toast",
-      },
-    });
+    const missingFields = [
+      !reservationName && "le titre",
+      !reservationDate && "la date",
+      !reservationLocation && "la localisation",
+      !reservationDescription && "une description",
+      !isEditing && !reservationPicture && "une image",
+    ].filter(Boolean);
 
-    if (
-      !reservationName ||
-      !reservationDate ||
-      !reservationLocation ||
-      !reservationDescription ||
-      !reservationPicture
-    ) {
-      const missingFields = [
-        !reservationName && "le titre",
-        !reservationDate && "la date",
-        !reservationLocation && "la localisation",
-        !reservationDescription && "une description",
-        !reservationPicture && "une image",
-      ].filter(Boolean);
-
+    if (missingFields.length > 0) {
       toast.fire({
         icon: "error",
         text: `Il vous manque : ${missingFields.join(", ")}`,
-
         customClass: {
           popup: "toast-error-popup",
         },
@@ -108,20 +120,23 @@ function Reservation() {
     }
 
     const formData = new FormData();
-
     formData.append("reservation_id_event", String(eventId));
     formData.append("reservation_id_user", String(userId));
     formData.append("reservation_name", reservationName);
     formData.append("reservation_date", reservationDate);
     formData.append("reservation_location", reservationLocation);
     formData.append("reservation_description", reservationDescription);
-
     if (reservationPicture) {
       formData.append("reservation_picture", reservationPicture);
     }
 
-    const response = await fetch("http://localhost:3310/api/reservations", {
-      method: "POST",
+    const url = isEditing
+      ? `http://localhost:3310/api/reservations/update/${editingReservationId}`
+      : "http://localhost:3310/api/reservations";
+    const method = isEditing ? "PUT" : "POST";
+
+    const response = await fetch(url, {
+      method,
       body: formData,
     });
     await fetchReservations();
@@ -131,7 +146,6 @@ function Reservation() {
       toast.fire({
         icon: "error",
         text: `Marche pas : ${data.message}`,
-
         customClass: {
           popup: "toast-error-popup",
         },
@@ -145,12 +159,12 @@ function Reservation() {
     setReservationDescription("");
     setReservationPicture(null);
     setPreview("");
-
+    setEditingReservationId(null);
     setIsModalOpen(false);
+
     toast.fire({
       icon: "success",
-      text: "Réservation ajoutée",
-
+      text: isEditing ? "Réservation modifiée" : "Réservation ajoutée",
       customClass: {
         popup: "toast-error-popup",
       },
@@ -190,7 +204,16 @@ function Reservation() {
 
         <motion.button
           type="button"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setEditingReservationId(null);
+            setReservationName("");
+            setReservationDate("");
+            setReservationLocation("");
+            setReservationDescription("");
+            setReservationPicture(null);
+            setPreview("");
+            setIsModalOpen(true);
+          }}
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.1 }}
@@ -213,7 +236,7 @@ function Reservation() {
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  handleAddReservation(e);
+                  handleSubmitReservation(e);
                 }
               }}
             >
@@ -229,7 +252,11 @@ function Reservation() {
                   }
                 }}
               >
-                <h2>Nouvelle réservation</h2>
+                <h2>
+                  {editingReservationId
+                    ? "Modifier la réservation"
+                    : "Nouvelle réservation"}
+                </h2>
 
                 <input
                   type="text"
@@ -275,7 +302,7 @@ function Reservation() {
 
                 <motion.button
                   type="button"
-                  onClick={handleAddReservation}
+                  onClick={handleSubmitReservation}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -294,10 +321,27 @@ function Reservation() {
         transition={{ duration: 0.4, delay: 0.2 }}
       >
         {reservations.map((event) => (
-          <div className="card-reservation" key={event.reservation_id}>
+          <div
+            className="card-reservation"
+            key={`${event.reservation_id}-${event.reservation_name}-${event.reservation_date}-${event.reservation_location}-${event.reservation_description}-${event.reservation_picture}`}
+          >
             <CardEvents
               event_id={event.reservation_id}
               event_host_id={null}
+              reservation_id_user={event.reservation_id_user}
+              onEditReservation={openEditModal}
+              onReservationDeleted={(deletedId) => {
+                setReservations((prev) =>
+                  prev.filter((r) => r.reservation_id !== deletedId),
+                );
+                toast.fire({
+                  icon: "success",
+                  text: "Réservation supprimée",
+                  customClass: {
+                    popup: "toast-error-popup",
+                  },
+                });
+              }}
               image={`http://localhost:3310${event.reservation_picture}`}
               imageAlt={event.reservation_name}
               dateStart={event.reservation_date}

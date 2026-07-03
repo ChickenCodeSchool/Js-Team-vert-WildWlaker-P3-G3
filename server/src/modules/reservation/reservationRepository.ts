@@ -85,6 +85,39 @@ WHERE e.event_id = ?;
 
     return result;
   }
+  async updateReservation(
+    reservationId: number,
+    reservation: {
+      reservation_name: string;
+      reservation_date: string;
+      reservation_location: string;
+      reservation_description: string;
+      reservation_picture?: string | null;
+    },
+  ) {
+    const [result] = await mysql.query(
+      `
+    UPDATE reservation
+    SET
+      reservation_name = ?,
+      reservation_date = ?,
+      reservation_location = ?,
+      reservation_description = ?,
+      reservation_picture = COALESCE(?, reservation_picture)
+    WHERE reservation_id = ?
+    `,
+      [
+        reservation.reservation_name,
+        reservation.reservation_date,
+        reservation.reservation_location,
+        reservation.reservation_description,
+        reservation.reservation_picture ?? null,
+        reservationId,
+      ],
+    );
+
+    return result;
+  }
 }
 
 export default new reservationRepository();

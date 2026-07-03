@@ -70,6 +70,11 @@ router.post(
   upload.single("reservation_picture"),
   reservationActions.addReservation,
 );
+router.put(
+  "/api/reservations/update/:id",
+  upload.single("reservation_picture"),
+  reservationActions.updateReservation,
+);
 router.delete(
   "/api/reservations/delete/:id",
   reservationActions.deleteReservation,

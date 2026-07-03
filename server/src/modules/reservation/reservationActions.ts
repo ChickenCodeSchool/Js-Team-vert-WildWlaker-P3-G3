@@ -54,6 +54,47 @@ const addReservation: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const updateReservation: RequestHandler = async (req, res, next) => {
+  try {
+    const reservationId = Number(req.params.id);
+    const {
+      reservation_name,
+      reservation_date,
+      reservation_location,
+      reservation_description,
+    } = req.body;
+
+    if (
+      !reservation_name ||
+      !reservation_date ||
+      !reservation_location ||
+      !reservation_description
+    ) {
+      res.status(400).json({ message: "Veuillez remplir tous les champs." });
+      return;
+    }
+
+    const reservation_picture = req.file
+      ? `/uploads/${req.file.filename}`
+      : null;
+
+    const result = await reservationRepository.updateReservation(
+      reservationId,
+      {
+        reservation_name,
+        reservation_date,
+        reservation_location,
+        reservation_description,
+        reservation_picture,
+      },
+    );
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteReservation: RequestHandler = async (req, res, next) => {
   try {
     const reservationId = Number(req.params.id);
@@ -70,5 +111,6 @@ export default {
   browse,
   readAllReservation,
   addReservation,
+  updateReservation,
   deleteReservation,
 };

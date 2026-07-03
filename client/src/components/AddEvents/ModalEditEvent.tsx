@@ -12,9 +12,6 @@ function ModalEditEvent({
   event,
   onEventUpdated,
 }: ModalEditEventProps) {
-  console.log("date start reçue:", event.event_date_start);
-  console.log("date end reçue:", event.event_date_end);
-
   const dialogRef = useRef<HTMLDialogElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
