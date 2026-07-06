@@ -12,6 +12,7 @@
     margin: 0 0 0 20px;
     display: flex;
     align-items: center;
+    text-decoration: none;
 
     .logo-sidebar-image {
       width: 30px;

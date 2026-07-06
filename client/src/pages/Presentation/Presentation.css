@@ -350,12 +350,17 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    background-color: #80808024;
-    color: #80808056;
+    background-color: var(--bg-color);
+    color: var(--font-grey);
     width: 100%;
-    button {
-      border-style: none;
-      color: #80808056;
+
+    a {
+      color: var(--font-brown);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
     }
   }
 }
