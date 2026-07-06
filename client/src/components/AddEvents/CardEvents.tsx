@@ -30,6 +30,7 @@ const formatMonth = (date: string): string => {
 
 function CardEvents({
   event_id,
+  event_uuid,
   event_host_id,
   image,
   imageAlt,
@@ -88,7 +89,7 @@ function CardEvents({
   const handleDeleteEvent = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3310/api/event/delete/${event_id}`,
+        `http://localhost:3310/api/event/delete/${event_uuid}`,
         { method: "DELETE" },
       );
       if (!response.ok) throw new Error("Erreur suppression");
@@ -103,7 +104,7 @@ function CardEvents({
     <>
       <div className="CardEvents-Wrapper">
         <Link
-          to={isHomeEvents ? `/tableaudebord/${event_id}` : "#"}
+          to={isHomeEvents ? `/tableaudebord/${event_uuid}` : "#"}
           className="CardEvents-Global"
         >
           <div className="CardEvents-ImageDate">
@@ -214,6 +215,7 @@ function CardEvents({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         event={{
+          event_uuid,
           event_id,
           event_host_id,
           event_name: currentTitle,

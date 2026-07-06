@@ -81,6 +81,7 @@ function HomeEvents() {
               <CardEvents
                 key={event.event_id}
                 event_id={event.event_id}
+                event_uuid={event.event_uuid}
                 event_host_id={event.event_host_id}
                 image={event.event_picture}
                 imageAlt={event.event_name}

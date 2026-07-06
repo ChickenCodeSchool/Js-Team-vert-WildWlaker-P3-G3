@@ -14,14 +14,14 @@ export const initSocket = (server: HttpServer): SocketServer => {
   io.on("connection", (socket) => {
     console.log("Utilisateur connecté :", socket.id);
 
-    socket.on("join-event", (eventId: number) => {
-      socket.join(`event-${eventId}`);
-      console.log(`${socket.id} a rejoint event-${eventId}`);
+    socket.on("join-event", (eventUuid: string) => {
+      socket.join(`event-${eventUuid}`);
+      console.log(`${socket.id} a rejoint event-${eventUuid}`);
     });
 
-    socket.on("leave-event", (eventId: number) => {
-      socket.leave(`event-${eventId}`);
-      console.log(`${socket.id} a quitté event-${eventId}`);
+    socket.on("leave-event", (eventUuid: string) => {
+      socket.leave(`event-${eventUuid}`);
+      console.log(`${socket.id} a quitté event-${eventUuid}`);
     });
 
     socket.on("disconnect", () => {

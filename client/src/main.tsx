@@ -43,7 +43,7 @@ const router = createBrowserRouter([
     element: <HomeEvents />,
   },
   {
-    path: "/tableaudebord/:id",
+    path: "/tableaudebord/:eventUuid",
     element: <TableauDeBord />,
   },
   {
@@ -63,7 +63,7 @@ const router = createBrowserRouter([
     element: <ResetPassword />,
   },
   {
-    path: "/events/:eventId/report",
+    path: "/events/:eventUuid/report",
     element: <UserReport />,
   },
   {

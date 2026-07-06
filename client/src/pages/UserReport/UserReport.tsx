@@ -14,7 +14,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 function UserReport() {
   const navigate = useNavigate();
-  const { eventId } = useParams();
+  const { eventUuid } = useParams();
 
   const [repType, setRepType] = useState<string>("");
   const [repDetail, setRepDetail] = useState<string>("");
@@ -24,13 +24,14 @@ function UserReport() {
   const [reportedUserId, setReportedUserId] = useState<number>(0);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/events/${eventId}/users`)
+    if (!eventUuid) return;
+    fetch(`${API_URL}/api/events/${eventUuid}/users`)
       .then((response) => response.json())
       .then((data: EventUserJoin[]) => {
         setEuj(data);
       })
       .catch((error) => console.error(error));
-  }, [eventId]);
+  }, [eventUuid]);
 
   const handleGoBack = () => {
     navigate(-1);
@@ -106,7 +107,7 @@ function UserReport() {
         }
         case "evenement": {
           const formData = new FormData();
-          formData.append("reported_event_id_event", eventId ?? "");
+          formData.append("event_uuid", eventUuid ?? "");
           formData.append("reported_event_description", repDetail);
           formData.append("reported_event_by_id_user", user.id.toString());
           for (const file of repEvidence) {
@@ -157,7 +158,7 @@ function UserReport() {
           popup: "toast-success-popup",
         },
       });
-      navigate(`/tableaudebord/${eventId}`);
+      navigate(`/tableaudebord/${eventUuid}`);
     } catch (error) {
       console.error(error);
       toast.fire({
@@ -171,7 +172,7 @@ function UserReport() {
   };
 
   const handleCancel = () => {
-    navigate(`/tableaudebord/${eventId}`);
+    navigate(`/tableaudebord/${eventUuid}`);
   };
 
   return (

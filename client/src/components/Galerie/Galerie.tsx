@@ -1,6 +1,7 @@
 import "./Galerie.css";
 import { ImagePlus, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import GalleryModal from "./GalleryModal";
 import { PhotoItem } from "./PhotoItem";
 
@@ -28,8 +29,7 @@ const getUserFromStorage = (): User => {
 };
 
 function Galerie() {
-  const segments = window.location.pathname.split("/");
-  const id = segments[segments.indexOf("galerie") - 1] || segments[2];
+  const { eventUuid } = useParams();
 
   // Utilisation directe de l'ID pour éviter les boucles infinies sur l'objet currentUser
   const currentUser = getUserFromStorage();
@@ -52,15 +52,15 @@ function Galerie() {
   };
 
   useEffect(() => {
-    if (!id || currentUserId === 0) return;
-    fetch(`${API_URL}/api/gallery/${id}/likes/${currentUserId}`)
+    if (!eventUuid || currentUserId === 0) return;
+    fetch(`${API_URL}/api/gallery/${eventUuid}/likes/${currentUserId}`)
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => setLikedPhotos(data))
       .catch((err) => console.error("Erreur likes:", err));
-  }, [id, currentUserId]);
+  }, [eventUuid, currentUserId]);
 
   useEffect(() => {
-    if (!id) {
+    if (!eventUuid) {
       setIsLoading(false);
       return;
     }
@@ -71,7 +71,7 @@ function Galerie() {
       setIsLoading(true);
       setError(null);
       try {
-        const galRes = await fetch(`${API_URL}/api/gallery/${id}`, {
+        const galRes = await fetch(`${API_URL}/api/gallery/${eventUuid}`, {
           signal: controller.signal,
         });
         if (galRes.ok) {
@@ -80,7 +80,7 @@ function Galerie() {
           setError("Impossible de charger la galerie.");
         }
 
-        const evRes = await fetch(`${API_URL}/api/events/${id}`, {
+        const evRes = await fetch(`${API_URL}/api/events/${eventUuid}`, {
           signal: controller.signal,
         });
         if (evRes.ok) {
@@ -97,7 +97,7 @@ function Galerie() {
 
     loadData();
     return () => controller.abort();
-  }, [id]);
+  }, [eventUuid]);
 
   const toggleLike = async (photoId: number) => {
     const isAlreadyLiked = likedPhotos.includes(photoId);
@@ -144,7 +144,7 @@ function Galerie() {
     setPhotos((prev) => [
       {
         gallery_id: insertId,
-        gallery_id_event: Number(id),
+        gallery_id_event: 0,
         gallery_id_user: currentUserId,
         gallery_link: imageUrl,
         gallery_description: textDescription || "Ajout galerie",
@@ -302,7 +302,7 @@ function Galerie() {
         <GalleryModal
           onClose={() => setIsModalOpen(false)}
           onAddPhoto={handleAddPhoto}
-          eventId={Number(id)}
+          eventUuid={eventUuid ?? ""}
           userId={currentUserId}
         />
       )}
