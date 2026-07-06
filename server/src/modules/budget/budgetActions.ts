@@ -1,13 +1,18 @@
 import type { RequestHandler } from "express";
 
 // Import access to data
+import eventRepository from "../event/eventRepository";
 import budgetRepository from "./budgetRepository";
 
 // The R of BREAD - Read operation
 const browse: RequestHandler = async (req, res, next) => {
   try {
     // Fetch specific budget based on the provided event ID
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
     const budget = await budgetRepository.readByEvent(eventId);
 
     res.json(budget);
@@ -21,7 +26,11 @@ const browse: RequestHandler = async (req, res, next) => {
 const browseTotalUser: RequestHandler = async (req, res, next) => {
   try {
     // Fetch specific budget based on the provided event ID
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
     const budget = await budgetRepository.readAllTotalBudgetByEvent(eventId);
 
     res.json(budget);
@@ -34,8 +43,12 @@ const browseTotalUser: RequestHandler = async (req, res, next) => {
 
 const browseUser: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id_event);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
     const userId = Number(req.params.id_user);
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
     const budget = await budgetRepository.readBudgetInfoByUser(eventId, userId);
 
     res.json(budget);
@@ -48,7 +61,11 @@ const browseUser: RequestHandler = async (req, res, next) => {
 
 const browseEvent: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
     const budget = await budgetRepository.readBudgetInfoEvent(eventId);
 
     res.json(budget);
@@ -61,10 +78,15 @@ const browseEvent: RequestHandler = async (req, res, next) => {
 
 const create: RequestHandler = async (req, res, next) => {
   try {
-    const event = Number(req.body.id_event);
+    const event = await eventRepository.readIdByUuid(req.body.event_uuid);
     const user = Number(req.body.id_user);
     const name = String(req.body.name);
     const price = Number(req.body.price);
+
+    if (!event) {
+      res.sendStatus(404);
+      return;
+    }
 
     const budget = await budgetRepository.create(event, user, name, price);
 

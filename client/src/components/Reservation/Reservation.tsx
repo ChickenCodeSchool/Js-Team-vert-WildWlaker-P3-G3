@@ -19,8 +19,7 @@ type Reservation = {
 };
 
 function Reservation() {
-  const { id } = useParams();
-  const eventId = Number(id);
+  const { eventUuid } = useParams();
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
   const [reservations, setReservations] = useState<Reservation[]>([]);
@@ -40,34 +39,39 @@ function Reservation() {
   >(null);
 
   const fetchReservations = useCallback(async () => {
+    if (!eventUuid) return;
+
     const res = await fetch(
-      `http://localhost:3310/api/reservations/all/${eventId}`,
+      `http://localhost:3310/api/reservations/all/${eventUuid}`,
     );
     const data = await res.json();
     setReservations(data);
-  }, [eventId]);
+  }, [eventUuid]);
 
   useEffect(() => {
+    if (!eventUuid || !userId) return;
+
     fetchReservations();
 
     const fetchTest = async () => {
       const response = await fetch(
-        `http://localhost:3310/api/user-in-event/${eventId}/${userId}`,
+        `http://localhost:3310/api/user-in-event/${eventUuid}/${userId}`,
       );
       const data = await response.json();
       setUserInEvent(data.joined);
     };
 
     fetchTest();
-  }, [eventId, userId, fetchReservations]);
+  }, [eventUuid, userId, fetchReservations]);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/events/name/${eventId}`)
+    if (!eventUuid) return;
+    fetch(`http://localhost:3310/api/events/name/${eventUuid}`)
       .then((res) => res.json())
       .then((data) => {
         setEventName(data);
       });
-  }, [eventId]);
+  }, [eventUuid]);
 
   const toast = Swal.mixin({
     toast: true,
@@ -98,6 +102,8 @@ function Reservation() {
   async function handleSubmitReservation(e: React.FormEvent) {
     e.preventDefault();
 
+    if (!eventUuid) return;
+
     const isEditing = editingReservationId !== null;
 
     const missingFields = [
@@ -120,7 +126,7 @@ function Reservation() {
     }
 
     const formData = new FormData();
-    formData.append("reservation_id_event", String(eventId));
+    formData.append("event_uuid", eventUuid ?? "");
     formData.append("reservation_id_user", String(userId));
     formData.append("reservation_name", reservationName);
     formData.append("reservation_date", reservationDate);
@@ -327,6 +333,7 @@ function Reservation() {
           >
             <CardEvents
               event_id={event.reservation_id}
+              event_uuid={eventUuid ?? ""}
               event_host_id={null}
               reservation_id_user={event.reservation_id_user}
               onEditReservation={openEditModal}

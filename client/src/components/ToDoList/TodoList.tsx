@@ -10,8 +10,8 @@ type Task = {
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function TodoList(props: { eventId: number; todo_id_user: number }) {
-  const eventId = props.eventId;
+function TodoList(props: { eventUuid: string; todo_id_user: number }) {
+  const eventUuid = props.eventUuid;
   const todo_id_user = props.todo_id_user;
   //deux states task qui contient les taches, setTask qui les met a jour. Pour la seconde state addTask c'est le string qui contient ce que l'utilisateur tape, setAddTask la met a jour.
   // editId garde l'id de la tache en cours d'édition, est null si aucune tache n'est éditée & editTask stock le texte modifié par l'utilisateur
@@ -21,12 +21,12 @@ function TodoList(props: { eventId: number; todo_id_user: number }) {
   const [editTask, setEditTask] = useState<string>("");
 
   useEffect(() => {
-    fetch(`${API_URL}/api/todo/${eventId}`)
+    fetch(`${API_URL}/api/todo/${eventUuid}`)
       .then((response) => response.json())
       .then((data: Task[]) => {
         setTask(data);
       });
-  }, [eventId]);
+  }, [eventUuid]);
 
   async function handleAddTask() {
     //quand on clique sur '+' setTask crée un nouveau tableau avec toutes les taches qui existent et ajoute un nouvel objet Task qui a un id, un texte et un état false / setAddTask("") remet l'input à vide
@@ -36,7 +36,7 @@ function TodoList(props: { eventId: number; todo_id_user: number }) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        todo_id_event: eventId,
+        event_uuid: eventUuid,
         todo_id_user: todo_id_user,
         todo_name: addTask,
         todo_deadline: null,

@@ -106,8 +106,7 @@ function returnDateString(dateString: string) {
 }
 
 function Budget() {
-  const { id } = useParams();
-  const eventID = Number(id);
+  const { eventUuid } = useParams();
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userID = user?.id;
 
@@ -127,10 +126,11 @@ function Budget() {
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
 
   useEffect(() => {
-    fetchUserInEvent();
+    if (!eventUuid) return;
 
+    fetchUserInEvent();
     fetchBudgetLists();
-  }, []);
+  }, [eventUuid]);
 
   const userBudget = getUserBudget(listUserBudget, userID)?.total_price ?? 0;
   const listBalance = getBalancePrice(listUserBudget);
@@ -139,22 +139,24 @@ function Budget() {
   /* -- Fonctions -- */
 
   function fetchBudgetLists() {
-    fetch(`${apiUrl}/api/budget/event/${eventID}`)
+    if (!eventUuid) return;
+    fetch(`${apiUrl}/api/budget/event/${eventUuid}`)
       .then((res) => res.json())
       .then((data: BudgetTotalEvent[]) => setBudgetEvent(data[0]));
 
-    fetch(`${apiUrl}/api/budget/${eventID}/totalUsers`)
+    fetch(`${apiUrl}/api/budget/${eventUuid}/totalUsers`)
       .then((res) => res.json())
       .then((data: BudgetByUser[]) => setListUserBudget(data));
 
-    fetch(`${apiUrl}/api/budget/${eventID}`)
+    fetch(`${apiUrl}/api/budget/${eventUuid}`)
       .then((res) => res.json())
       .then((data: Budget[]) => setListBudget(data));
   }
 
   async function fetchUserInEvent() {
+    if (!eventUuid) return;
     const response = await fetch(
-      `${apiUrl}/api/user-in-event/${eventID}/${userID}`,
+      `${apiUrl}/api/user-in-event/${eventUuid}/${userID}`,
     );
 
     const data = await response.json();
@@ -164,6 +166,8 @@ function Budget() {
 
   async function addBudget(e: React.FormEvent) {
     e.preventDefault();
+
+    if (!eventUuid) return;
 
     const addAlert = Swal.mixin({
       toast: true,
@@ -221,7 +225,7 @@ function Budget() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        id_event: eventID,
+        event_uuid: eventUuid,
         id_user: userID,
         name: String(nameCreateForm),
         price: Number(priceCreateForm),

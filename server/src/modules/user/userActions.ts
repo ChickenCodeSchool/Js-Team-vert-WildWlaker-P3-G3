@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import bcrypt from "bcrypt";
 import type { RequestHandler } from "express";
 import nodemailer from "nodemailer";
+import eventRepository from "../event/eventRepository";
 import userRepository from "./userRepository";
 
 const transporter = nodemailer.createTransport({
@@ -140,7 +141,12 @@ const login: RequestHandler = async (req, res, next) => {
 };
 const readUserDescriptionEvent: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const event = await userRepository.readUserDescriptionEvent(eventId);
 
@@ -152,7 +158,12 @@ const readUserDescriptionEvent: RequestHandler = async (req, res, next) => {
 
 const browseUserAndBudget: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const event = await userRepository.readUserAndBudgetOnDashboard(eventId);
 
@@ -371,7 +382,12 @@ const browseUserAdmin: RequestHandler = async (req, res, next) => {
 };
 const readUserJoinEvent: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const userName = await userRepository.readUserJoinEvent(eventId);
 

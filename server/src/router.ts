@@ -27,10 +27,16 @@ router.get("/api/username/:id", userActions.readUserName);
 // router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
 // TODO: vérifier avec l'équipe — deux routes identiques sur /api/users/:id
 // userActions.browse -> à confirmer : liste filtrée ou profil ?
-router.get("/api/users/description/:id", userActions.readUserDescriptionEvent);
+router.get(
+  "/api/users/description/:eventUuid",
+  userActions.readUserDescriptionEvent,
+);
 // userActions.read -> à confirmer : profil utilisateur unique ?
 router.get("/api/users/:id", userActions.read);
-router.get("/api/users/:id/userAndBudget", userActions.browseUserAndBudget);
+router.get(
+  "/api/users/:eventUuid/userAndBudget",
+  userActions.browseUserAndBudget,
+);
 // router.get("/:id", userActions.browse); browse pas declaré
 router.post("/api/users", userActions.add);
 router.get("/api/users/:id/photo", userActions.browsePhoto);
@@ -46,25 +52,28 @@ router.put("/api/auth/change-password", userActions.changePassword);
 router.put("/api/users/:id", userActions.editUserName);
 router.put("/api/users/change-password", userActions.forgotPassword);
 router.get("/api/users/admin/:id", userActions.browseUserAdmin);
-router.get("/api/user/event/:id", userActions.readUserJoinEvent);
+router.get("/api/user/event/:eventUuid", userActions.readUserJoinEvent);
 
 // router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
 
 // message routes
-router.get("/api/messages/:id", messageActions.browseMessagesByEventId);
-router.post("/api/messages/:id", messageActions.addMessage);
+router.get("/api/messages/:eventUuid", messageActions.browseMessagesByEventId);
+router.post("/api/messages/:eventUuid", messageActions.addMessage);
 router.post(
-  "/api/messages/notification/:id",
+  "/api/messages/notification/:eventUuid",
   messageActions.notificationMessage,
 );
 router.get(
-  "/api/messages/unread/:eventId/:userId",
+  "/api/messages/unread/:eventUuid/:userId",
   messageActions.getUnreadMessages,
 );
 
 // reservation routes
-router.get("/api/reservations/:id", reservationActions.browse);
-router.get("/api/reservations/all/:id", reservationActions.readAllReservation);
+router.get("/api/reservations/:eventUuid", reservationActions.browse);
+router.get(
+  "/api/reservations/all/:eventUuid",
+  reservationActions.readAllReservation,
+);
 router.post(
   "/api/reservations",
   upload.single("reservation_picture"),
@@ -89,23 +98,31 @@ router.post("/api/items", itemActions.add);
 // EventActions routes
 // router.get("/api/users/:id/events", userActions.getUserEvents);
 router.get("/api/events", eventActions.browse);
-router.get("/api/events/name/:id", eventActions.readEventName);
+router.get("/api/events/name/:eventUuid", eventActions.readEventName);
 router.get("/api/events/images", eventActions.browseImages);
-router.get("/api/events/:id", eventActions.read);
+
+router.get("/api/events/uuid/:uuid", eventActions.readByUuid);
+router.get("/events/uuid/:uuid", eventActions.readByUuid);
+router.get("/api/events/:eventUuid", eventActions.read);
+
 router.post("/api/events/join", eventActions.join);
 router.post("/api/events", eventActions.add);
-router.put("/api/events/:id/", upload.single("picture"), eventActions.edit);
-router.delete("/api/event/delete/:id", eventActions.deleteEvent);
-router.get("/api/event/host/:id", eventActions.readEventHostId);
+router.put(
+  "/api/events/:eventUuid/",
+  upload.single("picture"),
+  eventActions.edit,
+);
+router.delete("/api/event/delete/:eventUuid", eventActions.deleteEvent);
+router.get("/api/event/host/:eventUuid", eventActions.readEventHostId);
 
 // todoActions routes
-router.get("/api/todo/:eventId", todoActions.browse);
+router.get("/api/todo/:eventUuid", todoActions.browse);
 router.post("/api/todo", todoActions.add);
 router.put("/api/todo/:todo_id", todoActions.edit);
 router.delete("/api/todo/:todo_id", todoActions.destroy);
 
 // gallery routes
-router.get("/api/gallery/:eventId", galleryActions.browse);
+router.get("/api/gallery/:eventUuid", galleryActions.browse);
 
 router.post("/api/gallery", upload.single("photo"), galleryActions.uploadPhoto);
 
@@ -114,7 +131,10 @@ router.delete("/api/gallery/:gallery_id/:userId", galleryActions.destroy);
 router.put("/api/gallery/:gallery_id/:userId", galleryActions.edit);
 
 // gallery likes
-router.get("/api/gallery/:id/likes/:userId", galleryActions.getLikedPhotos);
+router.get(
+  "/api/gallery/:eventUuid/likes/:userId",
+  galleryActions.getLikedPhotos,
+);
 router.post("/api/gallery/:id/like", galleryActions.addLike);
 router.delete("/api/gallery/:id/like/:userId", galleryActions.removeLike);
 
@@ -141,9 +161,9 @@ router.post(
 );
 
 // event user joining route
-router.get("/api/events/:eventId/users", eventUserJoiningActions.browse);
+router.get("/api/events/:eventUuid/users", eventUserJoiningActions.browse);
 router.get(
-  "/api/user-in-event/:event/:user",
+  "/api/user-in-event/:eventUuid/:user",
   eventUserJoiningActions.browseUserEvent,
 );
 router.delete("/api/euj/delete/:id", eventUserJoiningActions.deleteAll);
@@ -174,10 +194,10 @@ router.patch("/api/admin/ban-event/:id", adminActions.banEvent);
 
 // --> budget
 // > get
-router.get("/api/budget/:id", budgetActions.browse);
-router.get("/api/budget/:id/totalUsers", budgetActions.browseTotalUser);
-router.get("/api/budget/user/:id_event/:id_user", budgetActions.browseUser);
-router.get("/api/budget/event/:id", budgetActions.browseEvent);
+router.get("/api/budget/:eventUuid", budgetActions.browse);
+router.get("/api/budget/:eventUuid/totalUsers", budgetActions.browseTotalUser);
+router.get("/api/budget/user/:eventUuid/:id_user", budgetActions.browseUser);
+router.get("/api/budget/event/:eventUuid", budgetActions.browseEvent);
 // > post
 router.post("/api/budget/add", budgetActions.create);
 // > put

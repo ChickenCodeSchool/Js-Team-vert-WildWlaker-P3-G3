@@ -1,11 +1,17 @@
 import type { RequestHandler } from "express";
 import { getIo } from "../../socket";
+import eventRepository from "../event/eventRepository";
 import messageRepository from "./messageRepository";
 
 const addMessage: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
     const { userId, messagesUser } = req.body;
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const result = await messageRepository.sendMessage(
       eventId,
@@ -14,8 +20,8 @@ const addMessage: RequestHandler = async (req, res, next) => {
     );
 
     const io = getIo();
-    console.log("Emission socket vers :", `event-${eventId}`);
-    io.to(`event-${eventId}`).emit("new-message", result);
+    console.log("Emission socket vers :", `event-${req.params.eventUuid}`);
+    io.to(`event-${req.params.eventUuid}`).emit("new-message", result);
 
     res.status(201).json(result);
   } catch (error) {
@@ -25,7 +31,12 @@ const addMessage: RequestHandler = async (req, res, next) => {
 };
 const browseMessagesByEventId: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const messages = await messageRepository.getMessagesByEventId(eventId);
     res.json(messages);
@@ -36,8 +47,13 @@ const browseMessagesByEventId: RequestHandler = async (req, res, next) => {
 };
 const notificationMessage: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
     const { userId } = req.body;
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     await messageRepository.notificationMessage(eventId, userId);
 
@@ -51,8 +67,13 @@ const notificationMessage: RequestHandler = async (req, res, next) => {
 };
 const getUnreadMessages: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.eventId);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
     const userId = Number(req.params.userId);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const count = await messageRepository.getUnreadMessages(eventId, userId);
 
