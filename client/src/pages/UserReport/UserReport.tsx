@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import ReportDetails from "../../components/ReportUser/ReportDetails";
 import ReportEvidence from "../../components/ReportUser/ReportEvidence";
 import ReportType from "../../components/ReportUser/ReportType";
@@ -222,8 +222,9 @@ function UserReport() {
         </form>
         <footer className="userReport-Footer">
           <p>
-            En soumettant ce formulaire, vous acceptez nos conditions
-            d'utilisation et notre politique de confidentialité.
+            En soumettant ce formulaire, vous acceptez nos{" "}
+            <Link to="/cgv">conditions d'utilisation</Link> et notre politique
+            de confidentialité.
           </p>
         </footer>
       </main>

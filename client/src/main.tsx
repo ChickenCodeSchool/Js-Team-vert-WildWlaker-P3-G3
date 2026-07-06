@@ -4,8 +4,6 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router";
 
 /* ************************************************************************* */
-
-// import TodoList from "./components/ToDoList/TodoList";
 import Admin from "../src/pages/Admin/Admin";
 // Import the main app component
 import App from "./App";
@@ -17,6 +15,7 @@ import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
 import HomeEvents from "./pages/HomeEvents/HomeEvents";
+import PageCGV from "./pages/PageCGV/PageCGV";
 // import Presentation from "./pages/Presentation/Presentation";
 import Register from "./pages/Register/Register";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
@@ -37,7 +36,6 @@ const router = createBrowserRouter([
   },
 
   // Renders the App component for the home page
-
   {
     path: "/homeevents",
     element: <HomeEvents />,
@@ -82,10 +80,10 @@ const router = createBrowserRouter([
     path: "/admin/report/:type/:id",
     element: <AdminReport />,
   },
-  // {
-  //   path: "/todoList",
-  //   element: <TodoList />,
-  // },
+  {
+    path: "/CGV",
+    element: <PageCGV />,
+  },
   // Try adding a new route! For example, "/about" with an About component
 ]);
 

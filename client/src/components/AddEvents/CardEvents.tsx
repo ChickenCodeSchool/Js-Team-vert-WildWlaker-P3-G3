@@ -2,6 +2,7 @@ import { MapPin, PencilLine, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 import { useLocation } from "react-router";
+import Swal from "sweetalert2";
 import type { CardEventsProps, EventData } from "../../types/Events";
 import ModalEditEvent from "./ModalEditEvent";
 import "./CardEvents.css";
@@ -59,6 +60,15 @@ function CardEvents({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleteEventModalOpen, setIsDeleteEventModalOpen] = useState(false);
 
+  const toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: true,
+    customClass: { popup: "toast" },
+  });
+
   const handleEventUpdated = (updatedEvent: EventData) => {
     setCurrentTitle(updatedEvent.event_name);
     setCurrentDescription(updatedEvent.event_description);
@@ -66,6 +76,11 @@ function CardEvents({
     setCurrentLocation(updatedEvent.event_location);
     setCurrentDateStart(updatedEvent.event_date_start);
     setCurrentDateEnd(updatedEvent.event_date_end);
+    toast.fire({
+      icon: "success",
+      text: "Événement modifié",
+      customClass: { popup: "toast-error-popup" },
+    });
   };
   const handleDeleteReservation = async () => {
     try {
@@ -96,6 +111,11 @@ function CardEvents({
 
       setIsDeleteEventModalOpen(false);
       onEventDeleted?.(event_id);
+      toast.fire({
+        icon: "success",
+        text: "Événement supprimé",
+        customClass: { popup: "toast-error-popup" },
+      });
     } catch (error) {
       console.error(error);
     }

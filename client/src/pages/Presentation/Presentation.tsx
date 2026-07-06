@@ -1,5 +1,5 @@
 import "./Presentation.css";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import budget from "../../assets/images/logo-feature-budget.png";
 import gallerie from "../../assets/images/logo-feature-gallerie.png";
 import messagerie from "../../assets/images/logo-feature-messagerie.png";
@@ -165,7 +165,9 @@ function Presentation() {
       </div>
       <footer className="footer-presentation">
         <p>copyright 2026 Wedoo. Tous droits réservés.</p>
-        <button type="button">CGU</button>
+        <Link to="/cgv" className="footer-presentation-link">
+          CGV
+        </Link>
       </footer>
     </div>
   );
