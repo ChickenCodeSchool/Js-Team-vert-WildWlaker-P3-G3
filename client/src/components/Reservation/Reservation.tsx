@@ -320,6 +320,46 @@ function Reservation() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
+        {reservations.length === 0 && (
+          <div className="reservation-empty">
+            <div className="reservation-empty-text">
+              <p className="reservation-empty-title">
+                Aucune réservation pour cet événement.
+              </p>
+              <p className="reservation-empty-subtitle">
+                Ajoutez votre première réservation.
+              </p>
+            </div>
+
+            <svg
+              className="reservation-empty-arrow"
+              viewBox="0 0 600 500"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                className="reservation-empty-path"
+                d="
+            M0 330
+            C20 300, 220 330, 290 300
+            C340 270, 340 200, 270 205
+            C220 210, 220 290, 290 290
+            C370 300, 450 270, 500 90
+          "
+                stroke="currentColor"
+                strokeLinecap="round"
+              />
+              <path
+                className="reservation-empty-head"
+                d="M470 120 L500 85 L525 130"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        )}
         {reservations.map((event) => (
           <div
             className="card-reservation"
