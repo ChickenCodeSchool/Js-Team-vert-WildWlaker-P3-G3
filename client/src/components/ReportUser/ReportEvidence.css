@@ -17,6 +17,8 @@ fieldset {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    font: inherit;
+    text-align: center;
     color: color-mix(in srgb, var(--font-black) 80%, transparent);
     gap: 8px;
     width: 100%;
@@ -39,6 +41,32 @@ fieldset {
       flex-wrap: wrap;
       gap: 8px;
       justify-content: center;
+
+      .reportEvidence-item {
+        position: relative;
+
+        .reportEvidence-remove {
+          position: absolute;
+          top: -6px;
+          right: -6px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 20px;
+          height: 20px;
+          padding: 0;
+          border: none;
+          border-radius: 50%;
+          background: var(--icon-color);
+          color: var(--bg-neutral);
+          cursor: pointer;
+          z-index: 1;
+
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
     }
 
     .photoEvidence-preview {

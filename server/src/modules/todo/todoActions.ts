@@ -1,10 +1,17 @@
 import type { RequestHandler } from "express";
 
+import eventRepository from "../event/eventRepository";
 import todoRepository from "./todoRepository";
 
 const browse: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.eventId);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
+
     const todo = await todoRepository.readAll(eventId);
 
     res.json(todo);
@@ -15,8 +22,15 @@ const browse: RequestHandler = async (req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
+    const eventId = await eventRepository.readIdByUuid(req.body.event_uuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
+
     const newTodo = {
-      todo_id_event: req.body.todo_id_event,
+      todo_id_event: eventId,
       todo_id_user: req.body.todo_id_user,
       todo_name: req.body.todo_name,
       todo_deadline: req.body.todo_deadline,

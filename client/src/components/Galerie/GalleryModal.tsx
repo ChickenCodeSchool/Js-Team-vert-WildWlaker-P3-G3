@@ -5,14 +5,14 @@ import { useState } from "react";
 type GalleryModalProps = {
   onClose: () => void;
   onAddPhoto: (imageUrl: string, insertId: number, description: string) => void;
-  eventId: number;
+  eventUuid: string;
   userId: number;
 };
 
 function GalleryModal({
   onClose,
   onAddPhoto,
-  eventId,
+  eventUuid,
   userId,
 }: GalleryModalProps) {
   const [preview, setPreview] = useState<string | null>(null);
@@ -39,14 +39,14 @@ function GalleryModal({
   };
 
   const handleAddClick = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile || !eventUuid) return;
 
     try {
       setError("");
 
       const formData = new FormData();
 
-      formData.append("gallery_id_event", eventId.toString());
+      formData.append("event_uuid", eventUuid);
       formData.append("gallery_id_user", userId.toString());
       formData.append("gallery_description", description);
 
