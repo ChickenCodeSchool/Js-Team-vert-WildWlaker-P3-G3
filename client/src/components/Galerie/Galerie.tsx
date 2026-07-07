@@ -1,12 +1,13 @@
 import "./Galerie.css";
 import { ImagePlus, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import GalleryModal from "./GalleryModal";
 import { PhotoItem } from "./PhotoItem";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-type User = { id: number };
+// type UserI = { id: number };
 type Gallery = {
   gallery_id: number;
   gallery_id_event: number;
@@ -18,22 +19,21 @@ type Gallery = {
   like_count: number;
 };
 
-const getUserFromStorage = (): User => {
-  try {
-    const stored = localStorage.getItem("user");
-    return stored ? { id: JSON.parse(stored).id ?? 0 } : { id: 0 };
-  } catch {
-    return { id: 0 };
-  }
-};
+// const getUserFromStorage = (): User => {
+//   try {
+//     const stored = localStorage.getItem("user");
+//     return stored ? { id: JSON.parse(stored).id ?? 0 } : { id: 0 };
+//   } catch {
+//     return { id: 0 };
+//   }
+// };
 
 function Galerie() {
-  const segments = window.location.pathname.split("/");
-  const id = segments[segments.indexOf("galerie") - 1] || segments[2];
+  const { eventUuid } = useParams();
 
   // Utilisation directe de l'ID pour éviter les boucles infinies sur l'objet currentUser
-  const currentUser = getUserFromStorage();
-  const currentUserId = currentUser.id;
+  // const currentUser = getUserFromStorage();
+  // const userId = currentUser.id;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [photoToDelete, setPhotoToDelete] = useState<number | null>(null);
@@ -50,17 +50,37 @@ function Galerie() {
     if (!link) return "";
     return link.startsWith("http") ? link : `${API_URL}${link}`;
   };
+  const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!id || currentUserId === 0) return;
-    fetch(`${API_URL}/api/gallery/${id}/likes/${currentUserId}`)
+    fetch(`${API_URL}/api/auth/authVerif`, {
+      credentials: "include",
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          setUserId(null);
+          return;
+        }
+
+        const data = await res.json();
+        setUserId(data.id);
+      })
+      .catch(() => setUserId(null));
+  }, []);
+
+  useEffect(() => {
+    if (!eventUuid || userId === null) return;
+
+    fetch(`${API_URL}/api/gallery/${eventUuid}/likes/${userId}`, {
+      credentials: "include",
+    })
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => setLikedPhotos(data))
       .catch((err) => console.error("Erreur likes:", err));
-  }, [id, currentUserId]);
+  }, [eventUuid, userId]);
 
   useEffect(() => {
-    if (!id) {
+    if (!eventUuid) {
       setIsLoading(false);
       return;
     }
@@ -71,8 +91,9 @@ function Galerie() {
       setIsLoading(true);
       setError(null);
       try {
-        const galRes = await fetch(`${API_URL}/api/gallery/${id}`, {
+        const galRes = await fetch(`${API_URL}/api/gallery/${eventUuid}`, {
           signal: controller.signal,
+          credentials: "include",
         });
         if (galRes.ok) {
           setPhotos(await galRes.json());
@@ -80,8 +101,9 @@ function Galerie() {
           setError("Impossible de charger la galerie.");
         }
 
-        const evRes = await fetch(`${API_URL}/api/events/${id}`, {
+        const evRes = await fetch(`${API_URL}/api/events/${eventUuid}`, {
           signal: controller.signal,
+          credentials: "include",
         });
         if (evRes.ok) {
           setEventName((await evRes.json()).event_name || "Mon Événement");
@@ -97,18 +119,18 @@ function Galerie() {
 
     loadData();
     return () => controller.abort();
-  }, [id]);
+  }, [eventUuid]);
 
   const toggleLike = async (photoId: number) => {
+    if (!userId) return;
     const isAlreadyLiked = likedPhotos.includes(photoId);
     try {
-      const url = `${API_URL}/api/gallery/${photoId}/like${isAlreadyLiked ? `/${currentUserId}` : ""}`;
+      const url = `${API_URL}/api/gallery/${photoId}/like${isAlreadyLiked ? `/${userId}` : ""}`;
       const response = await fetch(url, {
         method: isAlreadyLiked ? "DELETE" : "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: isAlreadyLiked
-          ? undefined
-          : JSON.stringify({ user_id: currentUserId }),
+        body: isAlreadyLiked ? undefined : JSON.stringify({ user_id: userId }),
       });
 
       if (response.ok) {
@@ -141,11 +163,13 @@ function Galerie() {
     insertId: number,
     textDescription: string,
   ) => {
+    if (userId === null) return;
+
     setPhotos((prev) => [
       {
         gallery_id: insertId,
-        gallery_id_event: Number(id),
-        gallery_id_user: currentUserId,
+        gallery_id_event: 0,
+        gallery_id_user: userId,
         gallery_link: imageUrl,
         gallery_description: textDescription || "Ajout galerie",
         gallery_creation_date: new Date().toISOString(),
@@ -154,6 +178,7 @@ function Galerie() {
       },
       ...prev,
     ]);
+
     setIsModalOpen(false);
   };
 
@@ -161,9 +186,10 @@ function Galerie() {
     if (photoToDelete === null) return;
     try {
       const res = await fetch(
-        `${API_URL}/api/gallery/${photoToDelete}/${currentUserId}`,
+        `${API_URL}/api/gallery/${photoToDelete}/${userId}`,
         {
           method: "DELETE",
+          credentials: "include",
         },
       );
       if (res.ok) {
@@ -180,9 +206,10 @@ function Galerie() {
     if (!photoToEdit) return;
     try {
       const res = await fetch(
-        `${API_URL}/api/gallery/${photoToEdit.gallery_id}/${currentUserId}`,
+        `${API_URL}/api/gallery/${photoToEdit.gallery_id}/${userId}`,
         {
           method: "PUT",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ gallery_description: newDescription }),
         },
@@ -201,6 +228,10 @@ function Galerie() {
       console.error("Erreur modification:", err);
     }
   };
+
+  if (userId === null) {
+    return <p>Chargement utilisateur...</p>;
+  }
 
   return (
     <section className="galerie">
@@ -236,7 +267,43 @@ function Galerie() {
 
       {!isLoading && photos.length === 0 && (
         <div className="galerie-empty">
-          <p>Aucune photo. Ajoutez-en une !</p>
+          <div className="galerie-empty-text">
+            <p className="galerie-empty-title">
+              Aucune photo dans cet événement.
+            </p>
+
+            <p className="galerie-empty-subtitle">
+              Partagez vos meilleurs souvenirs en ajoutant la première photo.
+            </p>
+          </div>
+
+          <svg
+            className="galerie-empty-arrow"
+            viewBox="0 0 600 500"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              className="galerie-empty-path"
+              d="
+        M0 330
+        C20 300, 220 330, 290 300
+        C340 270, 340 200, 270 205
+        C220 210, 220 290, 290 290
+        C370 300, 450 270, 500 90
+      "
+              stroke="currentColor"
+              strokeLinecap="round"
+            />
+            <path
+              className="galerie-empty-head"
+              d="M470 120 L500 85 L525 130"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
       )}
 
@@ -266,8 +333,8 @@ function Galerie() {
         <GalleryModal
           onClose={() => setIsModalOpen(false)}
           onAddPhoto={handleAddPhoto}
-          eventId={Number(id)}
-          userId={currentUserId}
+          eventUuid={eventUuid ?? ""}
+          userId={userId}
         />
       )}
 

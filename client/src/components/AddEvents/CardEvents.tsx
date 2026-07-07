@@ -2,6 +2,7 @@ import { MapPin, PencilLine, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 import { useLocation } from "react-router";
+import Swal from "sweetalert2";
 import type { CardEventsProps, EventData } from "../../types/Events";
 import ModalEditEvent from "./ModalEditEvent";
 import "./CardEvents.css";
@@ -29,8 +30,10 @@ const formatMonth = (date: string): string => {
 };
 
 function CardEvents({
+  user_id,
   event_id,
-  event_host_id,
+  event_uuid,
+  event_id_host,
   image,
   imageAlt,
   dateStart,
@@ -38,12 +41,16 @@ function CardEvents({
   title,
   description,
   location,
+  onEventDeleted,
+  reservation_id_user,
+  onEditReservation,
+  onReservationDeleted,
 }: CardEventsProps) {
   const uselocation = useLocation();
   const isHomeEvents = uselocation.pathname === "/homeevents";
   const onTableau = uselocation.pathname.startsWith("/tableaudebord/");
-  const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
-  const isHost = user_id === event_host_id;
+  // const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
+  const isHost = user_id === event_id_host;
   const [currentTitle, setCurrentTitle] = useState(title);
   const [currentDescription, setCurrentDescription] = useState(description);
   const [currentImage, setCurrentImage] = useState(image);
@@ -52,6 +59,16 @@ function CardEvents({
   const [currentDateEnd, setCurrentDateEnd] = useState(dateEnd);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleteEventModalOpen, setIsDeleteEventModalOpen] = useState(false);
+
+  const toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: true,
+    customClass: { popup: "toast" },
+  });
 
   const handleEventUpdated = (updatedEvent: EventData) => {
     setCurrentTitle(updatedEvent.event_name);
@@ -60,6 +77,11 @@ function CardEvents({
     setCurrentLocation(updatedEvent.event_location);
     setCurrentDateStart(updatedEvent.event_date_start);
     setCurrentDateEnd(updatedEvent.event_date_end);
+    toast.fire({
+      icon: "success",
+      text: "Événement modifié",
+      customClass: { popup: "toast-error-popup" },
+    });
   };
   const handleDeleteReservation = async () => {
     try {
@@ -67,6 +89,7 @@ function CardEvents({
         `http://localhost:3310/api/reservations/delete/${event_id}`,
         {
           method: "DELETE",
+          credentials: "include",
         },
       );
 
@@ -75,6 +98,26 @@ function CardEvents({
       }
 
       setIsDeleteModalOpen(false);
+      onReservationDeleted?.(event_id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleDeleteEvent = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3310/api/event/delete/${event_uuid}`,
+        { method: "DELETE", credentials: "include" },
+      );
+      if (!response.ok) throw new Error("Erreur suppression");
+
+      setIsDeleteEventModalOpen(false);
+      onEventDeleted?.(event_id);
+      toast.fire({
+        icon: "success",
+        text: "Événement supprimé",
+        customClass: { popup: "toast-error-popup" },
+      });
     } catch (error) {
       console.error(error);
     }
@@ -83,7 +126,7 @@ function CardEvents({
     <>
       <div className="CardEvents-Wrapper">
         <Link
-          to={isHomeEvents ? `/tableaudebord/${event_id}` : "#"}
+          to={isHomeEvents ? `/tableaudebord/${event_uuid}` : "#"}
           className="CardEvents-Global"
         >
           <div className="CardEvents-ImageDate">
@@ -119,10 +162,49 @@ function CardEvents({
             <PencilLine size={16} />
           </button>
         )}
+        {isHost && (
+          <button
+            type="button"
+            className="CardEvents-Deleted"
+            onClick={() => setIsDeleteEventModalOpen(true)}
+          >
+            <Trash2 size={16} />
+          </button>
+        )}
+        {isDeleteEventModalOpen && (
+          <div className="delete-modal-overlay">
+            <div className="delete-modal">
+              <h3>Supprimer l'événement</h3>
+              <p>Êtes-vous sûr de vouloir supprimer cet événement ?</p>
+              <div className="delete-modal-actions">
+                <button
+                  type="button"
+                  onClick={() => setIsDeleteEventModalOpen(false)}
+                >
+                  Annuler
+                </button>
+                <button type="button" onClick={handleDeleteEvent}>
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {onEditReservation &&
+          reservation_id_user != null &&
+          user_id === reservation_id_user && (
+            <button
+              type="button"
+              className="CardEvents-Edit"
+              onClick={() => onEditReservation?.(event_id)}
+            >
+              <PencilLine size={16} />
+            </button>
+          )}
         {onTableau && (
           <button
             type="button"
-            className="CardEvents-Edit"
+            className="CardEvents-Deleted"
             onClick={() => setIsDeleteModalOpen(true)}
           >
             <Trash2 size={16} />
@@ -155,8 +237,9 @@ function CardEvents({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         event={{
+          event_uuid,
           event_id,
-          event_host_id,
+          event_id_host,
           event_name: currentTitle,
           event_date_start: currentDateStart,
           event_date_end: currentDateEnd,

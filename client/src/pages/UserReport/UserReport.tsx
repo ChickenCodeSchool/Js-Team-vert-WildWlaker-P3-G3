@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import ReportDetails from "../../components/ReportUser/ReportDetails";
 import ReportEvidence from "../../components/ReportUser/ReportEvidence";
 import ReportType from "../../components/ReportUser/ReportType";
@@ -14,7 +14,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 function UserReport() {
   const navigate = useNavigate();
-  const { eventId } = useParams();
+  const { eventUuid } = useParams();
 
   const [repType, setRepType] = useState<string>("");
   const [repDetail, setRepDetail] = useState<string>("");
@@ -22,15 +22,37 @@ function UserReport() {
   const [_euj, setEuj] = useState<EventUserJoin[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [reportedUserId, setReportedUserId] = useState<number>(0);
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/events/${eventId}/users`)
+    fetch(`${API_URL}/api/auth/authVerif`, {
+      credentials: "include",
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Utilisateur non connecté");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setCurrentUserId(data.id);
+      })
+      .catch((error) => {
+        console.error(error);
+        setCurrentUserId(null);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/events/${eventUuid}/users`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data: EventUserJoin[]) => {
         setEuj(data);
       })
       .catch((error) => console.error(error));
-  }, [eventId]);
+  }, [eventUuid]);
 
   const handleGoBack = () => {
     navigate(-1);
@@ -50,24 +72,20 @@ function UserReport() {
       },
     });
 
-    const userJson = localStorage.getItem("user");
-    const user = userJson ? JSON.parse(userJson) : null;
-
-    if (!user) {
+    if (!repType || !repDetail || repEvidence.length === 0) {
       toast.fire({
         icon: "error",
-        text: "Vous devez être connecté pour envoyer un signalement.",
+        text: "Veuillez remplir les champs pour envoyer votre demande.",
         customClass: {
           popup: "toast-error-popup",
         },
       });
       return;
     }
-
-    if (!repType || !repDetail || repEvidence.length === 0) {
+    if (!currentUserId) {
       toast.fire({
         icon: "error",
-        text: "Veuillez remplir les champs pour envoyer votre demande.",
+        text: "Utilisateur non connecté.",
         customClass: {
           popup: "toast-error-popup",
         },
@@ -94,26 +112,31 @@ function UserReport() {
           const formData = new FormData();
           formData.append("reported_user_description", repDetail);
           formData.append("reported_user_id_user", reportedUserId.toString());
-          formData.append("reported_user_by_id_user", user.id.toString());
+          formData.append("reported_user_by_id_user", currentUserId.toString());
           for (const file of repEvidence) {
             formData.append("reported_user_image", file);
           }
           response = await fetch(`${API_URL}/api/userreport-user`, {
             method: "POST",
+            credentials: "include",
             body: formData,
           });
           break;
         }
         case "evenement": {
           const formData = new FormData();
-          formData.append("reported_event_id_event", eventId ?? "");
+          formData.append("event_uuid", eventUuid ?? "");
           formData.append("reported_event_description", repDetail);
-          formData.append("reported_event_by_id_user", user.id.toString());
+          formData.append(
+            "reported_event_by_id_user",
+            currentUserId.toString(),
+          );
           for (const file of repEvidence) {
             formData.append("reported_event_image", file);
           }
           response = await fetch(`${API_URL}/api/userreport-event`, {
             method: "POST",
+            credentials: "include",
             body: formData,
           });
           break;
@@ -121,12 +144,13 @@ function UserReport() {
         case "bug": {
           const formData = new FormData();
           formData.append("reported_bug_description", repDetail);
-          formData.append("reported_bug_by_id_user", user.id.toString());
+          formData.append("reported_bug_by_id_user", currentUserId.toString());
           for (const file of repEvidence) {
             formData.append("reported_bug_image", file);
           }
           response = await fetch(`${API_URL}/api/userreport-bug`, {
             method: "POST",
+            credentials: "include",
             body: formData,
           });
           break;
@@ -157,7 +181,7 @@ function UserReport() {
           popup: "toast-success-popup",
         },
       });
-      navigate(`/tableaudebord/${eventId}`);
+      navigate(`/tableaudebord/${eventUuid}`);
     } catch (error) {
       console.error(error);
       toast.fire({
@@ -171,7 +195,7 @@ function UserReport() {
   };
 
   const handleCancel = () => {
-    navigate(`/tableaudebord/${eventId}`);
+    navigate(`/tableaudebord/${eventUuid}`);
   };
 
   return (
@@ -221,8 +245,9 @@ function UserReport() {
         </form>
         <footer className="userReport-Footer">
           <p>
-            En soumettant ce formulaire, vous acceptez nos conditions
-            d'utilisation et notre politique de confidentialité.
+            En soumettant ce formulaire, vous acceptez nos{" "}
+            <Link to="/cgv">conditions d'utilisation</Link> et notre politique
+            de confidentialité.
           </p>
         </footer>
       </main>

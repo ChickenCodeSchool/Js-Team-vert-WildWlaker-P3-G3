@@ -1,9 +1,10 @@
 interface EventData {
   event_id: number;
+  event_uuid: string;
   event_name: string;
   event_date_start: string;
   event_date_end: string;
-  event_host_id: number;
+  event_id_host: number;
   event_picture: string;
   event_description: string;
   event_location: string;

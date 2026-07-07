@@ -1,7 +1,7 @@
 import { CircleX } from "lucide-react";
 import type { EventUserJoin } from "../../types/eventUserJoining";
 import "./ReportUserModal.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface ReportUserModalProps {
   euj: EventUserJoin[];
@@ -19,12 +19,20 @@ function ReportUserModal({
   useEffect(() => {
     dialogRef.current?.showModal();
   }, []);
-
-  const userJson = localStorage.getItem("user");
-  const currentUser = userJson ? JSON.parse(userJson) : null;
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  // const userJson = localStorage.getItem("user");
+  // const currentUser = userJson ? JSON.parse(userJson) : null;
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/authVerif`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => setCurrentUserId(data.id))
+      .catch(() => setCurrentUserId(null));
+  }, []);
 
   const otherUsers = euj.filter(
-    (activeUser) => activeUser.euj_id_user !== currentUser?.id,
+    (activeUser) => activeUser.euj_id_user !== currentUserId,
   );
 
   return (

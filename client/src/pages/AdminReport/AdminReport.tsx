@@ -62,12 +62,14 @@ function AdminReport() {
 
         response = await fetch(`${API_URL}/api/admin/ban-user/${targetId}`, {
           method: "PATCH",
+          credentials: "include",
         });
       } else {
         const eventId = report?.reported_event_id_event;
 
         response = await fetch(`${API_URL}/api/admin/ban-event/${eventId}`, {
           method: "PATCH",
+          credentials: "include",
         });
       }
 
@@ -77,6 +79,7 @@ function AdminReport() {
 
       await fetch(`${API_URL}/api/admin/report${capitalize(type)}/${id}/done`, {
         method: "PATCH",
+        credentials: "include",
       });
 
       setIsModalOpen(false);
@@ -139,6 +142,20 @@ function AdminReport() {
 
   if (!report) return <p>Chargement...</p>;
 
+  const handleImageClick = (image: string) => {
+    Swal.fire({
+      imageUrl: `${API_URL}/uploads/${image}`,
+      imageAlt: "preuve jointe",
+      showConfirmButton: false,
+      showCloseButton: false,
+      background: "transparent",
+      backdrop: "rgba(0, 0, 0, 0.85)",
+      customClass: {
+        image: "lightbox-image",
+      },
+    });
+  };
+
   return (
     <div className="adminReport-Layout">
       <header className="adminReport-HeaderNav">
@@ -197,10 +214,16 @@ function AdminReport() {
                   <ul>
                     {getImages().map((image) => (
                       <li key={image}>
-                        <img
-                          src={`${API_URL}/uploads/${image}`}
-                          alt="preuve jointe"
-                        />
+                        <button
+                          type="button"
+                          className="adminReport-EvidenceBtn"
+                          onClick={() => handleImageClick(image)}
+                        >
+                          <img
+                            src={`${API_URL}/uploads/${image}`}
+                            alt="preuve jointe"
+                          />
+                        </button>
                       </li>
                     ))}
                   </ul>

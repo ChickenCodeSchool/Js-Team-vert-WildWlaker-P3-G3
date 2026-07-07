@@ -1,10 +1,16 @@
 import type { RequestHandler } from "express";
 
+import eventRepository from "../event/eventRepository";
 import galleryRepository from "./galleryRepository";
 
 const browse: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.eventId);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const gallery = await galleryRepository.readAll(eventId);
 
@@ -16,8 +22,13 @@ const browse: RequestHandler = async (req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.body.gallery_id_event);
+    const eventId = await eventRepository.readIdByUuid(req.body.event_uuid);
     const userId = Number(req.body.gallery_id_user);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const permissions = await galleryRepository.checkUserPermissions(
       eventId,
@@ -52,8 +63,13 @@ const uploadPhoto: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const eventId = Number(req.body.gallery_id_event);
+    const eventId = await eventRepository.readIdByUuid(req.body.event_uuid);
     const userId = Number(req.body.gallery_id_user);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const permissions = await galleryRepository.checkUserPermissions(
       eventId,
@@ -124,15 +140,20 @@ const edit: RequestHandler = async (req, res, next) => {
 
 const getLikedPhotos: RequestHandler = async (req, res, next) => {
   try {
-    const id = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
     const userId = Number(req.params.userId);
 
-    const likedRows = (await galleryRepository.getLikesByEventAndUser(
-      id,
-      userId,
-    )) as { like_id_gallery: number }[];
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
-    const likedPhotoIds = likedRows.map((row) => row.like_id_gallery);
+    const likedRows = (await galleryRepository.getLikesByEventAndUser(
+      eventId,
+      userId,
+    )) as { gallery_like_id_gallery: number }[];
+
+    const likedPhotoIds = likedRows.map((row) => row.gallery_like_id_gallery);
 
     res.json(likedPhotoIds);
   } catch (error) {

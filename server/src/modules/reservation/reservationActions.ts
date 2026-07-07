@@ -1,9 +1,15 @@
 import type { RequestHandler } from "express";
+import eventRepository from "../event/eventRepository";
 import reservationRepository from "./reservationRepository";
 
 const browse: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const event =
       await reservationRepository.readReservationDescriptionEvent(eventId);
@@ -15,7 +21,12 @@ const browse: RequestHandler = async (req, res, next) => {
 };
 const readAllReservation: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const event = await reservationRepository.readAllReservation(eventId);
 
@@ -27,7 +38,6 @@ const readAllReservation: RequestHandler = async (req, res, next) => {
 const addReservation: RequestHandler = async (req, res, next) => {
   try {
     const {
-      reservation_id_event,
       reservation_id_user,
       reservation_name,
       reservation_date,
@@ -38,9 +48,15 @@ const addReservation: RequestHandler = async (req, res, next) => {
     const reservation_picture = req.file
       ? `/uploads/${req.file.filename}`
       : null;
+    const eventId = await eventRepository.readIdByUuid(req.body.event_uuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const event = await reservationRepository.addReservation({
-      reservation_id_event,
+      reservation_id_event: eventId,
       reservation_id_user,
       reservation_name,
       reservation_date,
@@ -54,6 +70,47 @@ const addReservation: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const updateReservation: RequestHandler = async (req, res, next) => {
+  try {
+    const reservationId = Number(req.params.id);
+    const {
+      reservation_name,
+      reservation_date,
+      reservation_location,
+      reservation_description,
+    } = req.body;
+
+    if (
+      !reservation_name ||
+      !reservation_date ||
+      !reservation_location ||
+      !reservation_description
+    ) {
+      res.status(400).json({ message: "Veuillez remplir tous les champs." });
+      return;
+    }
+
+    const reservation_picture = req.file
+      ? `/uploads/${req.file.filename}`
+      : null;
+
+    const result = await reservationRepository.updateReservation(
+      reservationId,
+      {
+        reservation_name,
+        reservation_date,
+        reservation_location,
+        reservation_description,
+        reservation_picture,
+      },
+    );
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteReservation: RequestHandler = async (req, res, next) => {
   try {
     const reservationId = Number(req.params.id);
@@ -70,5 +127,6 @@ export default {
   browse,
   readAllReservation,
   addReservation,
+  updateReservation,
   deleteReservation,
 };

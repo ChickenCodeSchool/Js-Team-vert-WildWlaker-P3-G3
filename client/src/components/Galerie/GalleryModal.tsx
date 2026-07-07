@@ -5,14 +5,14 @@ import { useState } from "react";
 type GalleryModalProps = {
   onClose: () => void;
   onAddPhoto: (imageUrl: string, insertId: number, description: string) => void;
-  eventId: number;
+  eventUuid: string;
   userId: number;
 };
 
 function GalleryModal({
   onClose,
   onAddPhoto,
-  eventId,
+  eventUuid,
   userId,
 }: GalleryModalProps) {
   const [preview, setPreview] = useState<string | null>(null);
@@ -39,14 +39,14 @@ function GalleryModal({
   };
 
   const handleAddClick = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile || !eventUuid) return;
 
     try {
       setError("");
 
       const formData = new FormData();
 
-      formData.append("gallery_id_event", eventId.toString());
+      formData.append("event_uuid", eventUuid);
       formData.append("gallery_id_user", userId.toString());
       formData.append("gallery_description", description);
 
@@ -56,6 +56,7 @@ function GalleryModal({
         `${import.meta.env.VITE_API_URL}/api/gallery`,
         {
           method: "POST",
+          credentials: "include",
           body: formData,
         },
       );
@@ -84,18 +85,25 @@ function GalleryModal({
       <div className="modal">
         <h2>Ajouter une photo</h2>
 
-        <input
-          type="file"
-          accept=".jpg,.jpeg,.png,.webp"
-          onChange={handleFileChange}
-        />
+        <label className="file-label">
+          <span>{selectedFile ? selectedFile.name : "Choisir un fichier"}</span>
+
+          <input
+            className="file-input"
+            type="file"
+            accept=".jpg,.jpeg,.png,.webp"
+            onChange={handleFileChange}
+          />
+        </label>
+
+        <p className="file-help">JPG, PNG, WEBP - Max. 5 Mo</p>
 
         <input
+          className="description-input"
           type="text"
-          placeholder="Ajouter une description (optionnel)..."
+          placeholder="Ajouter une description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          style={{ marginTop: "0.5rem", width: "100%", padding: "0.4rem" }}
         />
 
         {error && (

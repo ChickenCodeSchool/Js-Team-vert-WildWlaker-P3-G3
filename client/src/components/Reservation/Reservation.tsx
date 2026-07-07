@@ -19,10 +19,12 @@ type Reservation = {
 };
 
 function Reservation() {
-  const { id } = useParams();
-  const eventId = Number(id);
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-  const userId = user?.id;
+  const { eventUuid } = useParams();
+  // const { id } = useParams();
+  // const eventId = Number(id);
+  // const user = JSON.parse(localStorage.getItem("user") || "null");
+  // const userId = user?.id;
+  const [userId, setUserId] = useState<number | null>(null);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reservationName, setReservationName] = useState("");
@@ -35,71 +37,122 @@ function Reservation() {
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
   const [preview, setPreview] = useState("");
   const [eventName, setEventName] = useState<Reservation>();
+  const [editingReservationId, setEditingReservationId] = useState<
+    number | null
+  >(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/auth/authVerif`, {
+      credentials: "include",
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error("Non authentifié");
+        }
+        const user = await res.json();
+        setUserId(user.id);
+      })
+      .catch((err) => {
+        console.error(err);
+        setUserId(null);
+      })
+      .finally(() => {
+        setAuthLoading(false);
+      });
+  }, []);
 
   const fetchReservations = useCallback(async () => {
+    if (!eventUuid) return;
+
     const res = await fetch(
-      `http://localhost:3310/api/reservations/all/${eventId}`,
+      `http://localhost:3310/api/reservations/all/${eventUuid}`,
+      {
+        credentials: "include",
+      },
     );
     const data = await res.json();
     setReservations(data);
-  }, [eventId]);
+  }, [eventUuid]);
 
   useEffect(() => {
+    if (!eventUuid || !userId) return;
+
     fetchReservations();
 
     const fetchTest = async () => {
       const response = await fetch(
-        `http://localhost:3310/api/user-in-event/${eventId}/${userId}`,
+        `http://localhost:3310/api/user-in-event/${eventUuid}/${userId}`,
+        {
+          credentials: "include",
+        },
       );
+
       const data = await response.json();
       setUserInEvent(data.joined);
     };
 
     fetchTest();
-  }, [eventId, userId, fetchReservations]);
+  }, [eventUuid, userId, fetchReservations]);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/events/name/${eventId}`)
+    if (!eventUuid) return;
+    fetch(`http://localhost:3310/api/events/name/${eventUuid}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => {
         setEventName(data);
       });
-  }, [eventId]);
+  }, [eventUuid]);
 
-  async function handleAddReservation(e: React.FormEvent) {
+  const toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: true,
+
+    customClass: {
+      popup: "toast",
+    },
+  });
+
+  function openEditModal(reservationId: number) {
+    const resa = reservations.find((r) => r.reservation_id === reservationId);
+    if (!resa) return;
+
+    setReservationName(resa.reservation_name);
+    setReservationDate(resa.reservation_date.split("T")[0]);
+    setReservationLocation(resa.reservation_location);
+    setReservationDescription(resa.reservation_description);
+    setReservationPicture(null);
+    setPreview(`http://localhost:3310${resa.reservation_picture}`);
+    setEditingReservationId(reservationId);
+    setIsModalOpen(true);
+  }
+
+  async function handleSubmitReservation(e: React.FormEvent) {
     e.preventDefault();
 
-    const toast = Swal.mixin({
-      toast: true,
-      position: "top",
-      showConfirmButton: false,
-      timer: 2500,
-      timerProgressBar: true,
+    if (!eventUuid) return;
 
-      customClass: {
-        popup: "toast",
-      },
-    });
+    const isEditing = editingReservationId !== null;
 
-    if (
-      !reservationName ||
-      !reservationDate ||
-      !reservationLocation ||
-      !reservationDescription ||
-      !reservationPicture
-    ) {
-      const missingFields = [
-        !reservationName && "le titre",
-        !reservationDate && "la date",
-        !reservationLocation && "la localisation",
-        !reservationDescription && "une description",
-        !reservationPicture && "une image",
-      ].filter(Boolean);
+    const missingFields = [
+      !reservationName && "le titre",
+      !reservationDate && "la date",
+      !reservationLocation && "la localisation",
+      !reservationDescription && "une description",
+      !isEditing && !reservationPicture && "une image",
+    ].filter(Boolean);
 
+    if (missingFields.length > 0) {
       toast.fire({
         icon: "error",
         text: `Il vous manque : ${missingFields.join(", ")}`,
-
         customClass: {
           popup: "toast-error-popup",
         },
@@ -108,21 +161,25 @@ function Reservation() {
     }
 
     const formData = new FormData();
-
-    formData.append("reservation_id_event", String(eventId));
+    formData.append("event_uuid", eventUuid ?? "");
     formData.append("reservation_id_user", String(userId));
     formData.append("reservation_name", reservationName);
     formData.append("reservation_date", reservationDate);
     formData.append("reservation_location", reservationLocation);
     formData.append("reservation_description", reservationDescription);
-
     if (reservationPicture) {
       formData.append("reservation_picture", reservationPicture);
     }
 
-    const response = await fetch("http://localhost:3310/api/reservations", {
-      method: "POST",
+    const url = isEditing
+      ? `http://localhost:3310/api/reservations/update/${editingReservationId}`
+      : "http://localhost:3310/api/reservations";
+    const method = isEditing ? "PUT" : "POST";
+
+    const response = await fetch(url, {
+      method,
       body: formData,
+      credentials: "include",
     });
     await fetchReservations();
     const data = await response.json();
@@ -131,7 +188,6 @@ function Reservation() {
       toast.fire({
         icon: "error",
         text: `Marche pas : ${data.message}`,
-
         customClass: {
           popup: "toast-error-popup",
         },
@@ -145,12 +201,12 @@ function Reservation() {
     setReservationDescription("");
     setReservationPicture(null);
     setPreview("");
-
+    setEditingReservationId(null);
     setIsModalOpen(false);
+
     toast.fire({
       icon: "success",
-      text: "Réservation ajoutée",
-
+      text: isEditing ? "Réservation modifiée" : "Réservation ajoutée",
       customClass: {
         popup: "toast-error-popup",
       },
@@ -166,6 +222,14 @@ function Reservation() {
       setPreview(URL.createObjectURL(file));
     }
   }
+  if (authLoading) {
+    return <p>Chargement utilisateur...</p>;
+  }
+
+  if (userId === null) {
+    return <p>Vous devez être connecté.</p>;
+  }
+
   if (userInEvent === null) {
     return <p>Chargement...</p>;
   }
@@ -190,7 +254,16 @@ function Reservation() {
 
         <motion.button
           type="button"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setEditingReservationId(null);
+            setReservationName("");
+            setReservationDate("");
+            setReservationLocation("");
+            setReservationDescription("");
+            setReservationPicture(null);
+            setPreview("");
+            setIsModalOpen(true);
+          }}
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.1 }}
@@ -213,7 +286,7 @@ function Reservation() {
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  handleAddReservation(e);
+                  handleSubmitReservation(e);
                 }
               }}
             >
@@ -229,7 +302,11 @@ function Reservation() {
                   }
                 }}
               >
-                <h2>Nouvelle réservation</h2>
+                <h2>
+                  {editingReservationId
+                    ? "Modifier la réservation"
+                    : "Nouvelle réservation"}
+                </h2>
 
                 <input
                   type="text"
@@ -275,7 +352,7 @@ function Reservation() {
 
                 <motion.button
                   type="button"
-                  onClick={handleAddReservation}
+                  onClick={handleSubmitReservation}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -293,11 +370,70 @@ function Reservation() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
+        {reservations.length === 0 && (
+          <div className="reservation-empty">
+            <div className="reservation-empty-text">
+              <p className="reservation-empty-title">
+                Aucune réservation pour cet événement.
+              </p>
+              <p className="reservation-empty-subtitle">
+                Ajoutez votre première réservation.
+              </p>
+            </div>
+
+            <svg
+              className="reservation-empty-arrow"
+              viewBox="0 0 600 500"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                className="reservation-empty-path"
+                d="
+            M0 330
+            C20 300, 220 330, 290 300
+            C340 270, 340 200, 270 205
+            C220 210, 220 290, 290 290
+            C370 300, 450 270, 500 90
+          "
+                stroke="currentColor"
+                strokeLinecap="round"
+              />
+              <path
+                className="reservation-empty-head"
+                d="M470 120 L500 85 L525 130"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        )}
         {reservations.map((event) => (
-          <div className="card-reservation" key={event.reservation_id}>
+          <div
+            className="card-reservation"
+            key={`${event.reservation_id}-${event.reservation_name}-${event.reservation_date}-${event.reservation_location}-${event.reservation_description}-${event.reservation_picture}`}
+          >
             <CardEvents
+              user_id={userId}
               event_id={event.reservation_id}
-              event_host_id={null}
+              event_uuid={eventUuid ?? ""}
+              event_id_host={null}
+              reservation_id_user={event.reservation_id_user}
+              onEditReservation={openEditModal}
+              onReservationDeleted={(deletedId) => {
+                setReservations((prev) =>
+                  prev.filter((r) => r.reservation_id !== deletedId),
+                );
+                toast.fire({
+                  icon: "success",
+                  text: "Réservation supprimée",
+                  customClass: {
+                    popup: "toast-error-popup",
+                  },
+                });
+              }}
               image={`http://localhost:3310${event.reservation_picture}`}
               imageAlt={event.reservation_name}
               dateStart={event.reservation_date}

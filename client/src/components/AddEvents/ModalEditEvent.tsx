@@ -12,9 +12,6 @@ function ModalEditEvent({
   event,
   onEventUpdated,
 }: ModalEditEventProps) {
-  console.log("date start reçue:", event.event_date_start);
-  console.log("date end reçue:", event.event_date_end);
-
   const dialogRef = useRef<HTMLDialogElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -96,8 +93,8 @@ function ModalEditEvent({
       }
 
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/events/${event.event_id}`,
-        { method: "PUT", body: formData },
+        `${import.meta.env.VITE_API_URL}/api/events/${event.event_uuid}`,
+        { method: "PUT", credentials: "include", body: formData },
       );
 
       if (!res.ok) throw new Error("Erreur lors de la modification");

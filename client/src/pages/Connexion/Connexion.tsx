@@ -37,6 +37,7 @@ function Connexion() {
       const res = await fetch("http://localhost:3310/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ identifier, password }),
       });
 
@@ -47,7 +48,7 @@ function Connexion() {
         return;
       }
 
-      localStorage.setItem("user", JSON.stringify(data));
+      // localStorage.setItem("user", JSON.stringify(data));
       navigate("/homeevents");
     } catch {
       setErrorMessage("Erreur serveur");

@@ -26,20 +26,48 @@ function Profil() {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const isAdminPage = location.pathname === "/admin";
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-  const userId = user?.id;
+  // const user = JSON.parse(localStorage.getItem("user") || "null");
+  // const userId = user?.id;
+  const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/users/${userId}/photo`)
-      .then((res) => res.json())
+    fetch("http://localhost:3310/api/auth/authVerif", {
+      credentials: "include",
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Utilisateur non connecté");
+        }
+        return res.json();
+      })
       .then((data) => {
-        setProfilePicture(data.user_profile_picture);
-      });
-  }, [userId]);
+        setUserId(data.id);
+      })
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     if (!userId) return;
-    fetch(`http://localhost:3310/api/users/admin/${userId}`)
+
+    fetch(`http://localhost:3310/api/users/${userId}/photo`, {
+      credentials: "include",
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Erreur récupération photo");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setProfilePicture(data.user_profile_picture);
+      })
+      .catch((error) => console.error(error));
+  }, [userId]);
+  useEffect(() => {
+    if (!userId) return;
+    fetch(`http://localhost:3310/api/users/admin/${userId}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setIsAdmin(Boolean(data.user_is_admin)))
       .catch((err) => console.error(err));
@@ -88,6 +116,7 @@ function Profil() {
       `http://localhost:3310/api/users/${userId}/photo`,
       {
         method: "POST",
+        credentials: "include",
         body: formData,
       },
     );
@@ -122,6 +151,7 @@ function Profil() {
       setErrorMessage("");
       await fetch(`http://localhost:3310/api/users/${user_id}`, {
         method: "PUT",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_name }),
       });
@@ -131,12 +161,20 @@ function Profil() {
     }
   }
 
-  function handleDeconnexion() {
-    if (isOnEventPage) {
-      localStorage.removeItem("user");
-      navigate("/connexion");
-    } else {
-      navigate("/homeevents");
+  async function handleDeconnexion() {
+    try {
+      if (isOnEventPage) {
+        await fetch("http://localhost:3310/api/logout", {
+          method: "POST",
+          credentials: "include",
+        });
+
+        navigate("/connexion");
+      } else {
+        navigate("/homeevents");
+      }
+    } catch (error) {
+      console.error("Erreur déconnexion :", error);
     }
   }
 
@@ -185,7 +223,11 @@ function Profil() {
 
               <button
                 type="button"
-                onClick={() => setActiveModal("Changer le pseudo")}
+                onClick={() =>
+                  setActiveModal((prev) =>
+                    prev === "Changer le pseudo" ? null : "Changer le pseudo",
+                  )
+                }
               >
                 <Pencil size={15} />
                 Changer le pseudo
@@ -212,7 +254,11 @@ function Profil() {
                     )}
                     <button
                       type="button"
-                      onClick={() => updateUserName(userName, userId)}
+                      onClick={() => {
+                        if (userId !== null) {
+                          updateUserName(userName, userId);
+                        }
+                      }}
                     >
                       Valider
                     </button>
@@ -227,7 +273,13 @@ function Profil() {
 
               <button
                 type="button"
-                onClick={() => setActiveModal("Changer la photo de profil")}
+                onClick={() =>
+                  setActiveModal((prev) =>
+                    prev === "Changer la photo de profil"
+                      ? null
+                      : "Changer la photo de profil",
+                  )
+                }
               >
                 <Camera size={15} />
                 Changer la photo de profil

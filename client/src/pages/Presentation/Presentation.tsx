@@ -1,5 +1,6 @@
 import "./Presentation.css";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router";
 import budget from "../../assets/images/logo-feature-budget.png";
 import gallerie from "../../assets/images/logo-feature-gallerie.png";
 import messagerie from "../../assets/images/logo-feature-messagerie.png";
@@ -9,8 +10,29 @@ import note from "../../assets/images/logo-info-note.png";
 import user from "../../assets/images/logo-info-user.png";
 import logo from "../../assets/images/logo-wedoo.png";
 
+type User = {
+  id: number;
+};
+
 function Presentation() {
   const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/authVerif`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCurrentUser(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setCurrentUser(null);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <div className="presentation-content">
@@ -24,9 +46,9 @@ function Presentation() {
         <button
           type="button"
           onClick={() => {
-            const user = JSON.parse(localStorage.getItem("user") || "null");
+            if (loading) return;
 
-            if (!user?.id) {
+            if (!currentUser?.id) {
               navigate("/connexion");
               return;
             }
@@ -43,9 +65,9 @@ function Presentation() {
         <button
           type="button"
           onClick={() => {
-            const user = JSON.parse(localStorage.getItem("user") || "null");
+            if (loading) return;
 
-            if (!user?.id) {
+            if (!currentUser?.id) {
               navigate("/connexion");
               return;
             }
@@ -165,7 +187,9 @@ function Presentation() {
       </div>
       <footer className="footer-presentation">
         <p>copyright 2026 Wedoo. Tous droits réservés.</p>
-        <button type="button">CGU</button>
+        <Link to="/cgv" className="footer-presentation-link">
+          CGV
+        </Link>
       </footer>
     </div>
   );

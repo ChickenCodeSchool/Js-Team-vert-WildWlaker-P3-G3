@@ -21,15 +21,17 @@ function GalerieDashboard() {
     if (!link) return "";
     return link.startsWith("http") ? link : `${API_URL}${link}`;
   };
-  const { id } = useParams();
-  const event = Number(id);
+  const { eventUuid } = useParams();
 
   useEffect(() => {
-    fetch(`${API_URL}/api/gallery/${event}`)
+    if (!eventUuid) return;
+    fetch(`${API_URL}/api/gallery/${eventUuid}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setPhotos(data))
       .catch((error) => console.error(error));
-  }, [event]);
+  }, [eventUuid]);
 
   return (
     <section className="galerie-dash">
