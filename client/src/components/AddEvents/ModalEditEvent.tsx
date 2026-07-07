@@ -93,7 +93,7 @@ function ModalEditEvent({
       }
 
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/events/${event.event_id}`,
+        `${import.meta.env.VITE_API_URL}/api/events/${event.event_uuid}`,
         { method: "PUT", credentials: "include", body: formData },
       );
 

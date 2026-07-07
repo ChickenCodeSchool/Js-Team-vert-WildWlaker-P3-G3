@@ -145,12 +145,24 @@
               padding: 0;
               margin: 0;
 
-              img {
-                width: 120px;
-                height: 90px;
-                object-fit: cover;
-                border-radius: 12px;
-                border: 1px solid var(--input-color);
+              .adminReport-EvidenceBtn {
+                padding: 0;
+                border: none;
+                background: none;
+                cursor: pointer;
+
+                &:hover {
+                  transform: scale(1.03);
+                }
+
+                img {
+                  width: 120px;
+                  height: 90px;
+                  object-fit: cover;
+                  border-radius: 12px;
+                  border: 1px solid var(--input-color);
+                  display: block;
+                }
               }
             }
           }
@@ -290,4 +302,10 @@
   .adminReport-Layout main .adminReport-Rightside {
     min-width: 0;
   }
+}
+
+.lightbox-image {
+  max-width: 90vw;
+  max-height: 85vh;
+  border-radius: 12px;
 }

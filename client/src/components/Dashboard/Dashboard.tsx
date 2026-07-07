@@ -44,8 +44,9 @@ function Dashboard() {
   const [userName, setUserName] = useState<string>("");
   const [userAndBudgetData, setUserAndBudgetData] = useState<UserAndBudget>();
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
-  const { id } = useParams();
-  const event = Number(id);
+  // const { id } = useParams();
+  const { eventUuid } = useParams();
+  // const event = Number(id);
   // const user = JSON.parse(localStorage.getItem("user") || "null");
   // const userId = user?.id;
   useEffect(() => {
@@ -68,8 +69,9 @@ function Dashboard() {
     if (!userId) return;
 
     const fetchTest = async () => {
+      if (!eventUuid || !userId) return;
       const response = await fetch(
-        `http://localhost:3310/api/user-in-event/${event}/${userId}`,
+        `http://localhost:3310/api/user-in-event/${eventUuid}/${userId}`,
         { credentials: "include" },
       );
       const data = await response.json();
@@ -77,7 +79,7 @@ function Dashboard() {
     };
 
     fetchTest();
-  }, [event, userId]);
+  }, [eventUuid, userId]);
 
   useEffect(() => {
     if (!userId) return;
@@ -92,36 +94,37 @@ function Dashboard() {
   }, [userId]);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/reservations/${event}`, {
+    if (!eventUuid) return;
+    fetch(`http://localhost:3310/api/reservations/${eventUuid}`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
         setReservationData(Array.isArray(data) ? data : []);
       });
-  }, [event]);
+  }, [eventUuid]);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/users/description/${event}`, {
+    if (!eventUuid) return;
+    fetch(`http://localhost:3310/api/users/description/${eventUuid}`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
         setEventData(data[0]);
       });
-  }, [event]);
+  }, [eventUuid]);
 
   useEffect(() => {
-    if (!userId) return;
-
-    fetch(`http://localhost:3310/api/budget/user/${event}/${userId}`, {
+    if (!eventUuid || !userId) return;
+    fetch(`http://localhost:3310/api/budget/user/${eventUuid}/${userId}`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
         setUserAndBudgetData(data);
       });
-  }, [event, userId]);
+  }, [eventUuid, userId]);
 
   function getInitials(userName: string) {
     return userName
@@ -309,13 +312,15 @@ function Dashboard() {
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-        >
-          <TodoList eventId={event} todo_id_user={userId} />
-        </motion.div>
+        {eventUuid && userId && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+          >
+            <TodoList eventUuid={eventUuid} todo_id_user={userId} />
+          </motion.div>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}

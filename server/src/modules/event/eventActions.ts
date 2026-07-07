@@ -116,9 +116,7 @@ const browseImages: RequestHandler = (req, res, next) => {
 
 const read: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
-
-    const event = await eventRepository.read(eventId);
+    const event = await eventRepository.readByUuid(req.params.eventUuid);
 
     if (!event) {
       res.sendStatus(404);
@@ -132,7 +130,6 @@ const read: RequestHandler = async (req, res, next) => {
 };
 
 const edit: RequestHandler = async (req, res, next) => {
-  const eventId = Number(req.params.id);
   const {
     event_name,
     event_date_start,
@@ -146,6 +143,13 @@ const edit: RequestHandler = async (req, res, next) => {
     : undefined;
 
   try {
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
+
     await eventRepository.update(eventId, {
       event_name,
       event_date_start,
@@ -162,7 +166,12 @@ const edit: RequestHandler = async (req, res, next) => {
 };
 const deleteEvent: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     await eventRepository.deleteEvent(eventId);
 
@@ -173,7 +182,12 @@ const deleteEvent: RequestHandler = async (req, res, next) => {
 };
 const readEventHostId: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const rows = await eventRepository.readEventHostId(eventId);
 
@@ -184,16 +198,30 @@ const readEventHostId: RequestHandler = async (req, res, next) => {
 };
 const readEventName: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
 
-    if (Number.isNaN(eventId)) {
-      res.status(400).json({ message: "eventId invalide" });
+    if (!eventId) {
+      res.status(404).json({ message: "eventUuid invalide" });
       return;
     }
 
     const event = await eventRepository.readEventName(eventId);
 
     res.json(event[0]);
+  } catch (error) {
+    next(error);
+  }
+};
+const readByUuid: RequestHandler = async (req, res, next) => {
+  try {
+    const event = await eventRepository.readByUuid(req.params.uuid);
+
+    if (!event) {
+      res.sendStatus(404);
+      return;
+    }
+
+    res.json(event);
   } catch (error) {
     next(error);
   }
@@ -208,4 +236,5 @@ export default {
   deleteEvent,
   readEventHostId,
   readEventName,
+  readByUuid,
 };

@@ -53,8 +53,9 @@ type SideBarProps = {
 //   event_user_joining: number;
 // };
 function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
-  const { id } = useParams();
-  const eventId = Number(id);
+  const { eventUuid } = useParams();
+  // const { id } = useParams();
+  // const eventId = Number(id);
   // const user = JSON.parse(localStorage.getItem("user") || "null");
   // const userId = user?.id;
   const [userId, setUserId] = useState<number | null>(null);
@@ -74,7 +75,7 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/event/host/${eventId}`, {
+    fetch(`http://localhost:3310/api/event/host/${eventUuid}`, {
       credentials: "include",
     })
       .then((res) => {
@@ -90,14 +91,16 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
       .catch((error) => {
         console.error(error);
       });
-  }, [eventId]);
+  }, [eventUuid]);
 
   const host = userId === isHost;
 
   const handleDeleteEvent = async () => {
+    if (!eventUuid) return;
+
     try {
       const response = await fetch(
-        `http://localhost:3310/api/event/delete/${eventId}`,
+        `http://localhost:3310/api/event/delete/${eventUuid}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -133,17 +136,16 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
   };
 
   useEffect(() => {
-    if (userId === null) return;
-
-    fetch(`http://localhost:3310/api/messages/unread/${eventId}/${userId}`, {
+    if (!eventUuid || !userId) return;
+    fetch(`http://localhost:3310/api/messages/unread/${eventUuid}/${userId}`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => setUnreadCount(data.count))
       .catch(console.error);
-  }, [eventId, userId]);
+  }, [eventUuid, userId]);
 
-  if (userId === null) {
+  if (eventUuid === null) {
     return null;
   }
   return (
@@ -264,7 +266,7 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
             <MotionLink
               whileHover={{ x: 6, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              to={`/events/${eventId}/report`}
+              to={`/events/${eventUuid}/report`}
               className="link"
             >
               <TriangleAlert size={20} />

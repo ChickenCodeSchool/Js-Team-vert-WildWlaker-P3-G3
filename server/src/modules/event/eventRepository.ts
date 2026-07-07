@@ -1,8 +1,8 @@
+import { randomUUID } from "node:crypto";
+import type { RowDataPacket } from "mysql2";
 import databaseClient from "../../../database/client";
 import type { Result, Rows } from "../../../database/client";
-
 import type EventData from "../../types/event";
-
 const generateLinkKey = (): string => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   return Array.from({ length: 6 }, () =>
@@ -11,11 +11,14 @@ const generateLinkKey = (): string => {
 }; //creation de la cle pour rejoindre un event
 
 class EventRepository {
-  async create(event: Omit<EventData, "event_id" | "event_link_key">) {
+  async create(
+    event: Omit<EventData, "event_id" | "event_uuid" | "event_link_key">,
+  ) {
     const linkKey = generateLinkKey();
+    const eventUuid = randomUUID();
 
     const [result] = await databaseClient.query<Result>(
-      "INSERT INTO event (event_name, event_date_start, event_date_end, event_id_host, event_picture, event_description, event_location, event_link_key) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO event (event_name, event_date_start, event_date_end, event_id_host, event_picture, event_description, event_location, event_link_key, event_uuid) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)",
       [
         event.event_name,
         event.event_date_start,
@@ -25,6 +28,7 @@ class EventRepository {
         event.event_description,
         event.event_location,
         linkKey,
+        eventUuid,
       ],
     );
     const eventId = result.insertId;
@@ -151,6 +155,24 @@ class EventRepository {
       [eventId],
     );
     return rows;
+  }
+
+  async readByUuid(uuid: string) {
+    const [rows] = await databaseClient.query<RowDataPacket[]>(
+      "SELECT * FROM event WHERE event_uuid = ?",
+      [uuid],
+    );
+
+    return rows[0] as EventData | undefined;
+  }
+
+  async readIdByUuid(uuid: string) {
+    const [rows] = await databaseClient.query<RowDataPacket[]>(
+      "SELECT event_id FROM event WHERE event_uuid = ?",
+      [uuid],
+    );
+
+    return rows[0]?.event_id as number | undefined;
   }
 }
 

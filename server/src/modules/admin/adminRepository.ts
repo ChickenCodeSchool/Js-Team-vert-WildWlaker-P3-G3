@@ -259,19 +259,38 @@ FROM user
   }
 
   async banUser(id: number) {
-    const [result] = await databaseClient.query<Result>(
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT user_mail, user_username FROM user WHERE user_id = ?",
+      [id],
+    );
+    const user = rows[0];
+    if (!user) return null;
+
+    await databaseClient.query<Result>(
       "UPDATE user SET user_is_ban = TRUE WHERE user_id = ?",
       [id],
     );
-    return result.affectedRows;
+
+    return user;
   }
 
   async banEvent(id: number) {
-    const [result] = await databaseClient.query<Result>(
+    const [rows] = await databaseClient.query<Rows>(
+      `SELECT e.event_name, u.user_mail, u.user_username
+     FROM event AS e
+     JOIN user AS u ON u.user_id = e.event_host_id
+     WHERE e.event_id = ?`,
+      [id],
+    );
+    const data = rows[0];
+    if (!data) return null;
+
+    await databaseClient.query<Result>(
       "UPDATE event SET event_is_ban = TRUE WHERE event_id = ?",
       [id],
     );
-    return result.affectedRows;
+
+    return data;
   }
 }
 

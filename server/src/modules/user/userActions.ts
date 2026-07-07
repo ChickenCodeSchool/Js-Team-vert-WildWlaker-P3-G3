@@ -3,6 +3,7 @@ import argon2 from "argon2";
 import type { RequestHandler } from "express";
 import nodemailer from "nodemailer";
 import { encodeJWT } from "../../helper/jwtHelper";
+import eventRepository from "../event/eventRepository";
 import userRepository from "./userRepository";
 
 const authVerif: RequestHandler = (req, res) => {
@@ -178,7 +179,12 @@ const logout: RequestHandler = (req, res) => {
 };
 const readUserDescriptionEvent: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const event = await userRepository.readUserDescriptionEvent(eventId);
 
@@ -190,7 +196,12 @@ const readUserDescriptionEvent: RequestHandler = async (req, res, next) => {
 
 const browseUserAndBudget: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const event = await userRepository.readUserAndBudgetOnDashboard(eventId);
 
@@ -416,7 +427,12 @@ const browseUserAdmin: RequestHandler = async (req, res, next) => {
 };
 const readUserJoinEvent: RequestHandler = async (req, res, next) => {
   try {
-    const eventId = Number(req.params.id);
+    const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
+
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
 
     const userName = await userRepository.readUserJoinEvent(eventId);
 

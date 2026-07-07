@@ -29,9 +29,9 @@ function Messagerie() {
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
   const [usersByEvent, setUsersByEvent] = useState<UserByEvent[]>([]);
   const [showPicker, setShowPicker] = useState(false);
-
-  const { id } = useParams();
-  const event = Number(id);
+  const { eventUuid } = useParams();
+  // const { id } = useParams();
+  // const event = Number(id);
   // const user = JSON.parse(localStorage.getItem("user") || "null");
   // const userId = user?.id;
   const messagesRef = useRef<HTMLDivElement | null>(null);
@@ -60,15 +60,14 @@ function Messagerie() {
   };
 
   useEffect(() => {
-    if (!userId || !event) return;
-
+    if (!eventUuid || !userId) return;
     fetchUserEvent();
     fetchMessages();
-  }, [userId, event]);
+  }, [eventUuid, userId]);
 
   useEffect(() => {
-    if (!event || !userId) return;
-    fetch(`http://localhost:3310/api/messages/notification/${event}`, {
+    if (!eventUuid || !userId) return;
+    fetch(`http://localhost:3310/api/messages/notification/${eventUuid}`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -80,24 +79,21 @@ function Messagerie() {
     }).catch((error) => {
       console.error("Erreur lecture messages :", error);
     });
-  }, [event, userId]);
+  }, [eventUuid, userId]);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/messages/${event}`, {
+    if (!eventUuid) return;
+    fetch(`http://localhost:3310/api/messages/${eventUuid}`, {
       credentials: "include",
     })
       .then((res) => res.json())
-
-      .then((data) => {
-        setReceptionMessagesUser(data);
-      });
-  }, [event]);
+      .then((data) => setReceptionMessagesUser(data));
+  }, [eventUuid]);
 
   async function fetchUserEvent() {
-    if (!event || !userId) return;
-
+    if (!eventUuid || !userId) return;
     const response = await fetch(
-      `http://localhost:3310/api/user-in-event/${event}/${userId}`,
+      `http://localhost:3310/api/user-in-event/${eventUuid}/${userId}`,
       {
         credentials: "include",
       },
@@ -108,12 +104,13 @@ function Messagerie() {
   }
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/user/event/${event}`, {
+    if (!eventUuid) return;
+    fetch(`http://localhost:3310/api/user/event/${eventUuid}`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => setUsersByEvent(data));
-  }, [event]);
+  }, [eventUuid]);
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -131,9 +128,9 @@ function Messagerie() {
     };
   }, []);
   useEffect(() => {
-    if (!event) return;
+    if (!eventUuid) return;
 
-    socket.emit("join-event", event);
+    socket.emit("join-event", eventUuid);
 
     socket.on("new-message", (newMessage: ReceptionMessagesUser) => {
       setReceptionMessagesUser((previousMessages) => [
@@ -143,17 +140,17 @@ function Messagerie() {
     });
 
     return () => {
-      socket.emit("leave-event", event);
+      socket.emit("leave-event", eventUuid);
       socket.off("new-message");
     };
-  }, [event]);
+  }, [eventUuid]);
   async function handleSendMessage() {
-    if (!messagesUser.trim()) {
+    if (!messagesUser.trim() || !eventUuid) {
       return;
     }
     try {
       const response = await fetch(
-        `http://localhost:3310/api/messages/${event}`,
+        `http://localhost:3310/api/messages/${eventUuid}`,
         {
           method: "POST",
           credentials: "include",
@@ -176,7 +173,8 @@ function Messagerie() {
   }
 
   function fetchMessages() {
-    fetch(`http://localhost:3310/api/messages/${event}`, {
+    if (!eventUuid) return;
+    fetch(`http://localhost:3310/api/messages/${eventUuid}`, {
       credentials: "include",
     })
       .then((res) => res.json())

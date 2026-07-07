@@ -29,14 +29,14 @@ router.get("/api/username/:id", authorization, userActions.readUserName);
 // TODO: vérifier avec l'équipe — deux routes identiques sur /api/users/:id
 // userActions.browse -> à confirmer : liste filtrée ou profil ?
 router.get(
-  "/api/users/description/:id",
+  "/api/users/description/:eventUuid",
   authorization,
   userActions.readUserDescriptionEvent,
 );
 // userActions.read -> à confirmer : profil utilisateur unique ?
 router.get("/api/users/:id", authorization, userActions.read);
 router.get(
-  "/api/users/:id/userAndBudget",
+  "/api/users/:eventUuid/userAndBudget",
   authorization,
   userActions.browseUserAndBudget,
 );
@@ -65,32 +65,44 @@ router.put(
   userActions.forgotPassword,
 );
 router.get("/api/users/admin/:id", authorization, userActions.browseUserAdmin);
-router.get("/api/user/event/:id", authorization, userActions.readUserJoinEvent);
+router.get(
+  "/api/user/event/:eventUuid",
+  authorization,
+  userActions.readUserJoinEvent,
+);
 
 // router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
 
 // message routes
 router.get(
-  "/api/messages/:id",
+  "/api/messages/:eventUuid",
   authorization,
   messageActions.browseMessagesByEventId,
 );
-router.post("/api/messages/:id", authorization, messageActions.addMessage);
 router.post(
-  "/api/messages/notification/:id",
+  "/api/messages/:eventUuid",
+  authorization,
+  messageActions.addMessage,
+);
+router.post(
+  "/api/messages/notification/:eventUuid",
   authorization,
   messageActions.notificationMessage,
 );
 router.get(
-  "/api/messages/unread/:eventId/:userId",
+  "/api/messages/unread/:eventUuid/:userId",
   authorization,
   messageActions.getUnreadMessages,
 );
 
 // reservation routes
-router.get("/api/reservations/:id", authorization, reservationActions.browse);
 router.get(
-  "/api/reservations/all/:id",
+  "/api/reservations/:eventUuid",
+  authorization,
+  reservationActions.browse,
+);
+router.get(
+  "/api/reservations/all/:eventUuid",
   authorization,
   reservationActions.readAllReservation,
 );
@@ -121,28 +133,42 @@ router.post("/api/items", authorization, itemActions.add);
 // EventActions routes
 // router.get("/api/users/:id/events", userActions.getUserEvents);
 router.get("/api/events", authorization, eventActions.browse);
-router.get("/api/events/name/:id", authorization, eventActions.readEventName);
+router.get(
+  "/api/events/name/:eventUuid",
+  authorization,
+  eventActions.readEventName,
+);
 router.get("/api/events/images", authorization, eventActions.browseImages);
-router.get("/api/events/:id", authorization, eventActions.read);
+router.get("/api/events/uuid/:uuid", authorization, eventActions.readByUuid);
+router.get("/events/uuid/:uuid", authorization, eventActions.readByUuid);
+router.get("/api/events/:eventUuid", authorization, eventActions.read);
 router.post("/api/events/join", authorization, eventActions.join);
 router.post("/api/events", authorization, eventActions.add);
 router.put(
-  "/api/events/:id/",
+  "/api/events/:eventUuid/",
   authorization,
   upload.single("picture"),
   eventActions.edit,
 );
-router.delete("/api/event/delete/:id", authorization, eventActions.deleteEvent);
-router.get("/api/event/host/:id", authorization, eventActions.readEventHostId);
+router.delete(
+  "/api/event/delete/:eventUuid",
+  authorization,
+  eventActions.deleteEvent,
+);
+router.get(
+  "/api/event/host/:eventUuid",
+  authorization,
+  eventActions.readEventHostId,
+);
 
 // todoActions routes
-router.get("/api/todo/:eventId", authorization, todoActions.browse);
+router.get("/api/todo/:eventUuid", authorization, todoActions.browse);
 router.post("/api/todo", authorization, todoActions.add);
 router.put("/api/todo/:todo_id", authorization, todoActions.edit);
 router.delete("/api/todo/:todo_id", authorization, todoActions.destroy);
 
 // gallery routes
-router.get("/api/gallery/:eventId", authorization, galleryActions.browse);
+router.get("/api/gallery/:eventUuid", authorization, galleryActions.browse);
 
 router.post(
   "/api/gallery",
@@ -165,7 +191,7 @@ router.put(
 
 // gallery likes
 router.get(
-  "/api/gallery/:id/likes/:userId",
+  "/api/gallery/:eventUuid/likes/:userId",
   authorization,
   galleryActions.getLikedPhotos,
 );
@@ -203,12 +229,12 @@ router.post(
 
 // event user joining route
 router.get(
-  "/api/events/:eventId/users",
+  "/api/events/:eventUuid/users",
   authorization,
   eventUserJoiningActions.browse,
 );
 router.get(
-  "/api/user-in-event/:event/:user",
+  "/api/user-in-event/:eventUuid/:user",
   authorization,
   eventUserJoiningActions.browseUserEvent,
 );
@@ -280,18 +306,22 @@ router.patch("/api/admin/ban-event/:id", authorization, adminActions.banEvent);
 
 // --> budget
 // > get
-router.get("/api/budget/:id", authorization, budgetActions.browse);
+router.get("/api/budget/:eventUuid", authorization, budgetActions.browse);
 router.get(
-  "/api/budget/:id/totalUsers",
+  "/api/budget/:eventUuid/totalUsers",
   authorization,
   budgetActions.browseTotalUser,
 );
 router.get(
-  "/api/budget/user/:id_event/:id_user",
+  "/api/budget/user/:eventUuid/:id_user",
   authorization,
   budgetActions.browseUser,
 );
-router.get("/api/budget/event/:id", authorization, budgetActions.browseEvent);
+router.get(
+  "/api/budget/event/:eventUuid",
+  authorization,
+  budgetActions.browseEvent,
+);
 // > post
 router.post("/api/budget/add", authorization, budgetActions.create);
 // > put

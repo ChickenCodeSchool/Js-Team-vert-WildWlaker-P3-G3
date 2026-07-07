@@ -8,9 +8,11 @@ export interface EventData {
   event_description: string;
   event_location: string;
   event_link_key: string;
+  event_uuid: string;
 }
 
 export interface CardEventsProps {
+  event_uuid: string;
   user_id: number;
   event_id: number;
   event_id_host: number | null;

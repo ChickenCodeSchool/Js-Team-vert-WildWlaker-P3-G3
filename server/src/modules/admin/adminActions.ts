@@ -1,4 +1,5 @@
 import type { RequestHandler } from "express";
+import transporter from "../services/mailer";
 import adminRepository from "./adminRepository";
 
 const readAllUsers: RequestHandler = async (req, res, next) => {
@@ -152,11 +153,24 @@ const markUserAsDone: RequestHandler = async (req, res, next) => {
 const banUser: RequestHandler = async (req, res, next) => {
   try {
     const id = Number(req.params.id);
-    const affected = await adminRepository.banUser(id);
-    if (!affected) {
+    const user = await adminRepository.banUser(id);
+
+    if (!user) {
       res.status(404).json({ message: "Utilisateur introuvable" });
       return;
     }
+
+    try {
+      await transporter.sendMail({
+        from: `"Équipe Wedoo" <${process.env.EMAIL_USER}>`,
+        to: user.user_mail,
+        subject: "Votre compte Wedoo a été suspendu",
+        text: `Bonjour ${user.user_username},\n\nVotre compte Wedoo a été suspendu suite à un signalement.\n\nSi vous estimez qu'il s'agit d'une erreur, contactez notre support.\n\nL'équipe Wedoo.`,
+      });
+    } catch (mailErr) {
+      console.error("Échec de l'envoi du mail :", mailErr);
+    }
+
     res.json({ message: "Utilisateur banni" });
   } catch (err) {
     next(err);
@@ -166,11 +180,24 @@ const banUser: RequestHandler = async (req, res, next) => {
 const banEvent: RequestHandler = async (req, res, next) => {
   try {
     const id = Number(req.params.id);
-    const affected = await adminRepository.banEvent(id);
-    if (!affected) {
+    const data = await adminRepository.banEvent(id);
+
+    if (!data) {
       res.status(404).json({ message: "Événement introuvable" });
       return;
     }
+
+    try {
+      await transporter.sendMail({
+        from: `"Équipe Wedoo" <${process.env.EMAIL_USER}>`,
+        to: data.user_mail,
+        subject: "Votre événement Wedoo a été retiré",
+        text: `Bonjour ${data.user_username},\n\nVotre événement "${data.event_name}" a été retiré des listes publiques suite à un signalement.\n\nSi vous estimez qu'il s'agit d'une erreur, contactez notre support.\n\nL'équipe Wedoo.`,
+      });
+    } catch (mailErr) {
+      console.error("Échec de l'envoi du mail :", mailErr);
+    }
+
     res.json({ message: "Événement banni" });
   } catch (err) {
     next(err);

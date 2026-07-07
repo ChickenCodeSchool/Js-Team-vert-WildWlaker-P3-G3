@@ -47,7 +47,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/tableaudebord/:id",
+        path: "/tableaudebord/:eventUuid",
         element: (
           <AuthRequire>
             <TableauDeBord />
@@ -71,7 +71,7 @@ const router = createBrowserRouter([
         element: <ResetPassword />,
       },
       {
-        path: "/events/:eventId/report",
+        path: "/events/:eventUuid/report",
         element: (
           <AuthRequire>
             <UserReport />
