@@ -131,7 +131,12 @@ const login: RequestHandler = async (req, res, next) => {
     }
 
     const isPasswordValid = await argon2.verify(user.user_password, password);
-
+    if (user.user_is_ban) {
+      res.status(403).json({
+        message: "Votre compte a été banni.",
+      });
+      return;
+    }
     if (!isPasswordValid) {
       res.status(401).json({
         message: "Mot de passe incorrect",
