@@ -49,22 +49,34 @@ type SideBarProps = {
       | "galerie",
   ) => void;
 };
-type Host = {
-  event_user_joining: number;
-};
+// type Host = {
+//   event_user_joining: number;
+// };
 function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
   const { id } = useParams();
   const eventId = Number(id);
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-  const userId = user?.id;
+  // const user = JSON.parse(localStorage.getItem("user") || "null");
+  // const userId = user?.id;
+  const [userId, setUserId] = useState<number | null>(null);
   const MotionLink = motion(Link);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
-  const [isHost, setIsHost] = useState<Host>();
+  const [isHost, setIsHost] = useState<number | null>(null);
   const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/event/host/${eventId}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/authVerif`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => setUserId(data.id))
+      .catch(() => setUserId(null));
+  }, []);
+
+  useEffect(() => {
+    fetch(`http://localhost:3310/api/event/host/${eventId}`, {
+      credentials: "include",
+    })
       .then((res) => {
         if (!res.ok) {
           throw new Error("Erreur récupération host");
@@ -73,7 +85,7 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
         return res.json();
       })
       .then((data) => {
-        setIsHost(data.event_host_id);
+        setIsHost(data.event_id_host);
       })
       .catch((error) => {
         console.error(error);
@@ -88,6 +100,7 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
         `http://localhost:3310/api/event/delete/${eventId}`,
         {
           method: "DELETE",
+          credentials: "include",
         },
       );
 
@@ -106,6 +119,7 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
         `http://localhost:3310/api/euj/delete/${userId}`,
         {
           method: "DELETE",
+          credentials: "include",
         },
       );
 
@@ -119,11 +133,19 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/messages/unread/${eventId}/${userId}`)
+    if (userId === null) return;
+
+    fetch(`http://localhost:3310/api/messages/unread/${eventId}/${userId}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setUnreadCount(data.count))
-      .catch((error) => console.error(error));
+      .catch(console.error);
   }, [eventId, userId]);
+
+  if (userId === null) {
+    return null;
+  }
   return (
     <>
       <motion.nav

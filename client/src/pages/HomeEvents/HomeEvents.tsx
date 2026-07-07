@@ -11,20 +11,35 @@ import Profil from "../../components/Profil/Profil";
 
 import "./HomeEvents.css";
 import EventEmpty from "../../components/AddEvents/EventEmpty";
+type User = {
+  id: number;
+};
 
 function HomeEvents() {
   const [events, setEvents] = useState<EventData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [activeFilter, setActiveFilter] = useState<FilterType>("ongoing");
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/authVerif`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then(setUser)
+      .catch(() => setUser(null));
+  }, []);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}"); // --> recupere dans le local storage l'user id
-    fetch(`${import.meta.env.VITE_API_URL}/api/events?userId=${user.id}`) // --> il recupere l'userid pour afficher les events de l'id connecté
+    if (!user?.id) return;
+
+    fetch(`${import.meta.env.VITE_API_URL}/api/events?userId=${user.id}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setEvents(data))
       .catch(console.error);
-  }, []);
+  }, [user?.id]);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0); // je met l'heure à 00h00m00s00ms pour comparer les jours sans l'heure
@@ -80,8 +95,9 @@ function HomeEvents() {
             filteredEvents.map((event) => (
               <CardEvents
                 key={event.event_id}
+                user_id={user?.id ?? 0}
                 event_id={event.event_id}
-                event_host_id={event.event_host_id}
+                event_id_host={event.event_id_host}
                 image={event.event_picture}
                 imageAlt={event.event_name}
                 dateStart={event.event_date_start}

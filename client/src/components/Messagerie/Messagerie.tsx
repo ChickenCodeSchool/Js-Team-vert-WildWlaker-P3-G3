@@ -32,9 +32,22 @@ function Messagerie() {
 
   const { id } = useParams();
   const event = Number(id);
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-  const userId = user?.id;
+  // const user = JSON.parse(localStorage.getItem("user") || "null");
+  // const userId = user?.id;
   const messagesRef = useRef<HTMLDivElement | null>(null);
+
+  const [userId, setUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch("http://localhost:3310/api/auth/authVerif", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setUserId(data.id);
+      })
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     const messagesElement = messagesRef.current;
@@ -47,14 +60,17 @@ function Messagerie() {
   };
 
   useEffect(() => {
+    if (!userId || !event) return;
+
     fetchUserEvent();
     fetchMessages();
-  }, []);
+  }, [userId, event]);
 
   useEffect(() => {
     if (!event || !userId) return;
     fetch(`http://localhost:3310/api/messages/notification/${event}`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -67,20 +83,34 @@ function Messagerie() {
   }, [event, userId]);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/messages/${event}`)
+    fetch(`http://localhost:3310/api/messages/${event}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
-      .then((data) => setReceptionMessagesUser(data));
+
+      .then((data) => {
+        setReceptionMessagesUser(data);
+      });
   }, [event]);
 
   async function fetchUserEvent() {
+    if (!event || !userId) return;
+
     const response = await fetch(
       `http://localhost:3310/api/user-in-event/${event}/${userId}`,
+      {
+        credentials: "include",
+      },
     );
+
     const data = await response.json();
     setUserInEvent(data.joined);
   }
+
   useEffect(() => {
-    fetch(`http://localhost:3310/api/user/event/${event}`)
+    fetch(`http://localhost:3310/api/user/event/${event}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setUsersByEvent(data));
   }, [event]);
@@ -126,6 +156,7 @@ function Messagerie() {
         `http://localhost:3310/api/messages/${event}`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -145,7 +176,9 @@ function Messagerie() {
   }
 
   function fetchMessages() {
-    fetch(`http://localhost:3310/api/messages/${event}`)
+    fetch(`http://localhost:3310/api/messages/${event}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setReceptionMessagesUser(data));
   }

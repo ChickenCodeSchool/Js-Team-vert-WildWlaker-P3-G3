@@ -21,8 +21,9 @@ type Reservation = {
 function Reservation() {
   const { id } = useParams();
   const eventId = Number(id);
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-  const userId = user?.id;
+  // const user = JSON.parse(localStorage.getItem("user") || "null");
+  // const userId = user?.id;
+  const [userId, setUserId] = useState<number | null>(null);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reservationName, setReservationName] = useState("");
@@ -38,22 +39,54 @@ function Reservation() {
   const [editingReservationId, setEditingReservationId] = useState<
     number | null
   >(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/auth/authVerif`, {
+      credentials: "include",
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error("Non authentifié");
+        }
+        const user = await res.json();
+        setUserId(user.id);
+      })
+      .catch((err) => {
+        console.error(err);
+        setUserId(null);
+      })
+      .finally(() => {
+        setAuthLoading(false);
+      });
+  }, []);
 
   const fetchReservations = useCallback(async () => {
     const res = await fetch(
       `http://localhost:3310/api/reservations/all/${eventId}`,
+      {
+        credentials: "include",
+      },
     );
     const data = await res.json();
     setReservations(data);
   }, [eventId]);
 
   useEffect(() => {
+    if (!userId) return;
+
     fetchReservations();
 
     const fetchTest = async () => {
       const response = await fetch(
         `http://localhost:3310/api/user-in-event/${eventId}/${userId}`,
+        {
+          credentials: "include",
+        },
       );
+
       const data = await response.json();
       setUserInEvent(data.joined);
     };
@@ -62,7 +95,9 @@ function Reservation() {
   }, [eventId, userId, fetchReservations]);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/events/name/${eventId}`)
+    fetch(`http://localhost:3310/api/events/name/${eventId}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => {
         setEventName(data);
@@ -138,6 +173,7 @@ function Reservation() {
     const response = await fetch(url, {
       method,
       body: formData,
+      credentials: "include",
     });
     await fetchReservations();
     const data = await response.json();
@@ -180,6 +216,14 @@ function Reservation() {
       setPreview(URL.createObjectURL(file));
     }
   }
+  if (authLoading) {
+    return <p>Chargement utilisateur...</p>;
+  }
+
+  if (userId === null) {
+    return <p>Vous devez être connecté.</p>;
+  }
+
   if (userInEvent === null) {
     return <p>Chargement...</p>;
   }
@@ -326,8 +370,9 @@ function Reservation() {
             key={`${event.reservation_id}-${event.reservation_name}-${event.reservation_date}-${event.reservation_location}-${event.reservation_description}-${event.reservation_picture}`}
           >
             <CardEvents
+              user_id={userId}
               event_id={event.reservation_id}
-              event_host_id={null}
+              event_id_host={null}
               reservation_id_user={event.reservation_id_user}
               onEditReservation={openEditModal}
               onReservationDeleted={(deletedId) => {

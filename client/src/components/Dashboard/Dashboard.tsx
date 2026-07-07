@@ -40,36 +40,61 @@ function Dashboard() {
   const [reservationData, setReservationData] = useState<
     ReservationDashboard[]
   >([]);
+  const [userId, setUserId] = useState<number | null>(null);
   const [userName, setUserName] = useState<string>("");
   const [userAndBudgetData, setUserAndBudgetData] = useState<UserAndBudget>();
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
   const { id } = useParams();
   const event = Number(id);
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-  const userId = user?.id;
+  // const user = JSON.parse(localStorage.getItem("user") || "null");
+  // const userId = user?.id;
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/authVerif`, {
+      credentials: "include",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Not logged in");
+        return res.json();
+      })
+      .then((data) => {
+        setUserId(data.id);
+      })
+      .catch(() => {
+        setUserId(null);
+      });
+  }, []);
 
   useEffect(() => {
+    if (!userId) return;
+
     const fetchTest = async () => {
       const response = await fetch(
         `http://localhost:3310/api/user-in-event/${event}/${userId}`,
+        { credentials: "include" },
       );
       const data = await response.json();
       setUserInEvent(data.joined);
     };
+
     fetchTest();
   }, [event, userId]);
 
   useEffect(() => {
     if (!userId) return;
-    fetch(`http://localhost:3310/api/username/${userId}`)
+
+    fetch(`http://localhost:3310/api/username/${userId}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => {
-        setUserName(data.username); // doit matcher ce que retourne l'API
+        setUserName(data.username);
       });
   }, [userId]);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/reservations/${event}`)
+    fetch(`http://localhost:3310/api/reservations/${event}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => {
         setReservationData(Array.isArray(data) ? data : []);
@@ -77,7 +102,9 @@ function Dashboard() {
   }, [event]);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/users/description/${event}`)
+    fetch(`http://localhost:3310/api/users/description/${event}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => {
         setEventData(data[0]);
@@ -85,7 +112,11 @@ function Dashboard() {
   }, [event]);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/budget/user/${event}/${userId}`)
+    if (!userId) return;
+
+    fetch(`http://localhost:3310/api/budget/user/${event}/${userId}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => {
         setUserAndBudgetData(data);
@@ -115,6 +146,8 @@ function Dashboard() {
 
     return reservationDate < today ? "passe" : "a_venir";
   }
+  const safeUserId = userId;
+  if (!safeUserId) return <p>Chargement...</p>;
 
   if (userInEvent === null) {
     return <p>Chargement...</p>;

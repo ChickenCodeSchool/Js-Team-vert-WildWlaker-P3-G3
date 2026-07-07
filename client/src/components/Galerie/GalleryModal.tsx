@@ -56,6 +56,7 @@ function GalleryModal({
         `${import.meta.env.VITE_API_URL}/api/gallery`,
         {
           method: "POST",
+          credentials: "include",
           body: formData,
         },
       );

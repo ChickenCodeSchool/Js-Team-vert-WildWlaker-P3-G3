@@ -29,8 +29,9 @@ const formatMonth = (date: string): string => {
 };
 
 function CardEvents({
+  user_id,
   event_id,
-  event_host_id,
+  event_id_host,
   image,
   imageAlt,
   dateStart,
@@ -46,8 +47,8 @@ function CardEvents({
   const uselocation = useLocation();
   const isHomeEvents = uselocation.pathname === "/homeevents";
   const onTableau = uselocation.pathname.startsWith("/tableaudebord/");
-  const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
-  const isHost = user_id === event_host_id;
+  // const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
+  const isHost = user_id === event_id_host;
   const [currentTitle, setCurrentTitle] = useState(title);
   const [currentDescription, setCurrentDescription] = useState(description);
   const [currentImage, setCurrentImage] = useState(image);
@@ -72,6 +73,7 @@ function CardEvents({
         `http://localhost:3310/api/reservations/delete/${event_id}`,
         {
           method: "DELETE",
+          credentials: "include",
         },
       );
 
@@ -89,7 +91,7 @@ function CardEvents({
     try {
       const response = await fetch(
         `http://localhost:3310/api/event/delete/${event_id}`,
-        { method: "DELETE" },
+        { method: "DELETE", credentials: "include" },
       );
       if (!response.ok) throw new Error("Erreur suppression");
 
@@ -215,7 +217,7 @@ function CardEvents({
         onClose={() => setIsModalOpen(false)}
         event={{
           event_id,
-          event_host_id,
+          event_id_host,
           event_name: currentTitle,
           event_date_start: currentDateStart,
           event_date_end: currentDateEnd,

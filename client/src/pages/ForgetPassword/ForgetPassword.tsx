@@ -24,6 +24,7 @@ function ForgetPassword() {
         "http://localhost:3310/api/auth/forgot-password",
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

@@ -106,10 +106,26 @@ function returnDateString(dateString: string) {
 }
 
 function Budget() {
+  const [userID, setUserID] = useState<number | null>(null);
+  useEffect(() => {
+    fetch(`${apiUrl}/api/auth/authVerif`, {
+      credentials: "include",
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          setUserID(null);
+          return;
+        }
+
+        const data = await res.json();
+        setUserID(data.id);
+      })
+      .catch(() => setUserID(null));
+  }, []);
   const { id } = useParams();
   const eventID = Number(id);
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-  const userID = user?.id;
+  // const user = JSON.parse(localStorage.getItem("user") || "null");
+  // const userID = user?.id;
 
   const [budgetEvent, setBudgetEvent] = useState<BudgetTotalEvent>();
   const [listUserBudget, setListUserBudget] = useState<BudgetByUser[]>([]);
@@ -127,27 +143,30 @@ function Budget() {
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
 
   useEffect(() => {
+    if (userID === null) return;
+
     fetchUserInEvent();
-
     fetchBudgetLists();
-  }, []);
-
-  const userBudget = getUserBudget(listUserBudget, userID)?.total_price ?? 0;
-  const listBalance = getBalancePrice(listUserBudget);
-  const userBalance = getUserBudget(listBalance, userID)?.total_price ?? 0;
+  }, [userID]);
 
   /* -- Fonctions -- */
 
   function fetchBudgetLists() {
-    fetch(`${apiUrl}/api/budget/event/${eventID}`)
+    fetch(`${apiUrl}/api/budget/event/${eventID}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data: BudgetTotalEvent[]) => setBudgetEvent(data[0]));
 
-    fetch(`${apiUrl}/api/budget/${eventID}/totalUsers`)
+    fetch(`${apiUrl}/api/budget/${eventID}/totalUsers`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data: BudgetByUser[]) => setListUserBudget(data));
 
-    fetch(`${apiUrl}/api/budget/${eventID}`)
+    fetch(`${apiUrl}/api/budget/${eventID}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data: Budget[]) => setListBudget(data));
   }
@@ -155,6 +174,7 @@ function Budget() {
   async function fetchUserInEvent() {
     const response = await fetch(
       `${apiUrl}/api/user-in-event/${eventID}/${userID}`,
+      { credentials: "include" },
     );
 
     const data = await response.json();
@@ -219,6 +239,7 @@ function Budget() {
 
     const answer = await fetch(`${apiUrl}/api/budget/add`, {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         id_event: eventID,
@@ -323,6 +344,7 @@ function Budget() {
 
     const answer = await fetch(`${apiUrl}/api/budget/update`, {
       method: "PUT",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -405,10 +427,19 @@ function Budget() {
 
     await fetch(`${apiUrl}/api/budget/${id}`, {
       method: "DELETE",
+      credentials: "include",
     });
 
     await fetchBudgetLists();
   }
+
+  if (userID === null) {
+    return <p>Chargement utilisateur...</p>;
+  }
+
+  const userBudget = getUserBudget(listUserBudget, userID)?.total_price ?? 0;
+  const listBalance = getBalancePrice(listUserBudget);
+  const userBalance = getUserBudget(listBalance, userID)?.total_price ?? 0;
 
   if (userInEvent === null) {
     return <p>Chargement...</p>;

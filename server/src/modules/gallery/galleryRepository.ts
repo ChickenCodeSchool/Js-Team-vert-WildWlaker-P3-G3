@@ -15,9 +15,9 @@ class GalleryRepository {
   async readAll(gallery_id_event: number) {
     const [rows] = await databaseClient.query<Rows>(
       `
-      SELECT g.*, COUNT(gl.like_id_user) AS like_count 
+      SELECT g.*, COUNT(gl.gallery_like_id_user) AS like_count 
       FROM gallery g
-      LEFT JOIN gallery_like gl ON g.gallery_id = gl.like_id_gallery
+      LEFT JOIN gallery_like gl ON g.gallery_id = gl.gallery_like_id_gallery
       WHERE g.gallery_id_event = ?
       GROUP BY g.gallery_id
       ORDER BY g.gallery_creation_date DESC
@@ -76,11 +76,11 @@ class GalleryRepository {
 
   async checkUserPermissions(gallery_id_event: number, user_id: number) {
     const [eventRows] = await databaseClient.query<Rows>(
-      "SELECT event_host_id FROM event WHERE event_id = ?",
+      "SELECT event_id_host FROM event WHERE event_id = ?",
       [gallery_id_event],
     );
     const isHost =
-      eventRows.length > 0 && eventRows[0].event_host_id === user_id;
+      eventRows.length > 0 && eventRows[0].event_id_host === user_id;
 
     const [joiningRows] = await databaseClient.query<Rows>(
       "SELECT COUNT(*) AS total FROM event_user_joining WHERE euj_id_event = ? AND euj_id_user = ?",
@@ -96,7 +96,7 @@ class GalleryRepository {
 
   async checkIfUserLiked(galleryId: number, userId: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT * FROM gallery_like WHERE like_id_gallery = ? AND like_id_user = ?",
+      "SELECT * FROM gallery_like WHERE gallery_like_id_gallery = ? AND gallery_like_id_user = ?",
       [galleryId, userId],
     );
     return rows.length > 0;
@@ -104,7 +104,7 @@ class GalleryRepository {
 
   async insertLike(galleryId: number, userId: number) {
     const [result] = await databaseClient.query<Result>(
-      "INSERT INTO gallery_like (like_id_gallery, like_id_user) VALUES (?, ?)",
+      "INSERT INTO gallery_like (gallery_like_id_gallery, gallery_like_id_user) VALUES (?, ?)",
       [galleryId, userId],
     );
     return result.insertId;
@@ -112,7 +112,7 @@ class GalleryRepository {
 
   async deleteLike(galleryId: number, userId: number) {
     const [result] = await databaseClient.query<Result>(
-      "DELETE FROM gallery_like WHERE like_id_gallery = ? AND like_id_user = ?",
+      "DELETE FROM gallery_like WHERE  gallery_like_id_gallery = ? AND gallery_like_id_user = ?",
       [galleryId, userId],
     );
     return result.affectedRows;
@@ -121,13 +121,16 @@ class GalleryRepository {
   async getLikesByEventAndUser(eventId: number, userId: number) {
     const [rows] = await databaseClient.query<Rows>(
       `
-      SELECT gl.like_id_gallery 
-      FROM gallery_like gl
-      JOIN gallery g ON gl.like_id_gallery = g.gallery_id
-      WHERE g.gallery_id_event = ? AND gl.like_id_user = ?
-      `,
+    SELECT gl.gallery_like_id_gallery 
+    FROM gallery_like gl
+    JOIN gallery g 
+      ON gl.gallery_like_id_gallery = g.gallery_id
+    WHERE g.gallery_id_event = ? 
+    AND gl.gallery_like_id_user = ?
+    `,
       [eventId, userId],
     );
+
     return rows;
   }
 }

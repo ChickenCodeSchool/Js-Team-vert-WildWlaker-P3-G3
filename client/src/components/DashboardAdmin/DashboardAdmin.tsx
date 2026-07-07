@@ -62,42 +62,58 @@ function DashboardAdmin() {
   const [graphic, setGraphic] = useState<GraphicAdmin[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/reportUser")
+    fetch("http://localhost:3310/api/admin/reportUser", {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setReportUser(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/reportBug")
+    fetch("http://localhost:3310/api/admin/reportBug", {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setReportBug(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/reportEvent")
+    fetch("http://localhost:3310/api/admin/reportEvent", {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setReportEvent(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/users")
+    fetch("http://localhost:3310/api/admin/users", {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setAllUsers(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/events")
+    fetch("http://localhost:3310/api/admin/events", {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setAllEvents(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/arrayReport")
+    fetch("http://localhost:3310/api/admin/arrayReport", {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setArrayReport(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/arrayUser")
+    fetch("http://localhost:3310/api/admin/arrayUser", {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setArrayUser(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/dashboard-chart")
+    fetch("http://localhost:3310/api/admin/dashboard-chart", {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
