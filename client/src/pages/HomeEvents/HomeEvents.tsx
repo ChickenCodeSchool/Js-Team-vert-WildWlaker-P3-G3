@@ -81,6 +81,13 @@ function HomeEvents() {
       customClass: { popup: "toast-error-popup" },
     });
   };
+  const handleEventUpdated = (updatedEvent: EventData) => {
+    setEvents((prev) =>
+      prev.map((e) =>
+        e.event_id === updatedEvent.event_id ? updatedEvent : e,
+      ),
+    );
+  };
   const handleEventDeleted = (deletedId: number) => {
     setEvents((prev) => prev.filter((ev) => ev.event_id !== deletedId));
   };
@@ -107,7 +114,7 @@ function HomeEvents() {
             <EventEmpty />
           ) : (
             filteredEvents.map((event) => (
-              <li key={event.event_id} className="HomeEvents-CardItem">
+              <li key={event.event_id} className="HomeEvents-Card">
                 <CardEvents
                   key={event.event_id}
                   user_id={user?.id ?? 0}
@@ -122,6 +129,7 @@ function HomeEvents() {
                   description={event.event_description}
                   location={event.event_location}
                   onEventDeleted={handleEventDeleted}
+                  onEventUpdated={handleEventUpdated}
                 />
               </li>
             ))

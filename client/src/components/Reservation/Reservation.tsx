@@ -16,6 +16,8 @@ type Reservation = {
   reservation_description: string;
   reservation_picture: string;
   event_name: string;
+  event_date_start: string;
+  event_date_end: string;
 };
 
 function Reservation() {
@@ -156,6 +158,19 @@ function Reservation() {
         customClass: {
           popup: "toast-error-popup",
         },
+      });
+      return;
+    }
+
+    if (
+      eventName &&
+      (reservationDate < eventName.event_date_start ||
+        reservationDate > eventName.event_date_end)
+    ) {
+      toast.fire({
+        icon: "error",
+        text: "La date doit être comprise dans les dates de l'événement",
+        customClass: { popup: "toast-error-popup" },
       });
       return;
     }
@@ -318,6 +333,8 @@ function Reservation() {
                 <input
                   type="date"
                   value={reservationDate}
+                  min={eventName?.event_date_start}
+                  max={eventName?.event_date_end}
                   onChange={(e) => setReservationDate(e.target.value)}
                 />
 

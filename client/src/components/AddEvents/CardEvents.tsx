@@ -45,6 +45,7 @@ function CardEvents({
   reservation_id_user,
   onEditReservation,
   onReservationDeleted,
+  onEventUpdated,
 }: CardEventsProps) {
   const uselocation = useLocation();
   const isHomeEvents = uselocation.pathname === "/homeevents";
@@ -77,6 +78,7 @@ function CardEvents({
     setCurrentLocation(updatedEvent.event_location);
     setCurrentDateStart(updatedEvent.event_date_start);
     setCurrentDateEnd(updatedEvent.event_date_end);
+    onEventUpdated?.(updatedEvent);
     toast.fire({
       icon: "success",
       text: "Événement modifié",
