@@ -8,6 +8,7 @@ import Admin from "../src/pages/Admin/Admin";
 // Import the main app component
 import App from "./App";
 import DashboardReport from "./components/DashboardReport/DashboardReport";
+import AuthRequire from "./helper/AuthRequire";
 import AdminReport from "./pages/AdminReport/AdminReport";
 import ChangePassword from "./pages/ChangePassword/ChangePassword";
 import Connexion from "./pages/Connexion/Connexion";
@@ -16,6 +17,7 @@ import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
 // Try creating these components in the "pages" folder
 import HomeEvents from "./pages/HomeEvents/HomeEvents";
 import PageCGV from "./pages/PageCGV/PageCGV";
+import Presentation from "./pages/Presentation/Presentation";
 // import Presentation from "./pages/Presentation/Presentation";
 import Register from "./pages/Register/Register";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
@@ -31,58 +33,88 @@ import UserReport from "./pages/UserReport/UserReport";
 // You can add more routes as you build out your app!
 const router = createBrowserRouter([
   {
-    path: "/", // The root path
     element: <App />,
-  },
+    children: [
+      { path: "/", element: <Presentation /> },
 
-  // Renders the App component for the home page
-  {
-    path: "/homeevents",
-    element: <HomeEvents />,
-  },
-  {
-    path: "/tableaudebord/:eventUuid",
-    element: <TableauDeBord />,
-  },
-  {
-    path: "/connexion",
-    element: <Connexion />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/forgetpassword",
-    element: <ForgetPassword />,
-  },
-  {
-    path: "/resetpassword",
-    element: <ResetPassword />,
-  },
-  {
-    path: "/events/:eventUuid/report",
-    element: <UserReport />,
-  },
-  {
-    path: "/admin",
-    element: <Admin />,
-  },
-  {
-    path: "/changepassword",
-    element: <ChangePassword />,
-  },
-  {
-    path: "/dashboardreport",
-    element: <DashboardReport />,
-  },
-  {
-    path: "/admin/report/:type/:id",
-    element: <AdminReport />,
-  },
-  {
-    path: "/CGV",
-    element: <PageCGV />,
+      // Renders the App component for the home page
+      {
+        path: "/homeevents",
+        element: (
+          <AuthRequire>
+            <HomeEvents />
+          </AuthRequire>
+        ),
+      },
+      {
+        path: "/tableaudebord/:eventUuid",
+        element: (
+          <AuthRequire>
+            <TableauDeBord />
+          </AuthRequire>
+        ),
+      },
+      {
+        path: "/connexion",
+        element: <Connexion />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/forgetpassword",
+        element: <ForgetPassword />,
+      },
+      {
+        path: "/resetpassword",
+        element: <ResetPassword />,
+      },
+      {
+        path: "/events/:eventUuid/report",
+        element: (
+          <AuthRequire>
+            <UserReport />
+          </AuthRequire>
+        ),
+      },
+      {
+        path: "/admin",
+        element: (
+          <AuthRequire>
+            <Admin />
+          </AuthRequire>
+        ),
+      },
+      {
+        path: "/changepassword",
+        element: <ChangePassword />,
+      },
+      {
+        path: "/dashboardreport",
+        element: (
+          <AuthRequire>
+            <DashboardReport />
+          </AuthRequire>
+        ),
+      },
+      {
+        path: "/admin/report/:type/:id",
+        element: (
+          <AuthRequire>
+            <AdminReport />
+          </AuthRequire>
+        ),
+      },
+      {
+        path: "/CGV",
+        element: (
+          <AuthRequire>
+            <PageCGV />
+          </AuthRequire>
+        ),
+      },
+    ],
   },
   // Try adding a new route! For example, "/about" with an About component
 ]);

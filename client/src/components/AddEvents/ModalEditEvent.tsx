@@ -94,7 +94,7 @@ function ModalEditEvent({
 
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/api/events/${event.event_uuid}`,
-        { method: "PUT", body: formData },
+        { method: "PUT", credentials: "include", body: formData },
       );
 
       if (!res.ok) throw new Error("Erreur lors de la modification");

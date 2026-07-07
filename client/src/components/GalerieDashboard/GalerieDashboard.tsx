@@ -25,7 +25,9 @@ function GalerieDashboard() {
 
   useEffect(() => {
     if (!eventUuid) return;
-    fetch(`${API_URL}/api/gallery/${eventUuid}`)
+    fetch(`${API_URL}/api/gallery/${eventUuid}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setPhotos(data))
       .catch((error) => console.error(error));

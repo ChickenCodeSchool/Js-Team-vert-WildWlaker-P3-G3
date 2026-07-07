@@ -107,8 +107,26 @@ function returnDateString(dateString: string) {
 
 function Budget() {
   const { eventUuid } = useParams();
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-  const userID = user?.id;
+  const [userID, setUserID] = useState<number | null>(null);
+  useEffect(() => {
+    fetch(`${apiUrl}/api/auth/authVerif`, {
+      credentials: "include",
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          setUserID(null);
+          return;
+        }
+
+        const data = await res.json();
+        setUserID(data.id);
+      })
+      .catch(() => setUserID(null));
+  }, []);
+  // const { id } = useParams();
+  // const eventID = Number(id);
+  // const user = JSON.parse(localStorage.getItem("user") || "null");
+  // const userID = user?.id;
 
   const [budgetEvent, setBudgetEvent] = useState<BudgetTotalEvent>();
   const [listUserBudget, setListUserBudget] = useState<BudgetByUser[]>([]);
@@ -126,44 +144,58 @@ function Budget() {
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (!eventUuid) return;
+    if (!eventUuid || userID === null) return;
 
     fetchUserInEvent();
     fetchBudgetLists();
-  }, [eventUuid]);
-
-  const userBudget = getUserBudget(listUserBudget, userID)?.total_price ?? 0;
-  const listBalance = getBalancePrice(listUserBudget);
-  const userBalance = getUserBudget(listBalance, userID)?.total_price ?? 0;
+  }, [eventUuid, userID]);
 
   /* -- Fonctions -- */
 
   function fetchBudgetLists() {
     if (!eventUuid) return;
-    fetch(`${apiUrl}/api/budget/event/${eventUuid}`)
+    fetch(`${apiUrl}/api/budget/event/${eventUuid}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data: BudgetTotalEvent[]) => setBudgetEvent(data[0]));
 
-    fetch(`${apiUrl}/api/budget/${eventUuid}/totalUsers`)
+    fetch(`${apiUrl}/api/budget/${eventUuid}/totalUsers`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data: BudgetByUser[]) => setListUserBudget(data));
 
-    fetch(`${apiUrl}/api/budget/${eventUuid}`)
+    fetch(`${apiUrl}/api/budget/${eventUuid}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data: Budget[]) => setListBudget(data));
   }
 
   async function fetchUserInEvent() {
-    if (!eventUuid) return;
-    const response = await fetch(
-      `${apiUrl}/api/user-in-event/${eventUuid}/${userID}`,
-    );
+    if (!eventUuid || userID === null) return;
 
-    const data = await response.json();
+    try {
+      const response = await fetch(
+        `${apiUrl}/api/user-in-event/${eventUuid}/${userID}`,
+        {
+          credentials: "include",
+        },
+      );
 
-    setUserInEvent(data.joined);
+      if (!response.ok) {
+        throw new Error("Erreur vérification inscription");
+      }
+
+      const data = await response.json();
+
+      setUserInEvent(data.joined);
+    } catch (error) {
+      console.error(error);
+      setUserInEvent(false);
+    }
   }
-
   async function addBudget(e: React.FormEvent) {
     e.preventDefault();
 
@@ -223,6 +255,7 @@ function Budget() {
 
     const answer = await fetch(`${apiUrl}/api/budget/add`, {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         event_uuid: eventUuid,
@@ -327,6 +360,7 @@ function Budget() {
 
     const answer = await fetch(`${apiUrl}/api/budget/update`, {
       method: "PUT",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -409,10 +443,19 @@ function Budget() {
 
     await fetch(`${apiUrl}/api/budget/${id}`, {
       method: "DELETE",
+      credentials: "include",
     });
 
     await fetchBudgetLists();
   }
+
+  if (userID === null) {
+    return <p>Chargement utilisateur...</p>;
+  }
+
+  const userBudget = getUserBudget(listUserBudget, userID)?.total_price ?? 0;
+  const listBalance = getBalancePrice(listUserBudget);
+  const userBalance = getUserBudget(listBalance, userID)?.total_price ?? 0;
 
   if (userInEvent === null) {
     return <p>Chargement...</p>;

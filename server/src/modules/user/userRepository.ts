@@ -14,8 +14,8 @@ type UserRow = {
   user_username: string;
   user_mail: string;
   user_password: string;
-  reset_token?: string | null;
-  reset_expires?: number | null;
+  user_reset_token?: string | null;
+  user_reset_expires?: number | null;
   user_is_admin: number;
 };
 
@@ -150,7 +150,7 @@ class UserRepository {
 
   async findByResetToken(token: string) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT * FROM user WHERE reset_token = ?",
+      "SELECT * FROM user WHERE user_reset_token = ?",
       [token],
     );
 
@@ -159,7 +159,7 @@ class UserRepository {
 
   async saveResetToken(userId: number, token: string, expires: number) {
     await databaseClient.query(
-      "UPDATE user SET reset_token = ?, reset_expires = ? WHERE user_id = ?",
+      "UPDATE user SET user_reset_token = ?, user_reset_expires = ? WHERE user_id = ?",
       [token, expires, userId],
     );
   }
@@ -167,7 +167,7 @@ class UserRepository {
   async resetPassword(userId: number, password: string) {
     await databaseClient.query(
       `UPDATE user 
-       SET user_password = ?, reset_token = NULL, reset_expires = NULL 
+       SET user_password = ?, user_reset_token = NULL, user_reset_expires = NULL 
        WHERE user_id = ?`,
       [password, userId],
     );

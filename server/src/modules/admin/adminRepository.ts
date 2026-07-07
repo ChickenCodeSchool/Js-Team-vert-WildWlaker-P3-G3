@@ -161,7 +161,7 @@ FROM user
     const [images] = await databaseClient.query<Rows>(
       `SELECT reported_bug_image_path
      FROM reported_bug_image
-     WHERE reported_bug_id = ?`,
+     WHERE reported_bug_image_by_id_reported_bug = ?`,
       [id],
     );
 
@@ -175,7 +175,7 @@ FROM user
     const [rows] = await databaseClient.query<Rows>(
       `SELECT 
       re.*,
-      e.event_host_id,
+      e.event_id_host,
       u.user_username,
       u.user_mail,
       u.user_profile_picture
@@ -192,7 +192,7 @@ FROM user
     const [images] = await databaseClient.query<Rows>(
       `SELECT reported_event_image_path
      FROM reported_event_image
-     WHERE reported_event_id = ?`,
+     WHERE reported_event_image_by_id_reported_event = ?`,
       [id],
     );
 
@@ -224,7 +224,7 @@ FROM user
     const [images] = await databaseClient.query<Rows>(
       `SELECT reported_user_image_path
      FROM reported_user_image
-     WHERE reported_user_id = ?`,
+     WHERE reported_user_image_by_id_reported_user = ?`,
       [id],
     );
 

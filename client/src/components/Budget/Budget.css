@@ -384,7 +384,7 @@ body {
     display: flex;
     flex-direction: column;
     padding: 3rem 3rem 2rem 0;
-    width: 75vw;
+    /* width: 75vw; */
     height: auto;
 
     header {

@@ -62,12 +62,14 @@ function AdminReport() {
 
         response = await fetch(`${API_URL}/api/admin/ban-user/${targetId}`, {
           method: "PATCH",
+          credentials: "include",
         });
       } else {
         const eventId = report?.reported_event_id_event;
 
         response = await fetch(`${API_URL}/api/admin/ban-event/${eventId}`, {
           method: "PATCH",
+          credentials: "include",
         });
       }
 
@@ -77,6 +79,7 @@ function AdminReport() {
 
       await fetch(`${API_URL}/api/admin/report${capitalize(type)}/${id}/done`, {
         method: "PATCH",
+        credentials: "include",
       });
 
       setIsModalOpen(false);

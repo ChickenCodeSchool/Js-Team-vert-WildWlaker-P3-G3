@@ -36,7 +36,7 @@ class reportUserRepository {
 
       for (const path of imagePaths) {
         await connection.query(
-          "insert into reported_user_image (reported_user_image_path, reported_user_id) values (?, ?)",
+          "insert into reported_user_image (reported_user_image_path, reported_user_image_by_id_reported_user) values (?, ?)",
           [path, reportId],
         );
       }

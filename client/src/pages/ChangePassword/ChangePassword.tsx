@@ -47,7 +47,7 @@ function ChangePassword() {
     });
 
     try {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      // const user = JSON.parse(localStorage.getItem("user") || "{}");
 
       const res = await fetch(
         "http://localhost:3310/api/auth/change-password",
@@ -56,8 +56,9 @@ function ChangePassword() {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({
-            userId: user.id,
+            // userId: user.id,
             currentPassword,
             newPassword: password,
           }),

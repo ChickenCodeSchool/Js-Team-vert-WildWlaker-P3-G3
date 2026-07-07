@@ -1,9 +1,19 @@
 import crypto from "node:crypto";
-import bcrypt from "bcrypt";
+import argon2 from "argon2";
 import type { RequestHandler } from "express";
 import nodemailer from "nodemailer";
+import { encodeJWT } from "../../helper/jwtHelper";
 import eventRepository from "../event/eventRepository";
 import userRepository from "./userRepository";
+
+const authVerif: RequestHandler = (req, res) => {
+  if (!req.user) {
+    res.sendStatus(401);
+    return;
+  }
+
+  res.status(200).json(req.user);
+};
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -59,7 +69,7 @@ const readUserName: RequestHandler = async (req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const hashedPassword = await argon2.hash(req.body.password);
     const newUser = {
       username: req.body.username,
       email: req.body.email,
@@ -86,20 +96,20 @@ const add: RequestHandler = async (req, res, next) => {
 
     const insertId = await userRepository.create(newUser);
 
-    await transporter.sendMail({
+    res.status(201).json({
+      message: "Inscription réussie 🎉",
+      insertId,
+    });
+
+    transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: newUser.email,
       subject: "Bienvenue sur Wedoo",
       html: `
-        <h1>Bienvenue sur Wedoo 🎉</h1>
-        <p>Votre compte a été créé avec succès.</p>
-        <p>Pseudo : ${newUser.username}</p>
-      `,
-    });
-
-    res.status(201).json({
-      message: "Inscription réussie 🎉",
-      insertId,
+    <h1>Bienvenue sur Wedoo 🎉</h1>
+    <p>Votre compte a été créé avec succès.</p>
+    <p>Pseudo : ${newUser.username}</p>
+  `,
     });
     return;
   } catch (err) {
@@ -120,7 +130,7 @@ const login: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.user_password);
+    const isPasswordValid = await argon2.verify(user.user_password, password);
 
     if (!isPasswordValid) {
       res.status(401).json({
@@ -129,15 +139,43 @@ const login: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    res.status(200).json({
+    const token = encodeJWT({
       id: user.user_id,
       username: user.user_username,
       email: user.user_mail,
-      isAdmin: user.user_is_admin,
+      isAdmin: Boolean(user.user_is_admin),
+    });
+
+    res.cookie("auth_token", `Bearer ${token}`, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+
+    res.status(200).json({
+      message: "Connexion réussie",
+      user: {
+        id: user.user_id,
+        username: user.user_username,
+        email: user.user_mail,
+        isAdmin: Boolean(user.user_is_admin),
+      },
     });
   } catch (err) {
     next(err);
   }
+};
+const logout: RequestHandler = (req, res) => {
+  res.clearCookie("auth_token", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+  });
+
+  res.status(200).json({
+    message: "Déconnexion réussie",
+  });
 };
 const readUserDescriptionEvent: RequestHandler = async (req, res, next) => {
   try {
@@ -192,27 +230,26 @@ const forgotPassword: RequestHandler = async (req, res, next) => {
     }
 
     const token = crypto.randomBytes(32).toString("hex");
-    const expires = Date.now() + 1000 * 60 * 1;
+    const expires = Date.now() + 1000 * 60 * 3;
 
     await userRepository.saveResetToken(user.user_id, token, expires);
 
     const link = `http://localhost:3000/resetpassword?token=${token}`;
 
-    await transporter.sendMail({
+    res.json({ message: "Lien envoyé" });
+
+    transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: user.user_mail,
       subject: "Réinitialisation du mot de passe",
       html: `
-    <h1>Wedoo<h1>
+    <h1>Wedoo</h1>
     <h2>Réinitialisation du mot de passe</h2>
     <p>Cliquez sur le lien suivant :</p>
     <a href="${link}">${link}</a>
   `,
     });
-
-    res.json({ message: "Lien envoyé" });
   } catch (err) {
-    console.error("FORGOT PASSWORD ERROR:", err);
     next(err);
   }
 };
@@ -228,12 +265,12 @@ const resetPassword: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    if (!user.reset_expires || Date.now() > user.reset_expires) {
+    if (!user.user_reset_expires || Date.now() > user.user_reset_expires) {
       res.status(401).json({ message: "Token expiré" });
       return;
     }
 
-    const isSamePassword = await bcrypt.compare(password, user.user_password);
+    const isSamePassword = await argon2.verify(user.user_password, password);
 
     if (isSamePassword) {
       res.status(400).json({
@@ -241,22 +278,24 @@ const resetPassword: RequestHandler = async (req, res, next) => {
       });
       return;
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await argon2.hash(password);
     await userRepository.resetPassword(user.user_id, hashedPassword);
-
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: user.user_mail,
-      subject: "Mot de passe modifié",
-      html: `
-        <h1>Wedoo</h1>
-        <p>Votre mot de passe a été modifié avec succès.</p>
-      `,
-    });
 
     res.json({
       message: "Mot de passe modifié avec succès",
     });
+
+    transporter
+      .sendMail({
+        from: process.env.EMAIL_USER,
+        to: user.user_mail,
+        subject: "Mot de passe modifié",
+        html: `
+    <h1>Wedoo</h1>
+    <p>Votre mot de passe a été modifié avec succès.</p>
+  `,
+      })
+      .catch((err) => {});
     return;
   } catch (err) {
     next(err);
@@ -264,7 +303,13 @@ const resetPassword: RequestHandler = async (req, res, next) => {
 };
 const changePassword: RequestHandler = async (req, res, next) => {
   try {
-    const { userId, currentPassword, newPassword } = req.body;
+    if (!req.user) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+
+    const userId = req.user.id;
+    const { currentPassword, newPassword } = req.body;
 
     const user = await userRepository.read(userId);
 
@@ -275,7 +320,7 @@ const changePassword: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const isValid = await bcrypt.compare(currentPassword, user.password);
+    const isValid = await argon2.verify(user.password, currentPassword);
 
     if (!isValid) {
       res.status(400).json({
@@ -284,7 +329,7 @@ const changePassword: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const samePassword = await bcrypt.compare(newPassword, user.password);
+    const samePassword = await argon2.verify(user.password, newPassword);
 
     if (samePassword) {
       res.status(400).json({
@@ -293,7 +338,7 @@ const changePassword: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const hashedPassword = await argon2.hash(newPassword);
 
     await userRepository.resetPassword(userId, hashedPassword);
 
@@ -402,12 +447,14 @@ const readUserJoinEvent: RequestHandler = async (req, res, next) => {
   }
 };
 export default {
+  authVerif,
   readUserDescriptionEvent,
   browseInscription,
   browsePhoto,
   read,
   add,
   login,
+  logout,
   browseUserAndBudget,
   forgotPassword,
   resetPassword,
