@@ -41,17 +41,23 @@ function DashboardReport() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/reportUser")
+    fetch("http://localhost:3310/api/admin/reportUser", {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setReportUser(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/reportBug")
+    fetch("http://localhost:3310/api/admin/reportBug", {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setReportBug(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/reportEvent")
+    fetch("http://localhost:3310/api/admin/reportEvent", {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => setReportEvent(data));
   }, []);

@@ -21,7 +21,9 @@ function TodoList(props: { eventUuid: string; todo_id_user: number }) {
   const [editTask, setEditTask] = useState<string>("");
 
   useEffect(() => {
-    fetch(`${API_URL}/api/todo/${eventUuid}`)
+    fetch(`${API_URL}/api/todo/${eventUuid}`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data: Task[]) => {
         setTask(data);
@@ -34,6 +36,7 @@ function TodoList(props: { eventUuid: string; todo_id_user: number }) {
     // si l'input ne contient rien, on ne fait rien. C'est pour éviter d'envoyer une todo vide dans le backend.
     const response = await fetch(`${API_URL}/api/todo`, {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         event_uuid: eventUuid,
@@ -59,6 +62,7 @@ function TodoList(props: { eventUuid: string; todo_id_user: number }) {
 
     await fetch(`${API_URL}/api/todo/${id}`, {
       method: "PUT",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         todo_id: id,
@@ -90,6 +94,7 @@ function TodoList(props: { eventUuid: string; todo_id_user: number }) {
 
     await fetch(`${API_URL}/api/todo/${editId}`, {
       method: "PUT",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         todo_id: editId,
@@ -112,6 +117,7 @@ function TodoList(props: { eventUuid: string; todo_id_user: number }) {
   async function handleDeleteTask(id: number) {
     await fetch(`${API_URL}/api/todo/${id}`, {
       method: "DELETE",
+      credentials: "include",
     });
     setTask(task.filter((t) => t.todo_id !== id));
   }

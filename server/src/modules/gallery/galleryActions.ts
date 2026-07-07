@@ -151,9 +151,9 @@ const getLikedPhotos: RequestHandler = async (req, res, next) => {
     const likedRows = (await galleryRepository.getLikesByEventAndUser(
       eventId,
       userId,
-    )) as { like_id_gallery: number }[];
+    )) as { gallery_like_id_gallery: number }[];
 
-    const likedPhotoIds = likedRows.map((row) => row.like_id_gallery);
+    const likedPhotoIds = likedRows.map((row) => row.gallery_like_id_gallery);
 
     res.json(likedPhotoIds);
   } catch (error) {

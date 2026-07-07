@@ -18,12 +18,12 @@ class EventRepository {
     const eventUuid = randomUUID();
 
     const [result] = await databaseClient.query<Result>(
-      "INSERT INTO event (event_name, event_date_start, event_date_end, event_host_id, event_picture, event_description, event_location, event_link_key, event_uuid) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO event (event_name, event_date_start, event_date_end, event_id_host, event_picture, event_description, event_location, event_link_key, event_uuid) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)",
       [
         event.event_name,
         event.event_date_start,
         event.event_date_end,
-        event.event_host_id,
+        event.event_id_host,
         event.event_picture,
         event.event_description,
         event.event_location,
@@ -33,7 +33,7 @@ class EventRepository {
     );
     const eventId = result.insertId;
 
-    await this.joinEvent(eventId, event.event_host_id);
+    await this.joinEvent(eventId, event.event_id_host);
 
     return eventId;
   }
@@ -50,7 +50,7 @@ class EventRepository {
     const [rows] = await databaseClient.query<Rows>(
       `SELECT DISTINCT e.* FROM event e
       LEFT JOIN event_user_joining euj ON euj.euj_id_event = e.event_id
-      WHERE e.event_host_id = ?
+      WHERE e.event_id_host = ?
       OR euj.euj_id_user = ?
       ORDER BY e.event_date_start ASC`,
       [userId, userId],
@@ -144,7 +144,7 @@ class EventRepository {
   }
   async readEventHostId(eventId: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT event_host_id FROM event WHERE event_id=?;",
+      "SELECT event_id_host FROM event WHERE event_id=?;",
       [eventId],
     );
     return rows;

@@ -64,18 +64,21 @@ ORDER BY m.message_date ASC;`,
   }
   async notificationMessage(eventId: number, userId: number) {
     const [result] = await mysql.query(
-      `INSERT INTO message_read (message_read_message_id, message_read_user_id)
-      SELECT
+      `INSERT INTO message_read (
+      message_read_id_message,
+      message_read_user_id
+    )
+    SELECT
       m.message_id,
       ?
-      FROM message m
-      LEFT JOIN message_read mr
-      ON mr.message_read_message_id = m.message_id
+    FROM message m
+    LEFT JOIN message_read mr
+      ON mr.message_read_id_message = m.message_id
       AND mr.message_read_user_id = ?
-      WHERE
+    WHERE
       m.message_id_event = ?
       AND m.message_id_user <> ?
-      AND mr.message_read_message_id IS NULL;`,
+      AND mr.message_read_id_message IS NULL;`,
       [userId, userId, eventId, userId],
     );
 
@@ -86,11 +89,11 @@ ORDER BY m.message_date ASC;`,
       `SELECT COUNT(*) AS count
     FROM message m
     LEFT JOIN message_read mr
-      ON mr.message_read_message_id = m.message_id
+      ON mr.message_read_id_message = m.message_id
       AND mr.message_read_user_id = ?
     WHERE m.message_id_event = ?
       AND m.message_id_user <> ?
-      AND mr.message_read_message_id IS NULL;`,
+      AND mr.message_read_id_message IS NULL;`,
       [userId, eventId, userId],
     );
 

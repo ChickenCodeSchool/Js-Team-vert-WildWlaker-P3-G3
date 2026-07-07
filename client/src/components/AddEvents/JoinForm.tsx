@@ -6,7 +6,7 @@ import "./JoinForm.css";
 
 function JoinForm({ onClose, onEventCreated }: JoinFormProps) {
   const [code, setCode] = useState("");
-  const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
+  // const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,10 +26,10 @@ function JoinForm({ onClose, onEventCreated }: JoinFormProps) {
         `${import.meta.env.VITE_API_URL}/api/events/join`,
         {
           method: "POST",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             event_link_key: code.trim().toUpperCase(),
-            user_id,
           }),
         },
       );

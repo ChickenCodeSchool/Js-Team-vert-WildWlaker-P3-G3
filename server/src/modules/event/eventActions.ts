@@ -14,12 +14,18 @@ const browse: RequestHandler = async (req, res, next) => {
 };
 
 const add: RequestHandler = async (req, res, next) => {
+  if (!req.user) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
+  }
+
+  const event_id_host = req.user.id;
+
   const {
     event_name,
     event_date_start,
     event_date_end,
     event_picture,
-    event_host_id,
     event_description,
     event_location,
   } = req.body;
@@ -40,7 +46,7 @@ const add: RequestHandler = async (req, res, next) => {
       event_name,
       event_date_start,
       event_date_end,
-      event_host_id,
+      event_id_host,
       event_picture,
       event_description,
       event_location,
@@ -53,7 +59,14 @@ const add: RequestHandler = async (req, res, next) => {
 };
 
 const join: RequestHandler = async (req, res, next) => {
-  const { event_link_key, user_id } = req.body;
+  if (!req.user) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
+  }
+
+  const user_id = req.user.id;
+
+  const { event_link_key } = req.body;
 
   if (!event_link_key || !user_id) {
     res.status(400).json({ message: "Code et utilisateur requis." });

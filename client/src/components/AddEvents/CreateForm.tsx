@@ -13,7 +13,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
     location: "",
   });
 
-  const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
+  // const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}"); // --> recupere dans localstorage "user" l'id pour le passer en user_id
   const today = new Date().toISOString().split("T")[0];
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,14 +36,16 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           event_name: form.title,
           event_date_start: form.dateStart,
           event_date_end: form.dateEnd,
           event_description: form.description,
           event_location: form.location,
-          event_host_id: user_id,
           event_picture: `${import.meta.env.VITE_API_URL}/assets/images/logo-wedoo.png`,
         }),
       });
