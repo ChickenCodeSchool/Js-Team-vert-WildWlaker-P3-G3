@@ -12,6 +12,7 @@
     margin-top: 3vh;
     flex-direction: column;
     position: fixed;
+    z-index: 10000;
     background: var(--sideBar-color);
     border-radius: 40px;
     .logo-sidebar-container {
