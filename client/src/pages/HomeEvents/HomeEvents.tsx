@@ -77,7 +77,7 @@ function HomeEvents() {
         <NavBar />
         <Profil />
       </header>
-      <div className="HomeEvents-Global">
+      <main className="HomeEvents-Global">
         <div className="HomeEvents-Title">
           <h1>Mes Evénements</h1>
         </div>
@@ -88,34 +88,36 @@ function HomeEvents() {
           />
           <ButtonAddEvent onClick={() => setIsModalOpen(true)} />
         </div>
-        <div className="HomeEvents-CardGlobal">
+        <ul className="HomeEvents-CardGlobal">
           {filteredEvents.length === 0 ? (
             <EventEmpty />
           ) : (
             filteredEvents.map((event) => (
-              <CardEvents
-                key={event.event_id}
-                event_id={event.event_id}
-                event_uuid={event.event_uuid}
-                event_host_id={event.event_host_id}
-                image={event.event_picture}
-                imageAlt={event.event_name}
-                dateStart={event.event_date_start}
-                dateEnd={event.event_date_end}
-                title={event.event_name}
-                description={event.event_description}
-                location={event.event_location}
-                onEventDeleted={handleEventDeleted}
-              />
+              <li key={event.event_id} className="HomeEvents-CardItem">
+                <CardEvents
+                  key={event.event_id}
+                  event_id={event.event_id}
+                  event_uuid={event.event_uuid}
+                  event_host_id={event.event_host_id}
+                  image={event.event_picture}
+                  imageAlt={event.event_name}
+                  dateStart={event.event_date_start}
+                  dateEnd={event.event_date_end}
+                  title={event.event_name}
+                  description={event.event_description}
+                  location={event.event_location}
+                  onEventDeleted={handleEventDeleted}
+                />
+              </li>
             ))
           )}
-        </div>
+        </ul>
         <ModalAddEvent
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onEventCreated={handleEventCreated}
         />
-      </div>
+      </main>
     </>
   );
 }

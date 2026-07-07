@@ -122,7 +122,7 @@ function CardEvents({
   };
   return (
     <>
-      <div className="CardEvents-Wrapper">
+      <article className="CardEvents-Wrapper">
         <Link
           to={isHomeEvents ? `/tableaudebord/${event_uuid}` : "#"}
           className="CardEvents-Global"
@@ -133,17 +133,17 @@ function CardEvents({
               src={currentImage}
               alt={imageAlt}
             />
-            <span className="CardEvents-Date">
+            <time className="CardEvents-Date">
               <span className="CardEvents-Date-Day">
                 {formatDay(currentDateStart)}
               </span>
               <span className="CardEvents-Date-Month">
                 {formatMonth(currentDateStart)}
               </span>
-            </span>
+            </time>
           </div>
           <div className="CardEvents-Container">
-            <h3 className="CardEvents-Title">{currentTitle}</h3>
+            <h2 className="CardEvents-Title">{currentTitle}</h2>
             <p className="CardEvents-Description">{currentDescription}</p>
             <span className="CardEvents-Location">
               <MapPin size={14} /> {currentLocation}
@@ -230,7 +230,7 @@ function CardEvents({
             </div>
           </div>
         )}
-      </div>
+      </article>
       <ModalEditEvent
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

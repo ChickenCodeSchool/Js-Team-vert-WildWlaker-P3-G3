@@ -3,7 +3,8 @@ import "./Filter.css";
 
 function Filter({ activeFilter, onFilterChange }: FilterProps) {
   return (
-    <div className="Filter-Global">
+    <fieldset className="Filter-Global" aria-label="Filtrer les évènements">
+      <legend className="Filter-Legend">Filtrer les évènements</legend>
       <div className="Filter-ButtonGlobal">
         <button
           type="button"
@@ -31,7 +32,7 @@ function Filter({ activeFilter, onFilterChange }: FilterProps) {
           Tous
         </button>
       </div>
-    </div>
+    </fieldset>
   );
 }
 

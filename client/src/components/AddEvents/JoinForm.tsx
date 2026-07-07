@@ -14,7 +14,7 @@ function JoinForm({ onClose, onEventCreated }: JoinFormProps) {
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, []); // le inputRef et useEffect met directement le curseur dans le champs
+  }, []);
 
   const submitCode = async () => {
     if (isLoading) return;
@@ -66,7 +66,7 @@ function JoinForm({ onClose, onEventCreated }: JoinFormProps) {
             Pour rejoindre un événement, veuillez renseigner le code événement
             partagé par l'organisateur.
           </label>
-          <section className="JoinForm-InputGlobal">
+          <div className="JoinForm-InputGlobal">
             <input
               ref={inputRef}
               id="code"
@@ -83,7 +83,7 @@ function JoinForm({ onClose, onEventCreated }: JoinFormProps) {
               disabled={isLoading}
             />
             {error && <p className="JoinForm-Error">{error}</p>}
-          </section>
+          </div>
         </div>
       </div>
       <div className="JoinForm-Footer">
