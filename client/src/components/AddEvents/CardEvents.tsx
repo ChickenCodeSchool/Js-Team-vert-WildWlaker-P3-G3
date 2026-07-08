@@ -86,7 +86,7 @@ function CardEvents({
   const handleDeleteReservation = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3310/api/reservations/delete/${event_id}`,
+        `${import.meta.env.VITE_API_URL}/api/reservations/delete/${event_id}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -106,7 +106,7 @@ function CardEvents({
   const handleDeleteEvent = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3310/api/event/delete/${event_uuid}`,
+        `${import.meta.env.VITE_API_URL}/api/event/delete/${event_uuid}`,
         { method: "DELETE", credentials: "include" },
       );
       if (!response.ok) throw new Error("Erreur suppression");

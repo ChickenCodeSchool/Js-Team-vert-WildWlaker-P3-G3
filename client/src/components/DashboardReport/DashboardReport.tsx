@@ -41,21 +41,21 @@ function DashboardReport() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/reportUser", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/reportUser`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => setReportUser(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/reportBug", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/reportBug`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => setReportBug(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/reportEvent", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/reportEvent`, {
       credentials: "include",
     })
       .then((res) => res.json())

@@ -15,7 +15,7 @@ const AuthRequire = ({ children }: AuthRequireProps) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3310/api/auth/authVerif", {
+      .get(`${import.meta.env.VITE_API_URL}/api/auth/authVerif`, {
         withCredentials: true, // envoie le cookie httpOnly
       })
       .then(() => setChecking(false))

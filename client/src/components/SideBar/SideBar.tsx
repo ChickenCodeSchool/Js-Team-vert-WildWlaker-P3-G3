@@ -75,7 +75,7 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:3310/api/event/host/${eventUuid}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/event/host/${eventUuid}`, {
       credentials: "include",
     })
       .then((res) => {
@@ -100,7 +100,7 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
 
     try {
       const response = await fetch(
-        `http://localhost:3310/api/event/delete/${eventUuid}`,
+        `${import.meta.env.VITE_API_URL}/api/event/delete/${eventUuid}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -119,7 +119,7 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
   const handleDeleteUserJoining = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3310/api/euj/delete/${userId}`,
+        `${import.meta.env.VITE_API_URL}/api/euj/delete/${userId}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -137,9 +137,12 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
 
   useEffect(() => {
     if (!eventUuid || !userId) return;
-    fetch(`http://localhost:3310/api/messages/unread/${eventUuid}/${userId}`, {
-      credentials: "include",
-    })
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/messages/unread/${eventUuid}/${userId}`,
+      {
+        credentials: "include",
+      },
+    )
       .then((res) => res.json())
       .then((data) => setUnreadCount(data.count))
       .catch(console.error);

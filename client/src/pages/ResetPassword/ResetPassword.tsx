@@ -33,14 +33,17 @@ function ResetPassword() {
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:3310/api/auth/reset-password", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/auth/reset-password`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token, password }),
       },
-      body: JSON.stringify({ token, password }),
-    });
+    );
 
     const data = await res.json();
 
