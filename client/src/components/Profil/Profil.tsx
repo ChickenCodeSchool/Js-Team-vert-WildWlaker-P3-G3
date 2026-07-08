@@ -347,7 +347,7 @@ function Profil() {
                 onClick={handleDeconnexion}
               >
                 <LogOut size={15} />
-                Retour a l'accueil
+                {isOnEventPage ? "Déconnexion" : "Retour à l'accueil"}
               </button>
 
               <button

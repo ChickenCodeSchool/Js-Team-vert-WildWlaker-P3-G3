@@ -17,6 +17,7 @@ type UserRow = {
   user_reset_token?: string | null;
   user_reset_expires?: number | null;
   user_is_admin: number;
+  user_is_ban: number;
 };
 
 class UserRepository {
@@ -66,6 +67,15 @@ class UserRepository {
       email: user.user_mail,
       password: user.user_password,
     };
+  }
+
+  async isBanned(userId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT user_is_ban FROM user WHERE user_id = ?",
+      [userId],
+    );
+
+    return rows[0];
   }
 
   async readAll() {
