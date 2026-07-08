@@ -44,6 +44,7 @@ class MessageRepository {
   m.message_date,
   u.user_name,
   u.user_id,
+  u.user_profile_picture,
   e.event_name
 
 FROM message AS m
