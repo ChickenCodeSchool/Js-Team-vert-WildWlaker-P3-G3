@@ -28,5 +28,5 @@ export type ReportData = {
   reported_event_by_id_user?: number;
   reported_user_by_id_user?: number;
   reported_user_id_user?: number;
-  event_host_id?: number;
+  event_id_host?: number;
 };

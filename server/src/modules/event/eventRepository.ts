@@ -39,7 +39,12 @@ class EventRepository {
   }
   async read(id: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT * FROM event WHERE event_id = ?",
+      `
+    SELECT * 
+    FROM event 
+    WHERE event_id = ?
+    AND event_is_ban = FALSE
+    `,
       [id],
     );
 
@@ -50,8 +55,9 @@ class EventRepository {
     const [rows] = await databaseClient.query<Rows>(
       `SELECT DISTINCT e.* FROM event e
       LEFT JOIN event_user_joining euj ON euj.euj_id_event = e.event_id
-      WHERE e.event_id_host = ?
-      OR euj.euj_id_user = ?
+      WHERE (e.event_id_host = ?
+      OR euj.euj_id_user = ?)
+      AND e.event_is_ban = FALSE
       ORDER BY e.event_date_start ASC`,
       [userId, userId],
     );
@@ -67,8 +73,39 @@ class EventRepository {
   }
 
   async joinEvent(eventId: number, userId: number) {
+    const [event] = await databaseClient.query<Rows>(
+      `
+    SELECT event_is_ban
+    FROM event
+    WHERE event_id = ?
+    `,
+      [eventId],
+    );
+
+    if (!event[0] || event[0].event_is_ban) {
+      throw new Error("Cet événement est indisponible");
+    }
+
+    const [ban] = await databaseClient.query<Rows>(
+      `
+    SELECT *
+    FROM event_user_ban
+    WHERE eub_id_event=? 
+    AND eub_id_user=?
+    `,
+      [eventId, userId],
+    );
+
+    if (ban.length) {
+      throw new Error("Vous êtes banni de cet événement");
+    }
+
     await databaseClient.query<Result>(
-      "INSERT INTO event_user_joining (euj_id_event, euj_id_user) VALUES (?, ?)",
+      `
+    INSERT INTO event_user_joining
+    (euj_id_event,euj_id_user)
+    VALUES (?,?)
+    `,
       [eventId, userId],
     );
   }
@@ -159,7 +196,7 @@ class EventRepository {
 
   async readByUuid(uuid: string) {
     const [rows] = await databaseClient.query<RowDataPacket[]>(
-      "SELECT * FROM event WHERE event_uuid = ?",
+      "SELECT * FROM event WHERE event_uuid = ? AND event_is_ban = FALSE",
       [uuid],
     );
 
