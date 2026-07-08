@@ -17,6 +17,9 @@
     grid-template-columns: repeat(5, 16rem);
     align-items: stretch;
     gap: 3rem;
+    .HomeEvents-Card {
+      list-style: none;
+    }
   }
 }
 

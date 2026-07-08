@@ -257,6 +257,11 @@ router.get(
   authorization,
   adminActions.readDashboardChart,
 );
+router.get(
+  "/api/admin/dashboard-years",
+  authorization,
+  adminActions.readAvailableYears,
+);
 router.get("/api/admin/arrayUser", authorization, adminActions.readArrayUsers);
 router.get(
   "/api/admin/arrayReport",

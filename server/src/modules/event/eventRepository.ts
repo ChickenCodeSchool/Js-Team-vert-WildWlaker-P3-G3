@@ -188,7 +188,7 @@ class EventRepository {
   }
   async readEventName(eventId: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT event_name FROM event WHERE event_id=?;",
+      "SELECT event_name, event_date_start, event_date_end FROM event WHERE event_id=?;",
       [eventId],
     );
     return rows;

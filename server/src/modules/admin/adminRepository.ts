@@ -55,55 +55,78 @@ FROM user
 `);
     return rows;
   }
-  async readDashboardChart() {
-    const [rows] = await databaseClient.query<Rows>(`
+  async readDashboardChart(year: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `
+    SELECT
+      month_number,
+      month,
+      SUM(users) AS users,
+      SUM(events) AS events,
+      SUM(reports) AS reports
+    FROM (
       SELECT
-        month_number,
-        month,
-        SUM(users) AS users,
-        SUM(events) AS events,
-        SUM(reports) AS reports
+        MONTH(user_joining_date) AS month_number,
+        DATE_FORMAT(user_joining_date, '%b') AS month,
+        COUNT(user_id) AS users,
+        0 AS events,
+        0 AS reports
+      FROM user
+      WHERE YEAR(user_joining_date) = ?
+      GROUP BY MONTH(user_joining_date), DATE_FORMAT(user_joining_date, '%b')
+
+      UNION ALL
+
+      SELECT
+        MONTH(event_creation_date) AS month_number,
+        DATE_FORMAT(event_creation_date, '%b') AS month,
+        0 AS users,
+        COUNT(event_id) AS events,
+        0 AS reports
+      FROM event
+      WHERE YEAR(event_creation_date) = ?
+      GROUP BY MONTH(event_creation_date), DATE_FORMAT(event_creation_date, '%b')
+
+      UNION ALL
+
+      SELECT
+        MONTH(report_date) AS month_number,
+        DATE_FORMAT(report_date, '%b') AS month,
+        0 AS users,
+        0 AS events,
+        COUNT(*) AS reports
       FROM (
-        SELECT
-          MONTH(user_joining_date) AS month_number,
-          DATE_FORMAT(user_joining_date, '%b') AS month,
-          COUNT(user_id) AS users,
-          0 AS events,
-          0 AS reports
-        FROM user
-        GROUP BY MONTH(user_joining_date), DATE_FORMAT(user_joining_date, '%b')
-
+        SELECT reported_user_date AS report_date FROM reported_user
         UNION ALL
-
-        SELECT
-          MONTH(event_creation_date) AS month_number,
-          DATE_FORMAT(event_creation_date, '%b') AS month,
-          0 AS users,
-          COUNT(event_id) AS events,
-          0 AS reports
-        FROM event
-        GROUP BY MONTH(event_creation_date), DATE_FORMAT(event_creation_date, '%b')
-
+        SELECT reported_event_date AS report_date FROM reported_event
         UNION ALL
+        SELECT reported_bug_date AS report_date FROM reported_bug
+      ) AS all_reports
+      WHERE YEAR(report_date) = ?
+      GROUP BY MONTH(report_date), DATE_FORMAT(report_date, '%b')
+    ) AS dashboard_data
+    GROUP BY month_number, month
+    ORDER BY month_number;
+    `,
+      [year, year, year],
+    );
 
-        SELECT
-          MONTH(report_date) AS month_number,
-          DATE_FORMAT(report_date, '%b') AS month,
-          0 AS users,
-          0 AS events,
-          COUNT(*) AS reports
-        FROM (
-          SELECT reported_user_date AS report_date FROM reported_user
-          UNION ALL
-          SELECT reported_event_date AS report_date FROM reported_event
-          UNION ALL
-          SELECT reported_bug_date AS report_date FROM reported_bug
-        ) AS all_reports
-        GROUP BY MONTH(report_date), DATE_FORMAT(report_date, '%b')
-      ) AS dashboard_data
-      GROUP BY month_number, month
-      ORDER BY month_number;
-    `);
+    return rows;
+  }
+
+  async readAvailableYears() {
+    const [rows] = await databaseClient.query<Rows>(`
+    SELECT YEAR(user_joining_date) AS year FROM user
+    UNION
+    SELECT YEAR(event_creation_date) FROM event
+    UNION
+    SELECT YEAR(reported_user_date) FROM reported_user
+    UNION
+    SELECT YEAR(reported_event_date) FROM reported_event
+    UNION
+    SELECT YEAR(reported_bug_date) FROM reported_bug
+    ORDER BY year DESC;
+  `);
 
     return rows;
   }

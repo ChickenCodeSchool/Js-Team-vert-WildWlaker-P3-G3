@@ -60,6 +60,10 @@ function DashboardAdmin() {
   const [arrayReport, setArrayReport] = useState<ArrayReport[]>([]);
   const [arrayUser, setArrayUser] = useState<ArrayUser[]>([]);
   const [graphic, setGraphic] = useState<GraphicAdmin[]>([]);
+  const [availableYears, setAvailableYears] = useState<number[]>([]);
+  const [selectedYear, setSelectedYear] = useState<number>(
+    new Date().getFullYear(),
+  );
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/admin/reportUser`, {
@@ -111,9 +115,19 @@ function DashboardAdmin() {
       .then((data) => setArrayUser(data));
   }, []);
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard-chart`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard-years`, {
       credentials: "include",
     })
+      .then((res) => res.json())
+      .then((data) =>
+        setAvailableYears(data.map((row: { year: number }) => row.year)),
+      );
+  }, []);
+  useEffect(() => {
+    fetch(
+      `http://localhost:3310/api/admin/dashboard-chart?year=${selectedYear}`,
+      { credentials: "include" },
+    )
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -126,7 +140,7 @@ function DashboardAdmin() {
           setGraphic([]);
         }
       });
-  }, []);
+  }, [selectedYear]);
 
   const totalIdsUsers = allUsers.reduce((total, report) => {
     return total + (report.user_id ? 1 : 0);
@@ -211,6 +225,16 @@ function DashboardAdmin() {
             </h2>
             <p>Évolution mensuelle des utilisateurs, événements et reports</p>
           </div>
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(Number(e.target.value))}
+          >
+            {availableYears.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="chart-container">

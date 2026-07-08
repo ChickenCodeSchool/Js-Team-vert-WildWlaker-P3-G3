@@ -11,7 +11,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
     dateEnd: "",
     description: "",
     location: "",
-  }); //etat et valeurs de titre, date, description et ville donc vide au depart
+  });
 
   // const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}"); // --> recupere dans localstorage "user" l'id pour le passer en user_id
   const today = new Date().toISOString().split("T")[0];
@@ -27,7 +27,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
         ? value
         : value.charAt(0).toUpperCase() + value.slice(1);
     setForm((prev) => ({ ...prev, [name]: formatted }));
-  }; // met directement une majuscule dans tous les inputs mais exclu dateStart et dateEnd
+  };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -65,7 +65,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
     } catch {
       setError("Une erreur est survenue, veuillez réessayer.");
     } finally {
-      setIsLoading(false); //remet le bouton a son etat normal apres qu'il ait valider ou qu'il ait une erreur sinon le bouton resterai en valider et il ne pourrait plus cliquer dessus.
+      setIsLoading(false);
     }
   };
 
@@ -74,7 +74,7 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
     form.dateStart &&
     form.dateEnd &&
     form.description &&
-    form.location; // indique qu'il faut les champs renseignés
+    form.location;
   return (
     <>
       <form className="CreateForm-Body">
@@ -82,11 +82,14 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
           Créez votre événement
         </h2>
 
-        {error && <p className="CreateForm-Error">{error}</p>}
+        {error && (
+          <p className="CreateForm-Error" role="alert">
+            {error}
+          </p>
+        )}
 
         <div className="CreateForm-Field">
           <label className="CreateForm-Label" htmlFor="title">
-            {/* htmlFor permet de mettre le curseur dans l'input quand on clique sur le nom du champs */}
             Nom de votre événement
           </label>
           <input
