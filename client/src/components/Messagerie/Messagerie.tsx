@@ -83,9 +83,11 @@ function Messagerie() {
     fetch(`http://localhost:3310/api/messages/${eventUuid}`, {
       credentials: "include",
     })
-    .then((res) => res.json())
-    .then((data) => {setReceptionMessagesUser(data);
-    console.log(data);})
+      .then((res) => res.json())
+      .then((data) => {
+        setReceptionMessagesUser(data);
+        console.log(data);
+      });
   }, [eventUuid]);
 
   async function fetchUserEvent() {
@@ -272,7 +274,10 @@ function Messagerie() {
                     }
                   >
                     {reception.user_id !== userId && (
-                      <img src={`http://localhost:3310${reception.user_profile_picture}`} alt="profil_ami" />
+                      <img
+                        src={`http://localhost:3310${reception.user_profile_picture}`}
+                        alt="profil_ami"
+                      />
                     )}
 
                     <section>
