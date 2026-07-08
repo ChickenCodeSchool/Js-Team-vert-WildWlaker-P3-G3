@@ -57,6 +57,10 @@ function ModalAddEvent({
         <div className="ModalAddEvent-Tabs">
           <button
             type="button"
+            role="tab"
+            id="tab-create"
+            aria-selected={activeTab === "create"}
+            aria-controls="panel-create"
             className={`ModalAddEvent-Tab ${activeTab === "create" ? "ModalAddEvent-Tab--active" : ""}`}
             onClick={() => setActiveTab("create")}
           >
@@ -64,6 +68,10 @@ function ModalAddEvent({
           </button>
           <button
             type="button"
+            role="tab"
+            id="tab-join"
+            aria-selected={activeTab === "join"}
+            aria-controls="panel-join"
             className={`ModalAddEvent-Tab ${activeTab === "join" ? "ModalAddEvent-Tab--active" : ""}`}
             onClick={() => setActiveTab("join")}
           >
@@ -71,9 +79,13 @@ function ModalAddEvent({
           </button>
         </div>
         {activeTab === "create" ? (
-          <CreateForm onClose={onClose} onEventCreated={onEventCreated} />
+          <div role="tabpanel" id="panel-create" aria-labelledby="tab-create">
+            <CreateForm onClose={onClose} onEventCreated={onEventCreated} />
+          </div>
         ) : (
-          <JoinForm onClose={onClose} onEventCreated={onEventCreated} />
+          <div role="tabpanel" id="panel-join" aria-labelledby="tab-join">
+            <JoinForm onClose={onClose} onEventCreated={onEventCreated} />
+          </div>
         )}
       </div>
     </dialog>

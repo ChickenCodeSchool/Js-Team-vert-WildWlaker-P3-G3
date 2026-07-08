@@ -40,8 +40,18 @@ const readArrayUsers: RequestHandler = async (req, res, next) => {
 
 const readDashboardChart: RequestHandler = async (req, res, next) => {
   try {
-    const chartData = await adminRepository.readDashboardChart();
+    const year = Number(req.query.year) || new Date().getFullYear();
+    const chartData = await adminRepository.readDashboardChart(year);
     res.json(chartData);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const readAvailableYears: RequestHandler = async (req, res, next) => {
+  try {
+    const years = await adminRepository.readAvailableYears();
+    res.json(years);
   } catch (error) {
     next(error);
   }
@@ -210,6 +220,7 @@ export default {
   readArrayReport,
   readArrayUsers,
   readDashboardChart,
+  readAvailableYears,
   readReportBug,
   readReportEvent,
   readReportUser,

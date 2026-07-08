@@ -85,8 +85,11 @@ function GalleryModal({
       <div className="modal">
         <h2>Ajouter une photo</h2>
 
+        {preview && (
+          <img src={preview} alt="Prévisualisation" className="preview-image" />
+        )}
         <label className="file-label">
-          <span>{selectedFile ? selectedFile.name : "Choisir un fichier"}</span>
+          <span>Choisir un fichier</span>
 
           <input
             className="file-input"
@@ -113,10 +116,6 @@ function GalleryModal({
           >
             {error}
           </p>
-        )}
-
-        {preview && (
-          <img src={preview} alt="Prévisualisation" className="preview-image" />
         )}
 
         <div className="modal-actions">

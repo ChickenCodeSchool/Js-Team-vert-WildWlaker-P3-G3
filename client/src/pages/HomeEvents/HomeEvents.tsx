@@ -81,6 +81,13 @@ function HomeEvents() {
       customClass: { popup: "toast-error-popup" },
     });
   };
+  const handleEventUpdated = (updatedEvent: EventData) => {
+    setEvents((prev) =>
+      prev.map((e) =>
+        e.event_id === updatedEvent.event_id ? updatedEvent : e,
+      ),
+    );
+  };
   const handleEventDeleted = (deletedId: number) => {
     setEvents((prev) => prev.filter((ev) => ev.event_id !== deletedId));
   };
@@ -91,7 +98,7 @@ function HomeEvents() {
         <NavBar />
         <Profil />
       </header>
-      <div className="HomeEvents-Global">
+      <main className="HomeEvents-Global">
         <div className="HomeEvents-Title">
           <h1>Mes Evénements</h1>
         </div>
@@ -102,35 +109,38 @@ function HomeEvents() {
           />
           <ButtonAddEvent onClick={() => setIsModalOpen(true)} />
         </div>
-        <div className="HomeEvents-CardGlobal">
+        <ul className="HomeEvents-CardGlobal">
           {filteredEvents.length === 0 ? (
             <EventEmpty />
           ) : (
             filteredEvents.map((event) => (
-              <CardEvents
-                key={event.event_id}
-                user_id={user?.id ?? 0}
-                event_id={event.event_id}
-                event_uuid={event.event_uuid}
-                event_id_host={event.event_id_host}
-                image={event.event_picture}
-                imageAlt={event.event_name}
-                dateStart={event.event_date_start}
-                dateEnd={event.event_date_end}
-                title={event.event_name}
-                description={event.event_description}
-                location={event.event_location}
-                onEventDeleted={handleEventDeleted}
-              />
+              <li key={event.event_id} className="HomeEvents-Card">
+                <CardEvents
+                  key={event.event_id}
+                  user_id={user?.id ?? 0}
+                  event_id={event.event_id}
+                  event_uuid={event.event_uuid}
+                  event_id_host={event.event_id_host}
+                  image={event.event_picture}
+                  imageAlt={event.event_name}
+                  dateStart={event.event_date_start}
+                  dateEnd={event.event_date_end}
+                  title={event.event_name}
+                  description={event.event_description}
+                  location={event.event_location}
+                  onEventDeleted={handleEventDeleted}
+                  onEventUpdated={handleEventUpdated}
+                />
+              </li>
             ))
           )}
-        </div>
+        </ul>
         <ModalAddEvent
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onEventCreated={handleEventCreated}
         />
-      </div>
+      </main>
     </>
   );
 }
