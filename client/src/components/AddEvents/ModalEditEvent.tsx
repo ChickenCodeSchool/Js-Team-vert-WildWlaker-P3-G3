@@ -66,7 +66,17 @@ function ModalEditEvent({
       name === "event_date_start" || name === "event_date_end"
         ? value
         : value.charAt(0).toUpperCase() + value.slice(1);
-    setForm((prev) => ({ ...prev, [name]: formatted }));
+
+    setForm((prev) => {
+      const next = { ...prev, [name]: formatted };
+
+      // si on change le début et que la fin devient antérieure, on recale la fin
+      if (name === "event_date_start" && next.event_date_end < formatted) {
+        next.event_date_end = formatted;
+      }
+
+      return next;
+    });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
