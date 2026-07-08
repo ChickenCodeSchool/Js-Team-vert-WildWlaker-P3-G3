@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { ContactRound, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import Profil from "../../assets/images/img-card-retraite.png";
 import { socket } from "../../socket/socket";
 
 type ReceptionMessagesUser = {
@@ -14,6 +13,7 @@ type ReceptionMessagesUser = {
   message_date: string;
   user_name: string;
   user_id: number;
+  user_profile_picture: string;
   event_name: string;
 };
 type UserByEvent = {
@@ -30,10 +30,7 @@ function Messagerie() {
   const [usersByEvent, setUsersByEvent] = useState<UserByEvent[]>([]);
   const [showPicker, setShowPicker] = useState(false);
   const { eventUuid } = useParams();
-  // const { id } = useParams();
-  // const event = Number(id);
-  // const user = JSON.parse(localStorage.getItem("user") || "null");
-  // const userId = user?.id;
+
   const messagesRef = useRef<HTMLDivElement | null>(null);
 
   const [userId, setUserId] = useState<number | null>(null);
@@ -87,7 +84,10 @@ function Messagerie() {
       credentials: "include",
     })
       .then((res) => res.json())
-      .then((data) => setReceptionMessagesUser(data));
+      .then((data) => {
+        setReceptionMessagesUser(data);
+        console.log(data);
+      });
   }, [eventUuid]);
 
   async function fetchUserEvent() {
@@ -274,7 +274,10 @@ function Messagerie() {
                     }
                   >
                     {reception.user_id !== userId && (
-                      <img src={Profil} alt="profil_ami" />
+                      <img
+                        src={`http://localhost:3310${reception.user_profile_picture}`}
+                        alt="profil_ami"
+                      />
                     )}
 
                     <section>
