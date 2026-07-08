@@ -39,6 +39,7 @@ const browseMessagesByEventId: RequestHandler = async (req, res, next) => {
     }
 
     const messages = await messageRepository.getMessagesByEventId(eventId);
+
     res.json(messages);
   } catch (error) {
     console.error("messageActions.browseMessagesByEventId erreur", error);
