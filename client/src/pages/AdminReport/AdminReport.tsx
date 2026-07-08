@@ -32,9 +32,17 @@ function AdminReport() {
     if (type === "user") endpoint = `${API_URL}/api/admin/reportUser/${id}`;
     if (!endpoint) return;
 
-    fetch(endpoint)
-      .then((res) => res.json())
-      .then((data: ReportData) => setReport(data));
+    fetch(endpoint, {
+      credentials: "include",
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Erreur serveur : ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data: ReportData) => setReport(data))
+      .catch((error) => console.error(error));
   }, [id, type]);
 
   const capitalize = (str = "") => str.charAt(0).toUpperCase() + str.slice(1);
@@ -58,7 +66,7 @@ function AdminReport() {
         const targetId =
           type === "user"
             ? report?.reported_user_id_user
-            : report?.event_host_id;
+            : report?.event_id_host;
 
         response = await fetch(`${API_URL}/api/admin/ban-user/${targetId}`, {
           method: "PATCH",

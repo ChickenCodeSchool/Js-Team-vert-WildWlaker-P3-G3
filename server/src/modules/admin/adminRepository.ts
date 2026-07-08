@@ -278,7 +278,7 @@ FROM user
     const [rows] = await databaseClient.query<Rows>(
       `SELECT e.event_name, u.user_mail, u.user_username
      FROM event AS e
-     JOIN user AS u ON u.user_id = e.event_host_id
+     JOIN user AS u ON u.user_id = e.event_id_host
      WHERE e.event_id = ?`,
       [id],
     );
