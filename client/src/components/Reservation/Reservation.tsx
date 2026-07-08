@@ -269,6 +269,7 @@ function Reservation() {
 
         <motion.button
           type="button"
+          className="reservation-button"
           onClick={() => {
             setEditingReservationId(null);
             setReservationName("");
