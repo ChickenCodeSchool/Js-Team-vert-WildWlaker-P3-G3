@@ -139,6 +139,14 @@ function AdminReport() {
 
   const getImages = (): string[] => report?.images ?? [];
 
+  const getInfoReport = () => {
+    if (type === "user")
+      return `ID utilisateur : ${report?.reported_user_id_user ?? "—"}`;
+    if (type === "event")
+      return `ID événement : ${report?.reported_event_id_event ?? "—"} — ID hôte : ${report?.event_id_host ?? "—"}`;
+    return "—";
+  };
+
   const getUsername = () =>
     type === "user" ? report?.author_username : report?.user_username;
 
@@ -200,6 +208,7 @@ function AdminReport() {
                 </div>
                 <div className="adminReport-WrapType-TypeText">
                   <h3>{type}</h3>
+                  {type !== "bug" && <p>{getInfoReport()}</p>}
                 </div>
               </div>
             </section>
