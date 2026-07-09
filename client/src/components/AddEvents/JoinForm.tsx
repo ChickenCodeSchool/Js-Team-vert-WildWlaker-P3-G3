@@ -6,7 +6,6 @@ import "./JoinForm.css";
 
 function JoinForm({ onClose, onEventCreated }: JoinFormProps) {
   const [code, setCode] = useState("");
-  // const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -79,7 +78,7 @@ function JoinForm({ onClose, onEventCreated }: JoinFormProps) {
                 setError(null);
                 setCode(e.target.value);
               }}
-              maxLength={6} // limite a 6 caracteres
+              maxLength={6}
               disabled={isLoading}
             />
             {error && <p className="JoinForm-Error">{error}</p>}

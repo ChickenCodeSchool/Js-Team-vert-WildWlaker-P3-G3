@@ -121,15 +121,15 @@ function DashboardReport() {
 
   function handleFilterChange(filter: FilterType) {
     setActiveFilter(filter);
-    setCurrentPage(1); // retour page 1 au changement de filtre
+    setCurrentPage(1);
     const { column, direction } = getDefaultSort(filter);
     setSortColumn(column);
-    setSortDirection(direction); // met directement le tri par défaut suivant le filtre choisit
+    setSortDirection(direction);
   }
 
   function handleSort(column: SortColumn) {
     if (sortColumn === column) {
-      setSortDirection((d) => (d === "asc" ? "desc" : "asc")); // quand on reclique ca inverse le sens du tri asc ou desc
+      setSortDirection((d) => (d === "asc" ? "desc" : "asc"));
     } else {
       setSortColumn(column);
       setSortDirection("asc");

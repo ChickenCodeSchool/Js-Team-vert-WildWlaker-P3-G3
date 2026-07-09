@@ -26,8 +26,6 @@ function Profil() {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const isAdminPage = location.pathname === "/admin";
-  // const user = JSON.parse(localStorage.getItem("user") || "null");
-  // const userId = user?.id;
   const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {

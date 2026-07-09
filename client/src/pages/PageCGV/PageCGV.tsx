@@ -93,37 +93,6 @@ function PageCGV() {
             </li>
           </ul>
         </section>
-
-        {/* <section>
-        <h2>Article 5 — Offres et tarifs</h2>
-        <p>
-        WeDoo propose un accès gratuit incluant les fonctionnalités de base
-          (création d'événement, chat, partage de photos, gestion des dépenses).
-          Des fonctionnalités additionnelles peuvent être proposées dans le
-          cadre d'une offre payante « [NOM DE L'OFFRE PREMIUM] », dont le tarif,
-          la périodicité et les modalités de résiliation sont précisés au moment
-          de la souscription.
-          </p>
-          <p>
-          Les prix sont indiqués en euros, toutes taxes comprises. WeDoo se
-          réserve le droit de modifier ses tarifs à tout moment ; les
-          utilisateurs abonnés seront informés au moins [DÉLAI, ex : 30 jours]
-          avant l'entrée en vigueur de toute modification tarifaire.
-          </p>
-          </section> */}
-
-        {/* <section>
-        <h2>Article 6 — Droit de rétractation</h2>
-        <p>
-        Conformément à l'article L221-18 du Code de la consommation,
-        l'utilisateur consommateur dispose d'un délai de 14 jours pour exercer
-        son droit de rétractation à compter de la souscription à une offre
-        payante, sauf s'il a expressément demandé le bénéfice immédiat du
-        service et renoncé à ce droit, ou si l'exécution du service a été
-        pleinement réalisée avant la fin de ce délai.
-        </p>
-        </section> */}
-
         <section>
           <h2>Article 5 — Obligations et responsabilité de l'utilisateur</h2>
           <p>

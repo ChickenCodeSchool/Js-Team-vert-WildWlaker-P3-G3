@@ -239,7 +239,7 @@ const forgotPassword: RequestHandler = async (req, res, next) => {
 
     await userRepository.saveResetToken(user.user_id, token, expires);
 
-    const link = `http://localhost:3000/resetpassword?token=${token}`;
+    const link = `${process.env.CLIENT_URL}/resetpassword?token=${token}`;
 
     res.json({ message: "Lien envoyé" });
 

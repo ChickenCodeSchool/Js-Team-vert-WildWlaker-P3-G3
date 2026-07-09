@@ -36,7 +36,7 @@ export type ReportEvent = {
 export type UnifiedReport = {
   id: number;
   type: "bug" | "user" | "event";
-  username: string; // nécessite un JOIN côté backend
+  username: string;
   email: string;
   date: string;
   is_done: 0 | 1;

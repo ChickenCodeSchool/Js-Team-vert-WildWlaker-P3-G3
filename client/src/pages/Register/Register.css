@@ -6,7 +6,7 @@
 }
 .navbar-register {
   width: 100%;
-  margin-top: 25px; /* Aligné à 25px comme les autres pages */
+  margin-top: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,7 +31,7 @@
   align-items: stretch;
   width: 90%;
   max-width: 900px;
-  margin: 4vh auto; /* Aligné à 4vh comme les autres pages */
+  margin: 4vh auto;
   border-radius: 16px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
   background: white;

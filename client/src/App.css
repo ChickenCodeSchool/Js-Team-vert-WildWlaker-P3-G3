@@ -12,24 +12,23 @@ body {
 }
 
 :root {
-  /* User */
-  --bg-neutral: #ffffff; /*cards*/
-  --bg-color: #fff8f5; /*background*/
-  --bg-sidebar: #e3966c; /*opacity 23%*/
+  --bg-neutral: #ffffff;
+  --bg-color: #fff8f5;
+  --bg-sidebar: #e3966c;
   --bg-positive: #d1fae5;
   --bg-negative: #ffe4e6;
   --bg-composant-dash: #fbf2ed;
 
-  --hover-sidebar: rgba(218, 148, 95, 0.3); /*opacity 30%*/
+  --hover-sidebar: rgba(218, 148, 95, 0.3);
 
   --sideBar-color: #feb47b5b;
 
-  --icon-color: #a53b22; /*hover & icons*/
+  --icon-color: #a53b22;
   --hover-signalement: #ffdad2;
   --input-color: rgba(222, 192, 185, 30%);
   --input-error: #ba1a1a;
   --border-color: #dec0b9;
-  --button-color: linear-gradient(to right, #ff7e5f, #a53b22); /*fonctionne uniquement avec background ou background-image*/
+  --button-color: linear-gradient(to right, #ff7e5f, #a53b22);
   --button-color-disable: #fffffff2;
   --button-color-image: lightgrey;
   --font-button-color-disable: black;
@@ -41,19 +40,16 @@ body {
   --font-black: #1f1b18;
   --font-neutral: #ffffff;
   --font-darkBrown: #57423d;
-  --font-brown: #a53b22; /*Wedoo title*/
+  --font-brown: #a53b22;
   --font-red: #e11d48;
   --font-green: #059669;
   --font-grey: #414141;
-
-  /* status user*/
   --bg-confirm-state: #cde5ff;
   --font-comfirm-state: #001d32;
 
   --bg-waiting-state: #ffdcc4;
   --font-waiting-state: #2f1400;
 
-  /* status admin*/
   --bg-valid-state: #b2f59e;
   --font-valid-state: #0c5b20;
 
@@ -62,7 +58,6 @@ body {
 
   --color-chat: #ff7e5f;
 
-  /* admin report card */
   --bg-admin-report-card: white;
   --icon-color-user: #366286;
   --icon-bg-user: #dee9f3;
@@ -71,7 +66,6 @@ body {
   --icon-color-bug: #a53b22;
   --icon-bg-bug: #f3e0dc;
 
-  /* admin report table*/
   --bg-table: white;
   --bg-state-ongoing: #fde2e1;
   --bg-state-finished: #d8f3dc;
@@ -83,7 +77,6 @@ body {
   --icon-eye-button-color: #a53b22;
   --icon-eye-button-color-hover: #ff7e5f;
 
-  /* signal notif */
   --signal: #ff3b30;
 }
 * {

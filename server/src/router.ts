@@ -1,6 +1,5 @@
 import express from "express";
 import multer from "multer";
-
 import authorization from "../src/middleware/auth";
 import adminActions from "./modules/admin/adminActions";
 import budgetActions from "./modules/budget/budgetActions";
@@ -19,28 +18,24 @@ import userActions from "./modules/user/userActions";
 const router = express.Router();
 const upload = multer({ dest: "public/uploads/" });
 
-/* ************************************************************************* */
 router.get("/api/auth/authVerif", authorization, userActions.authVerif);
-// user routes
+
 router.get("/api/users", authorization, userActions.browseInscription);
 router.get("/api/username/:id", authorization, userActions.readUserName);
-// router.get("/api/users/:id", userActions.read); // TODO: à réactiver après vérification
-// router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
-// TODO: vérifier avec l'équipe — deux routes identiques sur /api/users/:id
-// userActions.browse -> à confirmer : liste filtrée ou profil ?
+
 router.get(
   "/api/users/description/:eventUuid",
   authorization,
   userActions.readUserDescriptionEvent,
 );
-// userActions.read -> à confirmer : profil utilisateur unique ?
+
 router.get("/api/users/:id", authorization, userActions.read);
 router.get(
   "/api/users/:eventUuid/userAndBudget",
   authorization,
   userActions.browseUserAndBudget,
 );
-// router.get("/:id", userActions.browse); browse pas declaré
+
 router.post("/api/users", userActions.add);
 router.get("/api/users/:id/photo", authorization, userActions.browsePhoto);
 router.post(
@@ -71,9 +66,6 @@ router.get(
   userActions.readUserJoinEvent,
 );
 
-// router.get("/api/users/:id/events", userActions.getUserEvents); // TODO: à implémenter ????
-
-// message routes
 router.get(
   "/api/messages/:eventUuid",
   authorization,
@@ -95,7 +87,6 @@ router.get(
   messageActions.getUnreadMessages,
 );
 
-// reservation routes
 router.get(
   "/api/reservations/:eventUuid",
   authorization,
@@ -124,14 +115,10 @@ router.delete(
   reservationActions.deleteReservation,
 );
 
-// item routes
 router.get("/api/items", authorization, itemActions.browse);
 router.get("/api/items/:id", authorization, itemActions.read);
-// > post
 router.post("/api/items", authorization, itemActions.add);
 
-// EventActions routes
-// router.get("/api/users/:id/events", userActions.getUserEvents);
 router.get("/api/events", authorization, eventActions.browse);
 router.get(
   "/api/events/name/:eventUuid",
@@ -161,13 +148,11 @@ router.get(
   eventActions.readEventHostId,
 );
 
-// todoActions routes
 router.get("/api/todo/:eventUuid", authorization, todoActions.browse);
 router.post("/api/todo", authorization, todoActions.add);
 router.put("/api/todo/:todo_id", authorization, todoActions.edit);
 router.delete("/api/todo/:todo_id", authorization, todoActions.destroy);
 
-// gallery routes
 router.get("/api/gallery/:eventUuid", authorization, galleryActions.browse);
 
 router.post(
@@ -189,7 +174,6 @@ router.put(
   galleryActions.edit,
 );
 
-// gallery likes
 router.get(
   "/api/gallery/:eventUuid/likes/:userId",
   authorization,
@@ -202,7 +186,6 @@ router.delete(
   galleryActions.removeLike,
 );
 
-// report user routes
 router.get("/api/userreport-user", authorization, reportUserActions.browse);
 router.post(
   "/api/userreport-user",
@@ -227,7 +210,6 @@ router.post(
   reportEventActions.add,
 );
 
-// event user joining route
 router.get(
   "/api/events/:eventUuid/users",
   authorization,
@@ -244,7 +226,6 @@ router.delete(
   eventUserJoiningActions.deleteAll,
 );
 
-// admin route
 router.get("/api/admin/reportUser", authorization, adminActions.readReportUser);
 router.get("/api/admin/reportBug", authorization, adminActions.readReportBug);
 router.get(
@@ -271,7 +252,6 @@ router.get(
 router.get("/api/admin/events", authorization, adminActions.readAllEvents);
 router.get("/api/admin/users", authorization, adminActions.readAllUsers);
 
-// admin report route / details by ID
 router.get(
   "/api/admin/reportBug/:id",
   authorization,
@@ -288,7 +268,6 @@ router.get(
   adminActions.readReportUserById,
 );
 
-// admin report route / is done
 router.patch(
   "/api/admin/reportBug/:id/done",
   authorization,
@@ -305,12 +284,9 @@ router.patch(
   adminActions.markUserAsDone,
 );
 
-// admin ban routes
 router.patch("/api/admin/ban-user/:id", authorization, adminActions.banUser);
 router.patch("/api/admin/ban-event/:id", authorization, adminActions.banEvent);
 
-// --> budget
-// > get
 router.get("/api/budget/:eventUuid", authorization, budgetActions.browse);
 router.get(
   "/api/budget/:eventUuid/totalUsers",
@@ -327,11 +303,9 @@ router.get(
   authorization,
   budgetActions.browseEvent,
 );
-// > post
+
 router.post("/api/budget/add", authorization, budgetActions.create);
-// > put
 router.put("/api/budget/update", authorization, budgetActions.update);
-// > delete
 router.delete("/api/budget/:id", authorization, budgetActions.destroy);
 
 export default router;
