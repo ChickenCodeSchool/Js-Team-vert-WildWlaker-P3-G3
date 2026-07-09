@@ -9,6 +9,9 @@ export type ReportData = {
 
   images?: string[];
 
+  event_name?: string;
+  host_username?: string;
+
   reported_bug_is_done?: number;
   reported_event_is_done?: number;
   reported_user_is_done?: number;

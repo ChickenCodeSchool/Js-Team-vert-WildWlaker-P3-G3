@@ -157,7 +157,7 @@ function AdminReport() {
   const getInfoReport = () => {
     if (type === "user") return report?.target_username ?? "—";
     if (type === "event")
-      return `ID événement : ${report?.reported_event_id_event ?? "—"} — ID hôte : ${report?.event_id_host ?? "—"}`;
+      return `${report?.event_name ?? "—"} créé par ${report?.host_username ?? "—"}`;
     return "—";
   };
 
