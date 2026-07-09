@@ -9,7 +9,7 @@ export interface JwtUser {
 
 // Crée un token signé contenant le payload (infos non sensibles de l'user)
 const encodeJWT = (payload: JwtUser): string =>
-  jwt.sign(payload, process.env.TOKEN_SECRET as string, { expiresIn: "1h" });
+  jwt.sign(payload, process.env.TOKEN_SECRET as string, { expiresIn: "30d" });
 
 // Vérifie la SIGNATURE et l'EXPIRATION du token, puis retourne son contenu.
 // /!\ NE JAMAIS utiliser jwt.decode() pour authentifier : decode() ne vérifie

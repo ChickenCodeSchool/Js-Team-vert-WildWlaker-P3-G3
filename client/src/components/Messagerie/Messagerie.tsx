@@ -36,7 +36,7 @@ function Messagerie() {
   const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/auth/authVerif", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/authVerif`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -64,23 +64,26 @@ function Messagerie() {
 
   useEffect(() => {
     if (!eventUuid || !userId) return;
-    fetch(`http://localhost:3310/api/messages/notification/${eventUuid}`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/messages/notification/${eventUuid}`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+        }),
       },
-      body: JSON.stringify({
-        userId,
-      }),
-    }).catch((error) => {
+    ).catch((error) => {
       console.error("Erreur lecture messages :", error);
     });
   }, [eventUuid, userId]);
 
   useEffect(() => {
     if (!eventUuid) return;
-    fetch(`http://localhost:3310/api/messages/${eventUuid}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/messages/${eventUuid}`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -93,7 +96,7 @@ function Messagerie() {
   async function fetchUserEvent() {
     if (!eventUuid || !userId) return;
     const response = await fetch(
-      `http://localhost:3310/api/user-in-event/${eventUuid}/${userId}`,
+      `${import.meta.env.VITE_API_URL}/api/user-in-event/${eventUuid}/${userId}`,
       {
         credentials: "include",
       },
@@ -105,7 +108,7 @@ function Messagerie() {
 
   useEffect(() => {
     if (!eventUuid) return;
-    fetch(`http://localhost:3310/api/user/event/${eventUuid}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/user/event/${eventUuid}`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -150,7 +153,7 @@ function Messagerie() {
     }
     try {
       const response = await fetch(
-        `http://localhost:3310/api/messages/${eventUuid}`,
+        `${import.meta.env.VITE_API_URL}/api/messages/${eventUuid}`,
         {
           method: "POST",
           credentials: "include",
@@ -174,7 +177,7 @@ function Messagerie() {
 
   function fetchMessages() {
     if (!eventUuid) return;
-    fetch(`http://localhost:3310/api/messages/${eventUuid}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/messages/${eventUuid}`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -341,7 +344,7 @@ function Messagerie() {
               transition={{ duration: 0.3, delay: index * 0.06 }}
             >
               <img
-                src={`http://localhost:3310${event.user_profile_picture}`}
+                src={`${import.meta.env.VITE_API_URL}${event.user_profile_picture}`}
                 alt="photo-profil"
               />
               <div>

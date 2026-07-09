@@ -70,7 +70,7 @@ function Reservation() {
     if (!eventUuid) return;
 
     const res = await fetch(
-      `http://localhost:3310/api/reservations/all/${eventUuid}`,
+      `${import.meta.env.VITE_API_URL}/api/reservations/all/${eventUuid}`,
       {
         credentials: "include",
       },
@@ -86,7 +86,7 @@ function Reservation() {
 
     const fetchTest = async () => {
       const response = await fetch(
-        `http://localhost:3310/api/user-in-event/${eventUuid}/${userId}`,
+        `${import.meta.env.VITE_API_URL}/api/user-in-event/${eventUuid}/${userId}`,
         {
           credentials: "include",
         },
@@ -101,7 +101,7 @@ function Reservation() {
 
   useEffect(() => {
     if (!eventUuid) return;
-    fetch(`http://localhost:3310/api/events/name/${eventUuid}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/events/name/${eventUuid}`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -131,7 +131,7 @@ function Reservation() {
     setReservationLocation(resa.reservation_location);
     setReservationDescription(resa.reservation_description);
     setReservationPicture(null);
-    setPreview(`http://localhost:3310${resa.reservation_picture}`);
+    setPreview(`${import.meta.env.VITE_API_URL}${resa.reservation_picture}`);
     setEditingReservationId(reservationId);
     setIsModalOpen(true);
   }
@@ -187,8 +187,8 @@ function Reservation() {
     }
 
     const url = isEditing
-      ? `http://localhost:3310/api/reservations/update/${editingReservationId}`
-      : "http://localhost:3310/api/reservations";
+      ? `${import.meta.env.VITE_API_URL}/api/reservations/update/${editingReservationId}`
+      : `${import.meta.env.VITE_API_URL}/api/reservations`;
     const method = isEditing ? "PUT" : "POST";
 
     const response = await fetch(url, {
@@ -452,7 +452,7 @@ function Reservation() {
                   },
                 });
               }}
-              image={`http://localhost:3310${event.reservation_picture}`}
+              image={`${import.meta.env.VITE_API_URL}${event.reservation_picture}`}
               imageAlt={event.reservation_name}
               dateStart={event.reservation_date}
               dateEnd={event.reservation_date}
