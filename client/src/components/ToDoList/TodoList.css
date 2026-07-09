@@ -53,10 +53,10 @@
     margin: 0;
     max-height: 400px;
     overflow-y: auto;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE / Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     &::-webkit-scrollbar {
-      display: none; /* Chrome, Safari */
+      display: none;
     }
     .task-item-li {
       display: flex;
@@ -85,7 +85,6 @@
   .task-name {
     flex: 1;
     min-width: 0;
-    /* word-break: break-word; */
     overflow: hidden;
     min-height: 1em;
     color: var(--font-darkBrown);
@@ -100,7 +99,6 @@
     flex: 1;
     min-width: 0;
     width: 0;
-    /* text-wrap: wrap; */
     outline: none;
   }
 

@@ -70,7 +70,6 @@ class budgetRepository {
   }
 
   async readBudgetInfoByUser(id_event: number, id_user: number) {
-    // return user id, username, name and the total of all budget for a specific user
     const [rows] = await databaseClient.query<Rows>(
       `SELECT 
         u.user_id, 
@@ -95,7 +94,6 @@ class budgetRepository {
   }
 
   async readBudgetInfoEvent(id: number) {
-    // return event id, name and the total of all budget
     const [rows] = await databaseClient.query<Rows>(
       `SELECT 
         e.event_id, 
@@ -111,7 +109,6 @@ class budgetRepository {
   }
 
   async create(id_event: number, id_user: number, name: string, price: number) {
-    // Execute the SQL INSERT query to add a new item to the "item" table
     const [result] = await databaseClient.query<Result>(
       `INSERT INTO budget 
         (budget_id_event, 
@@ -122,13 +119,10 @@ class budgetRepository {
       [id_event, id_user, name, price],
     );
 
-    // Return the ID of the newly inserted item
     return result.insertId;
   }
 
   async update(id_budget: number, name: string, price: number) {
-    // update an already existing budget
-
     const [result] = await databaseClient.query<Result>(
       `
       UPDATE budget
@@ -142,8 +136,6 @@ class budgetRepository {
   }
 
   async delete(id: number) {
-    // delete an existing budget
-
     const [result] = await databaseClient.query<Result>(
       `DELETE FROM budget 
       WHERE budget.budget_id = ?;`,

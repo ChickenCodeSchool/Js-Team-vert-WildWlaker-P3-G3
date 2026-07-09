@@ -1,13 +1,9 @@
 import type { RequestHandler } from "express";
-
-// Import access to data
 import eventRepository from "../event/eventRepository";
 import budgetRepository from "./budgetRepository";
 
-// The R of BREAD - Read operation
 const browse: RequestHandler = async (req, res, next) => {
   try {
-    // Fetch specific budget based on the provided event ID
     const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
     if (!eventId) {
       res.sendStatus(404);
@@ -16,8 +12,6 @@ const browse: RequestHandler = async (req, res, next) => {
     const budget = await budgetRepository.readByEvent(eventId);
 
     res.json(budget);
-
-    // Error
   } catch (err) {
     next(err);
   }
@@ -25,7 +19,6 @@ const browse: RequestHandler = async (req, res, next) => {
 
 const browseTotalUser: RequestHandler = async (req, res, next) => {
   try {
-    // Fetch specific budget based on the provided event ID
     const eventId = await eventRepository.readIdByUuid(req.params.eventUuid);
     if (!eventId) {
       res.sendStatus(404);
@@ -34,8 +27,6 @@ const browseTotalUser: RequestHandler = async (req, res, next) => {
     const budget = await budgetRepository.readAllTotalBudgetByEvent(eventId);
 
     res.json(budget);
-
-    // Error
   } catch (err) {
     next(err);
   }
@@ -52,8 +43,6 @@ const browseUser: RequestHandler = async (req, res, next) => {
     const budget = await budgetRepository.readBudgetInfoByUser(eventId, userId);
 
     res.json(budget);
-
-    // Error
   } catch (err) {
     next(err);
   }
@@ -69,8 +58,6 @@ const browseEvent: RequestHandler = async (req, res, next) => {
     const budget = await budgetRepository.readBudgetInfoEvent(eventId);
 
     res.json(budget);
-
-    // Error
   } catch (err) {
     next(err);
   }
@@ -91,8 +78,6 @@ const create: RequestHandler = async (req, res, next) => {
     const budget = await budgetRepository.create(event, user, name, price);
 
     res.json(budget);
-
-    // Error
   } catch (err) {
     next(err);
   }
@@ -107,8 +92,6 @@ const update: RequestHandler = async (req, res, next) => {
     const budget = await budgetRepository.update(id_budget, name, price);
 
     res.json(budget);
-
-    // Error
   } catch (err) {
     next(err);
   }
@@ -121,8 +104,6 @@ const destroy: RequestHandler = async (req, res, next) => {
     const budget = await budgetRepository.delete(id);
 
     res.json(budget);
-
-    // Error
   } catch (err) {
     next(err);
   }

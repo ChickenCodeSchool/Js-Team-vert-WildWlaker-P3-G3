@@ -89,7 +89,6 @@ function Messagerie() {
       .then((res) => res.json())
       .then((data) => {
         setReceptionMessagesUser(data);
-        console.log(data);
       });
   }, [eventUuid]);
 
@@ -278,7 +277,7 @@ function Messagerie() {
                   >
                     {reception.user_id !== userId && (
                       <img
-                        src={`http://localhost:3310${reception.user_profile_picture}`}
+                        src={`${import.meta.env.VITE_API_URL}${reception.user_profile_picture}`}
                         alt="profil_ami"
                       />
                     )}

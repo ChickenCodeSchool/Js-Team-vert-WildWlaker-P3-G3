@@ -125,7 +125,7 @@ function DashboardAdmin() {
   }, []);
   useEffect(() => {
     fetch(
-      `http://localhost:3310/api/admin/dashboard-chart?year=${selectedYear}`,
+      `${import.meta.env.VITE_API_URL}/api/admin/dashboard-chart?year=${selectedYear}`,
       { credentials: "include" },
     )
       .then((res) => res.json())

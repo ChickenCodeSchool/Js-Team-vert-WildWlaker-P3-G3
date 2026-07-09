@@ -22,10 +22,6 @@ type Reservation = {
 
 function Reservation() {
   const { eventUuid } = useParams();
-  // const { id } = useParams();
-  // const eventId = Number(id);
-  // const user = JSON.parse(localStorage.getItem("user") || "null");
-  // const userId = user?.id;
   const [userId, setUserId] = useState<number | null>(null);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);

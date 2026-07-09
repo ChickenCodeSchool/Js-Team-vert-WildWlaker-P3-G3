@@ -13,7 +13,6 @@ function CreateForm({ onClose, onEventCreated }: CreateFormProps) {
     location: "",
   });
 
-  // const { id: user_id } = JSON.parse(localStorage.getItem("user") || "{}"); // --> recupere dans localstorage "user" l'id pour le passer en user_id
   const today = new Date().toISOString().split("T")[0];
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

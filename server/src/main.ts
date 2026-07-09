@@ -1,25 +1,17 @@
-// Load environment variables from .env file
 import "dotenv/config";
-
-// Check database connection
-// Note: This is optional and can be removed if the database connection
-// is not required when starting the application
 import "../database/checkConnection";
 
 import http from "node:http";
 import { Server } from "socket.io";
-// Import the Express application from ./app
 import app from "./app";
 import { initSocket } from "./socket";
 
 const server = http.createServer(app);
 
-// Get the port from the environment variables
 const port = process.env.APP_PORT;
 
 initSocket(server);
 
-// Start the server and listen on the specified port
 server
   .listen(port, () => {
     console.info(`Server is listening on port ${port}`);

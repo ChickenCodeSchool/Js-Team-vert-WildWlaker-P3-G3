@@ -123,24 +123,13 @@ function Budget() {
       })
       .catch(() => setUserID(null));
   }, []);
-  // const { id } = useParams();
-  // const eventID = Number(id);
-  // const user = JSON.parse(localStorage.getItem("user") || "null");
-  // const userID = user?.id;
 
   const [budgetEvent, setBudgetEvent] = useState<BudgetTotalEvent>();
   const [listUserBudget, setListUserBudget] = useState<BudgetByUser[]>([]);
   const [listBudget, setListBudget] = useState<Budget[]>([]);
-
   const [showCreateForm, setShowCreateForm] = useState<boolean>(false);
-
-  /* -- Create form -- */
-
   const [nameCreateForm, setNameCreateForm] = useState<string>("");
   const [priceCreateForm, setPriceCreateForm] = useState<number>();
-
-  /* -- User in Event Confirmaton -- */
-
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -149,8 +138,6 @@ function Budget() {
     fetchUserInEvent();
     fetchBudgetLists();
   }, [eventUuid, userID]);
-
-  /* -- Fonctions -- */
 
   function fetchBudgetLists() {
     if (!eventUuid) return;
