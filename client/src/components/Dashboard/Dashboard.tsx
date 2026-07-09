@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import {
   Book,
   CalendarClock,
+  Copy,
   Hand,
   HandCoins,
   PiggyBank,
@@ -44,11 +45,9 @@ function Dashboard() {
   const [userName, setUserName] = useState<string>("");
   const [userAndBudgetData, setUserAndBudgetData] = useState<UserAndBudget>();
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
-  // const { id } = useParams();
   const { eventUuid } = useParams();
-  // const event = Number(id);
-  // const user = JSON.parse(localStorage.getItem("user") || "null");
-  // const userId = user?.id;
+  const [isModalCode, setIsModalCode] = useState(false);
+
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/auth/authVerif`, {
       credentials: "include",
@@ -179,26 +178,64 @@ function Dashboard() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4 }}
       >
-        {eventData?.event_name} : {eventData?.event_link_key}
+        {eventData?.event_name}
       </motion.h1>
-
-      <motion.h1
-        className="user-name"
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-      >
-        Salut, {userName}
-        <MotionHand
-          size={20}
-          animate={{ rotate: [0, 25, -25, 25, -25, 25, -25, 25, -25, 0] }}
-          transition={{
-            duration: 1.5,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatDelay: 0.5,
-          }}
-        />
-      </motion.h1>
+      <section>
+        <motion.h1
+          className="user-name"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
+          Salut, {userName}
+          <MotionHand
+            size={20}
+            animate={{ rotate: [0, 25, -25, 25, -25, 25, -25, 25, -25, 0] }}
+            transition={{
+              duration: 1.5,
+              repeat: Number.POSITIVE_INFINITY,
+              repeatDelay: 0.5,
+            }}
+          />
+        </motion.h1>
+        <motion.div
+          initial={{ opacity: 0, height: 0, y: -10 }}
+          animate={{ opacity: 1, height: "auto", y: 0 }}
+          exit={{ opacity: 0, height: 0, y: -10 }}
+          transition={{ duration: 0.25 }}
+        >
+          <button
+            type="button"
+            className="button-code"
+            onClick={() => setIsModalCode(true)}
+          >
+            Code de l'événement
+          </button>
+        </motion.div>
+        {isModalCode && (
+          <motion.div
+            className="modal-code"
+            initial={{ opacity: 0, height: 0, y: -10 }}
+            animate={{ opacity: 1, height: 45, y: 0 }}
+            exit={{ opacity: 0, height: 0, y: -10 }}
+            transition={{ duration: 0.25 }}
+          >
+            <h1>{eventData?.event_link_key}</h1>
+            <button
+              className="copy"
+              type="button"
+              onClick={async () => {
+                await navigator.clipboard.writeText(
+                  eventData?.event_link_key || "",
+                );
+                setIsModalCode(false);
+              }}
+            >
+              <Copy />
+            </button>
+          </motion.div>
+        )}
+      </section>
 
       <motion.p
         initial={{ opacity: 0 }}
