@@ -1,4 +1,5 @@
 import type { RequestHandler } from "express";
+import eventRepository from "../event/eventRepository";
 import reportUserRepository from "./reportUserRepository";
 
 const browse: RequestHandler = async (req, res, next) => {
@@ -16,10 +17,17 @@ const add: RequestHandler = async (req, res, next) => {
     const files = req.files as Express.Multer.File[] | undefined;
     const imagePaths = files?.map((file) => file.filename) ?? [];
 
+    const eventId = await eventRepository.readIdByUuid(req.body.event_uuid);
+    if (!eventId) {
+      res.sendStatus(404);
+      return;
+    }
+
     const newReportUser = {
       reported_user_id_user: req.body.reported_user_id_user,
       reported_user_description: req.body.reported_user_description,
       reported_user_by_id_user: req.body.reported_user_by_id_user,
+      reported_user_id_event: eventId,
     };
 
     const alreadyExists = await reportUserRepository.exists(

@@ -297,6 +297,27 @@ FROM user
     return user;
   }
 
+  async banUserFromEvent(eventId: number, userId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT user_mail, user_username FROM user WHERE user_id = ?",
+      [userId],
+    );
+    const user = rows[0];
+    if (!user) return null;
+
+    await databaseClient.query<Result>(
+      "INSERT IGNORE INTO event_user_ban (eub_id_event, eub_id_user) VALUES (?, ?)",
+      [eventId, userId],
+    );
+
+    await databaseClient.query<Result>(
+      "DELETE FROM event_user_joining WHERE euj_id_event = ? AND euj_id_user = ?",
+      [eventId, userId],
+    );
+
+    return user;
+  }
+
   async banEvent(id: number) {
     const [rows] = await databaseClient.query<Rows>(
       `SELECT e.event_name, u.user_mail, u.user_username

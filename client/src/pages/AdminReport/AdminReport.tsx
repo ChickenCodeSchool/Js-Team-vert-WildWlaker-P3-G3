@@ -73,12 +73,25 @@ function AdminReport() {
           credentials: "include",
         });
       } else {
-        const eventId = report?.reported_event_id_event;
+        if (type === "user") {
+          const eventId = report?.reported_user_id_event;
+          const userId = report?.reported_user_id_user;
 
-        response = await fetch(`${API_URL}/api/admin/ban-event/${eventId}`, {
-          method: "PATCH",
-          credentials: "include",
-        });
+          response = await fetch(
+            `${API_URL}/api/admin/event-ban/${eventId}/${userId}`,
+            {
+              method: "PATCH",
+              credentials: "include",
+            },
+          );
+        } else {
+          const eventId = report?.reported_event_id_event;
+
+          response = await fetch(`${API_URL}/api/admin/ban-event/${eventId}`, {
+            method: "PATCH",
+            credentials: "include",
+          });
+        }
       }
 
       if (!response.ok) {
@@ -97,7 +110,9 @@ function AdminReport() {
         text:
           action === "user"
             ? "L'utilisateur a bien été banni."
-            : "L'événement a bien été banni.",
+            : type === "user"
+              ? "L'utilisateur a bien été retiré de l'événement."
+              : "L'événement a bien été banni.",
         customClass: {
           popup: "toast-success-popup",
         },
@@ -140,8 +155,7 @@ function AdminReport() {
   const getImages = (): string[] => report?.images ?? [];
 
   const getInfoReport = () => {
-    if (type === "user")
-      return `ID utilisateur : ${report?.reported_user_id_user ?? "—"}`;
+    if (type === "user") return report?.target_username ?? "—";
     if (type === "event")
       return `ID événement : ${report?.reported_event_id_event ?? "—"} — ID hôte : ${report?.event_id_host ?? "—"}`;
     return "—";

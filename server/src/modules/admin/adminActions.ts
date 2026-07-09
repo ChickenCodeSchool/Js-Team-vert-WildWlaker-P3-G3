@@ -183,6 +183,34 @@ const banUser: RequestHandler = async (req, res, next) => {
   }
 };
 
+const banUserFromEvent: RequestHandler = async (req, res, next) => {
+  try {
+    const eventId = Number(req.params.eventId);
+    const userId = Number(req.params.userId);
+    const user = await adminRepository.banUserFromEvent(eventId, userId);
+
+    if (!user) {
+      res.status(404).json({ message: "Utilisateur introuvable" });
+      return;
+    }
+
+    try {
+      await transporter.sendMail({
+        from: `"Équipe Wedoo" <${process.env.EMAIL_USER}>`,
+        to: user.user_mail,
+        subject: "Vous avez été retiré d'un événement Wedoo",
+        text: `Bonjour ${user.user_username},\n\nVous avez été retiré d'un événement suite à un signalement.\n\nSi vous estimez qu'il s'agit d'une erreur, contactez notre support.\n\nL'équipe Wedoo.`,
+      });
+    } catch (mailErr) {
+      console.error("Échec de l'envoi du mail :", mailErr);
+    }
+
+    res.json({ message: "Utilisateur retiré de l'événement" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const banEvent: RequestHandler = async (req, res, next) => {
   try {
     const id = Number(req.params.id);
@@ -227,5 +255,6 @@ export default {
   markEventAsDone,
   markUserAsDone,
   banUser,
+  banUserFromEvent,
   banEvent,
 };

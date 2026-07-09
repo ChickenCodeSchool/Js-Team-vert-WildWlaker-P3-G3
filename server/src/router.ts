@@ -286,6 +286,11 @@ router.patch(
 
 router.patch("/api/admin/ban-user/:id", authorization, adminActions.banUser);
 router.patch("/api/admin/ban-event/:id", authorization, adminActions.banEvent);
+router.patch(
+  "/api/admin/event-ban/:eventId/:userId",
+  authorization,
+  adminActions.banUserFromEvent,
+);
 
 router.get("/api/budget/:eventUuid", authorization, budgetActions.browse);
 router.get(
@@ -293,6 +298,7 @@ router.get(
   authorization,
   budgetActions.browseTotalUser,
 );
+
 router.get(
   "/api/budget/user/:eventUuid/:id_user",
   authorization,

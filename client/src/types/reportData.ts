@@ -24,6 +24,7 @@ export type ReportData = {
   target_picture?: string;
 
   reported_event_id_event?: number;
+  reported_user_id_event?: number;
   reported_bug_by_id_user?: number;
   reported_event_by_id_user?: number;
   reported_user_by_id_user?: number;

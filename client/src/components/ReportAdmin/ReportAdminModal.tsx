@@ -64,9 +64,15 @@ function ReportAdminModal({
             <CalendarX size={20} />
           </span>
           <span className="banModal-OptionText">
-            <span className="banModal-OptionTitle">Bannir l'événement</span>
+            <span className="banModal-OptionTitle">
+              {type === "event"
+                ? "Bannir l'événement"
+                : "Retirer de l'événement"}
+            </span>
             <span className="banModal-OptionDesc">
-              Supprimer cet événement des listes publiques immédiatement.
+              {type === "event"
+                ? "Supprimer cet événement des listes publiques immédiatement."
+                : "Retirer cet utilisateur de l'événement, sans bannir son compte."}
             </span>
           </span>
         </button>
