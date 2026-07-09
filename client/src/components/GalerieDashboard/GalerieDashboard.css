@@ -1,6 +1,5 @@
 .galerie-dash {
-  width: 100%;
-  padding-top: 3vh;
+  padding-block: 3vh;
   background: #fff6f2;
 
   .galerie-header {

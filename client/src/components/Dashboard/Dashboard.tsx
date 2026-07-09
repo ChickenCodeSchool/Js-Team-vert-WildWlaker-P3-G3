@@ -180,7 +180,7 @@ function Dashboard() {
       >
         {eventData?.event_name}
       </motion.h1>
-      <section>
+      <section className="section-nameCode">
         <motion.h1
           className="user-name"
           initial={{ y: -20, opacity: 0 }}
@@ -366,6 +366,7 @@ function Dashboard() {
         )}
 
         <motion.div
+          className="dashboard-gallery"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}

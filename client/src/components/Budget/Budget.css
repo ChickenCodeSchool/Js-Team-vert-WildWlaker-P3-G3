@@ -12,7 +12,9 @@ body {
     background: var(--bg-color);
     cursor: default;
     gap: 2rem;
-
+    .form {
+      backdrop-filter: blur(6px);
+    }
     .myBalance {
       .myBalanceBox {
         background: linear-gradient(135deg, #ff8a6a, #c24a2d);

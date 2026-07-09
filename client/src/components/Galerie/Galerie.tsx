@@ -1,6 +1,7 @@
 import "./Galerie.css";
+import { motion } from "framer-motion";
 import { ImagePlus, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import GalleryModal from "./GalleryModal";
 import { PhotoItem } from "./PhotoItem";
@@ -214,12 +215,38 @@ function Galerie() {
     }
   };
 
+  const photoKey = photos.map((p) => p.gallery_id).join(",");
+
+  const largePhotoIds = useMemo(() => {
+    const ids = photoKey ? photoKey.split(",").map(Number) : [];
+    const large = new Set<number>();
+    let prevWasLarge = false;
+
+    for (const id of ids) {
+      const pseudo = (id * 2654435761) % 100;
+
+      if (!prevWasLarge && pseudo < 30) {
+        large.add(id);
+        prevWasLarge = true;
+      } else {
+        prevWasLarge = false;
+      }
+    }
+
+    return large;
+  }, [photoKey]);
+
   if (userId === null) {
     return <p>Chargement utilisateur...</p>;
   }
 
   return (
-    <section className="galerie">
+    <motion.section
+      className="galerie"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
       <div className="galerie-header">
         <h1>{eventName}</h1>
         <button
@@ -294,25 +321,47 @@ function Galerie() {
       )}
 
       {!isLoading && photos.length > 0 && (
-        <div className="galerie-grid" aria-label="Galerie de l'événement">
+        <motion.div
+          className="galerie-grid"
+          aria-label="Galerie de l'événement"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: { staggerChildren: 0.08 },
+            },
+          }}
+        >
           {photos.map((photo) => (
-            <PhotoItem
+            <motion.div
               key={photo.gallery_id}
-              photo={{
-                ...photo,
-                gallery_link: formatImageUrl(photo.gallery_link),
+              className={
+                largePhotoIds.has(photo.gallery_id) ? "galerie-cell-large" : ""
+              }
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
               }}
-              isLiked={likedPhotos.includes(photo.gallery_id)}
-              onPreview={(url) => setSelectedPhoto(url)}
-              onLike={toggleLike}
-              onDelete={(fid) => setPhotoToDelete(fid)}
-              onEdit={(p) => {
-                setPhotoToEdit(p);
-                setNewDescription(p.gallery_description ?? "");
-              }}
-            />
+              transition={{ duration: 0.25 }}
+            >
+              <PhotoItem
+                photo={{
+                  ...photo,
+                  gallery_link: formatImageUrl(photo.gallery_link),
+                }}
+                isLiked={likedPhotos.includes(photo.gallery_id)}
+                onPreview={(url) => setSelectedPhoto(url)}
+                onLike={toggleLike}
+                onDelete={(fid) => setPhotoToDelete(fid)}
+                onEdit={(p) => {
+                  setPhotoToEdit(p);
+                  setNewDescription(p.gallery_description ?? "");
+                }}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
 
       {isModalOpen && (
@@ -378,7 +427,7 @@ function Galerie() {
           <img src={selectedPhoto} alt="Aperçu" className="image-modal" />
         </div>
       )}
-    </section>
+    </motion.section>
   );
 }
 

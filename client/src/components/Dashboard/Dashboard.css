@@ -6,7 +6,7 @@
   font-style: normal;
   height: 90vh;
   width: 74vw;
-  section {
+  .section-nameCode {
     width: 90%;
     display: flex;
     flex-direction: row;
@@ -50,14 +50,13 @@
       background: white;
       border-radius: 1rem;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-
-      cursor: pointer;
       overflow: hidden;
       .copy {
         background: none;
         border: none;
         .lucide.lucide-copy {
           color: var(--font-title);
+          cursor: pointer;
         }
       }
       h1 {
@@ -322,9 +321,9 @@
     .component-todo {
       grid-area: "todo";
     }
-
-    .component-galerie {
-      grid-area: "galerie";
+    .dashboard-gallery {
+      display: flex;
+      flex-direction: column;
     }
   }
 }
