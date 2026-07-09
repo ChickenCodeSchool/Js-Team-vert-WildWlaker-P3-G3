@@ -36,6 +36,7 @@ CREATE TABLE `reported_user` (
   `reported_user_id` INT NOT NULL AUTO_INCREMENT,
   `reported_user_id_user` INT NOT NULL,
   `reported_user_by_id_user` INT NOT NULL,
+  `reported_user_id_event` INT NOT NULL,
   `reported_user_description` VARCHAR(255) NOT NULL,
   `reported_user_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
