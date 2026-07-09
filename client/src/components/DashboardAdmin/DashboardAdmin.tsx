@@ -243,7 +243,7 @@ function DashboardAdmin() {
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="month" axisLine={false} tickLine={false} />
               <YAxis axisLine={false} tickLine={false} />
-              <Tooltip />
+              <Tooltip wrapperStyle={{ zIndex: 100 }} />
               <Legend />
 
               <Line

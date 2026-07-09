@@ -10,10 +10,12 @@ import {
   Trash2,
   TriangleAlert,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useParams } from "react-router";
 import Logo from "../../assets/images/logo-wedoo.png";
+import notificationSound from "../../assets/sounds/notification.mp3";
+import { socket } from "../../socket/socket";
 const containerVariants = {
   hidden: {},
   visible: {
@@ -57,6 +59,7 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [isHost, setIsHost] = useState<number | null>(null);
   const [unreadCount, setUnreadCount] = useState(0);
+  const notificationAudioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/auth/authVerif`, {
@@ -65,6 +68,11 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
       .then((res) => res.json())
       .then((data) => setUserId(data.id))
       .catch(() => setUserId(null));
+  }, []);
+
+  useEffect(() => {
+    notificationAudioRef.current = new Audio(notificationSound);
+    notificationAudioRef.current.volume = 0.5;
   }, []);
 
   useEffect(() => {
@@ -139,6 +147,34 @@ function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
       .then((res) => res.json())
       .then((data) => setUnreadCount(data.count))
       .catch(console.error);
+  }, [eventUuid, userId]);
+
+  if (eventUuid === null) {
+    return null;
+  }
+
+  const activeComponentRef = useRef(activeComponent);
+  useEffect(() => {
+    activeComponentRef.current = activeComponent;
+  }, [activeComponent]);
+  useEffect(() => {
+    if (!eventUuid || !userId) return;
+
+    socket.emit("join-event", eventUuid);
+
+    const handleNewMessage = (newMessage: { user_id: number }) => {
+      if (newMessage.user_id === userId) return;
+      if (activeComponentRef.current === "messagerie") return;
+      setUnreadCount((prev) => prev + 1);
+      notificationAudioRef.current?.play().catch(() => {});
+    };
+
+    socket.on("new-message", handleNewMessage);
+
+    return () => {
+      socket.emit("leave-event", eventUuid);
+      socket.off("new-message", handleNewMessage);
+    };
   }, [eventUuid, userId]);
 
   if (eventUuid === null) {

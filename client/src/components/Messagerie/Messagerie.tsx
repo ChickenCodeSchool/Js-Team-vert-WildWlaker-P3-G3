@@ -134,16 +134,14 @@ function Messagerie() {
 
     socket.emit("join-event", eventUuid);
 
-    socket.on("new-message", (newMessage: ReceptionMessagesUser) => {
-      setReceptionMessagesUser((previousMessages) => [
-        ...previousMessages,
-        newMessage,
-      ]);
-    });
+    const handleNewMessage = (newMessage: ReceptionMessagesUser) => {
+      setReceptionMessagesUser((prev) => [...prev, newMessage]);
+    };
+
+    socket.on("new-message", handleNewMessage);
 
     return () => {
-      socket.emit("leave-event", eventUuid);
-      socket.off("new-message");
+      socket.off("new-message", handleNewMessage);
     };
   }, [eventUuid]);
   async function handleSendMessage() {
