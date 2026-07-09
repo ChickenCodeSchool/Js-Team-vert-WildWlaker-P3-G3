@@ -53,7 +53,7 @@ function ReportUserModal({
             <div className="reportUserModal-userInfo">
               <img
                 className="reportUserModal-avatar"
-                src={activeUser.user_profile_picture ?? ""}
+                src={`${import.meta.env.VITE_API_URL}${activeUser.user_profile_picture}`}
                 alt={activeUser.user_username}
               />
               <span className="reportUserModal-userName">

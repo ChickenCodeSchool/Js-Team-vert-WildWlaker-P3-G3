@@ -50,6 +50,13 @@ class EventRepository {
 
     return rows[0] as EventData;
   }
+  async isUserBanned(eventId: number, userId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT * FROM event_user_ban WHERE eub_id_event = ? AND eub_id_user = ?",
+      [eventId, userId],
+    );
+    return rows.length > 0;
+  }
 
   async readAll(userId: number) {
     const [rows] = await databaseClient.query<Rows>(
