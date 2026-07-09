@@ -197,15 +197,18 @@ FROM user
   async readReportEventById(id: number) {
     const [rows] = await databaseClient.query<Rows>(
       `SELECT 
-      re.*,
-      e.event_id_host,
-      u.user_username,
-      u.user_mail,
-      u.user_profile_picture
-    FROM reported_event AS re
-    JOIN user AS u ON u.user_id = re.reported_event_by_id_user
-    JOIN event AS e ON e.event_id = re.reported_event_id_event
-    WHERE re.reported_event_id = ?`,
+    re.*,
+    e.event_id_host,
+    e.event_name,
+    host.user_username AS host_username,
+    u.user_username,
+    u.user_mail,
+    u.user_profile_picture
+  FROM reported_event AS re
+  JOIN user AS u ON u.user_id = re.reported_event_by_id_user
+  JOIN event AS e ON e.event_id = re.reported_event_id_event
+  JOIN user AS host ON host.user_id = e.event_id_host
+  WHERE re.reported_event_id = ?`,
       [id],
     );
 
@@ -292,6 +295,27 @@ FROM user
     await databaseClient.query<Result>(
       "UPDATE user SET user_is_ban = TRUE WHERE user_id = ?",
       [id],
+    );
+
+    return user;
+  }
+
+  async banUserFromEvent(eventId: number, userId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT user_mail, user_username FROM user WHERE user_id = ?",
+      [userId],
+    );
+    const user = rows[0];
+    if (!user) return null;
+
+    await databaseClient.query<Result>(
+      "INSERT IGNORE INTO event_user_ban (eub_id_event, eub_id_user) VALUES (?, ?)",
+      [eventId, userId],
+    );
+
+    await databaseClient.query<Result>(
+      "DELETE FROM event_user_joining WHERE euj_id_event = ? AND euj_id_user = ?",
+      [eventId, userId],
     );
 
     return user;

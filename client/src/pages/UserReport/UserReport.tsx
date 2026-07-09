@@ -108,6 +108,7 @@ function UserReport() {
             return;
           }
           const formData = new FormData();
+          formData.append("event_uuid", eventUuid ?? "");
           formData.append("reported_user_description", repDetail);
           formData.append("reported_user_id_user", reportedUserId.toString());
           formData.append("reported_user_by_id_user", currentUserId.toString());

@@ -24,11 +24,12 @@ class reportUserRepository {
       await connection.beginTransaction();
 
       const [result] = await connection.query<Result>(
-        "insert into reported_user (reported_user_id_user, reported_user_description, reported_user_by_id_user) values (?, ?, ?)",
+        "insert into reported_user (reported_user_id_user, reported_user_description, reported_user_by_id_user, reported_user_id_event) values (?, ?, ?, ?)",
         [
           reported_user.reported_user_id_user,
           reported_user.reported_user_description,
           reported_user.reported_user_by_id_user,
+          reported_user.reported_user_id_event,
         ],
       );
 
