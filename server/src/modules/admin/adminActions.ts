@@ -59,7 +59,6 @@ const readAvailableYears: RequestHandler = async (req, res, next) => {
 
 const readReportEvent: RequestHandler = async (req, res, next) => {
   try {
-    // const chartData = await adminRepository.readReportEvent();
     const reportEvent = await adminRepository.readReportEvent();
     res.json(reportEvent);
   } catch (error) {
@@ -69,7 +68,6 @@ const readReportEvent: RequestHandler = async (req, res, next) => {
 
 const readReportBug: RequestHandler = async (req, res, next) => {
   try {
-    // const chartData = await adminRepository.readReportBug();
     const reportBug = await adminRepository.readReportBug();
     res.json(reportBug);
   } catch (error) {
@@ -79,7 +77,6 @@ const readReportBug: RequestHandler = async (req, res, next) => {
 
 const readReportUser: RequestHandler = async (req, res, next) => {
   try {
-    // const chartData = await adminRepository.readReportUser();
     const reportUser = await adminRepository.readReportUser();
     res.json(reportUser);
   } catch (error) {
@@ -87,7 +84,6 @@ const readReportUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-//ajouts pour signalements user via admin
 const readReportBugById: RequestHandler = async (req, res, next) => {
   try {
     const id = Number(req.params.id);

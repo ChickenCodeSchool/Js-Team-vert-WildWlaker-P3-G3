@@ -2,8 +2,6 @@ import type { NextFunction, Request, Response } from "express";
 import { decodeJWT } from "../helper/jwtHelper";
 import userRepository from "../modules/user/userRepository";
 
-// Middleware d'autorisation : on le place AVANT les routes à protéger.
-// Le token est désormais lu depuis le cookie httpOnly (et non plus l'en-tête).
 const authorization = async (
   req: Request,
   res: Response,
@@ -29,7 +27,6 @@ const authorization = async (
       return;
     }
 
-    // vérification du ban
     const rawUser = await userRepository.findByEmailOrUsername(user.email);
 
     if (rawUser.user_is_ban) {

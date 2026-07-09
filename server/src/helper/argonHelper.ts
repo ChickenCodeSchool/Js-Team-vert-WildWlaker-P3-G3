@@ -7,12 +7,9 @@ const hashingOptions = {
   parallelism: 1,
 };
 
-// Transforme un mot de passe en clair en empreinte irréversible
 const hashPassword = (plainPassword: string): Promise<string> =>
   argon2.hash(plainPassword, hashingOptions);
 
-// Compare un mot de passe en clair à une empreinte stockée
-// /!\ ordre des arguments d'argon2.verify : (hash, plain)
 const verifyPassword = (
   hash: string,
   plainPassword: string,

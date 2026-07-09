@@ -48,7 +48,6 @@ function Connexion() {
         return;
       }
 
-      // localStorage.setItem("user", JSON.stringify(data));
       navigate("/homeevents");
     } catch {
       setErrorMessage("Erreur serveur");

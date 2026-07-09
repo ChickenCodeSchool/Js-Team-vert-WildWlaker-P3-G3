@@ -95,8 +95,6 @@ function UserReport() {
 
     try {
       let response: Response;
-      // On utilise un switch ici car une ternaire ne gère que 2 cas (vrai/faux),
-      // un switch en gère plusieurs sans devenir illisible ni trop verbeux.
       switch (repType) {
         case "utilisateur": {
           if (!reportedUserId) {

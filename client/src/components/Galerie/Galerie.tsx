@@ -7,7 +7,6 @@ import { PhotoItem } from "./PhotoItem";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// type UserI = { id: number };
 type Gallery = {
   gallery_id: number;
   gallery_id_event: number;
@@ -19,22 +18,8 @@ type Gallery = {
   like_count: number;
 };
 
-// const getUserFromStorage = (): User => {
-//   try {
-//     const stored = localStorage.getItem("user");
-//     return stored ? { id: JSON.parse(stored).id ?? 0 } : { id: 0 };
-//   } catch {
-//     return { id: 0 };
-//   }
-// };
-
 function Galerie() {
   const { eventUuid } = useParams();
-
-  // Utilisation directe de l'ID pour éviter les boucles infinies sur l'objet currentUser
-  // const currentUser = getUserFromStorage();
-  // const userId = currentUser.id;
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [photoToDelete, setPhotoToDelete] = useState<number | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);

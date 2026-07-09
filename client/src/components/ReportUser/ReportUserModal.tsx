@@ -20,8 +20,7 @@ function ReportUserModal({
     dialogRef.current?.showModal();
   }, []);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-  // const userJson = localStorage.getItem("user");
-  // const currentUser = userJson ? JSON.parse(userJson) : null;
+
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/auth/authVerif`, {
       credentials: "include",

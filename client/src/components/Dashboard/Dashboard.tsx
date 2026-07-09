@@ -44,11 +44,8 @@ function Dashboard() {
   const [userName, setUserName] = useState<string>("");
   const [userAndBudgetData, setUserAndBudgetData] = useState<UserAndBudget>();
   const [userInEvent, setUserInEvent] = useState<boolean | null>(null);
-  // const { id } = useParams();
   const { eventUuid } = useParams();
-  // const event = Number(id);
-  // const user = JSON.parse(localStorage.getItem("user") || "null");
-  // const userId = user?.id;
+
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/auth/authVerif`, {
       credentials: "include",

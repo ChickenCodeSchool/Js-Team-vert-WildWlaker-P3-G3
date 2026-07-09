@@ -76,7 +76,6 @@
         cursor: pointer;
 
         &:hover {
-          /* background: var(--icon-color); */
           transform: scale(0.95);
         }
       }
@@ -91,7 +90,6 @@
         cursor: pointer;
 
         &:hover {
-          /* background-color: var(--bg-neutral); */
           transform: scale(0.95);
         }
       }

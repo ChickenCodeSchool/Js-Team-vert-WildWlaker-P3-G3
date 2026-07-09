@@ -20,9 +20,7 @@ const addMessage: RequestHandler = async (req, res, next) => {
     );
 
     const io = getIo();
-    console.log("Emission socket vers :", `event-${req.params.eventUuid}`);
     io.to(`event-${req.params.eventUuid}`).emit("new-message", result);
-
     res.status(201).json(result);
   } catch (error) {
     console.error("messageActions.addMessage erreur", error);

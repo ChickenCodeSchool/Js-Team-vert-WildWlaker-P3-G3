@@ -8,7 +8,7 @@ const generateLinkKey = (): string => {
   return Array.from({ length: 6 }, () =>
     chars.charAt(Math.floor(Math.random() * chars.length)),
   ).join("");
-}; //creation de la cle pour rejoindre un event
+};
 
 class EventRepository {
   async create(

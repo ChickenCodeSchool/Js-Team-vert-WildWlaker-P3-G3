@@ -49,15 +49,8 @@ type SideBarProps = {
       | "galerie",
   ) => void;
 };
-// type Host = {
-//   event_user_joining: number;
-// };
 function SideBar({ activeComponent, handleChangeComponent }: SideBarProps) {
   const { eventUuid } = useParams();
-  // const { id } = useParams();
-  // const eventId = Number(id);
-  // const user = JSON.parse(localStorage.getItem("user") || "null");
-  // const userId = user?.id;
   const [userId, setUserId] = useState<number | null>(null);
   const MotionLink = motion(Link);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
