@@ -69,8 +69,6 @@ function ModalEditEvent({
 
     setForm((prev) => {
       const next = { ...prev, [name]: formatted };
-
-      // si on change le début et que la fin devient antérieure, on recale la fin
       if (name === "event_date_start" && next.event_date_end < formatted) {
         next.event_date_end = formatted;
       }

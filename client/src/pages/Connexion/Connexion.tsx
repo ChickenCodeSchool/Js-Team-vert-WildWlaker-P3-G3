@@ -34,7 +34,7 @@ function Connexion() {
     setErrorMessage("");
 
     try {
-      const res = await fetch("http://localhost:3310/api/login", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -48,7 +48,6 @@ function Connexion() {
         return;
       }
 
-      // localStorage.setItem("user", JSON.stringify(data));
       navigate("/homeevents");
     } catch {
       setErrorMessage("Erreur serveur");

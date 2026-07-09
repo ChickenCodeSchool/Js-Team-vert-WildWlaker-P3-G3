@@ -155,7 +155,7 @@ const login: RequestHandler = async (req, res, next) => {
       httpOnly: true,
       sameSite: "lax",
       secure: false,
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 24 * 30,
     });
 
     res.status(200).json({
@@ -239,7 +239,7 @@ const forgotPassword: RequestHandler = async (req, res, next) => {
 
     await userRepository.saveResetToken(user.user_id, token, expires);
 
-    const link = `http://localhost:3000/resetpassword?token=${token}`;
+    const link = `${process.env.CLIENT_URL}/resetpassword?token=${token}`;
 
     res.json({ message: "Lien envoyé" });
 

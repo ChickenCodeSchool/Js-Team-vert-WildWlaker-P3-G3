@@ -26,12 +26,10 @@ function Profil() {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const isAdminPage = location.pathname === "/admin";
-  // const user = JSON.parse(localStorage.getItem("user") || "null");
-  // const userId = user?.id;
   const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/auth/authVerif", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/authVerif`, {
       credentials: "include",
     })
       .then((res) => {
@@ -49,7 +47,7 @@ function Profil() {
   useEffect(() => {
     if (!userId) return;
 
-    fetch(`http://localhost:3310/api/users/${userId}/photo`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/users/${userId}/photo`, {
       credentials: "include",
     })
       .then((res) => {
@@ -65,7 +63,7 @@ function Profil() {
   }, [userId]);
   useEffect(() => {
     if (!userId) return;
-    fetch(`http://localhost:3310/api/users/admin/${userId}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/users/admin/${userId}`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -113,7 +111,7 @@ function Profil() {
     formData.append("photo", photo);
 
     const response = await fetch(
-      `http://localhost:3310/api/users/${userId}/photo`,
+      `${import.meta.env.VITE_API_URL}/api/users/${userId}/photo`,
       {
         method: "POST",
         credentials: "include",
@@ -149,7 +147,7 @@ function Profil() {
 
     try {
       setErrorMessage("");
-      await fetch(`http://localhost:3310/api/users/${user_id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/users/${user_id}`, {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -164,7 +162,7 @@ function Profil() {
   async function handleDeconnexion() {
     try {
       if (isOnEventPage) {
-        await fetch("http://localhost:3310/api/logout", {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/logout`, {
           method: "POST",
           credentials: "include",
         });
@@ -186,7 +184,7 @@ function Profil() {
         onClick={() => setIsMainModalOpen(true)}
       >
         <img
-          src={`http://localhost:3310${profilePicture}`}
+          src={`${import.meta.env.VITE_API_URL}${profilePicture}`}
           alt="photo-profil"
         />
       </button>
@@ -217,7 +215,7 @@ function Profil() {
               <h2>Parametre du profil</h2>
 
               <img
-                src={`http://localhost:3310${profilePicture}`}
+                src={`${import.meta.env.VITE_API_URL}${profilePicture}`}
                 alt="photo-profil"
               />
 

@@ -21,7 +21,7 @@ function ForgetPassword() {
 
     try {
       const res = await fetch(
-        "http://localhost:3310/api/auth/forgot-password",
+        `${import.meta.env.VITE_API_URL}/api/auth/forgot-password`,
         {
           method: "POST",
           credentials: "include",

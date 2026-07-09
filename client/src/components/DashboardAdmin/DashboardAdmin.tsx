@@ -66,56 +66,56 @@ function DashboardAdmin() {
   );
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/reportUser", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/reportUser`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => setReportUser(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/reportBug", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/reportBug`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => setReportBug(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/reportEvent", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/reportEvent`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => setReportEvent(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/users", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => setAllUsers(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/events", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/events`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => setAllEvents(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/arrayReport", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/arrayReport`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => setArrayReport(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/arrayUser", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/arrayUser`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => setArrayUser(data));
   }, []);
   useEffect(() => {
-    fetch("http://localhost:3310/api/admin/dashboard-years", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard-years`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -125,7 +125,7 @@ function DashboardAdmin() {
   }, []);
   useEffect(() => {
     fetch(
-      `http://localhost:3310/api/admin/dashboard-chart?year=${selectedYear}`,
+      `${import.meta.env.VITE_API_URL}/api/admin/dashboard-chart?year=${selectedYear}`,
       { credentials: "include" },
     )
       .then((res) => res.json())
@@ -341,7 +341,7 @@ function DashboardAdmin() {
                 whileHover={{ x: 6 }}
               >
                 <img
-                  src={`http://localhost:3310${user.user_profile_picture}`}
+                  src={`${import.meta.env.VITE_API_URL}${user.user_profile_picture}`}
                   alt={user.user_name}
                 />
 

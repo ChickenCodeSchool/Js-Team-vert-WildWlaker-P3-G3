@@ -7,14 +7,14 @@ import JoinForm from "./JoinForm";
 
 import "./ModalAddEvent.css";
 
-type Tab = "create" | "join"; // deux onglet creer et joindre
+type Tab = "create" | "join";
 
 function ModalAddEvent({
   isOpen,
   onClose,
   onEventCreated,
 }: ModalAddEventProps) {
-  const [activeTab, setActiveTab] = useState<Tab>("create"); // met le modal directement sur l'onglet creer un evenement
+  const [activeTab, setActiveTab] = useState<Tab>("create");
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -22,11 +22,11 @@ function ModalAddEvent({
     if (isOpen) {
       dialogRef.current?.showModal();
       const firstInput = dialogRef.current?.querySelector("input");
-      firstInput?.focus(); // --> met le focus sur le 1er input pour taper directement dans le modal
+      firstInput?.focus();
     } else {
       dialogRef.current?.close();
     }
-  }, [isOpen]); //le const dialogRef et le useEffect indique que si on ouvre le modal ca l'affiche sinon il est fermé
+  }, [isOpen]);
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     const rect = dialogRef.current?.getBoundingClientRect();
@@ -39,8 +39,7 @@ function ModalAddEvent({
     ) {
       onClose();
     }
-  }; // quand tu clique en dehors du modal ca le ferme
-
+  };
   return (
     <dialog
       ref={dialogRef}
@@ -51,8 +50,6 @@ function ModalAddEvent({
       aria-labelledby="modal-title"
     >
       {" "}
-      {/* la balise dialog est faite expres pour le modal 
-      aria indique pour les personnes non voyante que c'est un modal avec le titre (pour le referencement et l'accessibilité) */}
       <div className="ModalAddEvent-Global">
         <div className="ModalAddEvent-Tabs">
           <button

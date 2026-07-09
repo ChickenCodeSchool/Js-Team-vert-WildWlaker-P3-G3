@@ -47,10 +47,8 @@ function ChangePassword() {
     });
 
     try {
-      // const user = JSON.parse(localStorage.getItem("user") || "{}");
-
       const res = await fetch(
-        "http://localhost:3310/api/auth/change-password",
+        `${import.meta.env.VITE_API_URL}/api/auth/change-password`,
         {
           method: "PUT",
           headers: {
@@ -58,7 +56,6 @@ function ChangePassword() {
           },
           credentials: "include",
           body: JSON.stringify({
-            // userId: user.id,
             currentPassword,
             newPassword: password,
           }),

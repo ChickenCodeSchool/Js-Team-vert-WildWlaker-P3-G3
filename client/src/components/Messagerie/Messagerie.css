@@ -204,63 +204,6 @@
   }
 }
 @media screen and (max-width: 428px) {
-  /* .messagerie {
-    width: 100%;
-    height: 100vh;
-    margin-top: 0;
-    padding: 16px;
-
-    h1 {
-      font-size: 28px;
-      margin: 0;
-      padding: 0 0 30px 0;
-    }
-
-    .messagerie-box {
-      height: calc(84vh - 75px);
-      width: calc(100vw - 32px);
-
-      .messagerie-box-messages {
-        height: calc(100% - 60px);
-        padding-right: 4px;
-
-        .messagerie-box-messages-friends,
-        .messagerie-box-messages-user {
-          padding: 6px 0;
-
-          div {
-            max-width: 75%;
-            font-size: 14px;
-            line-height: 1.4;
-            padding: 8px 10px;
-          }
-        }
-
-        .messagerie-box-messages-friends {
-          img {
-            width: 28px;
-            height: 28px;
-          }
-        }
-      }
-
-      .massagerie-input {
-        height: 44px;
-        margin-top: 12px;
-        
-
-        input {
-          width: 85%;
-          font-size: 14px;
-        }
-
-        button {
-          width: 36px;
-          height: 36px;
-        }
-      }
-    }
-  } */
   .messagerie {
     padding: 10vh 1rem 0 1rem;
     height: 90vh;

@@ -150,8 +150,6 @@ body {
     border-radius: 12px !important;
   }
 }
-
-/* ---------- Mobile ---------- */
 @media screen and (max-width: 429px) {
   body {
     .toast-edit-popup {
@@ -386,13 +384,11 @@ body {
     }
   }
 }
-/* ---------- Desktop ---------- */
 @media screen and (min-width: 429px) {
   .budget {
     display: flex;
     flex-direction: column;
     padding: 3rem 3rem 2rem 0;
-    /* width: 75vw; */
     height: auto;
 
     header {
@@ -403,8 +399,6 @@ body {
 
       h1 {
         color: var(--font-brown);
-        /* font-size: 3vw;
-        font-weight: 600; */
       }
 
       button {

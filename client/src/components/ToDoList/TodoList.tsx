@@ -13,8 +13,6 @@ const API_URL = import.meta.env.VITE_API_URL;
 function TodoList(props: { eventUuid: string; todo_id_user: number }) {
   const eventUuid = props.eventUuid;
   const todo_id_user = props.todo_id_user;
-  //deux states task qui contient les taches, setTask qui les met a jour. Pour la seconde state addTask c'est le string qui contient ce que l'utilisateur tape, setAddTask la met a jour.
-  // editId garde l'id de la tache en cours d'édition, est null si aucune tache n'est éditée & editTask stock le texte modifié par l'utilisateur
   const [task, setTask] = useState<Task[]>([]);
   const [addTask, setAddTask] = useState<string>("");
   const [editId, setEditId] = useState<number | null>(null);
@@ -31,9 +29,7 @@ function TodoList(props: { eventUuid: string; todo_id_user: number }) {
   }, [eventUuid]);
 
   async function handleAddTask() {
-    //quand on clique sur '+' setTask crée un nouveau tableau avec toutes les taches qui existent et ajoute un nouvel objet Task qui a un id, un texte et un état false / setAddTask("") remet l'input à vide
     if (!addTask.trim()) return;
-    // si l'input ne contient rien, on ne fait rien. C'est pour éviter d'envoyer une todo vide dans le backend.
     const response = await fetch(`${API_URL}/api/todo`, {
       method: "POST",
       credentials: "include",
@@ -56,7 +52,6 @@ function TodoList(props: { eventUuid: string; todo_id_user: number }) {
   }
 
   async function handleToggleTask(id: number) {
-    // On cherche dans le tableau Task la todo dont l'id correspond à celui qu'on reçoit. On continue uniquement si on recup l'info. Donc on en a besoin pour récupérer todo_name qu'on envoie dans le backend via le fetch
     const t = task.find((t) => t.todo_id === id);
     if (!t) return;
 
@@ -70,7 +65,6 @@ function TodoList(props: { eventUuid: string; todo_id_user: number }) {
         todo_is_done: !t.todo_is_done,
       }),
     });
-    // la fonction recoit l'id de la tache concernée. le state parcours le tableau avec le .map pour chaque taches et si l'id correspond alors ça inverse completed (true devient false etc) et si l'id ne correspond pas alors elle retourne la tache sans aucune modif
     setTask(
       task.map((t) => {
         if (t.todo_id === id) {
@@ -82,13 +76,11 @@ function TodoList(props: { eventUuid: string; todo_id_user: number }) {
   }
 
   function handleEditTask(id: number, text: string) {
-    // la fonction mémorise juste quelle tache on édite et quel est son texte actuel
     setEditId(id);
     setEditTask(text);
   }
 
   async function handleSaveTask() {
-    // même raison que pour le handleToggleTask, on a besoin de todo_is_done pour tout envoyer vers le backend
     const t = task.find((t) => t.todo_id === editId);
     if (!t) return;
 
@@ -136,7 +128,6 @@ function TodoList(props: { eventUuid: string; todo_id_user: number }) {
           value={addTask}
           onKeyDown={(e) => e.key === "Enter" && handleAddTask()}
         />
-        {/*e = evenement déclanché par la frappe de l'utilisateur / e.target l'element html(dans l'input en gros) donc e.target.value c'est le texte qui vie dans l'input*/}
         <button type="button" className="task-add" onClick={handleAddTask}>
           <Plus size={16} />
         </button>

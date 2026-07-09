@@ -200,7 +200,6 @@ function AdminReport() {
                 </div>
                 <div className="adminReport-WrapType-TypeText">
                   <h3>{type}</h3>
-                  {/* <p>{getDescription()}</p> */}
                 </div>
               </div>
             </section>
