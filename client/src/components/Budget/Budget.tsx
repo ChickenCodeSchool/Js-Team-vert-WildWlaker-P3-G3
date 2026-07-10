@@ -57,9 +57,9 @@ function getBalancePrice(array: BudgetByUser[]) {
     let result_line = array[i].total_price;
 
     for (let j = 0; j < array.length; j++) {
-      if (j !== i) {
-        result_line -= array[j].total_price / (array.length - 1);
-      }
+      // if (j !== i) {
+      result_line -= array[j].total_price / array.length;
+      // }
     }
 
     const test = {
