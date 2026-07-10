@@ -33,6 +33,7 @@
     align-items: center;
     .HomeEvents-CardGlobal {
       grid-template-columns: 1fr;
+      gap: 0;
     }
     .HomeEvents-FilterAdd {
       display: flex;

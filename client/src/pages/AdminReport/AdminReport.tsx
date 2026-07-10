@@ -129,6 +129,51 @@ function AdminReport() {
       });
     }
   };
+
+  const handleReject = async () => {
+    const toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+      customClass: {
+        popup: "toast",
+      },
+    });
+
+    try {
+      const response = await fetch(
+        `${API_URL}/api/admin/report${capitalize(type)}/${id}/done`,
+        {
+          method: "PATCH",
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`Erreur serveur : ${response.status}`);
+      }
+
+      toast.fire({
+        icon: "success",
+        text: "Le signalement a été rejeté.",
+        customClass: {
+          popup: "toast-success-popup",
+        },
+        didClose: () => navigate(-1),
+      });
+    } catch (error) {
+      console.error(error);
+      toast.fire({
+        icon: "error",
+        text: "Une erreur est survenue, l'action n'a pas pu être effectuée.",
+        customClass: {
+          popup: "toast-error-popup",
+        },
+      });
+    }
+  };
   const getDescription = () =>
     report?.reported_bug_description ??
     report?.reported_event_description ??
@@ -178,9 +223,11 @@ function AdminReport() {
       imageAlt: "preuve jointe",
       showConfirmButton: false,
       showCloseButton: false,
+      width: "auto",
       background: "transparent",
       backdrop: "rgba(0, 0, 0, 0.85)",
       customClass: {
+        popup: "lightbox-popup",
         image: "lightbox-image",
       },
     });
@@ -295,7 +342,7 @@ function AdminReport() {
                   Bannir
                 </button>
               )}
-              <button type="button">
+              <button type="button" onClick={handleReject}>
                 <Trash2 size={16} />
                 Rejeter
               </button>

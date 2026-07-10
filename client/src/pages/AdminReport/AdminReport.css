@@ -304,8 +304,15 @@
   }
 }
 
+.lightbox-popup {
+  padding: 0;
+  box-shadow: none;
+}
+
 .lightbox-image {
+  margin: 0;
   max-width: 90vw;
   max-height: 85vh;
   border-radius: 12px;
+  display: block;
 }

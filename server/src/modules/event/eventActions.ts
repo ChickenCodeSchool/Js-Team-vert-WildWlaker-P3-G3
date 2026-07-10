@@ -65,7 +65,6 @@ const join: RequestHandler = async (req, res, next) => {
   }
 
   const user_id = req.user.id;
-
   const { event_link_key } = req.body;
 
   if (!event_link_key || !user_id) {
@@ -80,6 +79,17 @@ const join: RequestHandler = async (req, res, next) => {
       res
         .status(404)
         .json({ message: "Code invalide ou événement introuvable." });
+      return;
+    }
+
+    const isBanned = await eventRepository.isUserBanned(
+      event.event_id,
+      user_id,
+    );
+    if (isBanned) {
+      res
+        .status(403)
+        .json({ message: "Vous avez été banni de cet événement." });
       return;
     }
 
