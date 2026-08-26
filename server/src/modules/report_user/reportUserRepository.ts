@@ -24,7 +24,7 @@ class reportUserRepository {
       await connection.beginTransaction();
 
       const [result] = await connection.query<Result>(
-        "insert into reported_user (reported_user_id_user, reported_user_description, reported_user_by_id_user, reported_user_id_event) values (?, ?, ?, ?)",
+        "INSERT INTO reported_user (reported_user_id_user, reported_user_description, reported_user_by_id_user, reported_user_id_event) values (?, ?, ?, ?)",
         [
           reported_user.reported_user_id_user,
           reported_user.reported_user_description,
@@ -37,7 +37,7 @@ class reportUserRepository {
 
       for (const path of imagePaths) {
         await connection.query(
-          "insert into reported_user_image (reported_user_image_path, reported_user_image_by_id_reported_user) values (?, ?)",
+          "INSERT INTO reported_user_image (reported_user_image_path, reported_user_image_by_id_reported_user) values (?, ?)",
           [path, reportId],
         );
       }
